@@ -22,3 +22,5 @@
 
 # IDEs
 .vscode/
+
+/node_modules/

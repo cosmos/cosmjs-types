@@ -99,9 +99,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cosmjs-types@workspace:.":
+"axelarjs-types@workspace:.":
   version: 0.0.0-use.local
-  resolution: "cosmjs-types@workspace:."
+  resolution: "axelarjs-types@workspace:."
   dependencies:
     "@types/long": ^4.0.1
     "@types/node": ^15.6.2
