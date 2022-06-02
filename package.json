@@ -14,7 +14,7 @@
     "access": "public"
   },
   "files": [
-    "axelar-core/"
+    "axelar/"
   ],
   "scripts": {
     "format": "prettier --write --loglevel warn \"./src/**/*.ts\"",
