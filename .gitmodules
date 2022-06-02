@@ -1,9 +1,3 @@
-[submodule "wasmd-0.18"]
-	path = wasmd-0.18
-	url = https://github.com/CosmWasm/wasmd.git
-[submodule "cosmos-sdk-0.44"]
-	path = cosmos-sdk-0.45
-	url = https://github.com/cosmos/cosmos-sdk
-[submodule "wasmd-0.25"]
-	path = wasmd-0.25
-	url = https://github.com/CosmWasm/wasmd.git
+[submodule "axelar-core"]
+	path = axelar-core
+	url = https://github.com/axelarnetwork/axelar-core.git

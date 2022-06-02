@@ -118,7 +118,6 @@ export interface FieldDescriptorProto {
    * For booleans, "true" or "false".
    * For strings, contains the default text contents (not escaped in any way).
    * For bytes, contains the C escaped value.  All bytes >= 128 are escaped.
-   * TODO(kenton):  Base-64 encode?
    */
   defaultValue: string;
   /**
@@ -305,8 +304,9 @@ export function fieldDescriptorProto_TypeToJSON(object: FieldDescriptorProto_Typ
       return "TYPE_SINT32";
     case FieldDescriptorProto_Type.TYPE_SINT64:
       return "TYPE_SINT64";
+    case FieldDescriptorProto_Type.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -344,8 +344,9 @@ export function fieldDescriptorProto_LabelToJSON(object: FieldDescriptorProto_La
       return "LABEL_REQUIRED";
     case FieldDescriptorProto_Label.LABEL_REPEATED:
       return "LABEL_REPEATED";
+    case FieldDescriptorProto_Label.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -576,8 +577,9 @@ export function fileOptions_OptimizeModeToJSON(object: FileOptions_OptimizeMode)
       return "CODE_SIZE";
     case FileOptions_OptimizeMode.LITE_RUNTIME:
       return "LITE_RUNTIME";
+    case FileOptions_OptimizeMode.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -703,8 +705,17 @@ export interface FieldOptions {
    * implementation must either *always* check its required fields, or *never*
    * check its required fields, regardless of whether or not the message has
    * been parsed.
+   *
+   * As of May 2022, lazy verifies the contents of the byte stream during
+   * parsing.  An invalid byte stream will cause the overall parsing to fail.
    */
   lazy: boolean;
+  /**
+   * unverified_lazy does no correctness checks on the byte stream. This should
+   * only be used where lazy with verification is prohibitive for performance
+   * reasons.
+   */
+  unverifiedLazy: boolean;
   /**
    * Is this field deprecated?
    * Depending on the target platform, this can emit Deprecated annotations
@@ -752,8 +763,9 @@ export function fieldOptions_CTypeToJSON(object: FieldOptions_CType): string {
       return "CORD";
     case FieldOptions_CType.STRING_PIECE:
       return "STRING_PIECE";
+    case FieldOptions_CType.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -793,8 +805,9 @@ export function fieldOptions_JSTypeToJSON(object: FieldOptions_JSType): string {
       return "JS_STRING";
     case FieldOptions_JSType.JS_NUMBER:
       return "JS_NUMBER";
+    case FieldOptions_JSType.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -897,8 +910,9 @@ export function methodOptions_IdempotencyLevelToJSON(object: MethodOptions_Idemp
       return "NO_SIDE_EFFECTS";
     case MethodOptions_IdempotencyLevel.IDEMPOTENT:
       return "IDEMPOTENT";
+    case MethodOptions_IdempotencyLevel.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -928,8 +942,8 @@ export interface UninterpretedOption {
  * The name of the uninterpreted option.  Each string represents a segment in
  * a dot-separated name.  is_extension is true iff a segment represents an
  * extension (denoted with parentheses in options specs in .proto files).
- * E.g.,{ ["foo", false], ["bar.baz", true], ["qux", false] } represents
- * "foo.(bar.baz).qux".
+ * E.g.,{ ["foo", false], ["bar.baz", true], ["moo", false] } represents
+ * "foo.(bar.baz).moo".
  */
 export interface UninterpretedOption_NamePart {
   namePart: string;
@@ -995,8 +1009,8 @@ export interface SourceCodeInfo_Location {
    * location.
    *
    * Each element is a field number or an index.  They form a path from
-   * the root FileDescriptorProto to the place where the definition.  For
-   * example, this path:
+   * the root FileDescriptorProto to the place where the definition occurs.
+   * For example, this path:
    *   [ 4, 3, 2, 7, 1 ]
    * refers to:
    *   file.message_type(3)  // 4, 3
@@ -1052,13 +1066,13 @@ export interface SourceCodeInfo_Location {
    *   // Comment attached to baz.
    *   // Another line attached to baz.
    *
-   *   // Comment attached to qux.
+   *   // Comment attached to moo.
    *   //
-   *   // Another line attached to qux.
-   *   optional double qux = 4;
+   *   // Another line attached to moo.
+   *   optional double moo = 4;
    *
    *   // Detached comment for corge. This is not leading or trailing comments
-   *   // to qux or corge because there are blank lines separating it from
+   *   // to moo or corge because there are blank lines separating it from
    *   // both.
    *
    *   // Detached comment for corge paragraph 2.
@@ -2800,6 +2814,7 @@ function createBaseFieldOptions(): FieldOptions {
     packed: false,
     jstype: 0,
     lazy: false,
+    unverifiedLazy: false,
     deprecated: false,
     weak: false,
     uninterpretedOption: [],
@@ -2819,6 +2834,9 @@ export const FieldOptions = {
     }
     if (message.lazy === true) {
       writer.uint32(40).bool(message.lazy);
+    }
+    if (message.unverifiedLazy === true) {
+      writer.uint32(120).bool(message.unverifiedLazy);
     }
     if (message.deprecated === true) {
       writer.uint32(24).bool(message.deprecated);
@@ -2851,6 +2869,9 @@ export const FieldOptions = {
         case 5:
           message.lazy = reader.bool();
           break;
+        case 15:
+          message.unverifiedLazy = reader.bool();
+          break;
         case 3:
           message.deprecated = reader.bool();
           break;
@@ -2874,6 +2895,7 @@ export const FieldOptions = {
       packed: isSet(object.packed) ? Boolean(object.packed) : false,
       jstype: isSet(object.jstype) ? fieldOptions_JSTypeFromJSON(object.jstype) : 0,
       lazy: isSet(object.lazy) ? Boolean(object.lazy) : false,
+      unverifiedLazy: isSet(object.unverifiedLazy) ? Boolean(object.unverifiedLazy) : false,
       deprecated: isSet(object.deprecated) ? Boolean(object.deprecated) : false,
       weak: isSet(object.weak) ? Boolean(object.weak) : false,
       uninterpretedOption: Array.isArray(object?.uninterpretedOption)
@@ -2888,6 +2910,7 @@ export const FieldOptions = {
     message.packed !== undefined && (obj.packed = message.packed);
     message.jstype !== undefined && (obj.jstype = fieldOptions_JSTypeToJSON(message.jstype));
     message.lazy !== undefined && (obj.lazy = message.lazy);
+    message.unverifiedLazy !== undefined && (obj.unverifiedLazy = message.unverifiedLazy);
     message.deprecated !== undefined && (obj.deprecated = message.deprecated);
     message.weak !== undefined && (obj.weak = message.weak);
     if (message.uninterpretedOption) {
@@ -2906,6 +2929,7 @@ export const FieldOptions = {
     message.packed = object.packed ?? false;
     message.jstype = object.jstype ?? 0;
     message.lazy = object.lazy ?? false;
+    message.unverifiedLazy = object.unverifiedLazy ?? false;
     message.deprecated = object.deprecated ?? false;
     message.weak = object.weak ?? false;
     message.uninterpretedOption =
@@ -3341,10 +3365,8 @@ export const UninterpretedOption = {
         ? object.name.map((e: any) => UninterpretedOption_NamePart.fromJSON(e))
         : [],
       identifierValue: isSet(object.identifierValue) ? String(object.identifierValue) : "",
-      positiveIntValue: isSet(object.positiveIntValue)
-        ? Long.fromString(object.positiveIntValue)
-        : Long.UZERO,
-      negativeIntValue: isSet(object.negativeIntValue) ? Long.fromString(object.negativeIntValue) : Long.ZERO,
+      positiveIntValue: isSet(object.positiveIntValue) ? Long.fromValue(object.positiveIntValue) : Long.UZERO,
+      negativeIntValue: isSet(object.negativeIntValue) ? Long.fromValue(object.negativeIntValue) : Long.ZERO,
       doubleValue: isSet(object.doubleValue) ? Number(object.doubleValue) : 0,
       stringValue: isSet(object.stringValue) ? bytesFromBase64(object.stringValue) : new Uint8Array(),
       aggregateValue: isSet(object.aggregateValue) ? String(object.aggregateValue) : "",
