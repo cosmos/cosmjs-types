@@ -14,7 +14,9 @@
     "access": "public"
   },
   "files": [
-    "axelar/"
+    "axelar/",
+    "cosmos/",
+    "google/"
   ],
   "scripts": {
     "format": "prettier --write --loglevel warn \"./src/**/*.ts\"",
