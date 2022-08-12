@@ -10,6 +10,7 @@ import {
   RegisterAssetResponse,
   RouteIBCTransfersResponse,
   RegisterFeeCollectorResponse,
+  RetryIBCTransferResponse,
   LinkRequest,
   ConfirmDepositRequest,
   ExecutePendingTransfersRequest,
@@ -18,6 +19,7 @@ import {
   RegisterAssetRequest,
   RouteIBCTransfersRequest,
   RegisterFeeCollectorRequest,
+  RetryIBCTransferRequest,
 } from "../../../axelar/axelarnet/v1beta1/tx";
 import {
   PendingIBCTransferCountResponse,
@@ -36,6 +38,7 @@ export interface MsgService {
   RegisterAsset(request: RegisterAssetRequest): Promise<RegisterAssetResponse>;
   RouteIBCTransfers(request: RouteIBCTransfersRequest): Promise<RouteIBCTransfersResponse>;
   RegisterFeeCollector(request: RegisterFeeCollectorRequest): Promise<RegisterFeeCollectorResponse>;
+  RetryIBCTransfer(request: RetryIBCTransferRequest): Promise<RetryIBCTransferResponse>;
 }
 
 export class MsgServiceClientImpl implements MsgService {
@@ -50,6 +53,7 @@ export class MsgServiceClientImpl implements MsgService {
     this.RegisterAsset = this.RegisterAsset.bind(this);
     this.RouteIBCTransfers = this.RouteIBCTransfers.bind(this);
     this.RegisterFeeCollector = this.RegisterFeeCollector.bind(this);
+    this.RetryIBCTransfer = this.RetryIBCTransfer.bind(this);
   }
   Link(request: LinkRequest): Promise<LinkResponse> {
     const data = LinkRequest.encode(request).finish();
@@ -97,6 +101,12 @@ export class MsgServiceClientImpl implements MsgService {
     const data = RegisterFeeCollectorRequest.encode(request).finish();
     const promise = this.rpc.request("axelar.axelarnet.v1beta1.MsgService", "RegisterFeeCollector", data);
     return promise.then((data) => RegisterFeeCollectorResponse.decode(new _m0.Reader(data)));
+  }
+
+  RetryIBCTransfer(request: RetryIBCTransferRequest): Promise<RetryIBCTransferResponse> {
+    const data = RetryIBCTransferRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.axelarnet.v1beta1.MsgService", "RetryIBCTransfer", data);
+    return promise.then((data) => RetryIBCTransferResponse.decode(new _m0.Reader(data)));
   }
 }
 

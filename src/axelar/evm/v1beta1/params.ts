@@ -20,6 +20,7 @@ export interface Params {
   minVoterCount: Long;
   commandsGasLimit: number;
   votingGracePeriod: Long;
+  endBlockerLimit: Long;
 }
 
 export interface PendingChain {
@@ -40,6 +41,7 @@ function createBaseParams(): Params {
     minVoterCount: Long.ZERO,
     commandsGasLimit: 0,
     votingGracePeriod: Long.ZERO,
+    endBlockerLimit: Long.ZERO,
   };
 }
 
@@ -77,6 +79,9 @@ export const Params = {
     }
     if (!message.votingGracePeriod.isZero()) {
       writer.uint32(104).int64(message.votingGracePeriod);
+    }
+    if (!message.endBlockerLimit.isZero()) {
+      writer.uint32(112).int64(message.endBlockerLimit);
     }
     return writer;
   },
@@ -121,6 +126,9 @@ export const Params = {
         case 13:
           message.votingGracePeriod = reader.int64() as Long;
           break;
+        case 14:
+          message.endBlockerLimit = reader.int64() as Long;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -150,6 +158,7 @@ export const Params = {
       votingGracePeriod: isSet(object.votingGracePeriod)
         ? Long.fromValue(object.votingGracePeriod)
         : Long.ZERO,
+      endBlockerLimit: isSet(object.endBlockerLimit) ? Long.fromValue(object.endBlockerLimit) : Long.ZERO,
     };
   },
 
@@ -179,6 +188,8 @@ export const Params = {
     message.commandsGasLimit !== undefined && (obj.commandsGasLimit = Math.round(message.commandsGasLimit));
     message.votingGracePeriod !== undefined &&
       (obj.votingGracePeriod = (message.votingGracePeriod || Long.ZERO).toString());
+    message.endBlockerLimit !== undefined &&
+      (obj.endBlockerLimit = (message.endBlockerLimit || Long.ZERO).toString());
     return obj;
   },
 
@@ -209,6 +220,10 @@ export const Params = {
     message.votingGracePeriod =
       object.votingGracePeriod !== undefined && object.votingGracePeriod !== null
         ? Long.fromValue(object.votingGracePeriod)
+        : Long.ZERO;
+    message.endBlockerLimit =
+      object.endBlockerLimit !== undefined && object.endBlockerLimit !== null
+        ? Long.fromValue(object.endBlockerLimit)
         : Long.ZERO;
     return message;
   },

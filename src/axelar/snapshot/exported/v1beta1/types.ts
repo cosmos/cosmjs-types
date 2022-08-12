@@ -2,12 +2,12 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { Any } from "../../../../google/protobuf/any";
-import { Timestamp } from "../../../../google/protobuf/timestamp";
 import {
   KeyShareDistributionPolicy,
   keyShareDistributionPolicyFromJSON,
   keyShareDistributionPolicyToJSON,
 } from "../../../../axelar/tss/exported/v1beta1/types";
+import { Timestamp } from "../../../../google/protobuf/timestamp";
 
 export const protobufPackage = "axelar.snapshot.exported.v1beta1";
 
@@ -83,14 +83,31 @@ export interface Validator {
   shareCount: Long;
 }
 
+export interface Participant {
+  address: Uint8Array;
+  weight: Uint8Array;
+}
+
 export interface Snapshot {
+  /** @deprecated */
   validators: Validator[];
+  /** @deprecated */
+  totalShareCount: Uint8Array;
+  /** @deprecated */
+  counter: Long;
+  /** @deprecated */
+  keyShareDistributionPolicy: KeyShareDistributionPolicy;
+  /** @deprecated */
+  corruptionThreshold: Long;
   timestamp?: Timestamp;
   height: Long;
-  totalShareCount: Uint8Array;
-  counter: Long;
-  keyShareDistributionPolicy: KeyShareDistributionPolicy;
-  corruptionThreshold: Long;
+  participants: { [key: string]: Participant };
+  bondedWeight: Uint8Array;
+}
+
+export interface Snapshot_ParticipantsEntry {
+  key: string;
+  value?: Participant;
 }
 
 function createBaseValidator(): Validator {
@@ -158,15 +175,77 @@ export const Validator = {
   },
 };
 
+function createBaseParticipant(): Participant {
+  return { address: new Uint8Array(), weight: new Uint8Array() };
+}
+
+export const Participant = {
+  encode(message: Participant, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address.length !== 0) {
+      writer.uint32(10).bytes(message.address);
+    }
+    if (message.weight.length !== 0) {
+      writer.uint32(18).bytes(message.weight);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Participant {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseParticipant();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.bytes();
+          break;
+        case 2:
+          message.weight = reader.bytes();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Participant {
+    return {
+      address: isSet(object.address) ? bytesFromBase64(object.address) : new Uint8Array(),
+      weight: isSet(object.weight) ? bytesFromBase64(object.weight) : new Uint8Array(),
+    };
+  },
+
+  toJSON(message: Participant): unknown {
+    const obj: any = {};
+    message.address !== undefined &&
+      (obj.address = base64FromBytes(message.address !== undefined ? message.address : new Uint8Array()));
+    message.weight !== undefined &&
+      (obj.weight = base64FromBytes(message.weight !== undefined ? message.weight : new Uint8Array()));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<Participant>, I>>(object: I): Participant {
+    const message = createBaseParticipant();
+    message.address = object.address ?? new Uint8Array();
+    message.weight = object.weight ?? new Uint8Array();
+    return message;
+  },
+};
+
 function createBaseSnapshot(): Snapshot {
   return {
     validators: [],
-    timestamp: undefined,
-    height: Long.ZERO,
     totalShareCount: new Uint8Array(),
     counter: Long.ZERO,
     keyShareDistributionPolicy: 0,
     corruptionThreshold: Long.ZERO,
+    timestamp: undefined,
+    height: Long.ZERO,
+    participants: {},
+    bondedWeight: new Uint8Array(),
   };
 }
 
@@ -174,12 +253,6 @@ export const Snapshot = {
   encode(message: Snapshot, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.validators) {
       Validator.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.timestamp !== undefined) {
-      Timestamp.encode(message.timestamp, writer.uint32(18).fork()).ldelim();
-    }
-    if (!message.height.isZero()) {
-      writer.uint32(24).int64(message.height);
     }
     if (message.totalShareCount.length !== 0) {
       writer.uint32(34).bytes(message.totalShareCount);
@@ -192,6 +265,18 @@ export const Snapshot = {
     }
     if (!message.corruptionThreshold.isZero()) {
       writer.uint32(56).int64(message.corruptionThreshold);
+    }
+    if (message.timestamp !== undefined) {
+      Timestamp.encode(message.timestamp, writer.uint32(18).fork()).ldelim();
+    }
+    if (!message.height.isZero()) {
+      writer.uint32(24).int64(message.height);
+    }
+    Object.entries(message.participants).forEach(([key, value]) => {
+      Snapshot_ParticipantsEntry.encode({ key: key as any, value }, writer.uint32(66).fork()).ldelim();
+    });
+    if (message.bondedWeight.length !== 0) {
+      writer.uint32(74).bytes(message.bondedWeight);
     }
     return writer;
   },
@@ -206,12 +291,6 @@ export const Snapshot = {
         case 1:
           message.validators.push(Validator.decode(reader, reader.uint32()));
           break;
-        case 2:
-          message.timestamp = Timestamp.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.height = reader.int64() as Long;
-          break;
         case 4:
           message.totalShareCount = reader.bytes();
           break;
@@ -223,6 +302,21 @@ export const Snapshot = {
           break;
         case 7:
           message.corruptionThreshold = reader.int64() as Long;
+          break;
+        case 2:
+          message.timestamp = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.height = reader.int64() as Long;
+          break;
+        case 8:
+          const entry8 = Snapshot_ParticipantsEntry.decode(reader, reader.uint32());
+          if (entry8.value !== undefined) {
+            message.participants[entry8.key] = entry8.value;
+          }
+          break;
+        case 9:
+          message.bondedWeight = reader.bytes();
           break;
         default:
           reader.skipType(tag & 7);
@@ -237,8 +331,6 @@ export const Snapshot = {
       validators: Array.isArray(object?.validators)
         ? object.validators.map((e: any) => Validator.fromJSON(e))
         : [],
-      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
-      height: isSet(object.height) ? Long.fromValue(object.height) : Long.ZERO,
       totalShareCount: isSet(object.totalShareCount)
         ? bytesFromBase64(object.totalShareCount)
         : new Uint8Array(),
@@ -249,6 +341,15 @@ export const Snapshot = {
       corruptionThreshold: isSet(object.corruptionThreshold)
         ? Long.fromValue(object.corruptionThreshold)
         : Long.ZERO,
+      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
+      height: isSet(object.height) ? Long.fromValue(object.height) : Long.ZERO,
+      participants: isObject(object.participants)
+        ? Object.entries(object.participants).reduce<{ [key: string]: Participant }>((acc, [key, value]) => {
+            acc[key] = Participant.fromJSON(value);
+            return acc;
+          }, {})
+        : {},
+      bondedWeight: isSet(object.bondedWeight) ? bytesFromBase64(object.bondedWeight) : new Uint8Array(),
     };
   },
 
@@ -259,8 +360,6 @@ export const Snapshot = {
     } else {
       obj.validators = [];
     }
-    message.timestamp !== undefined && (obj.timestamp = fromTimestamp(message.timestamp).toISOString());
-    message.height !== undefined && (obj.height = (message.height || Long.ZERO).toString());
     message.totalShareCount !== undefined &&
       (obj.totalShareCount = base64FromBytes(
         message.totalShareCount !== undefined ? message.totalShareCount : new Uint8Array(),
@@ -270,18 +369,24 @@ export const Snapshot = {
       (obj.keyShareDistributionPolicy = keyShareDistributionPolicyToJSON(message.keyShareDistributionPolicy));
     message.corruptionThreshold !== undefined &&
       (obj.corruptionThreshold = (message.corruptionThreshold || Long.ZERO).toString());
+    message.timestamp !== undefined && (obj.timestamp = fromTimestamp(message.timestamp).toISOString());
+    message.height !== undefined && (obj.height = (message.height || Long.ZERO).toString());
+    obj.participants = {};
+    if (message.participants) {
+      Object.entries(message.participants).forEach(([k, v]) => {
+        obj.participants[k] = Participant.toJSON(v);
+      });
+    }
+    message.bondedWeight !== undefined &&
+      (obj.bondedWeight = base64FromBytes(
+        message.bondedWeight !== undefined ? message.bondedWeight : new Uint8Array(),
+      ));
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Snapshot>, I>>(object: I): Snapshot {
     const message = createBaseSnapshot();
     message.validators = object.validators?.map((e) => Validator.fromPartial(e)) || [];
-    message.timestamp =
-      object.timestamp !== undefined && object.timestamp !== null
-        ? Timestamp.fromPartial(object.timestamp)
-        : undefined;
-    message.height =
-      object.height !== undefined && object.height !== null ? Long.fromValue(object.height) : Long.ZERO;
     message.totalShareCount = object.totalShareCount ?? new Uint8Array();
     message.counter =
       object.counter !== undefined && object.counter !== null ? Long.fromValue(object.counter) : Long.ZERO;
@@ -290,6 +395,84 @@ export const Snapshot = {
       object.corruptionThreshold !== undefined && object.corruptionThreshold !== null
         ? Long.fromValue(object.corruptionThreshold)
         : Long.ZERO;
+    message.timestamp =
+      object.timestamp !== undefined && object.timestamp !== null
+        ? Timestamp.fromPartial(object.timestamp)
+        : undefined;
+    message.height =
+      object.height !== undefined && object.height !== null ? Long.fromValue(object.height) : Long.ZERO;
+    message.participants = Object.entries(object.participants ?? {}).reduce<{ [key: string]: Participant }>(
+      (acc, [key, value]) => {
+        if (value !== undefined) {
+          acc[key] = Participant.fromPartial(value);
+        }
+        return acc;
+      },
+      {},
+    );
+    message.bondedWeight = object.bondedWeight ?? new Uint8Array();
+    return message;
+  },
+};
+
+function createBaseSnapshot_ParticipantsEntry(): Snapshot_ParticipantsEntry {
+  return { key: "", value: undefined };
+}
+
+export const Snapshot_ParticipantsEntry = {
+  encode(message: Snapshot_ParticipantsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      Participant.encode(message.value, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Snapshot_ParticipantsEntry {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSnapshot_ParticipantsEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.key = reader.string();
+          break;
+        case 2:
+          message.value = Participant.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Snapshot_ParticipantsEntry {
+    return {
+      key: isSet(object.key) ? String(object.key) : "",
+      value: isSet(object.value) ? Participant.fromJSON(object.value) : undefined,
+    };
+  },
+
+  toJSON(message: Snapshot_ParticipantsEntry): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined &&
+      (obj.value = message.value ? Participant.toJSON(message.value) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<Snapshot_ParticipantsEntry>, I>>(
+    object: I,
+  ): Snapshot_ParticipantsEntry {
+    const message = createBaseSnapshot_ParticipantsEntry();
+    message.key = object.key ?? "";
+    message.value =
+      object.value !== undefined && object.value !== null ? Participant.fromPartial(object.value) : undefined;
     return message;
   },
 };
@@ -374,6 +557,10 @@ function numberToLong(number: number) {
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isObject(value: any): boolean {
+  return typeof value === "object" && value !== null;
 }
 
 function isSet(value: any): boolean {

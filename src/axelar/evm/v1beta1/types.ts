@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
+import { Any } from "../../../google/protobuf/any";
 
 export const protobufPackage = "axelar.evm.v1beta1";
 
@@ -93,45 +94,6 @@ export function batchedCommandsStatusToJSON(object: BatchedCommandsStatus): stri
     case BatchedCommandsStatus.BATCHED_COMMANDS_STATUS_SIGNED:
       return "BATCHED_COMMANDS_STATUS_SIGNED";
     case BatchedCommandsStatus.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-export enum TransferKeyType {
-  TRANSFER_KEY_TYPE_UNSPECIFIED = 0,
-  TRANSFER_KEY_TYPE_OWNERSHIP = 1,
-  TRANSFER_KEY_TYPE_OPERATORSHIP = 2,
-  UNRECOGNIZED = -1,
-}
-
-export function transferKeyTypeFromJSON(object: any): TransferKeyType {
-  switch (object) {
-    case 0:
-    case "TRANSFER_KEY_TYPE_UNSPECIFIED":
-      return TransferKeyType.TRANSFER_KEY_TYPE_UNSPECIFIED;
-    case 1:
-    case "TRANSFER_KEY_TYPE_OWNERSHIP":
-      return TransferKeyType.TRANSFER_KEY_TYPE_OWNERSHIP;
-    case 2:
-    case "TRANSFER_KEY_TYPE_OPERATORSHIP":
-      return TransferKeyType.TRANSFER_KEY_TYPE_OPERATORSHIP;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return TransferKeyType.UNRECOGNIZED;
-  }
-}
-
-export function transferKeyTypeToJSON(object: TransferKeyType): string {
-  switch (object) {
-    case TransferKeyType.TRANSFER_KEY_TYPE_UNSPECIFIED:
-      return "TRANSFER_KEY_TYPE_UNSPECIFIED";
-    case TransferKeyType.TRANSFER_KEY_TYPE_OWNERSHIP:
-      return "TRANSFER_KEY_TYPE_OWNERSHIP";
-    case TransferKeyType.TRANSFER_KEY_TYPE_OPERATORSHIP:
-      return "TRANSFER_KEY_TYPE_OPERATORSHIP";
-    case TransferKeyType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
@@ -321,6 +283,7 @@ export interface EventTokenDeployed {
   tokenAddress: Uint8Array;
 }
 
+/** @deprecated */
 export interface EventMultisigOwnershipTransferred {
   preOwners: Uint8Array[];
   prevThreshold: Uint8Array;
@@ -329,12 +292,12 @@ export interface EventMultisigOwnershipTransferred {
 }
 
 export interface EventMultisigOperatorshipTransferred {
-  preOperators: Uint8Array[];
-  prevThreshold: Uint8Array;
   newOperators: Uint8Array[];
   newThreshold: Uint8Array;
+  newWeights: Uint8Array[];
 }
 
+/** @deprecated */
 export interface EventSinglesigOwnershipTransferred {
   preOwner: Uint8Array;
   newOwner: Uint8Array;
@@ -406,6 +369,7 @@ export interface CommandBatchMetadata {
   status: BatchedCommandsStatus;
   keyId: string;
   prevBatchedCommandsId: Uint8Array;
+  signature?: Any;
 }
 
 /**
@@ -415,12 +379,12 @@ export interface CommandBatchMetadata {
 export interface SigMetadata {
   type: SigType;
   chain: string;
+  commandBatchId: Uint8Array;
 }
 
 /** TransferKey contains information for a transfer ownership or operatorship */
 export interface TransferKey {
   txId: Uint8Array;
-  type: TransferKeyType;
   nextKeyId: string;
 }
 
@@ -479,6 +443,11 @@ export function gateway_StatusToJSON(object: Gateway_Status): string {
     default:
       return "UNRECOGNIZED";
   }
+}
+
+export interface PollMetadata {
+  chain: string;
+  txId: Uint8Array;
 }
 
 function createBaseVoteEvents(): VoteEvents {
@@ -1301,12 +1270,7 @@ export const EventMultisigOwnershipTransferred = {
 };
 
 function createBaseEventMultisigOperatorshipTransferred(): EventMultisigOperatorshipTransferred {
-  return {
-    preOperators: [],
-    prevThreshold: new Uint8Array(),
-    newOperators: [],
-    newThreshold: new Uint8Array(),
-  };
+  return { newOperators: [], newThreshold: new Uint8Array(), newWeights: [] };
 }
 
 export const EventMultisigOperatorshipTransferred = {
@@ -1314,17 +1278,14 @@ export const EventMultisigOperatorshipTransferred = {
     message: EventMultisigOperatorshipTransferred,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
-    for (const v of message.preOperators) {
-      writer.uint32(10).bytes(v!);
-    }
-    if (message.prevThreshold.length !== 0) {
-      writer.uint32(18).bytes(message.prevThreshold);
-    }
     for (const v of message.newOperators) {
       writer.uint32(26).bytes(v!);
     }
     if (message.newThreshold.length !== 0) {
       writer.uint32(34).bytes(message.newThreshold);
+    }
+    for (const v of message.newWeights) {
+      writer.uint32(42).bytes(v!);
     }
     return writer;
   },
@@ -1336,17 +1297,14 @@ export const EventMultisigOperatorshipTransferred = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          message.preOperators.push(reader.bytes());
-          break;
-        case 2:
-          message.prevThreshold = reader.bytes();
-          break;
         case 3:
           message.newOperators.push(reader.bytes());
           break;
         case 4:
           message.newThreshold = reader.bytes();
+          break;
+        case 5:
+          message.newWeights.push(reader.bytes());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1358,30 +1316,18 @@ export const EventMultisigOperatorshipTransferred = {
 
   fromJSON(object: any): EventMultisigOperatorshipTransferred {
     return {
-      preOperators: Array.isArray(object?.preOperators)
-        ? object.preOperators.map((e: any) => bytesFromBase64(e))
-        : [],
-      prevThreshold: isSet(object.prevThreshold) ? bytesFromBase64(object.prevThreshold) : new Uint8Array(),
       newOperators: Array.isArray(object?.newOperators)
         ? object.newOperators.map((e: any) => bytesFromBase64(e))
         : [],
       newThreshold: isSet(object.newThreshold) ? bytesFromBase64(object.newThreshold) : new Uint8Array(),
+      newWeights: Array.isArray(object?.newWeights)
+        ? object.newWeights.map((e: any) => bytesFromBase64(e))
+        : [],
     };
   },
 
   toJSON(message: EventMultisigOperatorshipTransferred): unknown {
     const obj: any = {};
-    if (message.preOperators) {
-      obj.preOperators = message.preOperators.map((e) =>
-        base64FromBytes(e !== undefined ? e : new Uint8Array()),
-      );
-    } else {
-      obj.preOperators = [];
-    }
-    message.prevThreshold !== undefined &&
-      (obj.prevThreshold = base64FromBytes(
-        message.prevThreshold !== undefined ? message.prevThreshold : new Uint8Array(),
-      ));
     if (message.newOperators) {
       obj.newOperators = message.newOperators.map((e) =>
         base64FromBytes(e !== undefined ? e : new Uint8Array()),
@@ -1393,6 +1339,11 @@ export const EventMultisigOperatorshipTransferred = {
       (obj.newThreshold = base64FromBytes(
         message.newThreshold !== undefined ? message.newThreshold : new Uint8Array(),
       ));
+    if (message.newWeights) {
+      obj.newWeights = message.newWeights.map((e) => base64FromBytes(e !== undefined ? e : new Uint8Array()));
+    } else {
+      obj.newWeights = [];
+    }
     return obj;
   },
 
@@ -1400,10 +1351,9 @@ export const EventMultisigOperatorshipTransferred = {
     object: I,
   ): EventMultisigOperatorshipTransferred {
     const message = createBaseEventMultisigOperatorshipTransferred();
-    message.preOperators = object.preOperators?.map((e) => e) || [];
-    message.prevThreshold = object.prevThreshold ?? new Uint8Array();
     message.newOperators = object.newOperators?.map((e) => e) || [];
     message.newThreshold = object.newThreshold ?? new Uint8Array();
+    message.newWeights = object.newWeights?.map((e) => e) || [];
     return message;
   },
 };
@@ -2087,6 +2037,7 @@ function createBaseCommandBatchMetadata(): CommandBatchMetadata {
     status: 0,
     keyId: "",
     prevBatchedCommandsId: new Uint8Array(),
+    signature: undefined,
   };
 }
 
@@ -2112,6 +2063,9 @@ export const CommandBatchMetadata = {
     }
     if (message.prevBatchedCommandsId.length !== 0) {
       writer.uint32(58).bytes(message.prevBatchedCommandsId);
+    }
+    if (message.signature !== undefined) {
+      Any.encode(message.signature, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -2144,6 +2098,9 @@ export const CommandBatchMetadata = {
         case 7:
           message.prevBatchedCommandsId = reader.bytes();
           break;
+        case 8:
+          message.signature = Any.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2165,6 +2122,7 @@ export const CommandBatchMetadata = {
       prevBatchedCommandsId: isSet(object.prevBatchedCommandsId)
         ? bytesFromBase64(object.prevBatchedCommandsId)
         : new Uint8Array(),
+      signature: isSet(object.signature) ? Any.fromJSON(object.signature) : undefined,
     };
   },
 
@@ -2187,6 +2145,8 @@ export const CommandBatchMetadata = {
       (obj.prevBatchedCommandsId = base64FromBytes(
         message.prevBatchedCommandsId !== undefined ? message.prevBatchedCommandsId : new Uint8Array(),
       ));
+    message.signature !== undefined &&
+      (obj.signature = message.signature ? Any.toJSON(message.signature) : undefined);
     return obj;
   },
 
@@ -2199,12 +2159,16 @@ export const CommandBatchMetadata = {
     message.status = object.status ?? 0;
     message.keyId = object.keyId ?? "";
     message.prevBatchedCommandsId = object.prevBatchedCommandsId ?? new Uint8Array();
+    message.signature =
+      object.signature !== undefined && object.signature !== null
+        ? Any.fromPartial(object.signature)
+        : undefined;
     return message;
   },
 };
 
 function createBaseSigMetadata(): SigMetadata {
-  return { type: 0, chain: "" };
+  return { type: 0, chain: "", commandBatchId: new Uint8Array() };
 }
 
 export const SigMetadata = {
@@ -2214,6 +2178,9 @@ export const SigMetadata = {
     }
     if (message.chain !== "") {
       writer.uint32(18).string(message.chain);
+    }
+    if (message.commandBatchId.length !== 0) {
+      writer.uint32(26).bytes(message.commandBatchId);
     }
     return writer;
   },
@@ -2231,6 +2198,9 @@ export const SigMetadata = {
         case 2:
           message.chain = reader.string();
           break;
+        case 3:
+          message.commandBatchId = reader.bytes();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2243,6 +2213,9 @@ export const SigMetadata = {
     return {
       type: isSet(object.type) ? sigTypeFromJSON(object.type) : 0,
       chain: isSet(object.chain) ? String(object.chain) : "",
+      commandBatchId: isSet(object.commandBatchId)
+        ? bytesFromBase64(object.commandBatchId)
+        : new Uint8Array(),
     };
   },
 
@@ -2250,6 +2223,10 @@ export const SigMetadata = {
     const obj: any = {};
     message.type !== undefined && (obj.type = sigTypeToJSON(message.type));
     message.chain !== undefined && (obj.chain = message.chain);
+    message.commandBatchId !== undefined &&
+      (obj.commandBatchId = base64FromBytes(
+        message.commandBatchId !== undefined ? message.commandBatchId : new Uint8Array(),
+      ));
     return obj;
   },
 
@@ -2257,21 +2234,19 @@ export const SigMetadata = {
     const message = createBaseSigMetadata();
     message.type = object.type ?? 0;
     message.chain = object.chain ?? "";
+    message.commandBatchId = object.commandBatchId ?? new Uint8Array();
     return message;
   },
 };
 
 function createBaseTransferKey(): TransferKey {
-  return { txId: new Uint8Array(), type: 0, nextKeyId: "" };
+  return { txId: new Uint8Array(), nextKeyId: "" };
 }
 
 export const TransferKey = {
   encode(message: TransferKey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.txId.length !== 0) {
       writer.uint32(10).bytes(message.txId);
-    }
-    if (message.type !== 0) {
-      writer.uint32(16).int32(message.type);
     }
     if (message.nextKeyId !== "") {
       writer.uint32(26).string(message.nextKeyId);
@@ -2289,9 +2264,6 @@ export const TransferKey = {
         case 1:
           message.txId = reader.bytes();
           break;
-        case 2:
-          message.type = reader.int32() as any;
-          break;
         case 3:
           message.nextKeyId = reader.string();
           break;
@@ -2306,7 +2278,6 @@ export const TransferKey = {
   fromJSON(object: any): TransferKey {
     return {
       txId: isSet(object.txId) ? bytesFromBase64(object.txId) : new Uint8Array(),
-      type: isSet(object.type) ? transferKeyTypeFromJSON(object.type) : 0,
       nextKeyId: isSet(object.nextKeyId) ? String(object.nextKeyId) : "",
     };
   },
@@ -2315,7 +2286,6 @@ export const TransferKey = {
     const obj: any = {};
     message.txId !== undefined &&
       (obj.txId = base64FromBytes(message.txId !== undefined ? message.txId : new Uint8Array()));
-    message.type !== undefined && (obj.type = transferKeyTypeToJSON(message.type));
     message.nextKeyId !== undefined && (obj.nextKeyId = message.nextKeyId);
     return obj;
   },
@@ -2323,7 +2293,6 @@ export const TransferKey = {
   fromPartial<I extends Exact<DeepPartial<TransferKey>, I>>(object: I): TransferKey {
     const message = createBaseTransferKey();
     message.txId = object.txId ?? new Uint8Array();
-    message.type = object.type ?? 0;
     message.nextKeyId = object.nextKeyId ?? "";
     return message;
   },
@@ -2519,6 +2488,65 @@ export const Gateway = {
     const message = createBaseGateway();
     message.address = object.address ?? new Uint8Array();
     message.status = object.status ?? 0;
+    return message;
+  },
+};
+
+function createBasePollMetadata(): PollMetadata {
+  return { chain: "", txId: new Uint8Array() };
+}
+
+export const PollMetadata = {
+  encode(message: PollMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    if (message.txId.length !== 0) {
+      writer.uint32(18).bytes(message.txId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): PollMetadata {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePollMetadata();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        case 2:
+          message.txId = reader.bytes();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PollMetadata {
+    return {
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      txId: isSet(object.txId) ? bytesFromBase64(object.txId) : new Uint8Array(),
+    };
+  },
+
+  toJSON(message: PollMetadata): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.txId !== undefined &&
+      (obj.txId = base64FromBytes(message.txId !== undefined ? message.txId : new Uint8Array()));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<PollMetadata>, I>>(object: I): PollMetadata {
+    const message = createBasePollMetadata();
+    message.chain = object.chain ?? "";
+    message.txId = object.txId ?? new Uint8Array();
     return message;
   },
 };

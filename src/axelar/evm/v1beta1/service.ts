@@ -11,7 +11,6 @@ import {
   CreateDeployTokenResponse,
   CreateBurnTokensResponse,
   CreatePendingTransfersResponse,
-  CreateTransferOwnershipResponse,
   CreateTransferOperatorshipResponse,
   SignCommandsResponse,
   AddChainResponse,
@@ -25,7 +24,6 @@ import {
   CreateDeployTokenRequest,
   CreateBurnTokensRequest,
   CreatePendingTransfersRequest,
-  CreateTransferOwnershipRequest,
   CreateTransferOperatorshipRequest,
   SignCommandsRequest,
   AddChainRequest,
@@ -42,6 +40,8 @@ import {
   GatewayAddressResponse,
   BytecodeResponse,
   EventResponse,
+  ERC20TokensResponse,
+  TokenInfoResponse,
   BatchedCommandsRequest,
   BurnerInfoRequest,
   ConfirmationHeightRequest,
@@ -52,6 +52,8 @@ import {
   GatewayAddressRequest,
   BytecodeRequest,
   EventRequest,
+  ERC20TokensRequest,
+  TokenInfoRequest,
 } from "../../../axelar/evm/v1beta1/query";
 
 export const protobufPackage = "axelar.evm.v1beta1";
@@ -67,7 +69,6 @@ export interface MsgService {
   CreateDeployToken(request: CreateDeployTokenRequest): Promise<CreateDeployTokenResponse>;
   CreateBurnTokens(request: CreateBurnTokensRequest): Promise<CreateBurnTokensResponse>;
   CreatePendingTransfers(request: CreatePendingTransfersRequest): Promise<CreatePendingTransfersResponse>;
-  CreateTransferOwnership(request: CreateTransferOwnershipRequest): Promise<CreateTransferOwnershipResponse>;
   CreateTransferOperatorship(
     request: CreateTransferOperatorshipRequest,
   ): Promise<CreateTransferOperatorshipResponse>;
@@ -89,7 +90,6 @@ export class MsgServiceClientImpl implements MsgService {
     this.CreateDeployToken = this.CreateDeployToken.bind(this);
     this.CreateBurnTokens = this.CreateBurnTokens.bind(this);
     this.CreatePendingTransfers = this.CreatePendingTransfers.bind(this);
-    this.CreateTransferOwnership = this.CreateTransferOwnership.bind(this);
     this.CreateTransferOperatorship = this.CreateTransferOperatorship.bind(this);
     this.SignCommands = this.SignCommands.bind(this);
     this.AddChain = this.AddChain.bind(this);
@@ -149,12 +149,6 @@ export class MsgServiceClientImpl implements MsgService {
     return promise.then((data) => CreatePendingTransfersResponse.decode(new _m0.Reader(data)));
   }
 
-  CreateTransferOwnership(request: CreateTransferOwnershipRequest): Promise<CreateTransferOwnershipResponse> {
-    const data = CreateTransferOwnershipRequest.encode(request).finish();
-    const promise = this.rpc.request("axelar.evm.v1beta1.MsgService", "CreateTransferOwnership", data);
-    return promise.then((data) => CreateTransferOwnershipResponse.decode(new _m0.Reader(data)));
-  }
-
   CreateTransferOperatorship(
     request: CreateTransferOperatorshipRequest,
   ): Promise<CreateTransferOperatorshipResponse> {
@@ -208,6 +202,10 @@ export interface QueryService {
   Bytecode(request: BytecodeRequest): Promise<BytecodeResponse>;
   /** Event queries an event at the specified chain */
   Event(request: EventRequest): Promise<EventResponse>;
+  /** ERC20Tokens queries the ERC20 tokens registered for a chain */
+  ERC20Tokens(request: ERC20TokensRequest): Promise<ERC20TokensResponse>;
+  /** TokenInfo queries the token info for a registered ERC20 Token */
+  TokenInfo(request: TokenInfoRequest): Promise<TokenInfoResponse>;
 }
 
 export class QueryServiceClientImpl implements QueryService {
@@ -224,6 +222,8 @@ export class QueryServiceClientImpl implements QueryService {
     this.GatewayAddress = this.GatewayAddress.bind(this);
     this.Bytecode = this.Bytecode.bind(this);
     this.Event = this.Event.bind(this);
+    this.ERC20Tokens = this.ERC20Tokens.bind(this);
+    this.TokenInfo = this.TokenInfo.bind(this);
   }
   BatchedCommands(request: BatchedCommandsRequest): Promise<BatchedCommandsResponse> {
     const data = BatchedCommandsRequest.encode(request).finish();
@@ -283,6 +283,18 @@ export class QueryServiceClientImpl implements QueryService {
     const data = EventRequest.encode(request).finish();
     const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "Event", data);
     return promise.then((data) => EventResponse.decode(new _m0.Reader(data)));
+  }
+
+  ERC20Tokens(request: ERC20TokensRequest): Promise<ERC20TokensResponse> {
+    const data = ERC20TokensRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "ERC20Tokens", data);
+    return promise.then((data) => ERC20TokensResponse.decode(new _m0.Reader(data)));
+  }
+
+  TokenInfo(request: TokenInfoRequest): Promise<TokenInfoResponse> {
+    const data = TokenInfoRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "TokenInfo", data);
+    return promise.then((data) => TokenInfoResponse.decode(new _m0.Reader(data)));
   }
 }
 

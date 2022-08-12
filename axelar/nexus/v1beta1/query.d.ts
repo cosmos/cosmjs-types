@@ -5,6 +5,14 @@ import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pa
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import { ChainState } from "../../../axelar/nexus/v1beta1/types";
 export declare const protobufPackage = "axelar.nexus.v1beta1";
+export declare enum ChainStatus {
+    CHAIN_STATUS_UNSPECIFIED = 0,
+    CHAIN_STATUS_ACTIVATED = 1,
+    CHAIN_STATUS_DEACTIVATED = 2,
+    UNRECOGNIZED = -1
+}
+export declare function chainStatusFromJSON(object: any): ChainStatus;
+export declare function chainStatusToJSON(object: ChainStatus): string;
 export interface QueryChainMaintainersResponse {
     maintainers: Uint8Array[];
 }
@@ -61,6 +69,7 @@ export interface TransferFeeResponse {
  * registered on the network
  */
 export interface ChainsRequest {
+    status: ChainStatus;
 }
 export interface ChainsResponse {
     chains: string[];
@@ -601,11 +610,15 @@ export declare const TransferFeeResponse: {
     } & Record<Exclude<keyof I, "fee">, never>>(object: I): TransferFeeResponse;
 };
 export declare const ChainsRequest: {
-    encode(_: ChainsRequest, writer?: _m0.Writer): _m0.Writer;
+    encode(message: ChainsRequest, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number | undefined): ChainsRequest;
-    fromJSON(_: any): ChainsRequest;
-    toJSON(_: ChainsRequest): unknown;
-    fromPartial<I extends {} & {} & Record<Exclude<keyof I, never>, never>>(_: I): ChainsRequest;
+    fromJSON(object: any): ChainsRequest;
+    toJSON(message: ChainsRequest): unknown;
+    fromPartial<I extends {
+        status?: ChainStatus | undefined;
+    } & {
+        status?: ChainStatus | undefined;
+    } & Record<Exclude<keyof I, "status">, never>>(object: I): ChainsRequest;
 };
 export declare const ChainsResponse: {
     encode(message: ChainsResponse, writer?: _m0.Writer): _m0.Writer;

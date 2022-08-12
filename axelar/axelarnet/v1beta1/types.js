@@ -36,6 +36,7 @@ function createBaseIBCTransfer() {
         portId: "",
         channelId: "",
         sequence: long_1.default.UZERO,
+        id: long_1.default.UZERO,
     };
 }
 exports.IBCTransfer = {
@@ -57,6 +58,9 @@ exports.IBCTransfer = {
         }
         if (!message.sequence.isZero()) {
             writer.uint32(48).uint64(message.sequence);
+        }
+        if (!message.id.isZero()) {
+            writer.uint32(56).uint64(message.id);
         }
         return writer;
     },
@@ -85,6 +89,9 @@ exports.IBCTransfer = {
                 case 6:
                     message.sequence = reader.uint64();
                     break;
+                case 7:
+                    message.id = reader.uint64();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -100,6 +107,7 @@ exports.IBCTransfer = {
             portId: isSet(object.portId) ? String(object.portId) : "",
             channelId: isSet(object.channelId) ? String(object.channelId) : "",
             sequence: isSet(object.sequence) ? long_1.default.fromValue(object.sequence) : long_1.default.UZERO,
+            id: isSet(object.id) ? long_1.default.fromValue(object.id) : long_1.default.UZERO,
         };
     },
     toJSON(message) {
@@ -111,6 +119,7 @@ exports.IBCTransfer = {
         message.portId !== undefined && (obj.portId = message.portId);
         message.channelId !== undefined && (obj.channelId = message.channelId);
         message.sequence !== undefined && (obj.sequence = (message.sequence || long_1.default.UZERO).toString());
+        message.id !== undefined && (obj.id = (message.id || long_1.default.UZERO).toString());
         return obj;
     },
     fromPartial(object) {
@@ -126,6 +135,7 @@ exports.IBCTransfer = {
             object.sequence !== undefined && object.sequence !== null
                 ? long_1.default.fromValue(object.sequence)
                 : long_1.default.UZERO;
+        message.id = object.id !== undefined && object.id !== null ? long_1.default.fromValue(object.id) : long_1.default.UZERO;
         return message;
     },
 };

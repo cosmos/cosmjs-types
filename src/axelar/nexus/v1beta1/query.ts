@@ -14,6 +14,45 @@ import { ChainState } from "../../../axelar/nexus/v1beta1/types";
 
 export const protobufPackage = "axelar.nexus.v1beta1";
 
+export enum ChainStatus {
+  CHAIN_STATUS_UNSPECIFIED = 0,
+  CHAIN_STATUS_ACTIVATED = 1,
+  CHAIN_STATUS_DEACTIVATED = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function chainStatusFromJSON(object: any): ChainStatus {
+  switch (object) {
+    case 0:
+    case "CHAIN_STATUS_UNSPECIFIED":
+      return ChainStatus.CHAIN_STATUS_UNSPECIFIED;
+    case 1:
+    case "CHAIN_STATUS_ACTIVATED":
+      return ChainStatus.CHAIN_STATUS_ACTIVATED;
+    case 2:
+    case "CHAIN_STATUS_DEACTIVATED":
+      return ChainStatus.CHAIN_STATUS_DEACTIVATED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return ChainStatus.UNRECOGNIZED;
+  }
+}
+
+export function chainStatusToJSON(object: ChainStatus): string {
+  switch (object) {
+    case ChainStatus.CHAIN_STATUS_UNSPECIFIED:
+      return "CHAIN_STATUS_UNSPECIFIED";
+    case ChainStatus.CHAIN_STATUS_ACTIVATED:
+      return "CHAIN_STATUS_ACTIVATED";
+    case ChainStatus.CHAIN_STATUS_DEACTIVATED:
+      return "CHAIN_STATUS_DEACTIVATED";
+    case ChainStatus.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export interface QueryChainMaintainersResponse {
   maintainers: Uint8Array[];
 }
@@ -78,7 +117,9 @@ export interface TransferFeeResponse {
  * ChainsRequest represents a message that queries the chains
  * registered on the network
  */
-export interface ChainsRequest {}
+export interface ChainsRequest {
+  status: ChainStatus;
+}
 
 export interface ChainsResponse {
   chains: string[];
@@ -684,11 +725,14 @@ export const TransferFeeResponse = {
 };
 
 function createBaseChainsRequest(): ChainsRequest {
-  return {};
+  return { status: 0 };
 }
 
 export const ChainsRequest = {
-  encode(_: ChainsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ChainsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.status !== 0) {
+      writer.uint32(8).int32(message.status);
+    }
     return writer;
   },
 
@@ -699,6 +743,9 @@ export const ChainsRequest = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.status = reader.int32() as any;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -707,17 +754,21 @@ export const ChainsRequest = {
     return message;
   },
 
-  fromJSON(_: any): ChainsRequest {
-    return {};
+  fromJSON(object: any): ChainsRequest {
+    return {
+      status: isSet(object.status) ? chainStatusFromJSON(object.status) : 0,
+    };
   },
 
-  toJSON(_: ChainsRequest): unknown {
+  toJSON(message: ChainsRequest): unknown {
     const obj: any = {};
+    message.status !== undefined && (obj.status = chainStatusToJSON(message.status));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ChainsRequest>, I>>(_: I): ChainsRequest {
+  fromPartial<I extends Exact<DeepPartial<ChainsRequest>, I>>(object: I): ChainsRequest {
     const message = createBaseChainsRequest();
+    message.status = object.status ?? 0;
     return message;
   },
 };

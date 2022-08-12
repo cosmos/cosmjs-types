@@ -97,6 +97,14 @@ export interface RegisterFeeCollectorRequest {
 
 export interface RegisterFeeCollectorResponse {}
 
+export interface RetryIBCTransferRequest {
+  sender: Uint8Array;
+  chain: string;
+  id: Long;
+}
+
+export interface RetryIBCTransferResponse {}
+
 function createBaseLinkRequest(): LinkRequest {
   return { sender: new Uint8Array(), recipientAddr: "", recipientChain: "", asset: "" };
 }
@@ -962,6 +970,113 @@ export const RegisterFeeCollectorResponse = {
     _: I,
   ): RegisterFeeCollectorResponse {
     const message = createBaseRegisterFeeCollectorResponse();
+    return message;
+  },
+};
+
+function createBaseRetryIBCTransferRequest(): RetryIBCTransferRequest {
+  return { sender: new Uint8Array(), chain: "", id: Long.UZERO };
+}
+
+export const RetryIBCTransferRequest = {
+  encode(message: RetryIBCTransferRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.sender.length !== 0) {
+      writer.uint32(10).bytes(message.sender);
+    }
+    if (message.chain !== "") {
+      writer.uint32(18).string(message.chain);
+    }
+    if (!message.id.isZero()) {
+      writer.uint32(24).uint64(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RetryIBCTransferRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRetryIBCTransferRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sender = reader.bytes();
+          break;
+        case 2:
+          message.chain = reader.string();
+          break;
+        case 3:
+          message.id = reader.uint64() as Long;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RetryIBCTransferRequest {
+    return {
+      sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
+    };
+  },
+
+  toJSON(message: RetryIBCTransferRequest): unknown {
+    const obj: any = {};
+    message.sender !== undefined &&
+      (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<RetryIBCTransferRequest>, I>>(object: I): RetryIBCTransferRequest {
+    const message = createBaseRetryIBCTransferRequest();
+    message.sender = object.sender ?? new Uint8Array();
+    message.chain = object.chain ?? "";
+    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    return message;
+  },
+};
+
+function createBaseRetryIBCTransferResponse(): RetryIBCTransferResponse {
+  return {};
+}
+
+export const RetryIBCTransferResponse = {
+  encode(_: RetryIBCTransferResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RetryIBCTransferResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRetryIBCTransferResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): RetryIBCTransferResponse {
+    return {};
+  },
+
+  toJSON(_: RetryIBCTransferResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<RetryIBCTransferResponse>, I>>(_: I): RetryIBCTransferResponse {
+    const message = createBaseRetryIBCTransferResponse();
     return message;
   },
 };

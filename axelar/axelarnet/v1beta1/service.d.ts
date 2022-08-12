@@ -1,4 +1,4 @@
-import { LinkResponse, ConfirmDepositResponse, ExecutePendingTransfersResponse, RegisterIBCPathResponse, AddCosmosBasedChainResponse, RegisterAssetResponse, RouteIBCTransfersResponse, RegisterFeeCollectorResponse, LinkRequest, ConfirmDepositRequest, ExecutePendingTransfersRequest, RegisterIBCPathRequest, AddCosmosBasedChainRequest, RegisterAssetRequest, RouteIBCTransfersRequest, RegisterFeeCollectorRequest } from "../../../axelar/axelarnet/v1beta1/tx";
+import { LinkResponse, ConfirmDepositResponse, ExecutePendingTransfersResponse, RegisterIBCPathResponse, AddCosmosBasedChainResponse, RegisterAssetResponse, RouteIBCTransfersResponse, RegisterFeeCollectorResponse, RetryIBCTransferResponse, LinkRequest, ConfirmDepositRequest, ExecutePendingTransfersRequest, RegisterIBCPathRequest, AddCosmosBasedChainRequest, RegisterAssetRequest, RouteIBCTransfersRequest, RegisterFeeCollectorRequest, RetryIBCTransferRequest } from "../../../axelar/axelarnet/v1beta1/tx";
 import { PendingIBCTransferCountResponse, PendingIBCTransferCountRequest } from "../../../axelar/axelarnet/v1beta1/query";
 export declare const protobufPackage = "axelar.axelarnet.v1beta1";
 /** Msg defines the axelarnet Msg service. */
@@ -11,6 +11,7 @@ export interface MsgService {
     RegisterAsset(request: RegisterAssetRequest): Promise<RegisterAssetResponse>;
     RouteIBCTransfers(request: RouteIBCTransfersRequest): Promise<RouteIBCTransfersResponse>;
     RegisterFeeCollector(request: RegisterFeeCollectorRequest): Promise<RegisterFeeCollectorResponse>;
+    RetryIBCTransfer(request: RetryIBCTransferRequest): Promise<RetryIBCTransferResponse>;
 }
 export declare class MsgServiceClientImpl implements MsgService {
     private readonly rpc;
@@ -23,6 +24,7 @@ export declare class MsgServiceClientImpl implements MsgService {
     RegisterAsset(request: RegisterAssetRequest): Promise<RegisterAssetResponse>;
     RouteIBCTransfers(request: RouteIBCTransfersRequest): Promise<RouteIBCTransfersResponse>;
     RegisterFeeCollector(request: RegisterFeeCollectorRequest): Promise<RegisterFeeCollectorResponse>;
+    RetryIBCTransfer(request: RetryIBCTransferRequest): Promise<RetryIBCTransferResponse>;
 }
 /** QueryService defines the gRPC querier service. */
 export interface QueryService {

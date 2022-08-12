@@ -1,6 +1,6 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
-import { Asset, TransferKeyType, TokenDetails } from "../../../axelar/evm/v1beta1/types";
+import { Asset, TokenDetails } from "../../../axelar/evm/v1beta1/types";
 import { KeyType } from "../../../axelar/tss/exported/v1beta1/types";
 export declare const protobufPackage = "axelar.evm.v1beta1";
 export interface SetGatewayRequest {
@@ -41,8 +41,6 @@ export interface ConfirmTransferKeyRequest {
     sender: Uint8Array;
     chain: string;
     txId: Uint8Array;
-    transferType: TransferKeyType;
-    keyId: string;
 }
 export interface ConfirmTransferKeyResponse {
 }
@@ -80,6 +78,7 @@ export interface CreateDeployTokenRequest {
     asset?: Asset;
     tokenDetails?: TokenDetails;
     address: Uint8Array;
+    dailyMintLimit: string;
 }
 export interface CreateDeployTokenResponse {
 }
@@ -118,6 +117,7 @@ export interface SignCommandsResponse {
 export interface AddChainRequest {
     sender: Uint8Array;
     name: string;
+    /** @deprecated */
     keyType: KeyType;
     params: Uint8Array;
 }
@@ -242,14 +242,10 @@ export declare const ConfirmTransferKeyRequest: {
         sender?: Uint8Array | undefined;
         chain?: string | undefined;
         txId?: Uint8Array | undefined;
-        transferType?: TransferKeyType | undefined;
-        keyId?: string | undefined;
     } & {
         sender?: Uint8Array | undefined;
         chain?: string | undefined;
         txId?: Uint8Array | undefined;
-        transferType?: TransferKeyType | undefined;
-        keyId?: string | undefined;
     } & Record<Exclude<keyof I, keyof ConfirmTransferKeyRequest>, never>>(object: I): ConfirmTransferKeyRequest;
 };
 export declare const ConfirmTransferKeyResponse: {
@@ -328,6 +324,7 @@ export declare const CreateDeployTokenRequest: {
             capacity?: Uint8Array | undefined;
         } | undefined;
         address?: Uint8Array | undefined;
+        dailyMintLimit?: string | undefined;
     } & {
         sender?: Uint8Array | undefined;
         chain?: string | undefined;
@@ -350,6 +347,7 @@ export declare const CreateDeployTokenRequest: {
             capacity?: Uint8Array | undefined;
         } & Record<Exclude<keyof I["tokenDetails"], keyof TokenDetails>, never>) | undefined;
         address?: Uint8Array | undefined;
+        dailyMintLimit?: string | undefined;
     } & Record<Exclude<keyof I, keyof CreateDeployTokenRequest>, never>>(object: I): CreateDeployTokenRequest;
 };
 export declare const CreateDeployTokenResponse: {

@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RecipientAddressResponse = exports.RecipientAddressRequest = exports.ChainsByAssetResponse = exports.ChainsByAssetRequest = exports.ChainStateResponse = exports.ChainStateRequest = exports.AssetsResponse = exports.AssetsRequest = exports.ChainsResponse = exports.ChainsRequest = exports.TransferFeeResponse = exports.TransferFeeRequest = exports.FeeInfoResponse = exports.FeeInfoRequest = exports.TransfersForChainResponse = exports.TransfersForChainRequest = exports.LatestDepositAddressResponse = exports.LatestDepositAddressRequest = exports.QueryChainMaintainersResponse = exports.protobufPackage = void 0;
+exports.RecipientAddressResponse = exports.RecipientAddressRequest = exports.ChainsByAssetResponse = exports.ChainsByAssetRequest = exports.ChainStateResponse = exports.ChainStateRequest = exports.AssetsResponse = exports.AssetsRequest = exports.ChainsResponse = exports.ChainsRequest = exports.TransferFeeResponse = exports.TransferFeeRequest = exports.FeeInfoResponse = exports.FeeInfoRequest = exports.TransfersForChainResponse = exports.TransfersForChainRequest = exports.LatestDepositAddressResponse = exports.LatestDepositAddressRequest = exports.QueryChainMaintainersResponse = exports.chainStatusToJSON = exports.chainStatusFromJSON = exports.ChainStatus = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
@@ -31,6 +31,45 @@ const pagination_1 = require("../../../cosmos/base/query/v1beta1/pagination");
 const coin_1 = require("../../../cosmos/base/v1beta1/coin");
 const types_2 = require("../../../axelar/nexus/v1beta1/types");
 exports.protobufPackage = "axelar.nexus.v1beta1";
+var ChainStatus;
+(function (ChainStatus) {
+    ChainStatus[ChainStatus["CHAIN_STATUS_UNSPECIFIED"] = 0] = "CHAIN_STATUS_UNSPECIFIED";
+    ChainStatus[ChainStatus["CHAIN_STATUS_ACTIVATED"] = 1] = "CHAIN_STATUS_ACTIVATED";
+    ChainStatus[ChainStatus["CHAIN_STATUS_DEACTIVATED"] = 2] = "CHAIN_STATUS_DEACTIVATED";
+    ChainStatus[ChainStatus["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
+})(ChainStatus = exports.ChainStatus || (exports.ChainStatus = {}));
+function chainStatusFromJSON(object) {
+    switch (object) {
+        case 0:
+        case "CHAIN_STATUS_UNSPECIFIED":
+            return ChainStatus.CHAIN_STATUS_UNSPECIFIED;
+        case 1:
+        case "CHAIN_STATUS_ACTIVATED":
+            return ChainStatus.CHAIN_STATUS_ACTIVATED;
+        case 2:
+        case "CHAIN_STATUS_DEACTIVATED":
+            return ChainStatus.CHAIN_STATUS_DEACTIVATED;
+        case -1:
+        case "UNRECOGNIZED":
+        default:
+            return ChainStatus.UNRECOGNIZED;
+    }
+}
+exports.chainStatusFromJSON = chainStatusFromJSON;
+function chainStatusToJSON(object) {
+    switch (object) {
+        case ChainStatus.CHAIN_STATUS_UNSPECIFIED:
+            return "CHAIN_STATUS_UNSPECIFIED";
+        case ChainStatus.CHAIN_STATUS_ACTIVATED:
+            return "CHAIN_STATUS_ACTIVATED";
+        case ChainStatus.CHAIN_STATUS_DEACTIVATED:
+            return "CHAIN_STATUS_DEACTIVATED";
+        case ChainStatus.UNRECOGNIZED:
+        default:
+            return "UNRECOGNIZED";
+    }
+}
+exports.chainStatusToJSON = chainStatusToJSON;
 function createBaseQueryChainMaintainersResponse() {
     return { maintainers: [] };
 }
@@ -524,10 +563,13 @@ exports.TransferFeeResponse = {
     },
 };
 function createBaseChainsRequest() {
-    return {};
+    return { status: 0 };
 }
 exports.ChainsRequest = {
-    encode(_, writer = _m0.Writer.create()) {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.status !== 0) {
+            writer.uint32(8).int32(message.status);
+        }
         return writer;
     },
     decode(input, length) {
@@ -537,6 +579,9 @@ exports.ChainsRequest = {
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
+                case 1:
+                    message.status = reader.int32();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -544,15 +589,20 @@ exports.ChainsRequest = {
         }
         return message;
     },
-    fromJSON(_) {
-        return {};
+    fromJSON(object) {
+        return {
+            status: isSet(object.status) ? chainStatusFromJSON(object.status) : 0,
+        };
     },
-    toJSON(_) {
+    toJSON(message) {
         const obj = {};
+        message.status !== undefined && (obj.status = chainStatusToJSON(message.status));
         return obj;
     },
-    fromPartial(_) {
+    fromPartial(object) {
+        var _a;
         const message = createBaseChainsRequest();
+        message.status = (_a = object.status) !== null && _a !== void 0 ? _a : 0;
         return message;
     },
 };

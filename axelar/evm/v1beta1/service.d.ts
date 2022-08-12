@@ -1,5 +1,5 @@
-import { SetGatewayResponse, ConfirmGatewayTxResponse, LinkResponse, ConfirmTokenResponse, ConfirmDepositResponse, ConfirmTransferKeyResponse, CreateDeployTokenResponse, CreateBurnTokensResponse, CreatePendingTransfersResponse, CreateTransferOwnershipResponse, CreateTransferOperatorshipResponse, SignCommandsResponse, AddChainResponse, RetryFailedEventResponse, SetGatewayRequest, ConfirmGatewayTxRequest, LinkRequest, ConfirmTokenRequest, ConfirmDepositRequest, ConfirmTransferKeyRequest, CreateDeployTokenRequest, CreateBurnTokensRequest, CreatePendingTransfersRequest, CreateTransferOwnershipRequest, CreateTransferOperatorshipRequest, SignCommandsRequest, AddChainRequest, RetryFailedEventRequest } from "../../../axelar/evm/v1beta1/tx";
-import { BatchedCommandsResponse, BurnerInfoResponse, ConfirmationHeightResponse, DepositStateResponse, PendingCommandsResponse, ChainsResponse, KeyAddressResponse, GatewayAddressResponse, BytecodeResponse, EventResponse, BatchedCommandsRequest, BurnerInfoRequest, ConfirmationHeightRequest, DepositStateRequest, PendingCommandsRequest, ChainsRequest, KeyAddressRequest, GatewayAddressRequest, BytecodeRequest, EventRequest } from "../../../axelar/evm/v1beta1/query";
+import { SetGatewayResponse, ConfirmGatewayTxResponse, LinkResponse, ConfirmTokenResponse, ConfirmDepositResponse, ConfirmTransferKeyResponse, CreateDeployTokenResponse, CreateBurnTokensResponse, CreatePendingTransfersResponse, CreateTransferOperatorshipResponse, SignCommandsResponse, AddChainResponse, RetryFailedEventResponse, SetGatewayRequest, ConfirmGatewayTxRequest, LinkRequest, ConfirmTokenRequest, ConfirmDepositRequest, ConfirmTransferKeyRequest, CreateDeployTokenRequest, CreateBurnTokensRequest, CreatePendingTransfersRequest, CreateTransferOperatorshipRequest, SignCommandsRequest, AddChainRequest, RetryFailedEventRequest } from "../../../axelar/evm/v1beta1/tx";
+import { BatchedCommandsResponse, BurnerInfoResponse, ConfirmationHeightResponse, DepositStateResponse, PendingCommandsResponse, ChainsResponse, KeyAddressResponse, GatewayAddressResponse, BytecodeResponse, EventResponse, ERC20TokensResponse, TokenInfoResponse, BatchedCommandsRequest, BurnerInfoRequest, ConfirmationHeightRequest, DepositStateRequest, PendingCommandsRequest, ChainsRequest, KeyAddressRequest, GatewayAddressRequest, BytecodeRequest, EventRequest, ERC20TokensRequest, TokenInfoRequest } from "../../../axelar/evm/v1beta1/query";
 export declare const protobufPackage = "axelar.evm.v1beta1";
 /** Msg defines the evm Msg service. */
 export interface MsgService {
@@ -12,7 +12,6 @@ export interface MsgService {
     CreateDeployToken(request: CreateDeployTokenRequest): Promise<CreateDeployTokenResponse>;
     CreateBurnTokens(request: CreateBurnTokensRequest): Promise<CreateBurnTokensResponse>;
     CreatePendingTransfers(request: CreatePendingTransfersRequest): Promise<CreatePendingTransfersResponse>;
-    CreateTransferOwnership(request: CreateTransferOwnershipRequest): Promise<CreateTransferOwnershipResponse>;
     CreateTransferOperatorship(request: CreateTransferOperatorshipRequest): Promise<CreateTransferOperatorshipResponse>;
     SignCommands(request: SignCommandsRequest): Promise<SignCommandsResponse>;
     AddChain(request: AddChainRequest): Promise<AddChainResponse>;
@@ -30,7 +29,6 @@ export declare class MsgServiceClientImpl implements MsgService {
     CreateDeployToken(request: CreateDeployTokenRequest): Promise<CreateDeployTokenResponse>;
     CreateBurnTokens(request: CreateBurnTokensRequest): Promise<CreateBurnTokensResponse>;
     CreatePendingTransfers(request: CreatePendingTransfersRequest): Promise<CreatePendingTransfersResponse>;
-    CreateTransferOwnership(request: CreateTransferOwnershipRequest): Promise<CreateTransferOwnershipResponse>;
     CreateTransferOperatorship(request: CreateTransferOperatorshipRequest): Promise<CreateTransferOperatorshipResponse>;
     SignCommands(request: SignCommandsRequest): Promise<SignCommandsResponse>;
     AddChain(request: AddChainRequest): Promise<AddChainResponse>;
@@ -62,6 +60,10 @@ export interface QueryService {
     Bytecode(request: BytecodeRequest): Promise<BytecodeResponse>;
     /** Event queries an event at the specified chain */
     Event(request: EventRequest): Promise<EventResponse>;
+    /** ERC20Tokens queries the ERC20 tokens registered for a chain */
+    ERC20Tokens(request: ERC20TokensRequest): Promise<ERC20TokensResponse>;
+    /** TokenInfo queries the token info for a registered ERC20 Token */
+    TokenInfo(request: TokenInfoRequest): Promise<TokenInfoResponse>;
 }
 export declare class QueryServiceClientImpl implements QueryService {
     private readonly rpc;
@@ -76,6 +78,8 @@ export declare class QueryServiceClientImpl implements QueryService {
     GatewayAddress(request: GatewayAddressRequest): Promise<GatewayAddressResponse>;
     Bytecode(request: BytecodeRequest): Promise<BytecodeResponse>;
     Event(request: EventRequest): Promise<EventResponse>;
+    ERC20Tokens(request: ERC20TokensRequest): Promise<ERC20TokensResponse>;
+    TokenInfo(request: TokenInfoRequest): Promise<TokenInfoResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

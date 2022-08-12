@@ -1,7 +1,15 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
-import { BatchedCommandsStatus, DepositStatus, Event, BurnerInfo } from "../../../axelar/evm/v1beta1/types";
+import { BatchedCommandsStatus, DepositStatus, Event, BurnerInfo, TokenDetails } from "../../../axelar/evm/v1beta1/types";
 export declare const protobufPackage = "axelar.evm.v1beta1";
+export declare enum TokenType {
+    TOKEN_TYPE_UNSPECIFIED = 0,
+    TOKEN_TYPE_INTERNAL = 1,
+    TOKEN_TYPE_EXTERNAL = 2,
+    UNRECOGNIZED = -1
+}
+export declare function tokenTypeFromJSON(object: any): TokenType;
+export declare function tokenTypeToJSON(object: TokenType): string;
 /**
  * DepositQueryParams describe the parameters used to query for an EVM
  * deposit address
@@ -24,28 +32,25 @@ export interface BatchedCommandsResponse {
     data: string;
     status: BatchedCommandsStatus;
     keyId: string;
-    signature: string[];
     executeData: string;
     prevBatchedCommandsId: string;
     commandIds: string[];
+    proof?: Proof;
 }
 export interface KeyAddressRequest {
     chain: string;
-    role: number | undefined;
-    id: string | undefined;
+    keyId: string;
 }
 export interface KeyAddressResponse {
     keyId: string;
-    multisigAddresses?: KeyAddressResponse_MultisigAddresses | undefined;
-    thresholdAddress?: KeyAddressResponse_ThresholdAddress | undefined;
+    addresses: KeyAddressResponse_WeightedAddress[];
+    threshold: string;
 }
-export interface KeyAddressResponse_MultisigAddresses {
-    addresses: string[];
-    threshold: number;
-}
-export interface KeyAddressResponse_ThresholdAddress {
+export interface KeyAddressResponse_WeightedAddress {
     address: string;
+    weight: string;
 }
+/** @deprecated */
 export interface QueryTokenAddressResponse {
     address: string;
     confirmed: boolean;
@@ -53,7 +58,6 @@ export interface QueryTokenAddressResponse {
 export interface QueryDepositStateParams {
     txId: Uint8Array;
     burnerAddress: Uint8Array;
-    amount: string;
 }
 export interface DepositStateRequest {
     chain: string;
@@ -122,6 +126,44 @@ export interface BytecodeRequest {
 export interface BytecodeResponse {
     bytecode: string;
 }
+/**
+ * ERC20TokensRequest describes the chain for which the type of ERC20 tokens are
+ * requested.
+ */
+export interface ERC20TokensRequest {
+    chain: string;
+    type: TokenType;
+}
+/**
+ * ERC20TokensResponse describes the asset and symbol for all
+ * ERC20 tokens requested for a chain
+ */
+export interface ERC20TokensResponse {
+    tokens: ERC20TokensResponse_Token[];
+}
+export interface ERC20TokensResponse_Token {
+    asset: string;
+    symbol: string;
+}
+export interface TokenInfoRequest {
+    chain: string;
+    asset: string | undefined;
+    symbol: string | undefined;
+}
+export interface TokenInfoResponse {
+    asset: string;
+    details?: TokenDetails;
+    address: string;
+    confirmed: boolean;
+    isExternal: boolean;
+    burnerCodeHash: string;
+}
+export interface Proof {
+    addresses: string[];
+    weights: string[];
+    threshold: string;
+    signatures: string[];
+}
 export declare const DepositQueryParams: {
     encode(message: DepositQueryParams, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number | undefined): DepositQueryParams;
@@ -160,19 +202,34 @@ export declare const BatchedCommandsResponse: {
         data?: string | undefined;
         status?: BatchedCommandsStatus | undefined;
         keyId?: string | undefined;
-        signature?: string[] | undefined;
         executeData?: string | undefined;
         prevBatchedCommandsId?: string | undefined;
         commandIds?: string[] | undefined;
+        proof?: {
+            addresses?: string[] | undefined;
+            weights?: string[] | undefined;
+            threshold?: string | undefined;
+            signatures?: string[] | undefined;
+        } | undefined;
     } & {
         id?: string | undefined;
         data?: string | undefined;
         status?: BatchedCommandsStatus | undefined;
         keyId?: string | undefined;
-        signature?: (string[] & string[] & Record<Exclude<keyof I["signature"], keyof string[]>, never>) | undefined;
         executeData?: string | undefined;
         prevBatchedCommandsId?: string | undefined;
         commandIds?: (string[] & string[] & Record<Exclude<keyof I["commandIds"], keyof string[]>, never>) | undefined;
+        proof?: ({
+            addresses?: string[] | undefined;
+            weights?: string[] | undefined;
+            threshold?: string | undefined;
+            signatures?: string[] | undefined;
+        } & {
+            addresses?: (string[] & string[] & Record<Exclude<keyof I["proof"]["addresses"], keyof string[]>, never>) | undefined;
+            weights?: (string[] & string[] & Record<Exclude<keyof I["proof"]["weights"], keyof string[]>, never>) | undefined;
+            threshold?: string | undefined;
+            signatures?: (string[] & string[] & Record<Exclude<keyof I["proof"]["signatures"], keyof string[]>, never>) | undefined;
+        } & Record<Exclude<keyof I["proof"], keyof Proof>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof BatchedCommandsResponse>, never>>(object: I): BatchedCommandsResponse;
 };
 export declare const KeyAddressRequest: {
@@ -182,12 +239,10 @@ export declare const KeyAddressRequest: {
     toJSON(message: KeyAddressRequest): unknown;
     fromPartial<I extends {
         chain?: string | undefined;
-        role?: number | undefined;
-        id?: string | undefined;
+        keyId?: string | undefined;
     } & {
         chain?: string | undefined;
-        role?: number | undefined;
-        id?: string | undefined;
+        keyId?: string | undefined;
     } & Record<Exclude<keyof I, keyof KeyAddressRequest>, never>>(object: I): KeyAddressRequest;
 };
 export declare const KeyAddressResponse: {
@@ -197,52 +252,41 @@ export declare const KeyAddressResponse: {
     toJSON(message: KeyAddressResponse): unknown;
     fromPartial<I extends {
         keyId?: string | undefined;
-        multisigAddresses?: {
-            addresses?: string[] | undefined;
-            threshold?: number | undefined;
-        } | undefined;
-        thresholdAddress?: {
+        addresses?: {
             address?: string | undefined;
-        } | undefined;
+            weight?: string | undefined;
+        }[] | undefined;
+        threshold?: string | undefined;
     } & {
         keyId?: string | undefined;
-        multisigAddresses?: ({
-            addresses?: string[] | undefined;
-            threshold?: number | undefined;
-        } & {
-            addresses?: (string[] & string[] & Record<Exclude<keyof I["multisigAddresses"]["addresses"], keyof string[]>, never>) | undefined;
-            threshold?: number | undefined;
-        } & Record<Exclude<keyof I["multisigAddresses"], keyof KeyAddressResponse_MultisigAddresses>, never>) | undefined;
-        thresholdAddress?: ({
+        addresses?: ({
             address?: string | undefined;
+            weight?: string | undefined;
+        }[] & ({
+            address?: string | undefined;
+            weight?: string | undefined;
         } & {
             address?: string | undefined;
-        } & Record<Exclude<keyof I["thresholdAddress"], "address">, never>) | undefined;
+            weight?: string | undefined;
+        } & Record<Exclude<keyof I["addresses"][number], keyof KeyAddressResponse_WeightedAddress>, never>)[] & Record<Exclude<keyof I["addresses"], keyof {
+            address?: string | undefined;
+            weight?: string | undefined;
+        }[]>, never>) | undefined;
+        threshold?: string | undefined;
     } & Record<Exclude<keyof I, keyof KeyAddressResponse>, never>>(object: I): KeyAddressResponse;
 };
-export declare const KeyAddressResponse_MultisigAddresses: {
-    encode(message: KeyAddressResponse_MultisigAddresses, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): KeyAddressResponse_MultisigAddresses;
-    fromJSON(object: any): KeyAddressResponse_MultisigAddresses;
-    toJSON(message: KeyAddressResponse_MultisigAddresses): unknown;
-    fromPartial<I extends {
-        addresses?: string[] | undefined;
-        threshold?: number | undefined;
-    } & {
-        addresses?: (string[] & string[] & Record<Exclude<keyof I["addresses"], keyof string[]>, never>) | undefined;
-        threshold?: number | undefined;
-    } & Record<Exclude<keyof I, keyof KeyAddressResponse_MultisigAddresses>, never>>(object: I): KeyAddressResponse_MultisigAddresses;
-};
-export declare const KeyAddressResponse_ThresholdAddress: {
-    encode(message: KeyAddressResponse_ThresholdAddress, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): KeyAddressResponse_ThresholdAddress;
-    fromJSON(object: any): KeyAddressResponse_ThresholdAddress;
-    toJSON(message: KeyAddressResponse_ThresholdAddress): unknown;
+export declare const KeyAddressResponse_WeightedAddress: {
+    encode(message: KeyAddressResponse_WeightedAddress, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): KeyAddressResponse_WeightedAddress;
+    fromJSON(object: any): KeyAddressResponse_WeightedAddress;
+    toJSON(message: KeyAddressResponse_WeightedAddress): unknown;
     fromPartial<I extends {
         address?: string | undefined;
+        weight?: string | undefined;
     } & {
         address?: string | undefined;
-    } & Record<Exclude<keyof I, "address">, never>>(object: I): KeyAddressResponse_ThresholdAddress;
+        weight?: string | undefined;
+    } & Record<Exclude<keyof I, keyof KeyAddressResponse_WeightedAddress>, never>>(object: I): KeyAddressResponse_WeightedAddress;
 };
 export declare const QueryTokenAddressResponse: {
     encode(message: QueryTokenAddressResponse, writer?: _m0.Writer): _m0.Writer;
@@ -265,11 +309,9 @@ export declare const QueryDepositStateParams: {
     fromPartial<I extends {
         txId?: Uint8Array | undefined;
         burnerAddress?: Uint8Array | undefined;
-        amount?: string | undefined;
     } & {
         txId?: Uint8Array | undefined;
         burnerAddress?: Uint8Array | undefined;
-        amount?: string | undefined;
     } & Record<Exclude<keyof I, keyof QueryDepositStateParams>, never>>(object: I): QueryDepositStateParams;
 };
 export declare const DepositStateRequest: {
@@ -282,18 +324,15 @@ export declare const DepositStateRequest: {
         params?: {
             txId?: Uint8Array | undefined;
             burnerAddress?: Uint8Array | undefined;
-            amount?: string | undefined;
         } | undefined;
     } & {
         chain?: string | undefined;
         params?: ({
             txId?: Uint8Array | undefined;
             burnerAddress?: Uint8Array | undefined;
-            amount?: string | undefined;
         } & {
             txId?: Uint8Array | undefined;
             burnerAddress?: Uint8Array | undefined;
-            amount?: string | undefined;
         } & Record<Exclude<keyof I["params"], keyof QueryDepositStateParams>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof DepositStateRequest>, never>>(object: I): DepositStateRequest;
 };
@@ -368,10 +407,9 @@ export declare const EventResponse: {
                 newThreshold?: Uint8Array | undefined;
             } | undefined;
             multisigOperatorshipTransferred?: {
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } | undefined;
             singlesigOwnershipTransferred?: {
                 preOwner?: Uint8Array | undefined;
@@ -424,10 +462,9 @@ export declare const EventResponse: {
                 newThreshold?: Uint8Array | undefined;
             } | undefined;
             multisigOperatorshipTransferred?: {
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } | undefined;
             singlesigOwnershipTransferred?: {
                 preOwner?: Uint8Array | undefined;
@@ -564,15 +601,13 @@ export declare const EventResponse: {
                 newThreshold?: Uint8Array | undefined;
             } & Record<Exclude<keyof I["event"]["multisigOwnershipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventMultisigOwnershipTransferred>, never>) | undefined;
             multisigOperatorshipTransferred?: ({
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } & {
-                preOperators?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["event"]["multisigOperatorshipTransferred"]["preOperators"], keyof Uint8Array[]>, never>) | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["event"]["multisigOperatorshipTransferred"]["newOperators"], keyof Uint8Array[]>, never>) | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["event"]["multisigOperatorshipTransferred"]["newWeights"], keyof Uint8Array[]>, never>) | undefined;
             } & Record<Exclude<keyof I["event"]["multisigOperatorshipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventMultisigOperatorshipTransferred>, never>) | undefined;
             singlesigOwnershipTransferred?: ({
                 preOwner?: Uint8Array | undefined;
@@ -891,6 +926,126 @@ export declare const BytecodeResponse: {
     } & {
         bytecode?: string | undefined;
     } & Record<Exclude<keyof I, "bytecode">, never>>(object: I): BytecodeResponse;
+};
+export declare const ERC20TokensRequest: {
+    encode(message: ERC20TokensRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): ERC20TokensRequest;
+    fromJSON(object: any): ERC20TokensRequest;
+    toJSON(message: ERC20TokensRequest): unknown;
+    fromPartial<I extends {
+        chain?: string | undefined;
+        type?: TokenType | undefined;
+    } & {
+        chain?: string | undefined;
+        type?: TokenType | undefined;
+    } & Record<Exclude<keyof I, keyof ERC20TokensRequest>, never>>(object: I): ERC20TokensRequest;
+};
+export declare const ERC20TokensResponse: {
+    encode(message: ERC20TokensResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): ERC20TokensResponse;
+    fromJSON(object: any): ERC20TokensResponse;
+    toJSON(message: ERC20TokensResponse): unknown;
+    fromPartial<I extends {
+        tokens?: {
+            asset?: string | undefined;
+            symbol?: string | undefined;
+        }[] | undefined;
+    } & {
+        tokens?: ({
+            asset?: string | undefined;
+            symbol?: string | undefined;
+        }[] & ({
+            asset?: string | undefined;
+            symbol?: string | undefined;
+        } & {
+            asset?: string | undefined;
+            symbol?: string | undefined;
+        } & Record<Exclude<keyof I["tokens"][number], keyof ERC20TokensResponse_Token>, never>)[] & Record<Exclude<keyof I["tokens"], keyof {
+            asset?: string | undefined;
+            symbol?: string | undefined;
+        }[]>, never>) | undefined;
+    } & Record<Exclude<keyof I, "tokens">, never>>(object: I): ERC20TokensResponse;
+};
+export declare const ERC20TokensResponse_Token: {
+    encode(message: ERC20TokensResponse_Token, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): ERC20TokensResponse_Token;
+    fromJSON(object: any): ERC20TokensResponse_Token;
+    toJSON(message: ERC20TokensResponse_Token): unknown;
+    fromPartial<I extends {
+        asset?: string | undefined;
+        symbol?: string | undefined;
+    } & {
+        asset?: string | undefined;
+        symbol?: string | undefined;
+    } & Record<Exclude<keyof I, keyof ERC20TokensResponse_Token>, never>>(object: I): ERC20TokensResponse_Token;
+};
+export declare const TokenInfoRequest: {
+    encode(message: TokenInfoRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): TokenInfoRequest;
+    fromJSON(object: any): TokenInfoRequest;
+    toJSON(message: TokenInfoRequest): unknown;
+    fromPartial<I extends {
+        chain?: string | undefined;
+        asset?: string | undefined;
+        symbol?: string | undefined;
+    } & {
+        chain?: string | undefined;
+        asset?: string | undefined;
+        symbol?: string | undefined;
+    } & Record<Exclude<keyof I, keyof TokenInfoRequest>, never>>(object: I): TokenInfoRequest;
+};
+export declare const TokenInfoResponse: {
+    encode(message: TokenInfoResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): TokenInfoResponse;
+    fromJSON(object: any): TokenInfoResponse;
+    toJSON(message: TokenInfoResponse): unknown;
+    fromPartial<I extends {
+        asset?: string | undefined;
+        details?: {
+            tokenName?: string | undefined;
+            symbol?: string | undefined;
+            decimals?: number | undefined;
+            capacity?: Uint8Array | undefined;
+        } | undefined;
+        address?: string | undefined;
+        confirmed?: boolean | undefined;
+        isExternal?: boolean | undefined;
+        burnerCodeHash?: string | undefined;
+    } & {
+        asset?: string | undefined;
+        details?: ({
+            tokenName?: string | undefined;
+            symbol?: string | undefined;
+            decimals?: number | undefined;
+            capacity?: Uint8Array | undefined;
+        } & {
+            tokenName?: string | undefined;
+            symbol?: string | undefined;
+            decimals?: number | undefined;
+            capacity?: Uint8Array | undefined;
+        } & Record<Exclude<keyof I["details"], keyof TokenDetails>, never>) | undefined;
+        address?: string | undefined;
+        confirmed?: boolean | undefined;
+        isExternal?: boolean | undefined;
+        burnerCodeHash?: string | undefined;
+    } & Record<Exclude<keyof I, keyof TokenInfoResponse>, never>>(object: I): TokenInfoResponse;
+};
+export declare const Proof: {
+    encode(message: Proof, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): Proof;
+    fromJSON(object: any): Proof;
+    toJSON(message: Proof): unknown;
+    fromPartial<I extends {
+        addresses?: string[] | undefined;
+        weights?: string[] | undefined;
+        threshold?: string | undefined;
+        signatures?: string[] | undefined;
+    } & {
+        addresses?: (string[] & string[] & Record<Exclude<keyof I["addresses"], keyof string[]>, never>) | undefined;
+        weights?: (string[] & string[] & Record<Exclude<keyof I["weights"], keyof string[]>, never>) | undefined;
+        threshold?: string | undefined;
+        signatures?: (string[] & string[] & Record<Exclude<keyof I["signatures"], keyof string[]>, never>) | undefined;
+    } & Record<Exclude<keyof I, keyof Proof>, never>>(object: I): Proof;
 };
 declare type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export declare type DeepPartial<T> = T extends Builtin ? T : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {

@@ -2,6 +2,7 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { Params } from "../../../axelar/axelarnet/v1beta1/params";
+import { QueueState } from "../../../axelar/utils/v1beta1/queuer";
 import { CosmosChain, IBCTransfer } from "../../../axelar/axelarnet/v1beta1/types";
 
 export const protobufPackage = "axelar.axelarnet.v1beta1";
@@ -10,11 +11,18 @@ export interface GenesisState {
   params?: Params;
   collectorAddress: Uint8Array;
   chains: CosmosChain[];
-  pendingTransfers: IBCTransfer[];
+  transferQueue?: QueueState;
+  failedTransfers: IBCTransfer[];
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { params: undefined, collectorAddress: new Uint8Array(), chains: [], pendingTransfers: [] };
+  return {
+    params: undefined,
+    collectorAddress: new Uint8Array(),
+    chains: [],
+    transferQueue: undefined,
+    failedTransfers: [],
+  };
 }
 
 export const GenesisState = {
@@ -28,8 +36,11 @@ export const GenesisState = {
     for (const v of message.chains) {
       CosmosChain.encode(v!, writer.uint32(26).fork()).ldelim();
     }
-    for (const v of message.pendingTransfers) {
-      IBCTransfer.encode(v!, writer.uint32(34).fork()).ldelim();
+    if (message.transferQueue !== undefined) {
+      QueueState.encode(message.transferQueue, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.failedTransfers) {
+      IBCTransfer.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -50,8 +61,11 @@ export const GenesisState = {
         case 3:
           message.chains.push(CosmosChain.decode(reader, reader.uint32()));
           break;
-        case 4:
-          message.pendingTransfers.push(IBCTransfer.decode(reader, reader.uint32()));
+        case 5:
+          message.transferQueue = QueueState.decode(reader, reader.uint32());
+          break;
+        case 6:
+          message.failedTransfers.push(IBCTransfer.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -68,8 +82,9 @@ export const GenesisState = {
         ? bytesFromBase64(object.collectorAddress)
         : new Uint8Array(),
       chains: Array.isArray(object?.chains) ? object.chains.map((e: any) => CosmosChain.fromJSON(e)) : [],
-      pendingTransfers: Array.isArray(object?.pendingTransfers)
-        ? object.pendingTransfers.map((e: any) => IBCTransfer.fromJSON(e))
+      transferQueue: isSet(object.transferQueue) ? QueueState.fromJSON(object.transferQueue) : undefined,
+      failedTransfers: Array.isArray(object?.failedTransfers)
+        ? object.failedTransfers.map((e: any) => IBCTransfer.fromJSON(e))
         : [],
     };
   },
@@ -86,10 +101,12 @@ export const GenesisState = {
     } else {
       obj.chains = [];
     }
-    if (message.pendingTransfers) {
-      obj.pendingTransfers = message.pendingTransfers.map((e) => (e ? IBCTransfer.toJSON(e) : undefined));
+    message.transferQueue !== undefined &&
+      (obj.transferQueue = message.transferQueue ? QueueState.toJSON(message.transferQueue) : undefined);
+    if (message.failedTransfers) {
+      obj.failedTransfers = message.failedTransfers.map((e) => (e ? IBCTransfer.toJSON(e) : undefined));
     } else {
-      obj.pendingTransfers = [];
+      obj.failedTransfers = [];
     }
     return obj;
   },
@@ -100,7 +117,11 @@ export const GenesisState = {
       object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     message.collectorAddress = object.collectorAddress ?? new Uint8Array();
     message.chains = object.chains?.map((e) => CosmosChain.fromPartial(e)) || [];
-    message.pendingTransfers = object.pendingTransfers?.map((e) => IBCTransfer.fromPartial(e)) || [];
+    message.transferQueue =
+      object.transferQueue !== undefined && object.transferQueue !== null
+        ? QueueState.fromPartial(object.transferQueue)
+        : undefined;
+    message.failedTransfers = object.failedTransfers?.map((e) => IBCTransfer.fromPartial(e)) || [];
     return message;
   },
 };

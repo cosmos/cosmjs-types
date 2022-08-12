@@ -1,13 +1,15 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { Params } from "../../../axelar/axelarnet/v1beta1/params";
+import { QueueState } from "../../../axelar/utils/v1beta1/queuer";
 import { CosmosChain, IBCTransfer } from "../../../axelar/axelarnet/v1beta1/types";
 export declare const protobufPackage = "axelar.axelarnet.v1beta1";
 export interface GenesisState {
     params?: Params;
     collectorAddress: Uint8Array;
     chains: CosmosChain[];
-    pendingTransfers: IBCTransfer[];
+    transferQueue?: QueueState;
+    failedTransfers: IBCTransfer[];
 }
 export declare const GenesisState: {
     encode(message: GenesisState, writer?: _m0.Writer): _m0.Writer;
@@ -28,7 +30,15 @@ export declare const GenesisState: {
             }[] | undefined;
             addrPrefix?: string | undefined;
         }[] | undefined;
-        pendingTransfers?: {
+        transferQueue?: {
+            items?: {
+                [x: string]: {
+                    key?: Uint8Array | undefined;
+                    value?: Uint8Array | undefined;
+                } | undefined;
+            } | undefined;
+        } | undefined;
+        failedTransfers?: {
             sender?: Uint8Array | undefined;
             receiver?: string | undefined;
             token?: {
@@ -38,6 +48,7 @@ export declare const GenesisState: {
             portId?: string | undefined;
             channelId?: string | undefined;
             sequence?: string | number | Long.Long | undefined;
+            id?: string | number | Long.Long | undefined;
         }[] | undefined;
     } & {
         params?: ({
@@ -145,7 +156,30 @@ export declare const GenesisState: {
             }[] | undefined;
             addrPrefix?: string | undefined;
         }[]>, never>) | undefined;
-        pendingTransfers?: ({
+        transferQueue?: ({
+            items?: {
+                [x: string]: {
+                    key?: Uint8Array | undefined;
+                    value?: Uint8Array | undefined;
+                } | undefined;
+            } | undefined;
+        } & {
+            items?: ({
+                [x: string]: {
+                    key?: Uint8Array | undefined;
+                    value?: Uint8Array | undefined;
+                } | undefined;
+            } & {
+                [x: string]: ({
+                    key?: Uint8Array | undefined;
+                    value?: Uint8Array | undefined;
+                } & {
+                    key?: Uint8Array | undefined;
+                    value?: Uint8Array | undefined;
+                } & Record<Exclude<keyof I["transferQueue"]["items"][string], keyof import("../../../axelar/utils/v1beta1/queuer").QueueState_Item>, never>) | undefined;
+            } & Record<Exclude<keyof I["transferQueue"]["items"], string | number>, never>) | undefined;
+        } & Record<Exclude<keyof I["transferQueue"], "items">, never>) | undefined;
+        failedTransfers?: ({
             sender?: Uint8Array | undefined;
             receiver?: string | undefined;
             token?: {
@@ -155,6 +189,7 @@ export declare const GenesisState: {
             portId?: string | undefined;
             channelId?: string | undefined;
             sequence?: string | number | Long.Long | undefined;
+            id?: string | number | Long.Long | undefined;
         }[] & ({
             sender?: Uint8Array | undefined;
             receiver?: string | undefined;
@@ -165,6 +200,7 @@ export declare const GenesisState: {
             portId?: string | undefined;
             channelId?: string | undefined;
             sequence?: string | number | Long.Long | undefined;
+            id?: string | number | Long.Long | undefined;
         } & {
             sender?: Uint8Array | undefined;
             receiver?: string | undefined;
@@ -174,7 +210,7 @@ export declare const GenesisState: {
             } & {
                 denom?: string | undefined;
                 amount?: string | undefined;
-            } & Record<Exclude<keyof I["pendingTransfers"][number]["token"], keyof import("../../../cosmos/base/v1beta1/coin").Coin>, never>) | undefined;
+            } & Record<Exclude<keyof I["failedTransfers"][number]["token"], keyof import("../../../cosmos/base/v1beta1/coin").Coin>, never>) | undefined;
             portId?: string | undefined;
             channelId?: string | undefined;
             sequence?: string | number | (Long.Long & {
@@ -234,8 +270,66 @@ export declare const GenesisState: {
                 toString: (radix?: number | undefined) => string;
                 toUnsigned: () => Long.Long;
                 xor: (other: string | number | Long.Long) => Long.Long;
-            } & Record<Exclude<keyof I["pendingTransfers"][number]["sequence"], keyof Long.Long>, never>) | undefined;
-        } & Record<Exclude<keyof I["pendingTransfers"][number], keyof IBCTransfer>, never>)[] & Record<Exclude<keyof I["pendingTransfers"], keyof {
+            } & Record<Exclude<keyof I["failedTransfers"][number]["sequence"], keyof Long.Long>, never>) | undefined;
+            id?: string | number | (Long.Long & {
+                high: number;
+                low: number;
+                unsigned: boolean;
+                add: (addend: string | number | Long.Long) => Long.Long;
+                and: (other: string | number | Long.Long) => Long.Long;
+                compare: (other: string | number | Long.Long) => number;
+                comp: (other: string | number | Long.Long) => number;
+                divide: (divisor: string | number | Long.Long) => Long.Long;
+                div: (divisor: string | number | Long.Long) => Long.Long;
+                equals: (other: string | number | Long.Long) => boolean;
+                eq: (other: string | number | Long.Long) => boolean;
+                getHighBits: () => number;
+                getHighBitsUnsigned: () => number;
+                getLowBits: () => number;
+                getLowBitsUnsigned: () => number;
+                getNumBitsAbs: () => number;
+                greaterThan: (other: string | number | Long.Long) => boolean;
+                gt: (other: string | number | Long.Long) => boolean;
+                greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                gte: (other: string | number | Long.Long) => boolean;
+                isEven: () => boolean;
+                isNegative: () => boolean;
+                isOdd: () => boolean;
+                isPositive: () => boolean;
+                isZero: () => boolean;
+                lessThan: (other: string | number | Long.Long) => boolean;
+                lt: (other: string | number | Long.Long) => boolean;
+                lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                lte: (other: string | number | Long.Long) => boolean;
+                modulo: (other: string | number | Long.Long) => Long.Long;
+                mod: (other: string | number | Long.Long) => Long.Long;
+                multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                mul: (multiplier: string | number | Long.Long) => Long.Long;
+                negate: () => Long.Long;
+                neg: () => Long.Long;
+                not: () => Long.Long;
+                notEquals: (other: string | number | Long.Long) => boolean;
+                neq: (other: string | number | Long.Long) => boolean;
+                or: (other: string | number | Long.Long) => Long.Long;
+                shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                shl: (numBits: number | Long.Long) => Long.Long;
+                shiftRight: (numBits: number | Long.Long) => Long.Long;
+                shr: (numBits: number | Long.Long) => Long.Long;
+                shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                shru: (numBits: number | Long.Long) => Long.Long;
+                subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                toInt: () => number;
+                toNumber: () => number;
+                toBytes: (le?: boolean | undefined) => number[];
+                toBytesLE: () => number[];
+                toBytesBE: () => number[];
+                toSigned: () => Long.Long;
+                toString: (radix?: number | undefined) => string;
+                toUnsigned: () => Long.Long;
+                xor: (other: string | number | Long.Long) => Long.Long;
+            } & Record<Exclude<keyof I["failedTransfers"][number]["id"], keyof Long.Long>, never>) | undefined;
+        } & Record<Exclude<keyof I["failedTransfers"][number], keyof IBCTransfer>, never>)[] & Record<Exclude<keyof I["failedTransfers"], keyof {
             sender?: Uint8Array | undefined;
             receiver?: string | undefined;
             token?: {
@@ -245,6 +339,7 @@ export declare const GenesisState: {
             portId?: string | undefined;
             channelId?: string | undefined;
             sequence?: string | number | Long.Long | undefined;
+            id?: string | number | Long.Long | undefined;
         }[]>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof GenesisState>, never>>(object: I): GenesisState;
 };

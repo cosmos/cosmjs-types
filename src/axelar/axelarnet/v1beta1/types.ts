@@ -11,7 +11,9 @@ export interface IBCTransfer {
   token?: Coin;
   portId: string;
   channelId: string;
+  /** @deprecated */
   sequence: Long;
+  id: Long;
 }
 
 export interface CosmosChain {
@@ -36,6 +38,7 @@ function createBaseIBCTransfer(): IBCTransfer {
     portId: "",
     channelId: "",
     sequence: Long.UZERO,
+    id: Long.UZERO,
   };
 }
 
@@ -58,6 +61,9 @@ export const IBCTransfer = {
     }
     if (!message.sequence.isZero()) {
       writer.uint32(48).uint64(message.sequence);
+    }
+    if (!message.id.isZero()) {
+      writer.uint32(56).uint64(message.id);
     }
     return writer;
   },
@@ -87,6 +93,9 @@ export const IBCTransfer = {
         case 6:
           message.sequence = reader.uint64() as Long;
           break;
+        case 7:
+          message.id = reader.uint64() as Long;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -103,6 +112,7 @@ export const IBCTransfer = {
       portId: isSet(object.portId) ? String(object.portId) : "",
       channelId: isSet(object.channelId) ? String(object.channelId) : "",
       sequence: isSet(object.sequence) ? Long.fromValue(object.sequence) : Long.UZERO,
+      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
     };
   },
 
@@ -115,6 +125,7 @@ export const IBCTransfer = {
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
     message.sequence !== undefined && (obj.sequence = (message.sequence || Long.UZERO).toString());
+    message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
     return obj;
   },
 
@@ -130,6 +141,7 @@ export const IBCTransfer = {
       object.sequence !== undefined && object.sequence !== null
         ? Long.fromValue(object.sequence)
         : Long.UZERO;
+    message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
     return message;
   },
 };

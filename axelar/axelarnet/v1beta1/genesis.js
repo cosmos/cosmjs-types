@@ -27,10 +27,17 @@ exports.GenesisState = exports.protobufPackage = void 0;
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
 const params_1 = require("../../../axelar/axelarnet/v1beta1/params");
+const queuer_1 = require("../../../axelar/utils/v1beta1/queuer");
 const types_1 = require("../../../axelar/axelarnet/v1beta1/types");
 exports.protobufPackage = "axelar.axelarnet.v1beta1";
 function createBaseGenesisState() {
-    return { params: undefined, collectorAddress: new Uint8Array(), chains: [], pendingTransfers: [] };
+    return {
+        params: undefined,
+        collectorAddress: new Uint8Array(),
+        chains: [],
+        transferQueue: undefined,
+        failedTransfers: [],
+    };
 }
 exports.GenesisState = {
     encode(message, writer = _m0.Writer.create()) {
@@ -43,8 +50,11 @@ exports.GenesisState = {
         for (const v of message.chains) {
             types_1.CosmosChain.encode(v, writer.uint32(26).fork()).ldelim();
         }
-        for (const v of message.pendingTransfers) {
-            types_1.IBCTransfer.encode(v, writer.uint32(34).fork()).ldelim();
+        if (message.transferQueue !== undefined) {
+            queuer_1.QueueState.encode(message.transferQueue, writer.uint32(42).fork()).ldelim();
+        }
+        for (const v of message.failedTransfers) {
+            types_1.IBCTransfer.encode(v, writer.uint32(50).fork()).ldelim();
         }
         return writer;
     },
@@ -64,8 +74,11 @@ exports.GenesisState = {
                 case 3:
                     message.chains.push(types_1.CosmosChain.decode(reader, reader.uint32()));
                     break;
-                case 4:
-                    message.pendingTransfers.push(types_1.IBCTransfer.decode(reader, reader.uint32()));
+                case 5:
+                    message.transferQueue = queuer_1.QueueState.decode(reader, reader.uint32());
+                    break;
+                case 6:
+                    message.failedTransfers.push(types_1.IBCTransfer.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -81,8 +94,9 @@ exports.GenesisState = {
                 ? bytesFromBase64(object.collectorAddress)
                 : new Uint8Array(),
             chains: Array.isArray(object === null || object === void 0 ? void 0 : object.chains) ? object.chains.map((e) => types_1.CosmosChain.fromJSON(e)) : [],
-            pendingTransfers: Array.isArray(object === null || object === void 0 ? void 0 : object.pendingTransfers)
-                ? object.pendingTransfers.map((e) => types_1.IBCTransfer.fromJSON(e))
+            transferQueue: isSet(object.transferQueue) ? queuer_1.QueueState.fromJSON(object.transferQueue) : undefined,
+            failedTransfers: Array.isArray(object === null || object === void 0 ? void 0 : object.failedTransfers)
+                ? object.failedTransfers.map((e) => types_1.IBCTransfer.fromJSON(e))
                 : [],
         };
     },
@@ -97,11 +111,13 @@ exports.GenesisState = {
         else {
             obj.chains = [];
         }
-        if (message.pendingTransfers) {
-            obj.pendingTransfers = message.pendingTransfers.map((e) => (e ? types_1.IBCTransfer.toJSON(e) : undefined));
+        message.transferQueue !== undefined &&
+            (obj.transferQueue = message.transferQueue ? queuer_1.QueueState.toJSON(message.transferQueue) : undefined);
+        if (message.failedTransfers) {
+            obj.failedTransfers = message.failedTransfers.map((e) => (e ? types_1.IBCTransfer.toJSON(e) : undefined));
         }
         else {
-            obj.pendingTransfers = [];
+            obj.failedTransfers = [];
         }
         return obj;
     },
@@ -112,7 +128,11 @@ exports.GenesisState = {
             object.params !== undefined && object.params !== null ? params_1.Params.fromPartial(object.params) : undefined;
         message.collectorAddress = (_a = object.collectorAddress) !== null && _a !== void 0 ? _a : new Uint8Array();
         message.chains = ((_b = object.chains) === null || _b === void 0 ? void 0 : _b.map((e) => types_1.CosmosChain.fromPartial(e))) || [];
-        message.pendingTransfers = ((_c = object.pendingTransfers) === null || _c === void 0 ? void 0 : _c.map((e) => types_1.IBCTransfer.fromPartial(e))) || [];
+        message.transferQueue =
+            object.transferQueue !== undefined && object.transferQueue !== null
+                ? queuer_1.QueueState.fromPartial(object.transferQueue)
+                : undefined;
+        message.failedTransfers = ((_c = object.failedTransfers) === null || _c === void 0 ? void 0 : _c.map((e) => types_1.IBCTransfer.fromPartial(e))) || [];
         return message;
     },
 };

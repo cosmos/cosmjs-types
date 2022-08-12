@@ -41,7 +41,6 @@ class MsgServiceClientImpl {
         this.CreateDeployToken = this.CreateDeployToken.bind(this);
         this.CreateBurnTokens = this.CreateBurnTokens.bind(this);
         this.CreatePendingTransfers = this.CreatePendingTransfers.bind(this);
-        this.CreateTransferOwnership = this.CreateTransferOwnership.bind(this);
         this.CreateTransferOperatorship = this.CreateTransferOperatorship.bind(this);
         this.SignCommands = this.SignCommands.bind(this);
         this.AddChain = this.AddChain.bind(this);
@@ -92,11 +91,6 @@ class MsgServiceClientImpl {
         const promise = this.rpc.request("axelar.evm.v1beta1.MsgService", "CreatePendingTransfers", data);
         return promise.then((data) => tx_1.CreatePendingTransfersResponse.decode(new _m0.Reader(data)));
     }
-    CreateTransferOwnership(request) {
-        const data = tx_1.CreateTransferOwnershipRequest.encode(request).finish();
-        const promise = this.rpc.request("axelar.evm.v1beta1.MsgService", "CreateTransferOwnership", data);
-        return promise.then((data) => tx_1.CreateTransferOwnershipResponse.decode(new _m0.Reader(data)));
-    }
     CreateTransferOperatorship(request) {
         const data = tx_1.CreateTransferOperatorshipRequest.encode(request).finish();
         const promise = this.rpc.request("axelar.evm.v1beta1.MsgService", "CreateTransferOperatorship", data);
@@ -132,6 +126,8 @@ class QueryServiceClientImpl {
         this.GatewayAddress = this.GatewayAddress.bind(this);
         this.Bytecode = this.Bytecode.bind(this);
         this.Event = this.Event.bind(this);
+        this.ERC20Tokens = this.ERC20Tokens.bind(this);
+        this.TokenInfo = this.TokenInfo.bind(this);
     }
     BatchedCommands(request) {
         const data = query_1.BatchedCommandsRequest.encode(request).finish();
@@ -182,6 +178,16 @@ class QueryServiceClientImpl {
         const data = query_1.EventRequest.encode(request).finish();
         const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "Event", data);
         return promise.then((data) => query_1.EventResponse.decode(new _m0.Reader(data)));
+    }
+    ERC20Tokens(request) {
+        const data = query_1.ERC20TokensRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "ERC20Tokens", data);
+        return promise.then((data) => query_1.ERC20TokensResponse.decode(new _m0.Reader(data)));
+    }
+    TokenInfo(request) {
+        const data = query_1.TokenInfoRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "TokenInfo", data);
+        return promise.then((data) => query_1.TokenInfoResponse.decode(new _m0.Reader(data)));
     }
 }
 exports.QueryServiceClientImpl = QueryServiceClientImpl;
