@@ -1,4 +1,4 @@
-# cosmjs-types
+# axelarjs-types
 
 ## Maintenance
 
