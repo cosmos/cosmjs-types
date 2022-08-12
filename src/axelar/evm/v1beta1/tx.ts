@@ -1,13 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
-import {
-  Asset,
-  TransferKeyType,
-  TokenDetails,
-  transferKeyTypeFromJSON,
-  transferKeyTypeToJSON,
-} from "../../../axelar/evm/v1beta1/types";
+import { Asset, TokenDetails } from "../../../axelar/evm/v1beta1/types";
 import { KeyType, keyTypeFromJSON, keyTypeToJSON } from "../../../axelar/tss/exported/v1beta1/types";
 
 export const protobufPackage = "axelar.evm.v1beta1";
@@ -54,8 +48,6 @@ export interface ConfirmTransferKeyRequest {
   sender: Uint8Array;
   chain: string;
   txId: Uint8Array;
-  transferType: TransferKeyType;
-  keyId: string;
 }
 
 export interface ConfirmTransferKeyResponse {}
@@ -97,6 +89,7 @@ export interface CreateDeployTokenRequest {
   asset?: Asset;
   tokenDetails?: TokenDetails;
   address: Uint8Array;
+  dailyMintLimit: string;
 }
 
 export interface CreateDeployTokenResponse {}
@@ -141,6 +134,7 @@ export interface SignCommandsResponse {
 export interface AddChainRequest {
   sender: Uint8Array;
   name: string;
+  /** @deprecated */
   keyType: KeyType;
   params: Uint8Array;
 }
@@ -626,7 +620,7 @@ export const ConfirmTokenResponse = {
 };
 
 function createBaseConfirmTransferKeyRequest(): ConfirmTransferKeyRequest {
-  return { sender: new Uint8Array(), chain: "", txId: new Uint8Array(), transferType: 0, keyId: "" };
+  return { sender: new Uint8Array(), chain: "", txId: new Uint8Array() };
 }
 
 export const ConfirmTransferKeyRequest = {
@@ -639,12 +633,6 @@ export const ConfirmTransferKeyRequest = {
     }
     if (message.txId.length !== 0) {
       writer.uint32(26).bytes(message.txId);
-    }
-    if (message.transferType !== 0) {
-      writer.uint32(32).int32(message.transferType);
-    }
-    if (message.keyId !== "") {
-      writer.uint32(42).string(message.keyId);
     }
     return writer;
   },
@@ -665,12 +653,6 @@ export const ConfirmTransferKeyRequest = {
         case 3:
           message.txId = reader.bytes();
           break;
-        case 4:
-          message.transferType = reader.int32() as any;
-          break;
-        case 5:
-          message.keyId = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -684,8 +666,6 @@ export const ConfirmTransferKeyRequest = {
       sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
       chain: isSet(object.chain) ? String(object.chain) : "",
       txId: isSet(object.txId) ? bytesFromBase64(object.txId) : new Uint8Array(),
-      transferType: isSet(object.transferType) ? transferKeyTypeFromJSON(object.transferType) : 0,
-      keyId: isSet(object.keyId) ? String(object.keyId) : "",
     };
   },
 
@@ -696,8 +676,6 @@ export const ConfirmTransferKeyRequest = {
     message.chain !== undefined && (obj.chain = message.chain);
     message.txId !== undefined &&
       (obj.txId = base64FromBytes(message.txId !== undefined ? message.txId : new Uint8Array()));
-    message.transferType !== undefined && (obj.transferType = transferKeyTypeToJSON(message.transferType));
-    message.keyId !== undefined && (obj.keyId = message.keyId);
     return obj;
   },
 
@@ -708,8 +686,6 @@ export const ConfirmTransferKeyRequest = {
     message.sender = object.sender ?? new Uint8Array();
     message.chain = object.chain ?? "";
     message.txId = object.txId ?? new Uint8Array();
-    message.transferType = object.transferType ?? 0;
-    message.keyId = object.keyId ?? "";
     return message;
   },
 };
@@ -993,6 +969,7 @@ function createBaseCreateDeployTokenRequest(): CreateDeployTokenRequest {
     asset: undefined,
     tokenDetails: undefined,
     address: new Uint8Array(),
+    dailyMintLimit: "",
   };
 }
 
@@ -1012,6 +989,9 @@ export const CreateDeployTokenRequest = {
     }
     if (message.address.length !== 0) {
       writer.uint32(50).bytes(message.address);
+    }
+    if (message.dailyMintLimit !== "") {
+      writer.uint32(58).string(message.dailyMintLimit);
     }
     return writer;
   },
@@ -1038,6 +1018,9 @@ export const CreateDeployTokenRequest = {
         case 6:
           message.address = reader.bytes();
           break;
+        case 7:
+          message.dailyMintLimit = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1053,6 +1036,7 @@ export const CreateDeployTokenRequest = {
       asset: isSet(object.asset) ? Asset.fromJSON(object.asset) : undefined,
       tokenDetails: isSet(object.tokenDetails) ? TokenDetails.fromJSON(object.tokenDetails) : undefined,
       address: isSet(object.address) ? bytesFromBase64(object.address) : new Uint8Array(),
+      dailyMintLimit: isSet(object.dailyMintLimit) ? String(object.dailyMintLimit) : "",
     };
   },
 
@@ -1066,6 +1050,7 @@ export const CreateDeployTokenRequest = {
       (obj.tokenDetails = message.tokenDetails ? TokenDetails.toJSON(message.tokenDetails) : undefined);
     message.address !== undefined &&
       (obj.address = base64FromBytes(message.address !== undefined ? message.address : new Uint8Array()));
+    message.dailyMintLimit !== undefined && (obj.dailyMintLimit = message.dailyMintLimit);
     return obj;
   },
 
@@ -1082,6 +1067,7 @@ export const CreateDeployTokenRequest = {
         ? TokenDetails.fromPartial(object.tokenDetails)
         : undefined;
     message.address = object.address ?? new Uint8Array();
+    message.dailyMintLimit = object.dailyMintLimit ?? "";
     return message;
   },
 };

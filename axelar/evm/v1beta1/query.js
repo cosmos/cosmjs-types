@@ -22,12 +22,51 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BytecodeResponse = exports.BytecodeRequest = exports.GatewayAddressResponse = exports.GatewayAddressRequest = exports.ConfirmationHeightResponse = exports.ConfirmationHeightRequest = exports.BurnerInfoResponse = exports.BurnerInfoRequest = exports.QueryCommandResponse_ParamsEntry = exports.QueryCommandResponse = exports.PendingCommandsResponse = exports.PendingCommandsRequest = exports.ChainsResponse = exports.ChainsRequest = exports.QueryBurnerAddressResponse = exports.EventResponse = exports.EventRequest = exports.DepositStateResponse = exports.DepositStateRequest = exports.QueryDepositStateParams = exports.QueryTokenAddressResponse = exports.KeyAddressResponse_ThresholdAddress = exports.KeyAddressResponse_MultisigAddresses = exports.KeyAddressResponse = exports.KeyAddressRequest = exports.BatchedCommandsResponse = exports.BatchedCommandsRequest = exports.DepositQueryParams = exports.protobufPackage = void 0;
+exports.Proof = exports.TokenInfoResponse = exports.TokenInfoRequest = exports.ERC20TokensResponse_Token = exports.ERC20TokensResponse = exports.ERC20TokensRequest = exports.BytecodeResponse = exports.BytecodeRequest = exports.GatewayAddressResponse = exports.GatewayAddressRequest = exports.ConfirmationHeightResponse = exports.ConfirmationHeightRequest = exports.BurnerInfoResponse = exports.BurnerInfoRequest = exports.QueryCommandResponse_ParamsEntry = exports.QueryCommandResponse = exports.PendingCommandsResponse = exports.PendingCommandsRequest = exports.ChainsResponse = exports.ChainsRequest = exports.QueryBurnerAddressResponse = exports.EventResponse = exports.EventRequest = exports.DepositStateResponse = exports.DepositStateRequest = exports.QueryDepositStateParams = exports.QueryTokenAddressResponse = exports.KeyAddressResponse_WeightedAddress = exports.KeyAddressResponse = exports.KeyAddressRequest = exports.BatchedCommandsResponse = exports.BatchedCommandsRequest = exports.DepositQueryParams = exports.tokenTypeToJSON = exports.tokenTypeFromJSON = exports.TokenType = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
 const types_1 = require("../../../axelar/evm/v1beta1/types");
 exports.protobufPackage = "axelar.evm.v1beta1";
+var TokenType;
+(function (TokenType) {
+    TokenType[TokenType["TOKEN_TYPE_UNSPECIFIED"] = 0] = "TOKEN_TYPE_UNSPECIFIED";
+    TokenType[TokenType["TOKEN_TYPE_INTERNAL"] = 1] = "TOKEN_TYPE_INTERNAL";
+    TokenType[TokenType["TOKEN_TYPE_EXTERNAL"] = 2] = "TOKEN_TYPE_EXTERNAL";
+    TokenType[TokenType["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
+})(TokenType = exports.TokenType || (exports.TokenType = {}));
+function tokenTypeFromJSON(object) {
+    switch (object) {
+        case 0:
+        case "TOKEN_TYPE_UNSPECIFIED":
+            return TokenType.TOKEN_TYPE_UNSPECIFIED;
+        case 1:
+        case "TOKEN_TYPE_INTERNAL":
+            return TokenType.TOKEN_TYPE_INTERNAL;
+        case 2:
+        case "TOKEN_TYPE_EXTERNAL":
+            return TokenType.TOKEN_TYPE_EXTERNAL;
+        case -1:
+        case "UNRECOGNIZED":
+        default:
+            return TokenType.UNRECOGNIZED;
+    }
+}
+exports.tokenTypeFromJSON = tokenTypeFromJSON;
+function tokenTypeToJSON(object) {
+    switch (object) {
+        case TokenType.TOKEN_TYPE_UNSPECIFIED:
+            return "TOKEN_TYPE_UNSPECIFIED";
+        case TokenType.TOKEN_TYPE_INTERNAL:
+            return "TOKEN_TYPE_INTERNAL";
+        case TokenType.TOKEN_TYPE_EXTERNAL:
+            return "TOKEN_TYPE_EXTERNAL";
+        case TokenType.UNRECOGNIZED:
+        default:
+            return "UNRECOGNIZED";
+    }
+}
+exports.tokenTypeToJSON = tokenTypeToJSON;
 function createBaseDepositQueryParams() {
     return { address: "", asset: "", chain: "" };
 }
@@ -149,10 +188,10 @@ function createBaseBatchedCommandsResponse() {
         data: "",
         status: 0,
         keyId: "",
-        signature: [],
         executeData: "",
         prevBatchedCommandsId: "",
         commandIds: [],
+        proof: undefined,
     };
 }
 exports.BatchedCommandsResponse = {
@@ -169,9 +208,6 @@ exports.BatchedCommandsResponse = {
         if (message.keyId !== "") {
             writer.uint32(34).string(message.keyId);
         }
-        for (const v of message.signature) {
-            writer.uint32(42).string(v);
-        }
         if (message.executeData !== "") {
             writer.uint32(50).string(message.executeData);
         }
@@ -180,6 +216,9 @@ exports.BatchedCommandsResponse = {
         }
         for (const v of message.commandIds) {
             writer.uint32(66).string(v);
+        }
+        if (message.proof !== undefined) {
+            exports.Proof.encode(message.proof, writer.uint32(74).fork()).ldelim();
         }
         return writer;
     },
@@ -202,9 +241,6 @@ exports.BatchedCommandsResponse = {
                 case 4:
                     message.keyId = reader.string();
                     break;
-                case 5:
-                    message.signature.push(reader.string());
-                    break;
                 case 6:
                     message.executeData = reader.string();
                     break;
@@ -213,6 +249,9 @@ exports.BatchedCommandsResponse = {
                     break;
                 case 8:
                     message.commandIds.push(reader.string());
+                    break;
+                case 9:
+                    message.proof = exports.Proof.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -227,10 +266,10 @@ exports.BatchedCommandsResponse = {
             data: isSet(object.data) ? String(object.data) : "",
             status: isSet(object.status) ? (0, types_1.batchedCommandsStatusFromJSON)(object.status) : 0,
             keyId: isSet(object.keyId) ? String(object.keyId) : "",
-            signature: Array.isArray(object === null || object === void 0 ? void 0 : object.signature) ? object.signature.map((e) => String(e)) : [],
             executeData: isSet(object.executeData) ? String(object.executeData) : "",
             prevBatchedCommandsId: isSet(object.prevBatchedCommandsId) ? String(object.prevBatchedCommandsId) : "",
             commandIds: Array.isArray(object === null || object === void 0 ? void 0 : object.commandIds) ? object.commandIds.map((e) => String(e)) : [],
+            proof: isSet(object.proof) ? exports.Proof.fromJSON(object.proof) : undefined,
         };
     },
     toJSON(message) {
@@ -239,12 +278,6 @@ exports.BatchedCommandsResponse = {
         message.data !== undefined && (obj.data = message.data);
         message.status !== undefined && (obj.status = (0, types_1.batchedCommandsStatusToJSON)(message.status));
         message.keyId !== undefined && (obj.keyId = message.keyId);
-        if (message.signature) {
-            obj.signature = message.signature.map((e) => e);
-        }
-        else {
-            obj.signature = [];
-        }
         message.executeData !== undefined && (obj.executeData = message.executeData);
         message.prevBatchedCommandsId !== undefined &&
             (obj.prevBatchedCommandsId = message.prevBatchedCommandsId);
@@ -254,35 +287,34 @@ exports.BatchedCommandsResponse = {
         else {
             obj.commandIds = [];
         }
+        message.proof !== undefined && (obj.proof = message.proof ? exports.Proof.toJSON(message.proof) : undefined);
         return obj;
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f, _g, _h;
+        var _a, _b, _c, _d, _e, _f, _g;
         const message = createBaseBatchedCommandsResponse();
         message.id = (_a = object.id) !== null && _a !== void 0 ? _a : "";
         message.data = (_b = object.data) !== null && _b !== void 0 ? _b : "";
         message.status = (_c = object.status) !== null && _c !== void 0 ? _c : 0;
         message.keyId = (_d = object.keyId) !== null && _d !== void 0 ? _d : "";
-        message.signature = ((_e = object.signature) === null || _e === void 0 ? void 0 : _e.map((e) => e)) || [];
-        message.executeData = (_f = object.executeData) !== null && _f !== void 0 ? _f : "";
-        message.prevBatchedCommandsId = (_g = object.prevBatchedCommandsId) !== null && _g !== void 0 ? _g : "";
-        message.commandIds = ((_h = object.commandIds) === null || _h === void 0 ? void 0 : _h.map((e) => e)) || [];
+        message.executeData = (_e = object.executeData) !== null && _e !== void 0 ? _e : "";
+        message.prevBatchedCommandsId = (_f = object.prevBatchedCommandsId) !== null && _f !== void 0 ? _f : "";
+        message.commandIds = ((_g = object.commandIds) === null || _g === void 0 ? void 0 : _g.map((e) => e)) || [];
+        message.proof =
+            object.proof !== undefined && object.proof !== null ? exports.Proof.fromPartial(object.proof) : undefined;
         return message;
     },
 };
 function createBaseKeyAddressRequest() {
-    return { chain: "", role: undefined, id: undefined };
+    return { chain: "", keyId: "" };
 }
 exports.KeyAddressRequest = {
     encode(message, writer = _m0.Writer.create()) {
         if (message.chain !== "") {
             writer.uint32(10).string(message.chain);
         }
-        if (message.role !== undefined) {
-            writer.uint32(16).int32(message.role);
-        }
-        if (message.id !== undefined) {
-            writer.uint32(26).string(message.id);
+        if (message.keyId !== "") {
+            writer.uint32(34).string(message.keyId);
         }
         return writer;
     },
@@ -296,11 +328,8 @@ exports.KeyAddressRequest = {
                 case 1:
                     message.chain = reader.string();
                     break;
-                case 2:
-                    message.role = reader.int32();
-                    break;
-                case 3:
-                    message.id = reader.string();
+                case 4:
+                    message.keyId = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -312,39 +341,36 @@ exports.KeyAddressRequest = {
     fromJSON(object) {
         return {
             chain: isSet(object.chain) ? String(object.chain) : "",
-            role: isSet(object.role) ? Number(object.role) : undefined,
-            id: isSet(object.id) ? String(object.id) : undefined,
+            keyId: isSet(object.keyId) ? String(object.keyId) : "",
         };
     },
     toJSON(message) {
         const obj = {};
         message.chain !== undefined && (obj.chain = message.chain);
-        message.role !== undefined && (obj.role = Math.round(message.role));
-        message.id !== undefined && (obj.id = message.id);
+        message.keyId !== undefined && (obj.keyId = message.keyId);
         return obj;
     },
     fromPartial(object) {
-        var _a, _b, _c;
+        var _a, _b;
         const message = createBaseKeyAddressRequest();
         message.chain = (_a = object.chain) !== null && _a !== void 0 ? _a : "";
-        message.role = (_b = object.role) !== null && _b !== void 0 ? _b : undefined;
-        message.id = (_c = object.id) !== null && _c !== void 0 ? _c : undefined;
+        message.keyId = (_b = object.keyId) !== null && _b !== void 0 ? _b : "";
         return message;
     },
 };
 function createBaseKeyAddressResponse() {
-    return { keyId: "", multisigAddresses: undefined, thresholdAddress: undefined };
+    return { keyId: "", addresses: [], threshold: "" };
 }
 exports.KeyAddressResponse = {
     encode(message, writer = _m0.Writer.create()) {
         if (message.keyId !== "") {
             writer.uint32(10).string(message.keyId);
         }
-        if (message.multisigAddresses !== undefined) {
-            exports.KeyAddressResponse_MultisigAddresses.encode(message.multisigAddresses, writer.uint32(18).fork()).ldelim();
+        for (const v of message.addresses) {
+            exports.KeyAddressResponse_WeightedAddress.encode(v, writer.uint32(18).fork()).ldelim();
         }
-        if (message.thresholdAddress !== undefined) {
-            exports.KeyAddressResponse_ThresholdAddress.encode(message.thresholdAddress, writer.uint32(26).fork()).ldelim();
+        if (message.threshold !== "") {
+            writer.uint32(26).string(message.threshold);
         }
         return writer;
     },
@@ -359,10 +385,10 @@ exports.KeyAddressResponse = {
                     message.keyId = reader.string();
                     break;
                 case 2:
-                    message.multisigAddresses = exports.KeyAddressResponse_MultisigAddresses.decode(reader, reader.uint32());
+                    message.addresses.push(exports.KeyAddressResponse_WeightedAddress.decode(reader, reader.uint32()));
                     break;
                 case 3:
-                    message.thresholdAddress = exports.KeyAddressResponse_ThresholdAddress.decode(reader, reader.uint32());
+                    message.threshold = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -374,119 +400,58 @@ exports.KeyAddressResponse = {
     fromJSON(object) {
         return {
             keyId: isSet(object.keyId) ? String(object.keyId) : "",
-            multisigAddresses: isSet(object.multisigAddresses)
-                ? exports.KeyAddressResponse_MultisigAddresses.fromJSON(object.multisigAddresses)
-                : undefined,
-            thresholdAddress: isSet(object.thresholdAddress)
-                ? exports.KeyAddressResponse_ThresholdAddress.fromJSON(object.thresholdAddress)
-                : undefined,
+            addresses: Array.isArray(object === null || object === void 0 ? void 0 : object.addresses)
+                ? object.addresses.map((e) => exports.KeyAddressResponse_WeightedAddress.fromJSON(e))
+                : [],
+            threshold: isSet(object.threshold) ? String(object.threshold) : "",
         };
     },
     toJSON(message) {
         const obj = {};
         message.keyId !== undefined && (obj.keyId = message.keyId);
-        message.multisigAddresses !== undefined &&
-            (obj.multisigAddresses = message.multisigAddresses
-                ? exports.KeyAddressResponse_MultisigAddresses.toJSON(message.multisigAddresses)
-                : undefined);
-        message.thresholdAddress !== undefined &&
-            (obj.thresholdAddress = message.thresholdAddress
-                ? exports.KeyAddressResponse_ThresholdAddress.toJSON(message.thresholdAddress)
-                : undefined);
-        return obj;
-    },
-    fromPartial(object) {
-        var _a;
-        const message = createBaseKeyAddressResponse();
-        message.keyId = (_a = object.keyId) !== null && _a !== void 0 ? _a : "";
-        message.multisigAddresses =
-            object.multisigAddresses !== undefined && object.multisigAddresses !== null
-                ? exports.KeyAddressResponse_MultisigAddresses.fromPartial(object.multisigAddresses)
-                : undefined;
-        message.thresholdAddress =
-            object.thresholdAddress !== undefined && object.thresholdAddress !== null
-                ? exports.KeyAddressResponse_ThresholdAddress.fromPartial(object.thresholdAddress)
-                : undefined;
-        return message;
-    },
-};
-function createBaseKeyAddressResponse_MultisigAddresses() {
-    return { addresses: [], threshold: 0 };
-}
-exports.KeyAddressResponse_MultisigAddresses = {
-    encode(message, writer = _m0.Writer.create()) {
-        for (const v of message.addresses) {
-            writer.uint32(10).string(v);
-        }
-        if (message.threshold !== 0) {
-            writer.uint32(16).uint32(message.threshold);
-        }
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = createBaseKeyAddressResponse_MultisigAddresses();
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                case 1:
-                    message.addresses.push(reader.string());
-                    break;
-                case 2:
-                    message.threshold = reader.uint32();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(object) {
-        return {
-            addresses: Array.isArray(object === null || object === void 0 ? void 0 : object.addresses) ? object.addresses.map((e) => String(e)) : [],
-            threshold: isSet(object.threshold) ? Number(object.threshold) : 0,
-        };
-    },
-    toJSON(message) {
-        const obj = {};
         if (message.addresses) {
-            obj.addresses = message.addresses.map((e) => e);
+            obj.addresses = message.addresses.map((e) => e ? exports.KeyAddressResponse_WeightedAddress.toJSON(e) : undefined);
         }
         else {
             obj.addresses = [];
         }
-        message.threshold !== undefined && (obj.threshold = Math.round(message.threshold));
+        message.threshold !== undefined && (obj.threshold = message.threshold);
         return obj;
     },
     fromPartial(object) {
-        var _a, _b;
-        const message = createBaseKeyAddressResponse_MultisigAddresses();
-        message.addresses = ((_a = object.addresses) === null || _a === void 0 ? void 0 : _a.map((e) => e)) || [];
-        message.threshold = (_b = object.threshold) !== null && _b !== void 0 ? _b : 0;
+        var _a, _b, _c;
+        const message = createBaseKeyAddressResponse();
+        message.keyId = (_a = object.keyId) !== null && _a !== void 0 ? _a : "";
+        message.addresses = ((_b = object.addresses) === null || _b === void 0 ? void 0 : _b.map((e) => exports.KeyAddressResponse_WeightedAddress.fromPartial(e))) || [];
+        message.threshold = (_c = object.threshold) !== null && _c !== void 0 ? _c : "";
         return message;
     },
 };
-function createBaseKeyAddressResponse_ThresholdAddress() {
-    return { address: "" };
+function createBaseKeyAddressResponse_WeightedAddress() {
+    return { address: "", weight: "" };
 }
-exports.KeyAddressResponse_ThresholdAddress = {
+exports.KeyAddressResponse_WeightedAddress = {
     encode(message, writer = _m0.Writer.create()) {
         if (message.address !== "") {
             writer.uint32(10).string(message.address);
+        }
+        if (message.weight !== "") {
+            writer.uint32(18).string(message.weight);
         }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = createBaseKeyAddressResponse_ThresholdAddress();
+        const message = createBaseKeyAddressResponse_WeightedAddress();
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
                     message.address = reader.string();
+                    break;
+                case 2:
+                    message.weight = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -498,17 +463,20 @@ exports.KeyAddressResponse_ThresholdAddress = {
     fromJSON(object) {
         return {
             address: isSet(object.address) ? String(object.address) : "",
+            weight: isSet(object.weight) ? String(object.weight) : "",
         };
     },
     toJSON(message) {
         const obj = {};
         message.address !== undefined && (obj.address = message.address);
+        message.weight !== undefined && (obj.weight = message.weight);
         return obj;
     },
     fromPartial(object) {
-        var _a;
-        const message = createBaseKeyAddressResponse_ThresholdAddress();
+        var _a, _b;
+        const message = createBaseKeyAddressResponse_WeightedAddress();
         message.address = (_a = object.address) !== null && _a !== void 0 ? _a : "";
+        message.weight = (_b = object.weight) !== null && _b !== void 0 ? _b : "";
         return message;
     },
 };
@@ -566,7 +534,7 @@ exports.QueryTokenAddressResponse = {
     },
 };
 function createBaseQueryDepositStateParams() {
-    return { txId: new Uint8Array(), burnerAddress: new Uint8Array(), amount: "" };
+    return { txId: new Uint8Array(), burnerAddress: new Uint8Array() };
 }
 exports.QueryDepositStateParams = {
     encode(message, writer = _m0.Writer.create()) {
@@ -575,9 +543,6 @@ exports.QueryDepositStateParams = {
         }
         if (message.burnerAddress.length !== 0) {
             writer.uint32(18).bytes(message.burnerAddress);
-        }
-        if (message.amount !== "") {
-            writer.uint32(26).string(message.amount);
         }
         return writer;
     },
@@ -594,9 +559,6 @@ exports.QueryDepositStateParams = {
                 case 2:
                     message.burnerAddress = reader.bytes();
                     break;
-                case 3:
-                    message.amount = reader.string();
-                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -608,7 +570,6 @@ exports.QueryDepositStateParams = {
         return {
             txId: isSet(object.txId) ? bytesFromBase64(object.txId) : new Uint8Array(),
             burnerAddress: isSet(object.burnerAddress) ? bytesFromBase64(object.burnerAddress) : new Uint8Array(),
-            amount: isSet(object.amount) ? String(object.amount) : "",
         };
     },
     toJSON(message) {
@@ -617,15 +578,13 @@ exports.QueryDepositStateParams = {
             (obj.txId = base64FromBytes(message.txId !== undefined ? message.txId : new Uint8Array()));
         message.burnerAddress !== undefined &&
             (obj.burnerAddress = base64FromBytes(message.burnerAddress !== undefined ? message.burnerAddress : new Uint8Array()));
-        message.amount !== undefined && (obj.amount = message.amount);
         return obj;
     },
     fromPartial(object) {
-        var _a, _b, _c;
+        var _a, _b;
         const message = createBaseQueryDepositStateParams();
         message.txId = (_a = object.txId) !== null && _a !== void 0 ? _a : new Uint8Array();
         message.burnerAddress = (_b = object.burnerAddress) !== null && _b !== void 0 ? _b : new Uint8Array();
-        message.amount = (_c = object.amount) !== null && _c !== void 0 ? _c : "";
         return message;
     },
 };
@@ -1571,6 +1530,411 @@ exports.BytecodeResponse = {
         var _a;
         const message = createBaseBytecodeResponse();
         message.bytecode = (_a = object.bytecode) !== null && _a !== void 0 ? _a : "";
+        return message;
+    },
+};
+function createBaseERC20TokensRequest() {
+    return { chain: "", type: 0 };
+}
+exports.ERC20TokensRequest = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.chain !== "") {
+            writer.uint32(10).string(message.chain);
+        }
+        if (message.type !== 0) {
+            writer.uint32(16).int32(message.type);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseERC20TokensRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.chain = reader.string();
+                    break;
+                case 2:
+                    message.type = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            chain: isSet(object.chain) ? String(object.chain) : "",
+            type: isSet(object.type) ? tokenTypeFromJSON(object.type) : 0,
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.chain !== undefined && (obj.chain = message.chain);
+        message.type !== undefined && (obj.type = tokenTypeToJSON(message.type));
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b;
+        const message = createBaseERC20TokensRequest();
+        message.chain = (_a = object.chain) !== null && _a !== void 0 ? _a : "";
+        message.type = (_b = object.type) !== null && _b !== void 0 ? _b : 0;
+        return message;
+    },
+};
+function createBaseERC20TokensResponse() {
+    return { tokens: [] };
+}
+exports.ERC20TokensResponse = {
+    encode(message, writer = _m0.Writer.create()) {
+        for (const v of message.tokens) {
+            exports.ERC20TokensResponse_Token.encode(v, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseERC20TokensResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.tokens.push(exports.ERC20TokensResponse_Token.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            tokens: Array.isArray(object === null || object === void 0 ? void 0 : object.tokens)
+                ? object.tokens.map((e) => exports.ERC20TokensResponse_Token.fromJSON(e))
+                : [],
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.tokens) {
+            obj.tokens = message.tokens.map((e) => (e ? exports.ERC20TokensResponse_Token.toJSON(e) : undefined));
+        }
+        else {
+            obj.tokens = [];
+        }
+        return obj;
+    },
+    fromPartial(object) {
+        var _a;
+        const message = createBaseERC20TokensResponse();
+        message.tokens = ((_a = object.tokens) === null || _a === void 0 ? void 0 : _a.map((e) => exports.ERC20TokensResponse_Token.fromPartial(e))) || [];
+        return message;
+    },
+};
+function createBaseERC20TokensResponse_Token() {
+    return { asset: "", symbol: "" };
+}
+exports.ERC20TokensResponse_Token = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.asset !== "") {
+            writer.uint32(10).string(message.asset);
+        }
+        if (message.symbol !== "") {
+            writer.uint32(18).string(message.symbol);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseERC20TokensResponse_Token();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.asset = reader.string();
+                    break;
+                case 2:
+                    message.symbol = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            asset: isSet(object.asset) ? String(object.asset) : "",
+            symbol: isSet(object.symbol) ? String(object.symbol) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.asset !== undefined && (obj.asset = message.asset);
+        message.symbol !== undefined && (obj.symbol = message.symbol);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b;
+        const message = createBaseERC20TokensResponse_Token();
+        message.asset = (_a = object.asset) !== null && _a !== void 0 ? _a : "";
+        message.symbol = (_b = object.symbol) !== null && _b !== void 0 ? _b : "";
+        return message;
+    },
+};
+function createBaseTokenInfoRequest() {
+    return { chain: "", asset: undefined, symbol: undefined };
+}
+exports.TokenInfoRequest = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.chain !== "") {
+            writer.uint32(10).string(message.chain);
+        }
+        if (message.asset !== undefined) {
+            writer.uint32(18).string(message.asset);
+        }
+        if (message.symbol !== undefined) {
+            writer.uint32(26).string(message.symbol);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseTokenInfoRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.chain = reader.string();
+                    break;
+                case 2:
+                    message.asset = reader.string();
+                    break;
+                case 3:
+                    message.symbol = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            chain: isSet(object.chain) ? String(object.chain) : "",
+            asset: isSet(object.asset) ? String(object.asset) : undefined,
+            symbol: isSet(object.symbol) ? String(object.symbol) : undefined,
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.chain !== undefined && (obj.chain = message.chain);
+        message.asset !== undefined && (obj.asset = message.asset);
+        message.symbol !== undefined && (obj.symbol = message.symbol);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b, _c;
+        const message = createBaseTokenInfoRequest();
+        message.chain = (_a = object.chain) !== null && _a !== void 0 ? _a : "";
+        message.asset = (_b = object.asset) !== null && _b !== void 0 ? _b : undefined;
+        message.symbol = (_c = object.symbol) !== null && _c !== void 0 ? _c : undefined;
+        return message;
+    },
+};
+function createBaseTokenInfoResponse() {
+    return {
+        asset: "",
+        details: undefined,
+        address: "",
+        confirmed: false,
+        isExternal: false,
+        burnerCodeHash: "",
+    };
+}
+exports.TokenInfoResponse = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.asset !== "") {
+            writer.uint32(10).string(message.asset);
+        }
+        if (message.details !== undefined) {
+            types_1.TokenDetails.encode(message.details, writer.uint32(18).fork()).ldelim();
+        }
+        if (message.address !== "") {
+            writer.uint32(26).string(message.address);
+        }
+        if (message.confirmed === true) {
+            writer.uint32(32).bool(message.confirmed);
+        }
+        if (message.isExternal === true) {
+            writer.uint32(40).bool(message.isExternal);
+        }
+        if (message.burnerCodeHash !== "") {
+            writer.uint32(50).string(message.burnerCodeHash);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseTokenInfoResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.asset = reader.string();
+                    break;
+                case 2:
+                    message.details = types_1.TokenDetails.decode(reader, reader.uint32());
+                    break;
+                case 3:
+                    message.address = reader.string();
+                    break;
+                case 4:
+                    message.confirmed = reader.bool();
+                    break;
+                case 5:
+                    message.isExternal = reader.bool();
+                    break;
+                case 6:
+                    message.burnerCodeHash = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            asset: isSet(object.asset) ? String(object.asset) : "",
+            details: isSet(object.details) ? types_1.TokenDetails.fromJSON(object.details) : undefined,
+            address: isSet(object.address) ? String(object.address) : "",
+            confirmed: isSet(object.confirmed) ? Boolean(object.confirmed) : false,
+            isExternal: isSet(object.isExternal) ? Boolean(object.isExternal) : false,
+            burnerCodeHash: isSet(object.burnerCodeHash) ? String(object.burnerCodeHash) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.asset !== undefined && (obj.asset = message.asset);
+        message.details !== undefined &&
+            (obj.details = message.details ? types_1.TokenDetails.toJSON(message.details) : undefined);
+        message.address !== undefined && (obj.address = message.address);
+        message.confirmed !== undefined && (obj.confirmed = message.confirmed);
+        message.isExternal !== undefined && (obj.isExternal = message.isExternal);
+        message.burnerCodeHash !== undefined && (obj.burnerCodeHash = message.burnerCodeHash);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b, _c, _d, _e;
+        const message = createBaseTokenInfoResponse();
+        message.asset = (_a = object.asset) !== null && _a !== void 0 ? _a : "";
+        message.details =
+            object.details !== undefined && object.details !== null
+                ? types_1.TokenDetails.fromPartial(object.details)
+                : undefined;
+        message.address = (_b = object.address) !== null && _b !== void 0 ? _b : "";
+        message.confirmed = (_c = object.confirmed) !== null && _c !== void 0 ? _c : false;
+        message.isExternal = (_d = object.isExternal) !== null && _d !== void 0 ? _d : false;
+        message.burnerCodeHash = (_e = object.burnerCodeHash) !== null && _e !== void 0 ? _e : "";
+        return message;
+    },
+};
+function createBaseProof() {
+    return { addresses: [], weights: [], threshold: "", signatures: [] };
+}
+exports.Proof = {
+    encode(message, writer = _m0.Writer.create()) {
+        for (const v of message.addresses) {
+            writer.uint32(10).string(v);
+        }
+        for (const v of message.weights) {
+            writer.uint32(18).string(v);
+        }
+        if (message.threshold !== "") {
+            writer.uint32(26).string(message.threshold);
+        }
+        for (const v of message.signatures) {
+            writer.uint32(34).string(v);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseProof();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.addresses.push(reader.string());
+                    break;
+                case 2:
+                    message.weights.push(reader.string());
+                    break;
+                case 3:
+                    message.threshold = reader.string();
+                    break;
+                case 4:
+                    message.signatures.push(reader.string());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            addresses: Array.isArray(object === null || object === void 0 ? void 0 : object.addresses) ? object.addresses.map((e) => String(e)) : [],
+            weights: Array.isArray(object === null || object === void 0 ? void 0 : object.weights) ? object.weights.map((e) => String(e)) : [],
+            threshold: isSet(object.threshold) ? String(object.threshold) : "",
+            signatures: Array.isArray(object === null || object === void 0 ? void 0 : object.signatures) ? object.signatures.map((e) => String(e)) : [],
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.addresses) {
+            obj.addresses = message.addresses.map((e) => e);
+        }
+        else {
+            obj.addresses = [];
+        }
+        if (message.weights) {
+            obj.weights = message.weights.map((e) => e);
+        }
+        else {
+            obj.weights = [];
+        }
+        message.threshold !== undefined && (obj.threshold = message.threshold);
+        if (message.signatures) {
+            obj.signatures = message.signatures.map((e) => e);
+        }
+        else {
+            obj.signatures = [];
+        }
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b, _c, _d;
+        const message = createBaseProof();
+        message.addresses = ((_a = object.addresses) === null || _a === void 0 ? void 0 : _a.map((e) => e)) || [];
+        message.weights = ((_b = object.weights) === null || _b === void 0 ? void 0 : _b.map((e) => e)) || [];
+        message.threshold = (_c = object.threshold) !== null && _c !== void 0 ? _c : "";
+        message.signatures = ((_d = object.signatures) === null || _d === void 0 ? void 0 : _d.map((e) => e)) || [];
         return message;
     },
 };

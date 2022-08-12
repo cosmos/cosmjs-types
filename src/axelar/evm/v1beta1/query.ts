@@ -6,6 +6,7 @@ import {
   DepositStatus,
   Event,
   BurnerInfo,
+  TokenDetails,
   batchedCommandsStatusFromJSON,
   batchedCommandsStatusToJSON,
   depositStatusFromJSON,
@@ -13,6 +14,45 @@ import {
 } from "../../../axelar/evm/v1beta1/types";
 
 export const protobufPackage = "axelar.evm.v1beta1";
+
+export enum TokenType {
+  TOKEN_TYPE_UNSPECIFIED = 0,
+  TOKEN_TYPE_INTERNAL = 1,
+  TOKEN_TYPE_EXTERNAL = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function tokenTypeFromJSON(object: any): TokenType {
+  switch (object) {
+    case 0:
+    case "TOKEN_TYPE_UNSPECIFIED":
+      return TokenType.TOKEN_TYPE_UNSPECIFIED;
+    case 1:
+    case "TOKEN_TYPE_INTERNAL":
+      return TokenType.TOKEN_TYPE_INTERNAL;
+    case 2:
+    case "TOKEN_TYPE_EXTERNAL":
+      return TokenType.TOKEN_TYPE_EXTERNAL;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return TokenType.UNRECOGNIZED;
+  }
+}
+
+export function tokenTypeToJSON(object: TokenType): string {
+  switch (object) {
+    case TokenType.TOKEN_TYPE_UNSPECIFIED:
+      return "TOKEN_TYPE_UNSPECIFIED";
+    case TokenType.TOKEN_TYPE_INTERNAL:
+      return "TOKEN_TYPE_INTERNAL";
+    case TokenType.TOKEN_TYPE_EXTERNAL:
+      return "TOKEN_TYPE_EXTERNAL";
+    case TokenType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 
 /**
  * DepositQueryParams describe the parameters used to query for an EVM
@@ -38,33 +78,29 @@ export interface BatchedCommandsResponse {
   data: string;
   status: BatchedCommandsStatus;
   keyId: string;
-  signature: string[];
   executeData: string;
   prevBatchedCommandsId: string;
   commandIds: string[];
+  proof?: Proof;
 }
 
 export interface KeyAddressRequest {
   chain: string;
-  role: number | undefined;
-  id: string | undefined;
+  keyId: string;
 }
 
 export interface KeyAddressResponse {
   keyId: string;
-  multisigAddresses?: KeyAddressResponse_MultisigAddresses | undefined;
-  thresholdAddress?: KeyAddressResponse_ThresholdAddress | undefined;
+  addresses: KeyAddressResponse_WeightedAddress[];
+  threshold: string;
 }
 
-export interface KeyAddressResponse_MultisigAddresses {
-  addresses: string[];
-  threshold: number;
-}
-
-export interface KeyAddressResponse_ThresholdAddress {
+export interface KeyAddressResponse_WeightedAddress {
   address: string;
+  weight: string;
 }
 
+/** @deprecated */
 export interface QueryTokenAddressResponse {
   address: string;
   confirmed: boolean;
@@ -73,7 +109,6 @@ export interface QueryTokenAddressResponse {
 export interface QueryDepositStateParams {
   txId: Uint8Array;
   burnerAddress: Uint8Array;
-  amount: string;
 }
 
 export interface DepositStateRequest {
@@ -157,6 +192,50 @@ export interface BytecodeRequest {
 
 export interface BytecodeResponse {
   bytecode: string;
+}
+
+/**
+ * ERC20TokensRequest describes the chain for which the type of ERC20 tokens are
+ * requested.
+ */
+export interface ERC20TokensRequest {
+  chain: string;
+  type: TokenType;
+}
+
+/**
+ * ERC20TokensResponse describes the asset and symbol for all
+ * ERC20 tokens requested for a chain
+ */
+export interface ERC20TokensResponse {
+  tokens: ERC20TokensResponse_Token[];
+}
+
+export interface ERC20TokensResponse_Token {
+  asset: string;
+  symbol: string;
+}
+
+export interface TokenInfoRequest {
+  chain: string;
+  asset: string | undefined;
+  symbol: string | undefined;
+}
+
+export interface TokenInfoResponse {
+  asset: string;
+  details?: TokenDetails;
+  address: string;
+  confirmed: boolean;
+  isExternal: boolean;
+  burnerCodeHash: string;
+}
+
+export interface Proof {
+  addresses: string[];
+  weights: string[];
+  threshold: string;
+  signatures: string[];
 }
 
 function createBaseDepositQueryParams(): DepositQueryParams {
@@ -290,10 +369,10 @@ function createBaseBatchedCommandsResponse(): BatchedCommandsResponse {
     data: "",
     status: 0,
     keyId: "",
-    signature: [],
     executeData: "",
     prevBatchedCommandsId: "",
     commandIds: [],
+    proof: undefined,
   };
 }
 
@@ -311,9 +390,6 @@ export const BatchedCommandsResponse = {
     if (message.keyId !== "") {
       writer.uint32(34).string(message.keyId);
     }
-    for (const v of message.signature) {
-      writer.uint32(42).string(v!);
-    }
     if (message.executeData !== "") {
       writer.uint32(50).string(message.executeData);
     }
@@ -322,6 +398,9 @@ export const BatchedCommandsResponse = {
     }
     for (const v of message.commandIds) {
       writer.uint32(66).string(v!);
+    }
+    if (message.proof !== undefined) {
+      Proof.encode(message.proof, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -345,9 +424,6 @@ export const BatchedCommandsResponse = {
         case 4:
           message.keyId = reader.string();
           break;
-        case 5:
-          message.signature.push(reader.string());
-          break;
         case 6:
           message.executeData = reader.string();
           break;
@@ -356,6 +432,9 @@ export const BatchedCommandsResponse = {
           break;
         case 8:
           message.commandIds.push(reader.string());
+          break;
+        case 9:
+          message.proof = Proof.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -371,10 +450,10 @@ export const BatchedCommandsResponse = {
       data: isSet(object.data) ? String(object.data) : "",
       status: isSet(object.status) ? batchedCommandsStatusFromJSON(object.status) : 0,
       keyId: isSet(object.keyId) ? String(object.keyId) : "",
-      signature: Array.isArray(object?.signature) ? object.signature.map((e: any) => String(e)) : [],
       executeData: isSet(object.executeData) ? String(object.executeData) : "",
       prevBatchedCommandsId: isSet(object.prevBatchedCommandsId) ? String(object.prevBatchedCommandsId) : "",
       commandIds: Array.isArray(object?.commandIds) ? object.commandIds.map((e: any) => String(e)) : [],
+      proof: isSet(object.proof) ? Proof.fromJSON(object.proof) : undefined,
     };
   },
 
@@ -384,11 +463,6 @@ export const BatchedCommandsResponse = {
     message.data !== undefined && (obj.data = message.data);
     message.status !== undefined && (obj.status = batchedCommandsStatusToJSON(message.status));
     message.keyId !== undefined && (obj.keyId = message.keyId);
-    if (message.signature) {
-      obj.signature = message.signature.map((e) => e);
-    } else {
-      obj.signature = [];
-    }
     message.executeData !== undefined && (obj.executeData = message.executeData);
     message.prevBatchedCommandsId !== undefined &&
       (obj.prevBatchedCommandsId = message.prevBatchedCommandsId);
@@ -397,6 +471,7 @@ export const BatchedCommandsResponse = {
     } else {
       obj.commandIds = [];
     }
+    message.proof !== undefined && (obj.proof = message.proof ? Proof.toJSON(message.proof) : undefined);
     return obj;
   },
 
@@ -406,16 +481,17 @@ export const BatchedCommandsResponse = {
     message.data = object.data ?? "";
     message.status = object.status ?? 0;
     message.keyId = object.keyId ?? "";
-    message.signature = object.signature?.map((e) => e) || [];
     message.executeData = object.executeData ?? "";
     message.prevBatchedCommandsId = object.prevBatchedCommandsId ?? "";
     message.commandIds = object.commandIds?.map((e) => e) || [];
+    message.proof =
+      object.proof !== undefined && object.proof !== null ? Proof.fromPartial(object.proof) : undefined;
     return message;
   },
 };
 
 function createBaseKeyAddressRequest(): KeyAddressRequest {
-  return { chain: "", role: undefined, id: undefined };
+  return { chain: "", keyId: "" };
 }
 
 export const KeyAddressRequest = {
@@ -423,11 +499,8 @@ export const KeyAddressRequest = {
     if (message.chain !== "") {
       writer.uint32(10).string(message.chain);
     }
-    if (message.role !== undefined) {
-      writer.uint32(16).int32(message.role);
-    }
-    if (message.id !== undefined) {
-      writer.uint32(26).string(message.id);
+    if (message.keyId !== "") {
+      writer.uint32(34).string(message.keyId);
     }
     return writer;
   },
@@ -442,11 +515,8 @@ export const KeyAddressRequest = {
         case 1:
           message.chain = reader.string();
           break;
-        case 2:
-          message.role = reader.int32();
-          break;
-        case 3:
-          message.id = reader.string();
+        case 4:
+          message.keyId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -459,30 +529,27 @@ export const KeyAddressRequest = {
   fromJSON(object: any): KeyAddressRequest {
     return {
       chain: isSet(object.chain) ? String(object.chain) : "",
-      role: isSet(object.role) ? Number(object.role) : undefined,
-      id: isSet(object.id) ? String(object.id) : undefined,
+      keyId: isSet(object.keyId) ? String(object.keyId) : "",
     };
   },
 
   toJSON(message: KeyAddressRequest): unknown {
     const obj: any = {};
     message.chain !== undefined && (obj.chain = message.chain);
-    message.role !== undefined && (obj.role = Math.round(message.role));
-    message.id !== undefined && (obj.id = message.id);
+    message.keyId !== undefined && (obj.keyId = message.keyId);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<KeyAddressRequest>, I>>(object: I): KeyAddressRequest {
     const message = createBaseKeyAddressRequest();
     message.chain = object.chain ?? "";
-    message.role = object.role ?? undefined;
-    message.id = object.id ?? undefined;
+    message.keyId = object.keyId ?? "";
     return message;
   },
 };
 
 function createBaseKeyAddressResponse(): KeyAddressResponse {
-  return { keyId: "", multisigAddresses: undefined, thresholdAddress: undefined };
+  return { keyId: "", addresses: [], threshold: "" };
 }
 
 export const KeyAddressResponse = {
@@ -490,14 +557,11 @@ export const KeyAddressResponse = {
     if (message.keyId !== "") {
       writer.uint32(10).string(message.keyId);
     }
-    if (message.multisigAddresses !== undefined) {
-      KeyAddressResponse_MultisigAddresses.encode(
-        message.multisigAddresses,
-        writer.uint32(18).fork(),
-      ).ldelim();
+    for (const v of message.addresses) {
+      KeyAddressResponse_WeightedAddress.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    if (message.thresholdAddress !== undefined) {
-      KeyAddressResponse_ThresholdAddress.encode(message.thresholdAddress, writer.uint32(26).fork()).ldelim();
+    if (message.threshold !== "") {
+      writer.uint32(26).string(message.threshold);
     }
     return writer;
   },
@@ -513,10 +577,10 @@ export const KeyAddressResponse = {
           message.keyId = reader.string();
           break;
         case 2:
-          message.multisigAddresses = KeyAddressResponse_MultisigAddresses.decode(reader, reader.uint32());
+          message.addresses.push(KeyAddressResponse_WeightedAddress.decode(reader, reader.uint32()));
           break;
         case 3:
-          message.thresholdAddress = KeyAddressResponse_ThresholdAddress.decode(reader, reader.uint32());
+          message.threshold = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -529,133 +593,64 @@ export const KeyAddressResponse = {
   fromJSON(object: any): KeyAddressResponse {
     return {
       keyId: isSet(object.keyId) ? String(object.keyId) : "",
-      multisigAddresses: isSet(object.multisigAddresses)
-        ? KeyAddressResponse_MultisigAddresses.fromJSON(object.multisigAddresses)
-        : undefined,
-      thresholdAddress: isSet(object.thresholdAddress)
-        ? KeyAddressResponse_ThresholdAddress.fromJSON(object.thresholdAddress)
-        : undefined,
+      addresses: Array.isArray(object?.addresses)
+        ? object.addresses.map((e: any) => KeyAddressResponse_WeightedAddress.fromJSON(e))
+        : [],
+      threshold: isSet(object.threshold) ? String(object.threshold) : "",
     };
   },
 
   toJSON(message: KeyAddressResponse): unknown {
     const obj: any = {};
     message.keyId !== undefined && (obj.keyId = message.keyId);
-    message.multisigAddresses !== undefined &&
-      (obj.multisigAddresses = message.multisigAddresses
-        ? KeyAddressResponse_MultisigAddresses.toJSON(message.multisigAddresses)
-        : undefined);
-    message.thresholdAddress !== undefined &&
-      (obj.thresholdAddress = message.thresholdAddress
-        ? KeyAddressResponse_ThresholdAddress.toJSON(message.thresholdAddress)
-        : undefined);
+    if (message.addresses) {
+      obj.addresses = message.addresses.map((e) =>
+        e ? KeyAddressResponse_WeightedAddress.toJSON(e) : undefined,
+      );
+    } else {
+      obj.addresses = [];
+    }
+    message.threshold !== undefined && (obj.threshold = message.threshold);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<KeyAddressResponse>, I>>(object: I): KeyAddressResponse {
     const message = createBaseKeyAddressResponse();
     message.keyId = object.keyId ?? "";
-    message.multisigAddresses =
-      object.multisigAddresses !== undefined && object.multisigAddresses !== null
-        ? KeyAddressResponse_MultisigAddresses.fromPartial(object.multisigAddresses)
-        : undefined;
-    message.thresholdAddress =
-      object.thresholdAddress !== undefined && object.thresholdAddress !== null
-        ? KeyAddressResponse_ThresholdAddress.fromPartial(object.thresholdAddress)
-        : undefined;
+    message.addresses = object.addresses?.map((e) => KeyAddressResponse_WeightedAddress.fromPartial(e)) || [];
+    message.threshold = object.threshold ?? "";
     return message;
   },
 };
 
-function createBaseKeyAddressResponse_MultisigAddresses(): KeyAddressResponse_MultisigAddresses {
-  return { addresses: [], threshold: 0 };
+function createBaseKeyAddressResponse_WeightedAddress(): KeyAddressResponse_WeightedAddress {
+  return { address: "", weight: "" };
 }
 
-export const KeyAddressResponse_MultisigAddresses = {
-  encode(
-    message: KeyAddressResponse_MultisigAddresses,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
-    for (const v of message.addresses) {
-      writer.uint32(10).string(v!);
-    }
-    if (message.threshold !== 0) {
-      writer.uint32(16).uint32(message.threshold);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): KeyAddressResponse_MultisigAddresses {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseKeyAddressResponse_MultisigAddresses();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.addresses.push(reader.string());
-          break;
-        case 2:
-          message.threshold = reader.uint32();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): KeyAddressResponse_MultisigAddresses {
-    return {
-      addresses: Array.isArray(object?.addresses) ? object.addresses.map((e: any) => String(e)) : [],
-      threshold: isSet(object.threshold) ? Number(object.threshold) : 0,
-    };
-  },
-
-  toJSON(message: KeyAddressResponse_MultisigAddresses): unknown {
-    const obj: any = {};
-    if (message.addresses) {
-      obj.addresses = message.addresses.map((e) => e);
-    } else {
-      obj.addresses = [];
-    }
-    message.threshold !== undefined && (obj.threshold = Math.round(message.threshold));
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<KeyAddressResponse_MultisigAddresses>, I>>(
-    object: I,
-  ): KeyAddressResponse_MultisigAddresses {
-    const message = createBaseKeyAddressResponse_MultisigAddresses();
-    message.addresses = object.addresses?.map((e) => e) || [];
-    message.threshold = object.threshold ?? 0;
-    return message;
-  },
-};
-
-function createBaseKeyAddressResponse_ThresholdAddress(): KeyAddressResponse_ThresholdAddress {
-  return { address: "" };
-}
-
-export const KeyAddressResponse_ThresholdAddress = {
-  encode(message: KeyAddressResponse_ThresholdAddress, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const KeyAddressResponse_WeightedAddress = {
+  encode(message: KeyAddressResponse_WeightedAddress, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
+    if (message.weight !== "") {
+      writer.uint32(18).string(message.weight);
+    }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): KeyAddressResponse_ThresholdAddress {
+  decode(input: _m0.Reader | Uint8Array, length?: number): KeyAddressResponse_WeightedAddress {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseKeyAddressResponse_ThresholdAddress();
+    const message = createBaseKeyAddressResponse_WeightedAddress();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
           message.address = reader.string();
           break;
+        case 2:
+          message.weight = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -664,23 +659,26 @@ export const KeyAddressResponse_ThresholdAddress = {
     return message;
   },
 
-  fromJSON(object: any): KeyAddressResponse_ThresholdAddress {
+  fromJSON(object: any): KeyAddressResponse_WeightedAddress {
     return {
       address: isSet(object.address) ? String(object.address) : "",
+      weight: isSet(object.weight) ? String(object.weight) : "",
     };
   },
 
-  toJSON(message: KeyAddressResponse_ThresholdAddress): unknown {
+  toJSON(message: KeyAddressResponse_WeightedAddress): unknown {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
+    message.weight !== undefined && (obj.weight = message.weight);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<KeyAddressResponse_ThresholdAddress>, I>>(
+  fromPartial<I extends Exact<DeepPartial<KeyAddressResponse_WeightedAddress>, I>>(
     object: I,
-  ): KeyAddressResponse_ThresholdAddress {
-    const message = createBaseKeyAddressResponse_ThresholdAddress();
+  ): KeyAddressResponse_WeightedAddress {
+    const message = createBaseKeyAddressResponse_WeightedAddress();
     message.address = object.address ?? "";
+    message.weight = object.weight ?? "";
     return message;
   },
 };
@@ -746,7 +744,7 @@ export const QueryTokenAddressResponse = {
 };
 
 function createBaseQueryDepositStateParams(): QueryDepositStateParams {
-  return { txId: new Uint8Array(), burnerAddress: new Uint8Array(), amount: "" };
+  return { txId: new Uint8Array(), burnerAddress: new Uint8Array() };
 }
 
 export const QueryDepositStateParams = {
@@ -756,9 +754,6 @@ export const QueryDepositStateParams = {
     }
     if (message.burnerAddress.length !== 0) {
       writer.uint32(18).bytes(message.burnerAddress);
-    }
-    if (message.amount !== "") {
-      writer.uint32(26).string(message.amount);
     }
     return writer;
   },
@@ -776,9 +771,6 @@ export const QueryDepositStateParams = {
         case 2:
           message.burnerAddress = reader.bytes();
           break;
-        case 3:
-          message.amount = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -791,7 +783,6 @@ export const QueryDepositStateParams = {
     return {
       txId: isSet(object.txId) ? bytesFromBase64(object.txId) : new Uint8Array(),
       burnerAddress: isSet(object.burnerAddress) ? bytesFromBase64(object.burnerAddress) : new Uint8Array(),
-      amount: isSet(object.amount) ? String(object.amount) : "",
     };
   },
 
@@ -803,7 +794,6 @@ export const QueryDepositStateParams = {
       (obj.burnerAddress = base64FromBytes(
         message.burnerAddress !== undefined ? message.burnerAddress : new Uint8Array(),
       ));
-    message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
 
@@ -811,7 +801,6 @@ export const QueryDepositStateParams = {
     const message = createBaseQueryDepositStateParams();
     message.txId = object.txId ?? new Uint8Array();
     message.burnerAddress = object.burnerAddress ?? new Uint8Array();
-    message.amount = object.amount ?? "";
     return message;
   },
 };
@@ -1864,6 +1853,439 @@ export const BytecodeResponse = {
   fromPartial<I extends Exact<DeepPartial<BytecodeResponse>, I>>(object: I): BytecodeResponse {
     const message = createBaseBytecodeResponse();
     message.bytecode = object.bytecode ?? "";
+    return message;
+  },
+};
+
+function createBaseERC20TokensRequest(): ERC20TokensRequest {
+  return { chain: "", type: 0 };
+}
+
+export const ERC20TokensRequest = {
+  encode(message: ERC20TokensRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    if (message.type !== 0) {
+      writer.uint32(16).int32(message.type);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ERC20TokensRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseERC20TokensRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        case 2:
+          message.type = reader.int32() as any;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ERC20TokensRequest {
+    return {
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      type: isSet(object.type) ? tokenTypeFromJSON(object.type) : 0,
+    };
+  },
+
+  toJSON(message: ERC20TokensRequest): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.type !== undefined && (obj.type = tokenTypeToJSON(message.type));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ERC20TokensRequest>, I>>(object: I): ERC20TokensRequest {
+    const message = createBaseERC20TokensRequest();
+    message.chain = object.chain ?? "";
+    message.type = object.type ?? 0;
+    return message;
+  },
+};
+
+function createBaseERC20TokensResponse(): ERC20TokensResponse {
+  return { tokens: [] };
+}
+
+export const ERC20TokensResponse = {
+  encode(message: ERC20TokensResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.tokens) {
+      ERC20TokensResponse_Token.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ERC20TokensResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseERC20TokensResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.tokens.push(ERC20TokensResponse_Token.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ERC20TokensResponse {
+    return {
+      tokens: Array.isArray(object?.tokens)
+        ? object.tokens.map((e: any) => ERC20TokensResponse_Token.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: ERC20TokensResponse): unknown {
+    const obj: any = {};
+    if (message.tokens) {
+      obj.tokens = message.tokens.map((e) => (e ? ERC20TokensResponse_Token.toJSON(e) : undefined));
+    } else {
+      obj.tokens = [];
+    }
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ERC20TokensResponse>, I>>(object: I): ERC20TokensResponse {
+    const message = createBaseERC20TokensResponse();
+    message.tokens = object.tokens?.map((e) => ERC20TokensResponse_Token.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseERC20TokensResponse_Token(): ERC20TokensResponse_Token {
+  return { asset: "", symbol: "" };
+}
+
+export const ERC20TokensResponse_Token = {
+  encode(message: ERC20TokensResponse_Token, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.asset !== "") {
+      writer.uint32(10).string(message.asset);
+    }
+    if (message.symbol !== "") {
+      writer.uint32(18).string(message.symbol);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ERC20TokensResponse_Token {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseERC20TokensResponse_Token();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.asset = reader.string();
+          break;
+        case 2:
+          message.symbol = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ERC20TokensResponse_Token {
+    return {
+      asset: isSet(object.asset) ? String(object.asset) : "",
+      symbol: isSet(object.symbol) ? String(object.symbol) : "",
+    };
+  },
+
+  toJSON(message: ERC20TokensResponse_Token): unknown {
+    const obj: any = {};
+    message.asset !== undefined && (obj.asset = message.asset);
+    message.symbol !== undefined && (obj.symbol = message.symbol);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ERC20TokensResponse_Token>, I>>(
+    object: I,
+  ): ERC20TokensResponse_Token {
+    const message = createBaseERC20TokensResponse_Token();
+    message.asset = object.asset ?? "";
+    message.symbol = object.symbol ?? "";
+    return message;
+  },
+};
+
+function createBaseTokenInfoRequest(): TokenInfoRequest {
+  return { chain: "", asset: undefined, symbol: undefined };
+}
+
+export const TokenInfoRequest = {
+  encode(message: TokenInfoRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    if (message.asset !== undefined) {
+      writer.uint32(18).string(message.asset);
+    }
+    if (message.symbol !== undefined) {
+      writer.uint32(26).string(message.symbol);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TokenInfoRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTokenInfoRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        case 2:
+          message.asset = reader.string();
+          break;
+        case 3:
+          message.symbol = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TokenInfoRequest {
+    return {
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      asset: isSet(object.asset) ? String(object.asset) : undefined,
+      symbol: isSet(object.symbol) ? String(object.symbol) : undefined,
+    };
+  },
+
+  toJSON(message: TokenInfoRequest): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.asset !== undefined && (obj.asset = message.asset);
+    message.symbol !== undefined && (obj.symbol = message.symbol);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<TokenInfoRequest>, I>>(object: I): TokenInfoRequest {
+    const message = createBaseTokenInfoRequest();
+    message.chain = object.chain ?? "";
+    message.asset = object.asset ?? undefined;
+    message.symbol = object.symbol ?? undefined;
+    return message;
+  },
+};
+
+function createBaseTokenInfoResponse(): TokenInfoResponse {
+  return {
+    asset: "",
+    details: undefined,
+    address: "",
+    confirmed: false,
+    isExternal: false,
+    burnerCodeHash: "",
+  };
+}
+
+export const TokenInfoResponse = {
+  encode(message: TokenInfoResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.asset !== "") {
+      writer.uint32(10).string(message.asset);
+    }
+    if (message.details !== undefined) {
+      TokenDetails.encode(message.details, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.address !== "") {
+      writer.uint32(26).string(message.address);
+    }
+    if (message.confirmed === true) {
+      writer.uint32(32).bool(message.confirmed);
+    }
+    if (message.isExternal === true) {
+      writer.uint32(40).bool(message.isExternal);
+    }
+    if (message.burnerCodeHash !== "") {
+      writer.uint32(50).string(message.burnerCodeHash);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TokenInfoResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTokenInfoResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.asset = reader.string();
+          break;
+        case 2:
+          message.details = TokenDetails.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.address = reader.string();
+          break;
+        case 4:
+          message.confirmed = reader.bool();
+          break;
+        case 5:
+          message.isExternal = reader.bool();
+          break;
+        case 6:
+          message.burnerCodeHash = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TokenInfoResponse {
+    return {
+      asset: isSet(object.asset) ? String(object.asset) : "",
+      details: isSet(object.details) ? TokenDetails.fromJSON(object.details) : undefined,
+      address: isSet(object.address) ? String(object.address) : "",
+      confirmed: isSet(object.confirmed) ? Boolean(object.confirmed) : false,
+      isExternal: isSet(object.isExternal) ? Boolean(object.isExternal) : false,
+      burnerCodeHash: isSet(object.burnerCodeHash) ? String(object.burnerCodeHash) : "",
+    };
+  },
+
+  toJSON(message: TokenInfoResponse): unknown {
+    const obj: any = {};
+    message.asset !== undefined && (obj.asset = message.asset);
+    message.details !== undefined &&
+      (obj.details = message.details ? TokenDetails.toJSON(message.details) : undefined);
+    message.address !== undefined && (obj.address = message.address);
+    message.confirmed !== undefined && (obj.confirmed = message.confirmed);
+    message.isExternal !== undefined && (obj.isExternal = message.isExternal);
+    message.burnerCodeHash !== undefined && (obj.burnerCodeHash = message.burnerCodeHash);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<TokenInfoResponse>, I>>(object: I): TokenInfoResponse {
+    const message = createBaseTokenInfoResponse();
+    message.asset = object.asset ?? "";
+    message.details =
+      object.details !== undefined && object.details !== null
+        ? TokenDetails.fromPartial(object.details)
+        : undefined;
+    message.address = object.address ?? "";
+    message.confirmed = object.confirmed ?? false;
+    message.isExternal = object.isExternal ?? false;
+    message.burnerCodeHash = object.burnerCodeHash ?? "";
+    return message;
+  },
+};
+
+function createBaseProof(): Proof {
+  return { addresses: [], weights: [], threshold: "", signatures: [] };
+}
+
+export const Proof = {
+  encode(message: Proof, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.addresses) {
+      writer.uint32(10).string(v!);
+    }
+    for (const v of message.weights) {
+      writer.uint32(18).string(v!);
+    }
+    if (message.threshold !== "") {
+      writer.uint32(26).string(message.threshold);
+    }
+    for (const v of message.signatures) {
+      writer.uint32(34).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Proof {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseProof();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.addresses.push(reader.string());
+          break;
+        case 2:
+          message.weights.push(reader.string());
+          break;
+        case 3:
+          message.threshold = reader.string();
+          break;
+        case 4:
+          message.signatures.push(reader.string());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Proof {
+    return {
+      addresses: Array.isArray(object?.addresses) ? object.addresses.map((e: any) => String(e)) : [],
+      weights: Array.isArray(object?.weights) ? object.weights.map((e: any) => String(e)) : [],
+      threshold: isSet(object.threshold) ? String(object.threshold) : "",
+      signatures: Array.isArray(object?.signatures) ? object.signatures.map((e: any) => String(e)) : [],
+    };
+  },
+
+  toJSON(message: Proof): unknown {
+    const obj: any = {};
+    if (message.addresses) {
+      obj.addresses = message.addresses.map((e) => e);
+    } else {
+      obj.addresses = [];
+    }
+    if (message.weights) {
+      obj.weights = message.weights.map((e) => e);
+    } else {
+      obj.weights = [];
+    }
+    message.threshold !== undefined && (obj.threshold = message.threshold);
+    if (message.signatures) {
+      obj.signatures = message.signatures.map((e) => e);
+    } else {
+      obj.signatures = [];
+    }
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<Proof>, I>>(object: I): Proof {
+    const message = createBaseProof();
+    message.addresses = object.addresses?.map((e) => e) || [];
+    message.weights = object.weights?.map((e) => e) || [];
+    message.threshold = object.threshold ?? "";
+    message.signatures = object.signatures?.map((e) => e) || [];
     return message;
   },
 };

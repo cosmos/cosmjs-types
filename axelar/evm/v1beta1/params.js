@@ -43,6 +43,7 @@ function createBaseParams() {
         minVoterCount: long_1.default.ZERO,
         commandsGasLimit: 0,
         votingGracePeriod: long_1.default.ZERO,
+        endBlockerLimit: long_1.default.ZERO,
     };
 }
 exports.Params = {
@@ -79,6 +80,9 @@ exports.Params = {
         }
         if (!message.votingGracePeriod.isZero()) {
             writer.uint32(104).int64(message.votingGracePeriod);
+        }
+        if (!message.endBlockerLimit.isZero()) {
+            writer.uint32(112).int64(message.endBlockerLimit);
         }
         return writer;
     },
@@ -122,6 +126,9 @@ exports.Params = {
                 case 13:
                     message.votingGracePeriod = reader.int64();
                     break;
+                case 14:
+                    message.endBlockerLimit = reader.int64();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -150,6 +157,7 @@ exports.Params = {
             votingGracePeriod: isSet(object.votingGracePeriod)
                 ? long_1.default.fromValue(object.votingGracePeriod)
                 : long_1.default.ZERO,
+            endBlockerLimit: isSet(object.endBlockerLimit) ? long_1.default.fromValue(object.endBlockerLimit) : long_1.default.ZERO,
         };
     },
     toJSON(message) {
@@ -177,6 +185,8 @@ exports.Params = {
         message.commandsGasLimit !== undefined && (obj.commandsGasLimit = Math.round(message.commandsGasLimit));
         message.votingGracePeriod !== undefined &&
             (obj.votingGracePeriod = (message.votingGracePeriod || long_1.default.ZERO).toString());
+        message.endBlockerLimit !== undefined &&
+            (obj.endBlockerLimit = (message.endBlockerLimit || long_1.default.ZERO).toString());
         return obj;
     },
     fromPartial(object) {
@@ -207,6 +217,10 @@ exports.Params = {
         message.votingGracePeriod =
             object.votingGracePeriod !== undefined && object.votingGracePeriod !== null
                 ? long_1.default.fromValue(object.votingGracePeriod)
+                : long_1.default.ZERO;
+        message.endBlockerLimit =
+            object.endBlockerLimit !== undefined && object.endBlockerLimit !== null
+                ? long_1.default.fromValue(object.endBlockerLimit)
                 : long_1.default.ZERO;
         return message;
     },

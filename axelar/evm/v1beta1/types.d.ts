@@ -1,5 +1,6 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
+import { Any } from "../../../google/protobuf/any";
 export declare const protobufPackage = "axelar.evm.v1beta1";
 export declare enum Status {
     /**
@@ -23,14 +24,6 @@ export declare enum BatchedCommandsStatus {
 }
 export declare function batchedCommandsStatusFromJSON(object: any): BatchedCommandsStatus;
 export declare function batchedCommandsStatusToJSON(object: BatchedCommandsStatus): string;
-export declare enum TransferKeyType {
-    TRANSFER_KEY_TYPE_UNSPECIFIED = 0,
-    TRANSFER_KEY_TYPE_OWNERSHIP = 1,
-    TRANSFER_KEY_TYPE_OPERATORSHIP = 2,
-    UNRECOGNIZED = -1
-}
-export declare function transferKeyTypeFromJSON(object: any): TransferKeyType;
-export declare function transferKeyTypeToJSON(object: TransferKeyType): string;
 export declare enum SigType {
     SIG_TYPE_UNSPECIFIED = 0,
     SIG_TYPE_TX = 1,
@@ -105,6 +98,7 @@ export interface EventTokenDeployed {
     symbol: string;
     tokenAddress: Uint8Array;
 }
+/** @deprecated */
 export interface EventMultisigOwnershipTransferred {
     preOwners: Uint8Array[];
     prevThreshold: Uint8Array;
@@ -112,11 +106,11 @@ export interface EventMultisigOwnershipTransferred {
     newThreshold: Uint8Array;
 }
 export interface EventMultisigOperatorshipTransferred {
-    preOperators: Uint8Array[];
-    prevThreshold: Uint8Array;
     newOperators: Uint8Array[];
     newThreshold: Uint8Array;
+    newWeights: Uint8Array[];
 }
+/** @deprecated */
 export interface EventSinglesigOwnershipTransferred {
     preOwner: Uint8Array;
     newOwner: Uint8Array;
@@ -180,6 +174,7 @@ export interface CommandBatchMetadata {
     status: BatchedCommandsStatus;
     keyId: string;
     prevBatchedCommandsId: Uint8Array;
+    signature?: Any;
 }
 /**
  * SigMetadata stores necessary information for external apps to map signature
@@ -188,11 +183,11 @@ export interface CommandBatchMetadata {
 export interface SigMetadata {
     type: SigType;
     chain: string;
+    commandBatchId: Uint8Array;
 }
 /** TransferKey contains information for a transfer ownership or operatorship */
 export interface TransferKey {
     txId: Uint8Array;
-    type: TransferKeyType;
     nextKeyId: string;
 }
 export interface Asset {
@@ -218,6 +213,10 @@ export declare enum Gateway_Status {
 }
 export declare function gateway_StatusFromJSON(object: any): Gateway_Status;
 export declare function gateway_StatusToJSON(object: Gateway_Status): string;
+export interface PollMetadata {
+    chain: string;
+    txId: Uint8Array;
+}
 export declare const VoteEvents: {
     encode(message: VoteEvents, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number | undefined): VoteEvents;
@@ -266,10 +265,9 @@ export declare const VoteEvents: {
                 newThreshold?: Uint8Array | undefined;
             } | undefined;
             multisigOperatorshipTransferred?: {
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } | undefined;
             singlesigOwnershipTransferred?: {
                 preOwner?: Uint8Array | undefined;
@@ -323,10 +321,9 @@ export declare const VoteEvents: {
                 newThreshold?: Uint8Array | undefined;
             } | undefined;
             multisigOperatorshipTransferred?: {
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } | undefined;
             singlesigOwnershipTransferred?: {
                 preOwner?: Uint8Array | undefined;
@@ -377,10 +374,9 @@ export declare const VoteEvents: {
                 newThreshold?: Uint8Array | undefined;
             } | undefined;
             multisigOperatorshipTransferred?: {
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } | undefined;
             singlesigOwnershipTransferred?: {
                 preOwner?: Uint8Array | undefined;
@@ -517,15 +513,13 @@ export declare const VoteEvents: {
                 newThreshold?: Uint8Array | undefined;
             } & Record<Exclude<keyof I["events"][number]["multisigOwnershipTransferred"], keyof EventMultisigOwnershipTransferred>, never>) | undefined;
             multisigOperatorshipTransferred?: ({
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } & {
-                preOperators?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["events"][number]["multisigOperatorshipTransferred"]["preOperators"], keyof Uint8Array[]>, never>) | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["events"][number]["multisigOperatorshipTransferred"]["newOperators"], keyof Uint8Array[]>, never>) | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["events"][number]["multisigOperatorshipTransferred"]["newWeights"], keyof Uint8Array[]>, never>) | undefined;
             } & Record<Exclude<keyof I["events"][number]["multisigOperatorshipTransferred"], keyof EventMultisigOperatorshipTransferred>, never>) | undefined;
             singlesigOwnershipTransferred?: ({
                 preOwner?: Uint8Array | undefined;
@@ -582,10 +576,9 @@ export declare const VoteEvents: {
                 newThreshold?: Uint8Array | undefined;
             } | undefined;
             multisigOperatorshipTransferred?: {
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } | undefined;
             singlesigOwnershipTransferred?: {
                 preOwner?: Uint8Array | undefined;
@@ -644,10 +637,9 @@ export declare const Event: {
             newThreshold?: Uint8Array | undefined;
         } | undefined;
         multisigOperatorshipTransferred?: {
-            preOperators?: Uint8Array[] | undefined;
-            prevThreshold?: Uint8Array | undefined;
             newOperators?: Uint8Array[] | undefined;
             newThreshold?: Uint8Array | undefined;
+            newWeights?: Uint8Array[] | undefined;
         } | undefined;
         singlesigOwnershipTransferred?: {
             preOwner?: Uint8Array | undefined;
@@ -784,15 +776,13 @@ export declare const Event: {
             newThreshold?: Uint8Array | undefined;
         } & Record<Exclude<keyof I["multisigOwnershipTransferred"], keyof EventMultisigOwnershipTransferred>, never>) | undefined;
         multisigOperatorshipTransferred?: ({
-            preOperators?: Uint8Array[] | undefined;
-            prevThreshold?: Uint8Array | undefined;
             newOperators?: Uint8Array[] | undefined;
             newThreshold?: Uint8Array | undefined;
+            newWeights?: Uint8Array[] | undefined;
         } & {
-            preOperators?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["multisigOperatorshipTransferred"]["preOperators"], keyof Uint8Array[]>, never>) | undefined;
-            prevThreshold?: Uint8Array | undefined;
             newOperators?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["multisigOperatorshipTransferred"]["newOperators"], keyof Uint8Array[]>, never>) | undefined;
             newThreshold?: Uint8Array | undefined;
+            newWeights?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["multisigOperatorshipTransferred"]["newWeights"], keyof Uint8Array[]>, never>) | undefined;
         } & Record<Exclude<keyof I["multisigOperatorshipTransferred"], keyof EventMultisigOperatorshipTransferred>, never>) | undefined;
         singlesigOwnershipTransferred?: ({
             preOwner?: Uint8Array | undefined;
@@ -916,15 +906,13 @@ export declare const EventMultisigOperatorshipTransferred: {
     fromJSON(object: any): EventMultisigOperatorshipTransferred;
     toJSON(message: EventMultisigOperatorshipTransferred): unknown;
     fromPartial<I extends {
-        preOperators?: Uint8Array[] | undefined;
-        prevThreshold?: Uint8Array | undefined;
         newOperators?: Uint8Array[] | undefined;
         newThreshold?: Uint8Array | undefined;
+        newWeights?: Uint8Array[] | undefined;
     } & {
-        preOperators?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["preOperators"], keyof Uint8Array[]>, never>) | undefined;
-        prevThreshold?: Uint8Array | undefined;
         newOperators?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["newOperators"], keyof Uint8Array[]>, never>) | undefined;
         newThreshold?: Uint8Array | undefined;
+        newWeights?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["newWeights"], keyof Uint8Array[]>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof EventMultisigOperatorshipTransferred>, never>>(object: I): EventMultisigOperatorshipTransferred;
 };
 export declare const EventSinglesigOwnershipTransferred: {
@@ -1091,6 +1079,10 @@ export declare const CommandBatchMetadata: {
         status?: BatchedCommandsStatus | undefined;
         keyId?: string | undefined;
         prevBatchedCommandsId?: Uint8Array | undefined;
+        signature?: {
+            typeUrl?: string | undefined;
+            value?: Uint8Array | undefined;
+        } | undefined;
     } & {
         id?: Uint8Array | undefined;
         commandIds?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["commandIds"], keyof Uint8Array[]>, never>) | undefined;
@@ -1099,6 +1091,13 @@ export declare const CommandBatchMetadata: {
         status?: BatchedCommandsStatus | undefined;
         keyId?: string | undefined;
         prevBatchedCommandsId?: Uint8Array | undefined;
+        signature?: ({
+            typeUrl?: string | undefined;
+            value?: Uint8Array | undefined;
+        } & {
+            typeUrl?: string | undefined;
+            value?: Uint8Array | undefined;
+        } & Record<Exclude<keyof I["signature"], keyof Any>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof CommandBatchMetadata>, never>>(object: I): CommandBatchMetadata;
 };
 export declare const SigMetadata: {
@@ -1109,9 +1108,11 @@ export declare const SigMetadata: {
     fromPartial<I extends {
         type?: SigType | undefined;
         chain?: string | undefined;
+        commandBatchId?: Uint8Array | undefined;
     } & {
         type?: SigType | undefined;
         chain?: string | undefined;
+        commandBatchId?: Uint8Array | undefined;
     } & Record<Exclude<keyof I, keyof SigMetadata>, never>>(object: I): SigMetadata;
 };
 export declare const TransferKey: {
@@ -1121,11 +1122,9 @@ export declare const TransferKey: {
     toJSON(message: TransferKey): unknown;
     fromPartial<I extends {
         txId?: Uint8Array | undefined;
-        type?: TransferKeyType | undefined;
         nextKeyId?: string | undefined;
     } & {
         txId?: Uint8Array | undefined;
-        type?: TransferKeyType | undefined;
         nextKeyId?: string | undefined;
     } & Record<Exclude<keyof I, keyof TransferKey>, never>>(object: I): TransferKey;
 };
@@ -1171,6 +1170,19 @@ export declare const Gateway: {
         address?: Uint8Array | undefined;
         status?: Gateway_Status | undefined;
     } & Record<Exclude<keyof I, keyof Gateway>, never>>(object: I): Gateway;
+};
+export declare const PollMetadata: {
+    encode(message: PollMetadata, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): PollMetadata;
+    fromJSON(object: any): PollMetadata;
+    toJSON(message: PollMetadata): unknown;
+    fromPartial<I extends {
+        chain?: string | undefined;
+        txId?: Uint8Array | undefined;
+    } & {
+        chain?: string | undefined;
+        txId?: Uint8Array | undefined;
+    } & Record<Exclude<keyof I, keyof PollMetadata>, never>>(object: I): PollMetadata;
 };
 declare type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export declare type DeepPartial<T> = T extends Builtin ? T : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {

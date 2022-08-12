@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegisterFeeCollectorResponse = exports.RegisterFeeCollectorRequest = exports.RouteIBCTransfersResponse = exports.RouteIBCTransfersRequest = exports.RegisterAssetResponse = exports.RegisterAssetRequest = exports.AddCosmosBasedChainResponse = exports.AddCosmosBasedChainRequest = exports.RegisterIBCPathResponse = exports.RegisterIBCPathRequest = exports.ExecutePendingTransfersResponse = exports.ExecutePendingTransfersRequest = exports.ConfirmDepositResponse = exports.ConfirmDepositRequest = exports.LinkResponse = exports.LinkRequest = exports.protobufPackage = void 0;
+exports.RetryIBCTransferResponse = exports.RetryIBCTransferRequest = exports.RegisterFeeCollectorResponse = exports.RegisterFeeCollectorRequest = exports.RouteIBCTransfersResponse = exports.RouteIBCTransfersRequest = exports.RegisterAssetResponse = exports.RegisterAssetRequest = exports.AddCosmosBasedChainResponse = exports.AddCosmosBasedChainRequest = exports.RegisterIBCPathResponse = exports.RegisterIBCPathRequest = exports.ExecutePendingTransfersResponse = exports.ExecutePendingTransfersRequest = exports.ConfirmDepositResponse = exports.ConfirmDepositRequest = exports.LinkResponse = exports.LinkRequest = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
@@ -790,6 +790,102 @@ exports.RegisterFeeCollectorResponse = {
     },
     fromPartial(_) {
         const message = createBaseRegisterFeeCollectorResponse();
+        return message;
+    },
+};
+function createBaseRetryIBCTransferRequest() {
+    return { sender: new Uint8Array(), chain: "", id: long_1.default.UZERO };
+}
+exports.RetryIBCTransferRequest = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.sender.length !== 0) {
+            writer.uint32(10).bytes(message.sender);
+        }
+        if (message.chain !== "") {
+            writer.uint32(18).string(message.chain);
+        }
+        if (!message.id.isZero()) {
+            writer.uint32(24).uint64(message.id);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseRetryIBCTransferRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.sender = reader.bytes();
+                    break;
+                case 2:
+                    message.chain = reader.string();
+                    break;
+                case 3:
+                    message.id = reader.uint64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
+            chain: isSet(object.chain) ? String(object.chain) : "",
+            id: isSet(object.id) ? long_1.default.fromValue(object.id) : long_1.default.UZERO,
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.sender !== undefined &&
+            (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
+        message.chain !== undefined && (obj.chain = message.chain);
+        message.id !== undefined && (obj.id = (message.id || long_1.default.UZERO).toString());
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b;
+        const message = createBaseRetryIBCTransferRequest();
+        message.sender = (_a = object.sender) !== null && _a !== void 0 ? _a : new Uint8Array();
+        message.chain = (_b = object.chain) !== null && _b !== void 0 ? _b : "";
+        message.id = object.id !== undefined && object.id !== null ? long_1.default.fromValue(object.id) : long_1.default.UZERO;
+        return message;
+    },
+};
+function createBaseRetryIBCTransferResponse() {
+    return {};
+}
+exports.RetryIBCTransferResponse = {
+    encode(_, writer = _m0.Writer.create()) {
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseRetryIBCTransferResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(_) {
+        return {};
+    },
+    toJSON(_) {
+        const obj = {};
+        return obj;
+    },
+    fromPartial(_) {
+        const message = createBaseRetryIBCTransferResponse();
         return message;
     },
 };

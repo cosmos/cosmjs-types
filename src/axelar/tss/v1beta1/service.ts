@@ -1,28 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
-import {
-  RegisterExternalKeysResponse,
-  HeartBeatResponse,
-  StartKeygenResponse,
-  ProcessKeygenTrafficResponse,
-  RotateKeyResponse,
-  VotePubKeyResponse,
-  ProcessSignTrafficResponse,
-  VoteSigResponse,
-  SubmitMultisigPubKeysResponse,
-  SubmitMultisigSignaturesResponse,
-  RegisterExternalKeysRequest,
-  HeartBeatRequest,
-  StartKeygenRequest,
-  ProcessKeygenTrafficRequest,
-  RotateKeyRequest,
-  VotePubKeyRequest,
-  ProcessSignTrafficRequest,
-  VoteSigRequest,
-  SubmitMultisigPubKeysRequest,
-  SubmitMultisigSignaturesRequest,
-} from "../../../axelar/tss/v1beta1/tx";
+import { HeartBeatResponse, HeartBeatRequest } from "../../../axelar/tss/v1beta1/tx";
 import {
   NextKeyIDResponse,
   AssignableKeyResponse,
@@ -36,95 +15,19 @@ export const protobufPackage = "axelar.tss.v1beta1";
 
 /** Msg defines the tss Msg service. */
 export interface MsgService {
-  RegisterExternalKeys(request: RegisterExternalKeysRequest): Promise<RegisterExternalKeysResponse>;
   HeartBeat(request: HeartBeatRequest): Promise<HeartBeatResponse>;
-  StartKeygen(request: StartKeygenRequest): Promise<StartKeygenResponse>;
-  ProcessKeygenTraffic(request: ProcessKeygenTrafficRequest): Promise<ProcessKeygenTrafficResponse>;
-  RotateKey(request: RotateKeyRequest): Promise<RotateKeyResponse>;
-  VotePubKey(request: VotePubKeyRequest): Promise<VotePubKeyResponse>;
-  ProcessSignTraffic(request: ProcessSignTrafficRequest): Promise<ProcessSignTrafficResponse>;
-  VoteSig(request: VoteSigRequest): Promise<VoteSigResponse>;
-  SubmitMultisigPubKeys(request: SubmitMultisigPubKeysRequest): Promise<SubmitMultisigPubKeysResponse>;
-  SubmitMultisigSignatures(
-    request: SubmitMultisigSignaturesRequest,
-  ): Promise<SubmitMultisigSignaturesResponse>;
 }
 
 export class MsgServiceClientImpl implements MsgService {
   private readonly rpc: Rpc;
   constructor(rpc: Rpc) {
     this.rpc = rpc;
-    this.RegisterExternalKeys = this.RegisterExternalKeys.bind(this);
     this.HeartBeat = this.HeartBeat.bind(this);
-    this.StartKeygen = this.StartKeygen.bind(this);
-    this.ProcessKeygenTraffic = this.ProcessKeygenTraffic.bind(this);
-    this.RotateKey = this.RotateKey.bind(this);
-    this.VotePubKey = this.VotePubKey.bind(this);
-    this.ProcessSignTraffic = this.ProcessSignTraffic.bind(this);
-    this.VoteSig = this.VoteSig.bind(this);
-    this.SubmitMultisigPubKeys = this.SubmitMultisigPubKeys.bind(this);
-    this.SubmitMultisigSignatures = this.SubmitMultisigSignatures.bind(this);
   }
-  RegisterExternalKeys(request: RegisterExternalKeysRequest): Promise<RegisterExternalKeysResponse> {
-    const data = RegisterExternalKeysRequest.encode(request).finish();
-    const promise = this.rpc.request("axelar.tss.v1beta1.MsgService", "RegisterExternalKeys", data);
-    return promise.then((data) => RegisterExternalKeysResponse.decode(new _m0.Reader(data)));
-  }
-
   HeartBeat(request: HeartBeatRequest): Promise<HeartBeatResponse> {
     const data = HeartBeatRequest.encode(request).finish();
     const promise = this.rpc.request("axelar.tss.v1beta1.MsgService", "HeartBeat", data);
     return promise.then((data) => HeartBeatResponse.decode(new _m0.Reader(data)));
-  }
-
-  StartKeygen(request: StartKeygenRequest): Promise<StartKeygenResponse> {
-    const data = StartKeygenRequest.encode(request).finish();
-    const promise = this.rpc.request("axelar.tss.v1beta1.MsgService", "StartKeygen", data);
-    return promise.then((data) => StartKeygenResponse.decode(new _m0.Reader(data)));
-  }
-
-  ProcessKeygenTraffic(request: ProcessKeygenTrafficRequest): Promise<ProcessKeygenTrafficResponse> {
-    const data = ProcessKeygenTrafficRequest.encode(request).finish();
-    const promise = this.rpc.request("axelar.tss.v1beta1.MsgService", "ProcessKeygenTraffic", data);
-    return promise.then((data) => ProcessKeygenTrafficResponse.decode(new _m0.Reader(data)));
-  }
-
-  RotateKey(request: RotateKeyRequest): Promise<RotateKeyResponse> {
-    const data = RotateKeyRequest.encode(request).finish();
-    const promise = this.rpc.request("axelar.tss.v1beta1.MsgService", "RotateKey", data);
-    return promise.then((data) => RotateKeyResponse.decode(new _m0.Reader(data)));
-  }
-
-  VotePubKey(request: VotePubKeyRequest): Promise<VotePubKeyResponse> {
-    const data = VotePubKeyRequest.encode(request).finish();
-    const promise = this.rpc.request("axelar.tss.v1beta1.MsgService", "VotePubKey", data);
-    return promise.then((data) => VotePubKeyResponse.decode(new _m0.Reader(data)));
-  }
-
-  ProcessSignTraffic(request: ProcessSignTrafficRequest): Promise<ProcessSignTrafficResponse> {
-    const data = ProcessSignTrafficRequest.encode(request).finish();
-    const promise = this.rpc.request("axelar.tss.v1beta1.MsgService", "ProcessSignTraffic", data);
-    return promise.then((data) => ProcessSignTrafficResponse.decode(new _m0.Reader(data)));
-  }
-
-  VoteSig(request: VoteSigRequest): Promise<VoteSigResponse> {
-    const data = VoteSigRequest.encode(request).finish();
-    const promise = this.rpc.request("axelar.tss.v1beta1.MsgService", "VoteSig", data);
-    return promise.then((data) => VoteSigResponse.decode(new _m0.Reader(data)));
-  }
-
-  SubmitMultisigPubKeys(request: SubmitMultisigPubKeysRequest): Promise<SubmitMultisigPubKeysResponse> {
-    const data = SubmitMultisigPubKeysRequest.encode(request).finish();
-    const promise = this.rpc.request("axelar.tss.v1beta1.MsgService", "SubmitMultisigPubKeys", data);
-    return promise.then((data) => SubmitMultisigPubKeysResponse.decode(new _m0.Reader(data)));
-  }
-
-  SubmitMultisigSignatures(
-    request: SubmitMultisigSignaturesRequest,
-  ): Promise<SubmitMultisigSignaturesResponse> {
-    const data = SubmitMultisigSignaturesRequest.encode(request).finish();
-    const promise = this.rpc.request("axelar.tss.v1beta1.MsgService", "SubmitMultisigSignatures", data);
-    return promise.then((data) => SubmitMultisigSignaturesResponse.decode(new _m0.Reader(data)));
   }
 }
 

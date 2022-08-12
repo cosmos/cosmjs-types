@@ -454,7 +454,7 @@ exports.ConfirmTokenResponse = {
     },
 };
 function createBaseConfirmTransferKeyRequest() {
-    return { sender: new Uint8Array(), chain: "", txId: new Uint8Array(), transferType: 0, keyId: "" };
+    return { sender: new Uint8Array(), chain: "", txId: new Uint8Array() };
 }
 exports.ConfirmTransferKeyRequest = {
     encode(message, writer = _m0.Writer.create()) {
@@ -466,12 +466,6 @@ exports.ConfirmTransferKeyRequest = {
         }
         if (message.txId.length !== 0) {
             writer.uint32(26).bytes(message.txId);
-        }
-        if (message.transferType !== 0) {
-            writer.uint32(32).int32(message.transferType);
-        }
-        if (message.keyId !== "") {
-            writer.uint32(42).string(message.keyId);
         }
         return writer;
     },
@@ -491,12 +485,6 @@ exports.ConfirmTransferKeyRequest = {
                 case 3:
                     message.txId = reader.bytes();
                     break;
-                case 4:
-                    message.transferType = reader.int32();
-                    break;
-                case 5:
-                    message.keyId = reader.string();
-                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -509,8 +497,6 @@ exports.ConfirmTransferKeyRequest = {
             sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
             chain: isSet(object.chain) ? String(object.chain) : "",
             txId: isSet(object.txId) ? bytesFromBase64(object.txId) : new Uint8Array(),
-            transferType: isSet(object.transferType) ? (0, types_1.transferKeyTypeFromJSON)(object.transferType) : 0,
-            keyId: isSet(object.keyId) ? String(object.keyId) : "",
         };
     },
     toJSON(message) {
@@ -520,18 +506,14 @@ exports.ConfirmTransferKeyRequest = {
         message.chain !== undefined && (obj.chain = message.chain);
         message.txId !== undefined &&
             (obj.txId = base64FromBytes(message.txId !== undefined ? message.txId : new Uint8Array()));
-        message.transferType !== undefined && (obj.transferType = (0, types_1.transferKeyTypeToJSON)(message.transferType));
-        message.keyId !== undefined && (obj.keyId = message.keyId);
         return obj;
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e;
+        var _a, _b, _c;
         const message = createBaseConfirmTransferKeyRequest();
         message.sender = (_a = object.sender) !== null && _a !== void 0 ? _a : new Uint8Array();
         message.chain = (_b = object.chain) !== null && _b !== void 0 ? _b : "";
         message.txId = (_c = object.txId) !== null && _c !== void 0 ? _c : new Uint8Array();
-        message.transferType = (_d = object.transferType) !== null && _d !== void 0 ? _d : 0;
-        message.keyId = (_e = object.keyId) !== null && _e !== void 0 ? _e : "";
         return message;
     },
 };
@@ -787,6 +769,7 @@ function createBaseCreateDeployTokenRequest() {
         asset: undefined,
         tokenDetails: undefined,
         address: new Uint8Array(),
+        dailyMintLimit: "",
     };
 }
 exports.CreateDeployTokenRequest = {
@@ -805,6 +788,9 @@ exports.CreateDeployTokenRequest = {
         }
         if (message.address.length !== 0) {
             writer.uint32(50).bytes(message.address);
+        }
+        if (message.dailyMintLimit !== "") {
+            writer.uint32(58).string(message.dailyMintLimit);
         }
         return writer;
     },
@@ -830,6 +816,9 @@ exports.CreateDeployTokenRequest = {
                 case 6:
                     message.address = reader.bytes();
                     break;
+                case 7:
+                    message.dailyMintLimit = reader.string();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -844,6 +833,7 @@ exports.CreateDeployTokenRequest = {
             asset: isSet(object.asset) ? types_1.Asset.fromJSON(object.asset) : undefined,
             tokenDetails: isSet(object.tokenDetails) ? types_1.TokenDetails.fromJSON(object.tokenDetails) : undefined,
             address: isSet(object.address) ? bytesFromBase64(object.address) : new Uint8Array(),
+            dailyMintLimit: isSet(object.dailyMintLimit) ? String(object.dailyMintLimit) : "",
         };
     },
     toJSON(message) {
@@ -856,10 +846,11 @@ exports.CreateDeployTokenRequest = {
             (obj.tokenDetails = message.tokenDetails ? types_1.TokenDetails.toJSON(message.tokenDetails) : undefined);
         message.address !== undefined &&
             (obj.address = base64FromBytes(message.address !== undefined ? message.address : new Uint8Array()));
+        message.dailyMintLimit !== undefined && (obj.dailyMintLimit = message.dailyMintLimit);
         return obj;
     },
     fromPartial(object) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         const message = createBaseCreateDeployTokenRequest();
         message.sender = (_a = object.sender) !== null && _a !== void 0 ? _a : new Uint8Array();
         message.chain = (_b = object.chain) !== null && _b !== void 0 ? _b : "";
@@ -870,6 +861,7 @@ exports.CreateDeployTokenRequest = {
                 ? types_1.TokenDetails.fromPartial(object.tokenDetails)
                 : undefined;
         message.address = (_c = object.address) !== null && _c !== void 0 ? _c : new Uint8Array();
+        message.dailyMintLimit = (_d = object.dailyMintLimit) !== null && _d !== void 0 ? _d : "";
         return message;
     },
 };

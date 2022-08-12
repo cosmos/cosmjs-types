@@ -45,6 +45,7 @@ export declare const GenesisState: {
                 minVoterCount?: string | number | Long.Long | undefined;
                 commandsGasLimit?: number | undefined;
                 votingGracePeriod?: string | number | Long.Long | undefined;
+                endBlockerLimit?: string | number | Long.Long | undefined;
             } | undefined;
             burnerInfos?: {
                 burnerAddress?: Uint8Array | undefined;
@@ -84,6 +85,10 @@ export declare const GenesisState: {
                 status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
                 keyId?: string | undefined;
                 prevBatchedCommandsId?: Uint8Array | undefined;
+                signature?: {
+                    typeUrl?: string | undefined;
+                    value?: Uint8Array | undefined;
+                } | undefined;
             }[] | undefined;
             gateway?: {
                 address?: Uint8Array | undefined;
@@ -145,10 +150,9 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                 } | undefined;
                 multisigOperatorshipTransferred?: {
-                    preOperators?: Uint8Array[] | undefined;
-                    prevThreshold?: Uint8Array | undefined;
                     newOperators?: Uint8Array[] | undefined;
                     newThreshold?: Uint8Array | undefined;
+                    newWeights?: Uint8Array[] | undefined;
                 } | undefined;
                 singlesigOwnershipTransferred?: {
                     preOwner?: Uint8Array | undefined;
@@ -188,6 +192,7 @@ export declare const GenesisState: {
                 minVoterCount?: string | number | Long.Long | undefined;
                 commandsGasLimit?: number | undefined;
                 votingGracePeriod?: string | number | Long.Long | undefined;
+                endBlockerLimit?: string | number | Long.Long | undefined;
             } | undefined;
             burnerInfos?: {
                 burnerAddress?: Uint8Array | undefined;
@@ -227,6 +232,10 @@ export declare const GenesisState: {
                 status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
                 keyId?: string | undefined;
                 prevBatchedCommandsId?: Uint8Array | undefined;
+                signature?: {
+                    typeUrl?: string | undefined;
+                    value?: Uint8Array | undefined;
+                } | undefined;
             }[] | undefined;
             gateway?: {
                 address?: Uint8Array | undefined;
@@ -288,10 +297,9 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                 } | undefined;
                 multisigOperatorshipTransferred?: {
-                    preOperators?: Uint8Array[] | undefined;
-                    prevThreshold?: Uint8Array | undefined;
                     newOperators?: Uint8Array[] | undefined;
                     newThreshold?: Uint8Array | undefined;
+                    newWeights?: Uint8Array[] | undefined;
                 } | undefined;
                 singlesigOwnershipTransferred?: {
                     preOwner?: Uint8Array | undefined;
@@ -329,6 +337,7 @@ export declare const GenesisState: {
                 minVoterCount?: string | number | Long.Long | undefined;
                 commandsGasLimit?: number | undefined;
                 votingGracePeriod?: string | number | Long.Long | undefined;
+                endBlockerLimit?: string | number | Long.Long | undefined;
             } | undefined;
             burnerInfos?: {
                 burnerAddress?: Uint8Array | undefined;
@@ -368,6 +377,10 @@ export declare const GenesisState: {
                 status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
                 keyId?: string | undefined;
                 prevBatchedCommandsId?: Uint8Array | undefined;
+                signature?: {
+                    typeUrl?: string | undefined;
+                    value?: Uint8Array | undefined;
+                } | undefined;
             }[] | undefined;
             gateway?: {
                 address?: Uint8Array | undefined;
@@ -429,10 +442,9 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                 } | undefined;
                 multisigOperatorshipTransferred?: {
-                    preOperators?: Uint8Array[] | undefined;
-                    prevThreshold?: Uint8Array | undefined;
                     newOperators?: Uint8Array[] | undefined;
                     newThreshold?: Uint8Array | undefined;
+                    newWeights?: Uint8Array[] | undefined;
                 } | undefined;
                 singlesigOwnershipTransferred?: {
                     preOwner?: Uint8Array | undefined;
@@ -470,6 +482,7 @@ export declare const GenesisState: {
                 minVoterCount?: string | number | Long.Long | undefined;
                 commandsGasLimit?: number | undefined;
                 votingGracePeriod?: string | number | Long.Long | undefined;
+                endBlockerLimit?: string | number | Long.Long | undefined;
             } & {
                 chain?: string | undefined;
                 confirmationHeight?: string | number | (Long.Long & {
@@ -842,6 +855,64 @@ export declare const GenesisState: {
                     toUnsigned: () => Long.Long;
                     xor: (other: string | number | Long.Long) => Long.Long;
                 } & Record<Exclude<keyof I["chains"][number]["params"]["votingGracePeriod"], keyof Long.Long>, never>) | undefined;
+                endBlockerLimit?: string | number | (Long.Long & {
+                    high: number;
+                    low: number;
+                    unsigned: boolean;
+                    add: (addend: string | number | Long.Long) => Long.Long;
+                    and: (other: string | number | Long.Long) => Long.Long;
+                    compare: (other: string | number | Long.Long) => number;
+                    comp: (other: string | number | Long.Long) => number;
+                    divide: (divisor: string | number | Long.Long) => Long.Long;
+                    div: (divisor: string | number | Long.Long) => Long.Long;
+                    equals: (other: string | number | Long.Long) => boolean;
+                    eq: (other: string | number | Long.Long) => boolean;
+                    getHighBits: () => number;
+                    getHighBitsUnsigned: () => number;
+                    getLowBits: () => number;
+                    getLowBitsUnsigned: () => number;
+                    getNumBitsAbs: () => number;
+                    greaterThan: (other: string | number | Long.Long) => boolean;
+                    gt: (other: string | number | Long.Long) => boolean;
+                    greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    gte: (other: string | number | Long.Long) => boolean;
+                    isEven: () => boolean;
+                    isNegative: () => boolean;
+                    isOdd: () => boolean;
+                    isPositive: () => boolean;
+                    isZero: () => boolean;
+                    lessThan: (other: string | number | Long.Long) => boolean;
+                    lt: (other: string | number | Long.Long) => boolean;
+                    lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    lte: (other: string | number | Long.Long) => boolean;
+                    modulo: (other: string | number | Long.Long) => Long.Long;
+                    mod: (other: string | number | Long.Long) => Long.Long;
+                    multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                    mul: (multiplier: string | number | Long.Long) => Long.Long;
+                    negate: () => Long.Long;
+                    neg: () => Long.Long;
+                    not: () => Long.Long;
+                    notEquals: (other: string | number | Long.Long) => boolean;
+                    neq: (other: string | number | Long.Long) => boolean;
+                    or: (other: string | number | Long.Long) => Long.Long;
+                    shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                    shl: (numBits: number | Long.Long) => Long.Long;
+                    shiftRight: (numBits: number | Long.Long) => Long.Long;
+                    shr: (numBits: number | Long.Long) => Long.Long;
+                    shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                    shru: (numBits: number | Long.Long) => Long.Long;
+                    subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                    sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                    toInt: () => number;
+                    toNumber: () => number;
+                    toBytes: (le?: boolean | undefined) => number[];
+                    toBytesLE: () => number[];
+                    toBytesBE: () => number[];
+                    toSigned: () => Long.Long;
+                    toString: (radix?: number | undefined) => string;
+                    toUnsigned: () => Long.Long;
+                    xor: (other: string | number | Long.Long) => Long.Long;
+                } & Record<Exclude<keyof I["chains"][number]["params"]["endBlockerLimit"], keyof Long.Long>, never>) | undefined;
             } & Record<Exclude<keyof I["chains"][number]["params"], keyof Params>, never>) | undefined;
             burnerInfos?: ({
                 burnerAddress?: Uint8Array | undefined;
@@ -953,6 +1024,10 @@ export declare const GenesisState: {
                 status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
                 keyId?: string | undefined;
                 prevBatchedCommandsId?: Uint8Array | undefined;
+                signature?: {
+                    typeUrl?: string | undefined;
+                    value?: Uint8Array | undefined;
+                } | undefined;
             }[] & ({
                 id?: Uint8Array | undefined;
                 commandIds?: Uint8Array[] | undefined;
@@ -961,6 +1036,10 @@ export declare const GenesisState: {
                 status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
                 keyId?: string | undefined;
                 prevBatchedCommandsId?: Uint8Array | undefined;
+                signature?: {
+                    typeUrl?: string | undefined;
+                    value?: Uint8Array | undefined;
+                } | undefined;
             } & {
                 id?: Uint8Array | undefined;
                 commandIds?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["chains"][number]["commandBatches"][number]["commandIds"], keyof Uint8Array[]>, never>) | undefined;
@@ -969,6 +1048,13 @@ export declare const GenesisState: {
                 status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
                 keyId?: string | undefined;
                 prevBatchedCommandsId?: Uint8Array | undefined;
+                signature?: ({
+                    typeUrl?: string | undefined;
+                    value?: Uint8Array | undefined;
+                } & {
+                    typeUrl?: string | undefined;
+                    value?: Uint8Array | undefined;
+                } & Record<Exclude<keyof I["chains"][number]["commandBatches"][number]["signature"], keyof import("../../../google/protobuf/any").Any>, never>) | undefined;
             } & Record<Exclude<keyof I["chains"][number]["commandBatches"][number], keyof CommandBatchMetadata>, never>)[] & Record<Exclude<keyof I["chains"][number]["commandBatches"], keyof {
                 id?: Uint8Array | undefined;
                 commandIds?: Uint8Array[] | undefined;
@@ -977,6 +1063,10 @@ export declare const GenesisState: {
                 status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
                 keyId?: string | undefined;
                 prevBatchedCommandsId?: Uint8Array | undefined;
+                signature?: {
+                    typeUrl?: string | undefined;
+                    value?: Uint8Array | undefined;
+                } | undefined;
             }[]>, never>) | undefined;
             gateway?: ({
                 address?: Uint8Array | undefined;
@@ -1088,10 +1178,9 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                 } | undefined;
                 multisigOperatorshipTransferred?: {
-                    preOperators?: Uint8Array[] | undefined;
-                    prevThreshold?: Uint8Array | undefined;
                     newOperators?: Uint8Array[] | undefined;
                     newThreshold?: Uint8Array | undefined;
+                    newWeights?: Uint8Array[] | undefined;
                 } | undefined;
                 singlesigOwnershipTransferred?: {
                     preOwner?: Uint8Array | undefined;
@@ -1142,10 +1231,9 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                 } | undefined;
                 multisigOperatorshipTransferred?: {
-                    preOperators?: Uint8Array[] | undefined;
-                    prevThreshold?: Uint8Array | undefined;
                     newOperators?: Uint8Array[] | undefined;
                     newThreshold?: Uint8Array | undefined;
+                    newWeights?: Uint8Array[] | undefined;
                 } | undefined;
                 singlesigOwnershipTransferred?: {
                     preOwner?: Uint8Array | undefined;
@@ -1282,15 +1370,13 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                 } & Record<Exclude<keyof I["chains"][number]["events"][number]["multisigOwnershipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventMultisigOwnershipTransferred>, never>) | undefined;
                 multisigOperatorshipTransferred?: ({
-                    preOperators?: Uint8Array[] | undefined;
-                    prevThreshold?: Uint8Array | undefined;
                     newOperators?: Uint8Array[] | undefined;
                     newThreshold?: Uint8Array | undefined;
+                    newWeights?: Uint8Array[] | undefined;
                 } & {
-                    preOperators?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["chains"][number]["events"][number]["multisigOperatorshipTransferred"]["preOperators"], keyof Uint8Array[]>, never>) | undefined;
-                    prevThreshold?: Uint8Array | undefined;
                     newOperators?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["chains"][number]["events"][number]["multisigOperatorshipTransferred"]["newOperators"], keyof Uint8Array[]>, never>) | undefined;
                     newThreshold?: Uint8Array | undefined;
+                    newWeights?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["chains"][number]["events"][number]["multisigOperatorshipTransferred"]["newWeights"], keyof Uint8Array[]>, never>) | undefined;
                 } & Record<Exclude<keyof I["chains"][number]["events"][number]["multisigOperatorshipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventMultisigOperatorshipTransferred>, never>) | undefined;
                 singlesigOwnershipTransferred?: ({
                     preOwner?: Uint8Array | undefined;
@@ -1347,10 +1433,9 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                 } | undefined;
                 multisigOperatorshipTransferred?: {
-                    preOperators?: Uint8Array[] | undefined;
-                    prevThreshold?: Uint8Array | undefined;
                     newOperators?: Uint8Array[] | undefined;
                     newThreshold?: Uint8Array | undefined;
+                    newWeights?: Uint8Array[] | undefined;
                 } | undefined;
                 singlesigOwnershipTransferred?: {
                     preOwner?: Uint8Array | undefined;
@@ -1403,6 +1488,7 @@ export declare const GenesisState: {
                 minVoterCount?: string | number | Long.Long | undefined;
                 commandsGasLimit?: number | undefined;
                 votingGracePeriod?: string | number | Long.Long | undefined;
+                endBlockerLimit?: string | number | Long.Long | undefined;
             } | undefined;
             burnerInfos?: {
                 burnerAddress?: Uint8Array | undefined;
@@ -1442,6 +1528,10 @@ export declare const GenesisState: {
                 status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
                 keyId?: string | undefined;
                 prevBatchedCommandsId?: Uint8Array | undefined;
+                signature?: {
+                    typeUrl?: string | undefined;
+                    value?: Uint8Array | undefined;
+                } | undefined;
             }[] | undefined;
             gateway?: {
                 address?: Uint8Array | undefined;
@@ -1503,10 +1593,9 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                 } | undefined;
                 multisigOperatorshipTransferred?: {
-                    preOperators?: Uint8Array[] | undefined;
-                    prevThreshold?: Uint8Array | undefined;
                     newOperators?: Uint8Array[] | undefined;
                     newThreshold?: Uint8Array | undefined;
+                    newWeights?: Uint8Array[] | undefined;
                 } | undefined;
                 singlesigOwnershipTransferred?: {
                     preOwner?: Uint8Array | undefined;
@@ -1552,6 +1641,7 @@ export declare const GenesisState_Chain: {
             minVoterCount?: string | number | Long.Long | undefined;
             commandsGasLimit?: number | undefined;
             votingGracePeriod?: string | number | Long.Long | undefined;
+            endBlockerLimit?: string | number | Long.Long | undefined;
         } | undefined;
         burnerInfos?: {
             burnerAddress?: Uint8Array | undefined;
@@ -1591,6 +1681,10 @@ export declare const GenesisState_Chain: {
             status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
             keyId?: string | undefined;
             prevBatchedCommandsId?: Uint8Array | undefined;
+            signature?: {
+                typeUrl?: string | undefined;
+                value?: Uint8Array | undefined;
+            } | undefined;
         }[] | undefined;
         gateway?: {
             address?: Uint8Array | undefined;
@@ -1652,10 +1746,9 @@ export declare const GenesisState_Chain: {
                 newThreshold?: Uint8Array | undefined;
             } | undefined;
             multisigOperatorshipTransferred?: {
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } | undefined;
             singlesigOwnershipTransferred?: {
                 preOwner?: Uint8Array | undefined;
@@ -1693,6 +1786,7 @@ export declare const GenesisState_Chain: {
             minVoterCount?: string | number | Long.Long | undefined;
             commandsGasLimit?: number | undefined;
             votingGracePeriod?: string | number | Long.Long | undefined;
+            endBlockerLimit?: string | number | Long.Long | undefined;
         } & {
             chain?: string | undefined;
             confirmationHeight?: string | number | (Long.Long & {
@@ -2065,6 +2159,64 @@ export declare const GenesisState_Chain: {
                 toUnsigned: () => Long.Long;
                 xor: (other: string | number | Long.Long) => Long.Long;
             } & Record<Exclude<keyof I["params"]["votingGracePeriod"], keyof Long.Long>, never>) | undefined;
+            endBlockerLimit?: string | number | (Long.Long & {
+                high: number;
+                low: number;
+                unsigned: boolean;
+                add: (addend: string | number | Long.Long) => Long.Long;
+                and: (other: string | number | Long.Long) => Long.Long;
+                compare: (other: string | number | Long.Long) => number;
+                comp: (other: string | number | Long.Long) => number;
+                divide: (divisor: string | number | Long.Long) => Long.Long;
+                div: (divisor: string | number | Long.Long) => Long.Long;
+                equals: (other: string | number | Long.Long) => boolean;
+                eq: (other: string | number | Long.Long) => boolean;
+                getHighBits: () => number;
+                getHighBitsUnsigned: () => number;
+                getLowBits: () => number;
+                getLowBitsUnsigned: () => number;
+                getNumBitsAbs: () => number;
+                greaterThan: (other: string | number | Long.Long) => boolean;
+                gt: (other: string | number | Long.Long) => boolean;
+                greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                gte: (other: string | number | Long.Long) => boolean;
+                isEven: () => boolean;
+                isNegative: () => boolean;
+                isOdd: () => boolean;
+                isPositive: () => boolean;
+                isZero: () => boolean;
+                lessThan: (other: string | number | Long.Long) => boolean;
+                lt: (other: string | number | Long.Long) => boolean;
+                lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                lte: (other: string | number | Long.Long) => boolean;
+                modulo: (other: string | number | Long.Long) => Long.Long;
+                mod: (other: string | number | Long.Long) => Long.Long;
+                multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                mul: (multiplier: string | number | Long.Long) => Long.Long;
+                negate: () => Long.Long;
+                neg: () => Long.Long;
+                not: () => Long.Long;
+                notEquals: (other: string | number | Long.Long) => boolean;
+                neq: (other: string | number | Long.Long) => boolean;
+                or: (other: string | number | Long.Long) => Long.Long;
+                shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                shl: (numBits: number | Long.Long) => Long.Long;
+                shiftRight: (numBits: number | Long.Long) => Long.Long;
+                shr: (numBits: number | Long.Long) => Long.Long;
+                shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                shru: (numBits: number | Long.Long) => Long.Long;
+                subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                toInt: () => number;
+                toNumber: () => number;
+                toBytes: (le?: boolean | undefined) => number[];
+                toBytesLE: () => number[];
+                toBytesBE: () => number[];
+                toSigned: () => Long.Long;
+                toString: (radix?: number | undefined) => string;
+                toUnsigned: () => Long.Long;
+                xor: (other: string | number | Long.Long) => Long.Long;
+            } & Record<Exclude<keyof I["params"]["endBlockerLimit"], keyof Long.Long>, never>) | undefined;
         } & Record<Exclude<keyof I["params"], keyof Params>, never>) | undefined;
         burnerInfos?: ({
             burnerAddress?: Uint8Array | undefined;
@@ -2176,6 +2328,10 @@ export declare const GenesisState_Chain: {
             status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
             keyId?: string | undefined;
             prevBatchedCommandsId?: Uint8Array | undefined;
+            signature?: {
+                typeUrl?: string | undefined;
+                value?: Uint8Array | undefined;
+            } | undefined;
         }[] & ({
             id?: Uint8Array | undefined;
             commandIds?: Uint8Array[] | undefined;
@@ -2184,6 +2340,10 @@ export declare const GenesisState_Chain: {
             status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
             keyId?: string | undefined;
             prevBatchedCommandsId?: Uint8Array | undefined;
+            signature?: {
+                typeUrl?: string | undefined;
+                value?: Uint8Array | undefined;
+            } | undefined;
         } & {
             id?: Uint8Array | undefined;
             commandIds?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["commandBatches"][number]["commandIds"], keyof Uint8Array[]>, never>) | undefined;
@@ -2192,6 +2352,13 @@ export declare const GenesisState_Chain: {
             status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
             keyId?: string | undefined;
             prevBatchedCommandsId?: Uint8Array | undefined;
+            signature?: ({
+                typeUrl?: string | undefined;
+                value?: Uint8Array | undefined;
+            } & {
+                typeUrl?: string | undefined;
+                value?: Uint8Array | undefined;
+            } & Record<Exclude<keyof I["commandBatches"][number]["signature"], keyof import("../../../google/protobuf/any").Any>, never>) | undefined;
         } & Record<Exclude<keyof I["commandBatches"][number], keyof CommandBatchMetadata>, never>)[] & Record<Exclude<keyof I["commandBatches"], keyof {
             id?: Uint8Array | undefined;
             commandIds?: Uint8Array[] | undefined;
@@ -2200,6 +2367,10 @@ export declare const GenesisState_Chain: {
             status?: import("../../../axelar/evm/v1beta1/types").BatchedCommandsStatus | undefined;
             keyId?: string | undefined;
             prevBatchedCommandsId?: Uint8Array | undefined;
+            signature?: {
+                typeUrl?: string | undefined;
+                value?: Uint8Array | undefined;
+            } | undefined;
         }[]>, never>) | undefined;
         gateway?: ({
             address?: Uint8Array | undefined;
@@ -2311,10 +2482,9 @@ export declare const GenesisState_Chain: {
                 newThreshold?: Uint8Array | undefined;
             } | undefined;
             multisigOperatorshipTransferred?: {
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } | undefined;
             singlesigOwnershipTransferred?: {
                 preOwner?: Uint8Array | undefined;
@@ -2365,10 +2535,9 @@ export declare const GenesisState_Chain: {
                 newThreshold?: Uint8Array | undefined;
             } | undefined;
             multisigOperatorshipTransferred?: {
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } | undefined;
             singlesigOwnershipTransferred?: {
                 preOwner?: Uint8Array | undefined;
@@ -2505,15 +2674,13 @@ export declare const GenesisState_Chain: {
                 newThreshold?: Uint8Array | undefined;
             } & Record<Exclude<keyof I["events"][number]["multisigOwnershipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventMultisigOwnershipTransferred>, never>) | undefined;
             multisigOperatorshipTransferred?: ({
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } & {
-                preOperators?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["events"][number]["multisigOperatorshipTransferred"]["preOperators"], keyof Uint8Array[]>, never>) | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["events"][number]["multisigOperatorshipTransferred"]["newOperators"], keyof Uint8Array[]>, never>) | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["events"][number]["multisigOperatorshipTransferred"]["newWeights"], keyof Uint8Array[]>, never>) | undefined;
             } & Record<Exclude<keyof I["events"][number]["multisigOperatorshipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventMultisigOperatorshipTransferred>, never>) | undefined;
             singlesigOwnershipTransferred?: ({
                 preOwner?: Uint8Array | undefined;
@@ -2570,10 +2737,9 @@ export declare const GenesisState_Chain: {
                 newThreshold?: Uint8Array | undefined;
             } | undefined;
             multisigOperatorshipTransferred?: {
-                preOperators?: Uint8Array[] | undefined;
-                prevThreshold?: Uint8Array | undefined;
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
+                newWeights?: Uint8Array[] | undefined;
             } | undefined;
             singlesigOwnershipTransferred?: {
                 preOwner?: Uint8Array | undefined;

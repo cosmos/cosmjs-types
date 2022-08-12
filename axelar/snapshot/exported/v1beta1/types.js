@@ -22,13 +22,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Snapshot = exports.Validator = exports.validatorIllegibilityToJSON = exports.validatorIllegibilityFromJSON = exports.ValidatorIllegibility = exports.protobufPackage = void 0;
+exports.Snapshot_ParticipantsEntry = exports.Snapshot = exports.Participant = exports.Validator = exports.validatorIllegibilityToJSON = exports.validatorIllegibilityFromJSON = exports.ValidatorIllegibility = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
 const any_1 = require("../../../../google/protobuf/any");
-const timestamp_1 = require("../../../../google/protobuf/timestamp");
 const types_1 = require("../../../../axelar/tss/exported/v1beta1/types");
+const timestamp_1 = require("../../../../google/protobuf/timestamp");
 exports.protobufPackage = "axelar.snapshot.exported.v1beta1";
 var ValidatorIllegibility;
 (function (ValidatorIllegibility) {
@@ -156,27 +156,78 @@ exports.Validator = {
         return message;
     },
 };
+function createBaseParticipant() {
+    return { address: new Uint8Array(), weight: new Uint8Array() };
+}
+exports.Participant = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.address.length !== 0) {
+            writer.uint32(10).bytes(message.address);
+        }
+        if (message.weight.length !== 0) {
+            writer.uint32(18).bytes(message.weight);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseParticipant();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.address = reader.bytes();
+                    break;
+                case 2:
+                    message.weight = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            address: isSet(object.address) ? bytesFromBase64(object.address) : new Uint8Array(),
+            weight: isSet(object.weight) ? bytesFromBase64(object.weight) : new Uint8Array(),
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.address !== undefined &&
+            (obj.address = base64FromBytes(message.address !== undefined ? message.address : new Uint8Array()));
+        message.weight !== undefined &&
+            (obj.weight = base64FromBytes(message.weight !== undefined ? message.weight : new Uint8Array()));
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b;
+        const message = createBaseParticipant();
+        message.address = (_a = object.address) !== null && _a !== void 0 ? _a : new Uint8Array();
+        message.weight = (_b = object.weight) !== null && _b !== void 0 ? _b : new Uint8Array();
+        return message;
+    },
+};
 function createBaseSnapshot() {
     return {
         validators: [],
-        timestamp: undefined,
-        height: long_1.default.ZERO,
         totalShareCount: new Uint8Array(),
         counter: long_1.default.ZERO,
         keyShareDistributionPolicy: 0,
         corruptionThreshold: long_1.default.ZERO,
+        timestamp: undefined,
+        height: long_1.default.ZERO,
+        participants: {},
+        bondedWeight: new Uint8Array(),
     };
 }
 exports.Snapshot = {
     encode(message, writer = _m0.Writer.create()) {
         for (const v of message.validators) {
             exports.Validator.encode(v, writer.uint32(10).fork()).ldelim();
-        }
-        if (message.timestamp !== undefined) {
-            timestamp_1.Timestamp.encode(message.timestamp, writer.uint32(18).fork()).ldelim();
-        }
-        if (!message.height.isZero()) {
-            writer.uint32(24).int64(message.height);
         }
         if (message.totalShareCount.length !== 0) {
             writer.uint32(34).bytes(message.totalShareCount);
@@ -190,6 +241,18 @@ exports.Snapshot = {
         if (!message.corruptionThreshold.isZero()) {
             writer.uint32(56).int64(message.corruptionThreshold);
         }
+        if (message.timestamp !== undefined) {
+            timestamp_1.Timestamp.encode(message.timestamp, writer.uint32(18).fork()).ldelim();
+        }
+        if (!message.height.isZero()) {
+            writer.uint32(24).int64(message.height);
+        }
+        Object.entries(message.participants).forEach(([key, value]) => {
+            exports.Snapshot_ParticipantsEntry.encode({ key: key, value }, writer.uint32(66).fork()).ldelim();
+        });
+        if (message.bondedWeight.length !== 0) {
+            writer.uint32(74).bytes(message.bondedWeight);
+        }
         return writer;
     },
     decode(input, length) {
@@ -201,12 +264,6 @@ exports.Snapshot = {
             switch (tag >>> 3) {
                 case 1:
                     message.validators.push(exports.Validator.decode(reader, reader.uint32()));
-                    break;
-                case 2:
-                    message.timestamp = timestamp_1.Timestamp.decode(reader, reader.uint32());
-                    break;
-                case 3:
-                    message.height = reader.int64();
                     break;
                 case 4:
                     message.totalShareCount = reader.bytes();
@@ -220,6 +277,21 @@ exports.Snapshot = {
                 case 7:
                     message.corruptionThreshold = reader.int64();
                     break;
+                case 2:
+                    message.timestamp = timestamp_1.Timestamp.decode(reader, reader.uint32());
+                    break;
+                case 3:
+                    message.height = reader.int64();
+                    break;
+                case 8:
+                    const entry8 = exports.Snapshot_ParticipantsEntry.decode(reader, reader.uint32());
+                    if (entry8.value !== undefined) {
+                        message.participants[entry8.key] = entry8.value;
+                    }
+                    break;
+                case 9:
+                    message.bondedWeight = reader.bytes();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -232,8 +304,6 @@ exports.Snapshot = {
             validators: Array.isArray(object === null || object === void 0 ? void 0 : object.validators)
                 ? object.validators.map((e) => exports.Validator.fromJSON(e))
                 : [],
-            timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
-            height: isSet(object.height) ? long_1.default.fromValue(object.height) : long_1.default.ZERO,
             totalShareCount: isSet(object.totalShareCount)
                 ? bytesFromBase64(object.totalShareCount)
                 : new Uint8Array(),
@@ -244,6 +314,15 @@ exports.Snapshot = {
             corruptionThreshold: isSet(object.corruptionThreshold)
                 ? long_1.default.fromValue(object.corruptionThreshold)
                 : long_1.default.ZERO,
+            timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
+            height: isSet(object.height) ? long_1.default.fromValue(object.height) : long_1.default.ZERO,
+            participants: isObject(object.participants)
+                ? Object.entries(object.participants).reduce((acc, [key, value]) => {
+                    acc[key] = exports.Participant.fromJSON(value);
+                    return acc;
+                }, {})
+                : {},
+            bondedWeight: isSet(object.bondedWeight) ? bytesFromBase64(object.bondedWeight) : new Uint8Array(),
         };
     },
     toJSON(message) {
@@ -254,8 +333,6 @@ exports.Snapshot = {
         else {
             obj.validators = [];
         }
-        message.timestamp !== undefined && (obj.timestamp = fromTimestamp(message.timestamp).toISOString());
-        message.height !== undefined && (obj.height = (message.height || long_1.default.ZERO).toString());
         message.totalShareCount !== undefined &&
             (obj.totalShareCount = base64FromBytes(message.totalShareCount !== undefined ? message.totalShareCount : new Uint8Array()));
         message.counter !== undefined && (obj.counter = (message.counter || long_1.default.ZERO).toString());
@@ -263,18 +340,22 @@ exports.Snapshot = {
             (obj.keyShareDistributionPolicy = (0, types_1.keyShareDistributionPolicyToJSON)(message.keyShareDistributionPolicy));
         message.corruptionThreshold !== undefined &&
             (obj.corruptionThreshold = (message.corruptionThreshold || long_1.default.ZERO).toString());
+        message.timestamp !== undefined && (obj.timestamp = fromTimestamp(message.timestamp).toISOString());
+        message.height !== undefined && (obj.height = (message.height || long_1.default.ZERO).toString());
+        obj.participants = {};
+        if (message.participants) {
+            Object.entries(message.participants).forEach(([k, v]) => {
+                obj.participants[k] = exports.Participant.toJSON(v);
+            });
+        }
+        message.bondedWeight !== undefined &&
+            (obj.bondedWeight = base64FromBytes(message.bondedWeight !== undefined ? message.bondedWeight : new Uint8Array()));
         return obj;
     },
     fromPartial(object) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d, _e;
         const message = createBaseSnapshot();
         message.validators = ((_a = object.validators) === null || _a === void 0 ? void 0 : _a.map((e) => exports.Validator.fromPartial(e))) || [];
-        message.timestamp =
-            object.timestamp !== undefined && object.timestamp !== null
-                ? timestamp_1.Timestamp.fromPartial(object.timestamp)
-                : undefined;
-        message.height =
-            object.height !== undefined && object.height !== null ? long_1.default.fromValue(object.height) : long_1.default.ZERO;
         message.totalShareCount = (_b = object.totalShareCount) !== null && _b !== void 0 ? _b : new Uint8Array();
         message.counter =
             object.counter !== undefined && object.counter !== null ? long_1.default.fromValue(object.counter) : long_1.default.ZERO;
@@ -283,6 +364,74 @@ exports.Snapshot = {
             object.corruptionThreshold !== undefined && object.corruptionThreshold !== null
                 ? long_1.default.fromValue(object.corruptionThreshold)
                 : long_1.default.ZERO;
+        message.timestamp =
+            object.timestamp !== undefined && object.timestamp !== null
+                ? timestamp_1.Timestamp.fromPartial(object.timestamp)
+                : undefined;
+        message.height =
+            object.height !== undefined && object.height !== null ? long_1.default.fromValue(object.height) : long_1.default.ZERO;
+        message.participants = Object.entries((_d = object.participants) !== null && _d !== void 0 ? _d : {}).reduce((acc, [key, value]) => {
+            if (value !== undefined) {
+                acc[key] = exports.Participant.fromPartial(value);
+            }
+            return acc;
+        }, {});
+        message.bondedWeight = (_e = object.bondedWeight) !== null && _e !== void 0 ? _e : new Uint8Array();
+        return message;
+    },
+};
+function createBaseSnapshot_ParticipantsEntry() {
+    return { key: "", value: undefined };
+}
+exports.Snapshot_ParticipantsEntry = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.key !== "") {
+            writer.uint32(10).string(message.key);
+        }
+        if (message.value !== undefined) {
+            exports.Participant.encode(message.value, writer.uint32(18).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseSnapshot_ParticipantsEntry();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.key = reader.string();
+                    break;
+                case 2:
+                    message.value = exports.Participant.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            key: isSet(object.key) ? String(object.key) : "",
+            value: isSet(object.value) ? exports.Participant.fromJSON(object.value) : undefined,
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.key !== undefined && (obj.key = message.key);
+        message.value !== undefined &&
+            (obj.value = message.value ? exports.Participant.toJSON(message.value) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a;
+        const message = createBaseSnapshot_ParticipantsEntry();
+        message.key = (_a = object.key) !== null && _a !== void 0 ? _a : "";
+        message.value =
+            object.value !== undefined && object.value !== null ? exports.Participant.fromPartial(object.value) : undefined;
         return message;
     },
 };
@@ -341,6 +490,9 @@ function numberToLong(number) {
 if (_m0.util.Long !== long_1.default) {
     _m0.util.Long = long_1.default;
     _m0.configure();
+}
+function isObject(value) {
+    return typeof value === "object" && value !== null;
 }
 function isSet(value) {
     return value !== null && value !== undefined;

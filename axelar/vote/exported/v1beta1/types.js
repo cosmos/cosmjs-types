@@ -22,25 +22,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PollMetadata = exports.Vote = exports.Voter = exports.PollKey = exports.pollStateToJSON = exports.pollStateFromJSON = exports.PollState = exports.protobufPackage = void 0;
+exports.PollParticipants = exports.PollKey = exports.PollMetadata = exports.pollStateToJSON = exports.pollStateFromJSON = exports.PollState = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
 const any_1 = require("../../../../google/protobuf/any");
 const threshold_1 = require("../../../../axelar/utils/v1beta1/threshold");
+const types_1 = require("../../../../axelar/snapshot/exported/v1beta1/types");
 exports.protobufPackage = "axelar.vote.exported.v1beta1";
 var PollState;
 (function (PollState) {
-    /**
-     * POLL_STATE_UNSPECIFIED - these enum values are used for bitwise operations, therefore they need to
-     * be powers of 2
-     */
     PollState[PollState["POLL_STATE_UNSPECIFIED"] = 0] = "POLL_STATE_UNSPECIFIED";
     PollState[PollState["POLL_STATE_PENDING"] = 1] = "POLL_STATE_PENDING";
     PollState[PollState["POLL_STATE_COMPLETED"] = 2] = "POLL_STATE_COMPLETED";
-    PollState[PollState["POLL_STATE_FAILED"] = 4] = "POLL_STATE_FAILED";
-    PollState[PollState["POLL_STATE_EXPIRED"] = 8] = "POLL_STATE_EXPIRED";
-    PollState[PollState["POLL_STATE_ALLOW_OVERRIDE"] = 16] = "POLL_STATE_ALLOW_OVERRIDE";
+    PollState[PollState["POLL_STATE_FAILED"] = 3] = "POLL_STATE_FAILED";
     PollState[PollState["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
 })(PollState = exports.PollState || (exports.PollState = {}));
 function pollStateFromJSON(object) {
@@ -54,15 +49,9 @@ function pollStateFromJSON(object) {
         case 2:
         case "POLL_STATE_COMPLETED":
             return PollState.POLL_STATE_COMPLETED;
-        case 4:
+        case 3:
         case "POLL_STATE_FAILED":
             return PollState.POLL_STATE_FAILED;
-        case 8:
-        case "POLL_STATE_EXPIRED":
-            return PollState.POLL_STATE_EXPIRED;
-        case 16:
-        case "POLL_STATE_ALLOW_OVERRIDE":
-            return PollState.POLL_STATE_ALLOW_OVERRIDE;
         case -1:
         case "UNRECOGNIZED":
         default:
@@ -80,16 +69,194 @@ function pollStateToJSON(object) {
             return "POLL_STATE_COMPLETED";
         case PollState.POLL_STATE_FAILED:
             return "POLL_STATE_FAILED";
-        case PollState.POLL_STATE_EXPIRED:
-            return "POLL_STATE_EXPIRED";
-        case PollState.POLL_STATE_ALLOW_OVERRIDE:
-            return "POLL_STATE_ALLOW_OVERRIDE";
         case PollState.UNRECOGNIZED:
         default:
             return "UNRECOGNIZED";
     }
 }
 exports.pollStateToJSON = pollStateToJSON;
+function createBasePollMetadata() {
+    return {
+        expiresAt: long_1.default.ZERO,
+        result: undefined,
+        votingThreshold: undefined,
+        state: 0,
+        minVoterCount: long_1.default.ZERO,
+        rewardPoolName: "",
+        gracePeriod: long_1.default.ZERO,
+        completedAt: long_1.default.ZERO,
+        id: long_1.default.UZERO,
+        snapshot: undefined,
+        module: "",
+        moduleMetadata: undefined,
+    };
+}
+exports.PollMetadata = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (!message.expiresAt.isZero()) {
+            writer.uint32(24).int64(message.expiresAt);
+        }
+        if (message.result !== undefined) {
+            any_1.Any.encode(message.result, writer.uint32(34).fork()).ldelim();
+        }
+        if (message.votingThreshold !== undefined) {
+            threshold_1.Threshold.encode(message.votingThreshold, writer.uint32(42).fork()).ldelim();
+        }
+        if (message.state !== 0) {
+            writer.uint32(48).int32(message.state);
+        }
+        if (!message.minVoterCount.isZero()) {
+            writer.uint32(56).int64(message.minVoterCount);
+        }
+        if (message.rewardPoolName !== "") {
+            writer.uint32(82).string(message.rewardPoolName);
+        }
+        if (!message.gracePeriod.isZero()) {
+            writer.uint32(88).int64(message.gracePeriod);
+        }
+        if (!message.completedAt.isZero()) {
+            writer.uint32(96).int64(message.completedAt);
+        }
+        if (!message.id.isZero()) {
+            writer.uint32(104).uint64(message.id);
+        }
+        if (message.snapshot !== undefined) {
+            types_1.Snapshot.encode(message.snapshot, writer.uint32(122).fork()).ldelim();
+        }
+        if (message.module !== "") {
+            writer.uint32(130).string(message.module);
+        }
+        if (message.moduleMetadata !== undefined) {
+            any_1.Any.encode(message.moduleMetadata, writer.uint32(138).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBasePollMetadata();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 3:
+                    message.expiresAt = reader.int64();
+                    break;
+                case 4:
+                    message.result = any_1.Any.decode(reader, reader.uint32());
+                    break;
+                case 5:
+                    message.votingThreshold = threshold_1.Threshold.decode(reader, reader.uint32());
+                    break;
+                case 6:
+                    message.state = reader.int32();
+                    break;
+                case 7:
+                    message.minVoterCount = reader.int64();
+                    break;
+                case 10:
+                    message.rewardPoolName = reader.string();
+                    break;
+                case 11:
+                    message.gracePeriod = reader.int64();
+                    break;
+                case 12:
+                    message.completedAt = reader.int64();
+                    break;
+                case 13:
+                    message.id = reader.uint64();
+                    break;
+                case 15:
+                    message.snapshot = types_1.Snapshot.decode(reader, reader.uint32());
+                    break;
+                case 16:
+                    message.module = reader.string();
+                    break;
+                case 17:
+                    message.moduleMetadata = any_1.Any.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            expiresAt: isSet(object.expiresAt) ? long_1.default.fromValue(object.expiresAt) : long_1.default.ZERO,
+            result: isSet(object.result) ? any_1.Any.fromJSON(object.result) : undefined,
+            votingThreshold: isSet(object.votingThreshold) ? threshold_1.Threshold.fromJSON(object.votingThreshold) : undefined,
+            state: isSet(object.state) ? pollStateFromJSON(object.state) : 0,
+            minVoterCount: isSet(object.minVoterCount) ? long_1.default.fromValue(object.minVoterCount) : long_1.default.ZERO,
+            rewardPoolName: isSet(object.rewardPoolName) ? String(object.rewardPoolName) : "",
+            gracePeriod: isSet(object.gracePeriod) ? long_1.default.fromValue(object.gracePeriod) : long_1.default.ZERO,
+            completedAt: isSet(object.completedAt) ? long_1.default.fromValue(object.completedAt) : long_1.default.ZERO,
+            id: isSet(object.id) ? long_1.default.fromValue(object.id) : long_1.default.UZERO,
+            snapshot: isSet(object.snapshot) ? types_1.Snapshot.fromJSON(object.snapshot) : undefined,
+            module: isSet(object.module) ? String(object.module) : "",
+            moduleMetadata: isSet(object.moduleMetadata) ? any_1.Any.fromJSON(object.moduleMetadata) : undefined,
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.expiresAt !== undefined && (obj.expiresAt = (message.expiresAt || long_1.default.ZERO).toString());
+        message.result !== undefined && (obj.result = message.result ? any_1.Any.toJSON(message.result) : undefined);
+        message.votingThreshold !== undefined &&
+            (obj.votingThreshold = message.votingThreshold ? threshold_1.Threshold.toJSON(message.votingThreshold) : undefined);
+        message.state !== undefined && (obj.state = pollStateToJSON(message.state));
+        message.minVoterCount !== undefined &&
+            (obj.minVoterCount = (message.minVoterCount || long_1.default.ZERO).toString());
+        message.rewardPoolName !== undefined && (obj.rewardPoolName = message.rewardPoolName);
+        message.gracePeriod !== undefined && (obj.gracePeriod = (message.gracePeriod || long_1.default.ZERO).toString());
+        message.completedAt !== undefined && (obj.completedAt = (message.completedAt || long_1.default.ZERO).toString());
+        message.id !== undefined && (obj.id = (message.id || long_1.default.UZERO).toString());
+        message.snapshot !== undefined &&
+            (obj.snapshot = message.snapshot ? types_1.Snapshot.toJSON(message.snapshot) : undefined);
+        message.module !== undefined && (obj.module = message.module);
+        message.moduleMetadata !== undefined &&
+            (obj.moduleMetadata = message.moduleMetadata ? any_1.Any.toJSON(message.moduleMetadata) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b, _c;
+        const message = createBasePollMetadata();
+        message.expiresAt =
+            object.expiresAt !== undefined && object.expiresAt !== null
+                ? long_1.default.fromValue(object.expiresAt)
+                : long_1.default.ZERO;
+        message.result =
+            object.result !== undefined && object.result !== null ? any_1.Any.fromPartial(object.result) : undefined;
+        message.votingThreshold =
+            object.votingThreshold !== undefined && object.votingThreshold !== null
+                ? threshold_1.Threshold.fromPartial(object.votingThreshold)
+                : undefined;
+        message.state = (_a = object.state) !== null && _a !== void 0 ? _a : 0;
+        message.minVoterCount =
+            object.minVoterCount !== undefined && object.minVoterCount !== null
+                ? long_1.default.fromValue(object.minVoterCount)
+                : long_1.default.ZERO;
+        message.rewardPoolName = (_b = object.rewardPoolName) !== null && _b !== void 0 ? _b : "";
+        message.gracePeriod =
+            object.gracePeriod !== undefined && object.gracePeriod !== null
+                ? long_1.default.fromValue(object.gracePeriod)
+                : long_1.default.ZERO;
+        message.completedAt =
+            object.completedAt !== undefined && object.completedAt !== null
+                ? long_1.default.fromValue(object.completedAt)
+                : long_1.default.ZERO;
+        message.id = object.id !== undefined && object.id !== null ? long_1.default.fromValue(object.id) : long_1.default.UZERO;
+        message.snapshot =
+            object.snapshot !== undefined && object.snapshot !== null
+                ? types_1.Snapshot.fromPartial(object.snapshot)
+                : undefined;
+        message.module = (_c = object.module) !== null && _c !== void 0 ? _c : "";
+        message.moduleMetadata =
+            object.moduleMetadata !== undefined && object.moduleMetadata !== null
+                ? any_1.Any.fromPartial(object.moduleMetadata)
+                : undefined;
+        return message;
+    },
+};
 function createBasePollKey() {
     return { module: "", id: "" };
 }
@@ -143,31 +310,31 @@ exports.PollKey = {
         return message;
     },
 };
-function createBaseVoter() {
-    return { validator: new Uint8Array(), votingPower: long_1.default.ZERO };
+function createBasePollParticipants() {
+    return { pollId: long_1.default.UZERO, participants: [] };
 }
-exports.Voter = {
+exports.PollParticipants = {
     encode(message, writer = _m0.Writer.create()) {
-        if (message.validator.length !== 0) {
-            writer.uint32(10).bytes(message.validator);
+        if (!message.pollId.isZero()) {
+            writer.uint32(8).uint64(message.pollId);
         }
-        if (!message.votingPower.isZero()) {
-            writer.uint32(16).int64(message.votingPower);
+        for (const v of message.participants) {
+            writer.uint32(18).bytes(v);
         }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = createBaseVoter();
+        const message = createBasePollParticipants();
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.validator = reader.bytes();
+                    message.pollId = reader.uint64();
                     break;
                 case 2:
-                    message.votingPower = reader.int64();
+                    message.participants.push(reader.bytes());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -178,242 +345,29 @@ exports.Voter = {
     },
     fromJSON(object) {
         return {
-            validator: isSet(object.validator) ? bytesFromBase64(object.validator) : new Uint8Array(),
-            votingPower: isSet(object.votingPower) ? long_1.default.fromValue(object.votingPower) : long_1.default.ZERO,
+            pollId: isSet(object.pollId) ? long_1.default.fromValue(object.pollId) : long_1.default.UZERO,
+            participants: Array.isArray(object === null || object === void 0 ? void 0 : object.participants)
+                ? object.participants.map((e) => bytesFromBase64(e))
+                : [],
         };
     },
     toJSON(message) {
         const obj = {};
-        message.validator !== undefined &&
-            (obj.validator = base64FromBytes(message.validator !== undefined ? message.validator : new Uint8Array()));
-        message.votingPower !== undefined && (obj.votingPower = (message.votingPower || long_1.default.ZERO).toString());
+        message.pollId !== undefined && (obj.pollId = (message.pollId || long_1.default.UZERO).toString());
+        if (message.participants) {
+            obj.participants = message.participants.map((e) => base64FromBytes(e !== undefined ? e : new Uint8Array()));
+        }
+        else {
+            obj.participants = [];
+        }
         return obj;
     },
     fromPartial(object) {
         var _a;
-        const message = createBaseVoter();
-        message.validator = (_a = object.validator) !== null && _a !== void 0 ? _a : new Uint8Array();
-        message.votingPower =
-            object.votingPower !== undefined && object.votingPower !== null
-                ? long_1.default.fromValue(object.votingPower)
-                : long_1.default.ZERO;
-        return message;
-    },
-};
-function createBaseVote() {
-    return { result: undefined };
-}
-exports.Vote = {
-    encode(message, writer = _m0.Writer.create()) {
-        if (message.result !== undefined) {
-            any_1.Any.encode(message.result, writer.uint32(18).fork()).ldelim();
-        }
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = createBaseVote();
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                case 2:
-                    message.result = any_1.Any.decode(reader, reader.uint32());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(object) {
-        return {
-            result: isSet(object.result) ? any_1.Any.fromJSON(object.result) : undefined,
-        };
-    },
-    toJSON(message) {
-        const obj = {};
-        message.result !== undefined && (obj.result = message.result ? any_1.Any.toJSON(message.result) : undefined);
-        return obj;
-    },
-    fromPartial(object) {
-        const message = createBaseVote();
-        message.result =
-            object.result !== undefined && object.result !== null ? any_1.Any.fromPartial(object.result) : undefined;
-        return message;
-    },
-};
-function createBasePollMetadata() {
-    return {
-        key: undefined,
-        expiresAt: long_1.default.ZERO,
-        result: undefined,
-        votingThreshold: undefined,
-        state: 0,
-        minVoterCount: long_1.default.ZERO,
-        voters: [],
-        totalVotingPower: new Uint8Array(),
-        rewardPoolName: "",
-        gracePeriod: long_1.default.ZERO,
-        completedAt: long_1.default.ZERO,
-    };
-}
-exports.PollMetadata = {
-    encode(message, writer = _m0.Writer.create()) {
-        if (message.key !== undefined) {
-            exports.PollKey.encode(message.key, writer.uint32(10).fork()).ldelim();
-        }
-        if (!message.expiresAt.isZero()) {
-            writer.uint32(24).int64(message.expiresAt);
-        }
-        if (message.result !== undefined) {
-            any_1.Any.encode(message.result, writer.uint32(34).fork()).ldelim();
-        }
-        if (message.votingThreshold !== undefined) {
-            threshold_1.Threshold.encode(message.votingThreshold, writer.uint32(42).fork()).ldelim();
-        }
-        if (message.state !== 0) {
-            writer.uint32(48).int32(message.state);
-        }
-        if (!message.minVoterCount.isZero()) {
-            writer.uint32(56).int64(message.minVoterCount);
-        }
-        for (const v of message.voters) {
-            exports.Voter.encode(v, writer.uint32(66).fork()).ldelim();
-        }
-        if (message.totalVotingPower.length !== 0) {
-            writer.uint32(74).bytes(message.totalVotingPower);
-        }
-        if (message.rewardPoolName !== "") {
-            writer.uint32(82).string(message.rewardPoolName);
-        }
-        if (!message.gracePeriod.isZero()) {
-            writer.uint32(88).int64(message.gracePeriod);
-        }
-        if (!message.completedAt.isZero()) {
-            writer.uint32(96).int64(message.completedAt);
-        }
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = createBasePollMetadata();
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                case 1:
-                    message.key = exports.PollKey.decode(reader, reader.uint32());
-                    break;
-                case 3:
-                    message.expiresAt = reader.int64();
-                    break;
-                case 4:
-                    message.result = any_1.Any.decode(reader, reader.uint32());
-                    break;
-                case 5:
-                    message.votingThreshold = threshold_1.Threshold.decode(reader, reader.uint32());
-                    break;
-                case 6:
-                    message.state = reader.int32();
-                    break;
-                case 7:
-                    message.minVoterCount = reader.int64();
-                    break;
-                case 8:
-                    message.voters.push(exports.Voter.decode(reader, reader.uint32()));
-                    break;
-                case 9:
-                    message.totalVotingPower = reader.bytes();
-                    break;
-                case 10:
-                    message.rewardPoolName = reader.string();
-                    break;
-                case 11:
-                    message.gracePeriod = reader.int64();
-                    break;
-                case 12:
-                    message.completedAt = reader.int64();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(object) {
-        return {
-            key: isSet(object.key) ? exports.PollKey.fromJSON(object.key) : undefined,
-            expiresAt: isSet(object.expiresAt) ? long_1.default.fromValue(object.expiresAt) : long_1.default.ZERO,
-            result: isSet(object.result) ? any_1.Any.fromJSON(object.result) : undefined,
-            votingThreshold: isSet(object.votingThreshold) ? threshold_1.Threshold.fromJSON(object.votingThreshold) : undefined,
-            state: isSet(object.state) ? pollStateFromJSON(object.state) : 0,
-            minVoterCount: isSet(object.minVoterCount) ? long_1.default.fromValue(object.minVoterCount) : long_1.default.ZERO,
-            voters: Array.isArray(object === null || object === void 0 ? void 0 : object.voters) ? object.voters.map((e) => exports.Voter.fromJSON(e)) : [],
-            totalVotingPower: isSet(object.totalVotingPower)
-                ? bytesFromBase64(object.totalVotingPower)
-                : new Uint8Array(),
-            rewardPoolName: isSet(object.rewardPoolName) ? String(object.rewardPoolName) : "",
-            gracePeriod: isSet(object.gracePeriod) ? long_1.default.fromValue(object.gracePeriod) : long_1.default.ZERO,
-            completedAt: isSet(object.completedAt) ? long_1.default.fromValue(object.completedAt) : long_1.default.ZERO,
-        };
-    },
-    toJSON(message) {
-        const obj = {};
-        message.key !== undefined && (obj.key = message.key ? exports.PollKey.toJSON(message.key) : undefined);
-        message.expiresAt !== undefined && (obj.expiresAt = (message.expiresAt || long_1.default.ZERO).toString());
-        message.result !== undefined && (obj.result = message.result ? any_1.Any.toJSON(message.result) : undefined);
-        message.votingThreshold !== undefined &&
-            (obj.votingThreshold = message.votingThreshold ? threshold_1.Threshold.toJSON(message.votingThreshold) : undefined);
-        message.state !== undefined && (obj.state = pollStateToJSON(message.state));
-        message.minVoterCount !== undefined &&
-            (obj.minVoterCount = (message.minVoterCount || long_1.default.ZERO).toString());
-        if (message.voters) {
-            obj.voters = message.voters.map((e) => (e ? exports.Voter.toJSON(e) : undefined));
-        }
-        else {
-            obj.voters = [];
-        }
-        message.totalVotingPower !== undefined &&
-            (obj.totalVotingPower = base64FromBytes(message.totalVotingPower !== undefined ? message.totalVotingPower : new Uint8Array()));
-        message.rewardPoolName !== undefined && (obj.rewardPoolName = message.rewardPoolName);
-        message.gracePeriod !== undefined && (obj.gracePeriod = (message.gracePeriod || long_1.default.ZERO).toString());
-        message.completedAt !== undefined && (obj.completedAt = (message.completedAt || long_1.default.ZERO).toString());
-        return obj;
-    },
-    fromPartial(object) {
-        var _a, _b, _c, _d;
-        const message = createBasePollMetadata();
-        message.key =
-            object.key !== undefined && object.key !== null ? exports.PollKey.fromPartial(object.key) : undefined;
-        message.expiresAt =
-            object.expiresAt !== undefined && object.expiresAt !== null
-                ? long_1.default.fromValue(object.expiresAt)
-                : long_1.default.ZERO;
-        message.result =
-            object.result !== undefined && object.result !== null ? any_1.Any.fromPartial(object.result) : undefined;
-        message.votingThreshold =
-            object.votingThreshold !== undefined && object.votingThreshold !== null
-                ? threshold_1.Threshold.fromPartial(object.votingThreshold)
-                : undefined;
-        message.state = (_a = object.state) !== null && _a !== void 0 ? _a : 0;
-        message.minVoterCount =
-            object.minVoterCount !== undefined && object.minVoterCount !== null
-                ? long_1.default.fromValue(object.minVoterCount)
-                : long_1.default.ZERO;
-        message.voters = ((_b = object.voters) === null || _b === void 0 ? void 0 : _b.map((e) => exports.Voter.fromPartial(e))) || [];
-        message.totalVotingPower = (_c = object.totalVotingPower) !== null && _c !== void 0 ? _c : new Uint8Array();
-        message.rewardPoolName = (_d = object.rewardPoolName) !== null && _d !== void 0 ? _d : "";
-        message.gracePeriod =
-            object.gracePeriod !== undefined && object.gracePeriod !== null
-                ? long_1.default.fromValue(object.gracePeriod)
-                : long_1.default.ZERO;
-        message.completedAt =
-            object.completedAt !== undefined && object.completedAt !== null
-                ? long_1.default.fromValue(object.completedAt)
-                : long_1.default.ZERO;
+        const message = createBasePollParticipants();
+        message.pollId =
+            object.pollId !== undefined && object.pollId !== null ? long_1.default.fromValue(object.pollId) : long_1.default.UZERO;
+        message.participants = ((_a = object.participants) === null || _a === void 0 ? void 0 : _a.map((e) => e)) || [];
         return message;
     },
 };
