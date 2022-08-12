@@ -1,6 +1,6 @@
 {
-  "name": "axelarjs-types",
-  "version": "0.0.1",
+  "name": "@axelar-network/axelarjs-types",
+  "version": "0.20.0",
   "description": "JS and TS types relating to Protocol Buffers used by Cosmos-SDK and other related projects",
   "contributors": [
     "Will Clark <willclarktech@users.noreply.github.com>"
@@ -14,13 +14,15 @@
     "access": "public"
   },
   "files": [
-    "axelar-core/"
+    "axelar/",
+    "cosmos/",
+    "google/"
   ],
   "scripts": {
     "format": "prettier --write --loglevel warn \"./src/**/*.ts\"",
     "codegen": "./scripts/codegen-axelar-sdk.sh && yarn format",
     "prepare": "./scripts/prepare.sh",
-    "build": "rm -rf ./build && tsc && yarn prepare"
+    "build": "tsc && yarn prepare"
   },
   "dependencies": {
     "long": "^4.0.0",

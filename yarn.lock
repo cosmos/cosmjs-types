@@ -5,6 +5,20 @@ __metadata:
   version: 5
   cacheKey: 8
 
+"@axelar-network/axelarjs-types@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@axelar-network/axelarjs-types@workspace:."
+  dependencies:
+    "@types/long": ^4.0.1
+    "@types/node": ^15.6.2
+    long: ^4.0.0
+    prettier: ^2.6
+    protobufjs: ~6.11.2
+    ts-proto: ^1.110
+    typescript: ~4.4
+  languageName: unknown
+  linkType: soft
+
 "@protobufjs/aspromise@npm:^1.1.1, @protobufjs/aspromise@npm:^1.1.2":
   version: 1.1.2
   resolution: "@protobufjs/aspromise@npm:1.1.2"
@@ -98,20 +112,6 @@ __metadata:
   checksum: fe4aa041427f3c69cbcf63434af6e788329b40d7208b30aa845cfc1aa6bf9b0c11b23fa33a567d85ba7f2574a95c3b4a227f4b9b9b55da1eaea68ab94b4058d9
   languageName: node
   linkType: hard
-
-"axelarjs-types@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "axelarjs-types@workspace:."
-  dependencies:
-    "@types/long": ^4.0.1
-    "@types/node": ^15.6.2
-    long: ^4.0.0
-    prettier: ^2.6
-    protobufjs: ~6.11.2
-    ts-proto: ^1.110
-    typescript: ~4.4
-  languageName: unknown
-  linkType: soft
 
 "dataloader@npm:^1.4.0":
   version: 1.4.0
