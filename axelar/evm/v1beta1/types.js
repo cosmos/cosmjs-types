@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PollMetadata = exports.Gateway = exports.TokenDetails = exports.Asset = exports.TransferKey = exports.SigMetadata = exports.CommandBatchMetadata = exports.Command = exports.TransactionMetadata = exports.ERC20TokenMetadata = exports.ERC20Deposit = exports.BurnerInfo = exports.NetworkInfo = exports.EventSinglesigOperatorshipTransferred = exports.EventSinglesigOwnershipTransferred = exports.EventMultisigOperatorshipTransferred = exports.EventMultisigOwnershipTransferred = exports.EventTokenDeployed = exports.EventTransfer = exports.EventContractCallWithToken = exports.EventContractCall = exports.EventTokenSent = exports.Event = exports.VoteEvents = exports.gateway_StatusToJSON = exports.gateway_StatusFromJSON = exports.Gateway_Status = exports.event_StatusToJSON = exports.event_StatusFromJSON = exports.Event_Status = exports.depositStatusToJSON = exports.depositStatusFromJSON = exports.DepositStatus = exports.sigTypeToJSON = exports.sigTypeFromJSON = exports.SigType = exports.batchedCommandsStatusToJSON = exports.batchedCommandsStatusFromJSON = exports.BatchedCommandsStatus = exports.statusToJSON = exports.statusFromJSON = exports.Status = exports.protobufPackage = void 0;
+exports.PollMetadata = exports.Gateway = exports.TokenDetails = exports.Asset = exports.TransferKey = exports.SigMetadata = exports.CommandBatchMetadata = exports.Command = exports.TransactionMetadata = exports.ERC20TokenMetadata = exports.ERC20Deposit = exports.BurnerInfo = exports.NetworkInfo = exports.EventMultisigOperatorshipTransferred = exports.EventMultisigOwnershipTransferred = exports.EventTokenDeployed = exports.EventTransfer = exports.EventContractCallWithToken = exports.EventContractCall = exports.EventTokenSent = exports.Event = exports.VoteEvents = exports.gateway_StatusToJSON = exports.gateway_StatusFromJSON = exports.Gateway_Status = exports.event_StatusToJSON = exports.event_StatusFromJSON = exports.Event_Status = exports.depositStatusToJSON = exports.depositStatusFromJSON = exports.DepositStatus = exports.sigTypeToJSON = exports.sigTypeFromJSON = exports.SigType = exports.batchedCommandsStatusToJSON = exports.batchedCommandsStatusFromJSON = exports.BatchedCommandsStatus = exports.statusToJSON = exports.statusFromJSON = exports.Status = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
@@ -361,8 +361,6 @@ function createBaseEvent() {
         tokenDeployed: undefined,
         multisigOwnershipTransferred: undefined,
         multisigOperatorshipTransferred: undefined,
-        singlesigOwnershipTransferred: undefined,
-        singlesigOperatorshipTransferred: undefined,
     };
 }
 exports.Event = {
@@ -399,12 +397,6 @@ exports.Event = {
         }
         if (message.multisigOperatorshipTransferred !== undefined) {
             exports.EventMultisigOperatorshipTransferred.encode(message.multisigOperatorshipTransferred, writer.uint32(90).fork()).ldelim();
-        }
-        if (message.singlesigOwnershipTransferred !== undefined) {
-            exports.EventSinglesigOwnershipTransferred.encode(message.singlesigOwnershipTransferred, writer.uint32(98).fork()).ldelim();
-        }
-        if (message.singlesigOperatorshipTransferred !== undefined) {
-            exports.EventSinglesigOperatorshipTransferred.encode(message.singlesigOperatorshipTransferred, writer.uint32(106).fork()).ldelim();
         }
         return writer;
     },
@@ -448,12 +440,6 @@ exports.Event = {
                 case 11:
                     message.multisigOperatorshipTransferred = exports.EventMultisigOperatorshipTransferred.decode(reader, reader.uint32());
                     break;
-                case 12:
-                    message.singlesigOwnershipTransferred = exports.EventSinglesigOwnershipTransferred.decode(reader, reader.uint32());
-                    break;
-                case 13:
-                    message.singlesigOperatorshipTransferred = exports.EventSinglesigOperatorshipTransferred.decode(reader, reader.uint32());
-                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -481,12 +467,6 @@ exports.Event = {
                 : undefined,
             multisigOperatorshipTransferred: isSet(object.multisigOperatorshipTransferred)
                 ? exports.EventMultisigOperatorshipTransferred.fromJSON(object.multisigOperatorshipTransferred)
-                : undefined,
-            singlesigOwnershipTransferred: isSet(object.singlesigOwnershipTransferred)
-                ? exports.EventSinglesigOwnershipTransferred.fromJSON(object.singlesigOwnershipTransferred)
-                : undefined,
-            singlesigOperatorshipTransferred: isSet(object.singlesigOperatorshipTransferred)
-                ? exports.EventSinglesigOperatorshipTransferred.fromJSON(object.singlesigOperatorshipTransferred)
                 : undefined,
         };
     },
@@ -518,14 +498,6 @@ exports.Event = {
         message.multisigOperatorshipTransferred !== undefined &&
             (obj.multisigOperatorshipTransferred = message.multisigOperatorshipTransferred
                 ? exports.EventMultisigOperatorshipTransferred.toJSON(message.multisigOperatorshipTransferred)
-                : undefined);
-        message.singlesigOwnershipTransferred !== undefined &&
-            (obj.singlesigOwnershipTransferred = message.singlesigOwnershipTransferred
-                ? exports.EventSinglesigOwnershipTransferred.toJSON(message.singlesigOwnershipTransferred)
-                : undefined);
-        message.singlesigOperatorshipTransferred !== undefined &&
-            (obj.singlesigOperatorshipTransferred = message.singlesigOperatorshipTransferred
-                ? exports.EventSinglesigOperatorshipTransferred.toJSON(message.singlesigOperatorshipTransferred)
                 : undefined);
         return obj;
     },
@@ -564,15 +536,6 @@ exports.Event = {
         message.multisigOperatorshipTransferred =
             object.multisigOperatorshipTransferred !== undefined && object.multisigOperatorshipTransferred !== null
                 ? exports.EventMultisigOperatorshipTransferred.fromPartial(object.multisigOperatorshipTransferred)
-                : undefined;
-        message.singlesigOwnershipTransferred =
-            object.singlesigOwnershipTransferred !== undefined && object.singlesigOwnershipTransferred !== null
-                ? exports.EventSinglesigOwnershipTransferred.fromPartial(object.singlesigOwnershipTransferred)
-                : undefined;
-        message.singlesigOperatorshipTransferred =
-            object.singlesigOperatorshipTransferred !== undefined &&
-                object.singlesigOperatorshipTransferred !== null
-                ? exports.EventSinglesigOperatorshipTransferred.fromPartial(object.singlesigOperatorshipTransferred)
                 : undefined;
         return message;
     },
@@ -1108,116 +1071,6 @@ exports.EventMultisigOperatorshipTransferred = {
         message.newOperators = ((_a = object.newOperators) === null || _a === void 0 ? void 0 : _a.map((e) => e)) || [];
         message.newThreshold = (_b = object.newThreshold) !== null && _b !== void 0 ? _b : new Uint8Array();
         message.newWeights = ((_c = object.newWeights) === null || _c === void 0 ? void 0 : _c.map((e) => e)) || [];
-        return message;
-    },
-};
-function createBaseEventSinglesigOwnershipTransferred() {
-    return { preOwner: new Uint8Array(), newOwner: new Uint8Array() };
-}
-exports.EventSinglesigOwnershipTransferred = {
-    encode(message, writer = _m0.Writer.create()) {
-        if (message.preOwner.length !== 0) {
-            writer.uint32(10).bytes(message.preOwner);
-        }
-        if (message.newOwner.length !== 0) {
-            writer.uint32(18).bytes(message.newOwner);
-        }
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = createBaseEventSinglesigOwnershipTransferred();
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                case 1:
-                    message.preOwner = reader.bytes();
-                    break;
-                case 2:
-                    message.newOwner = reader.bytes();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(object) {
-        return {
-            preOwner: isSet(object.preOwner) ? bytesFromBase64(object.preOwner) : new Uint8Array(),
-            newOwner: isSet(object.newOwner) ? bytesFromBase64(object.newOwner) : new Uint8Array(),
-        };
-    },
-    toJSON(message) {
-        const obj = {};
-        message.preOwner !== undefined &&
-            (obj.preOwner = base64FromBytes(message.preOwner !== undefined ? message.preOwner : new Uint8Array()));
-        message.newOwner !== undefined &&
-            (obj.newOwner = base64FromBytes(message.newOwner !== undefined ? message.newOwner : new Uint8Array()));
-        return obj;
-    },
-    fromPartial(object) {
-        var _a, _b;
-        const message = createBaseEventSinglesigOwnershipTransferred();
-        message.preOwner = (_a = object.preOwner) !== null && _a !== void 0 ? _a : new Uint8Array();
-        message.newOwner = (_b = object.newOwner) !== null && _b !== void 0 ? _b : new Uint8Array();
-        return message;
-    },
-};
-function createBaseEventSinglesigOperatorshipTransferred() {
-    return { preOperator: new Uint8Array(), newOperator: new Uint8Array() };
-}
-exports.EventSinglesigOperatorshipTransferred = {
-    encode(message, writer = _m0.Writer.create()) {
-        if (message.preOperator.length !== 0) {
-            writer.uint32(10).bytes(message.preOperator);
-        }
-        if (message.newOperator.length !== 0) {
-            writer.uint32(18).bytes(message.newOperator);
-        }
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = createBaseEventSinglesigOperatorshipTransferred();
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                case 1:
-                    message.preOperator = reader.bytes();
-                    break;
-                case 2:
-                    message.newOperator = reader.bytes();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(object) {
-        return {
-            preOperator: isSet(object.preOperator) ? bytesFromBase64(object.preOperator) : new Uint8Array(),
-            newOperator: isSet(object.newOperator) ? bytesFromBase64(object.newOperator) : new Uint8Array(),
-        };
-    },
-    toJSON(message) {
-        const obj = {};
-        message.preOperator !== undefined &&
-            (obj.preOperator = base64FromBytes(message.preOperator !== undefined ? message.preOperator : new Uint8Array()));
-        message.newOperator !== undefined &&
-            (obj.newOperator = base64FromBytes(message.newOperator !== undefined ? message.newOperator : new Uint8Array()));
-        return obj;
-    },
-    fromPartial(object) {
-        var _a, _b;
-        const message = createBaseEventSinglesigOperatorshipTransferred();
-        message.preOperator = (_a = object.preOperator) !== null && _a !== void 0 ? _a : new Uint8Array();
-        message.newOperator = (_b = object.newOperator) !== null && _b !== void 0 ? _b : new Uint8Array();
         return message;
     },
 };

@@ -411,14 +411,6 @@ export declare const EventResponse: {
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: Uint8Array[] | undefined;
             } | undefined;
-            singlesigOwnershipTransferred?: {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } | undefined;
-            singlesigOperatorshipTransferred?: {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
-            } | undefined;
         } | undefined;
     } & {
         event?: ({
@@ -465,14 +457,6 @@ export declare const EventResponse: {
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: Uint8Array[] | undefined;
-            } | undefined;
-            singlesigOwnershipTransferred?: {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } | undefined;
-            singlesigOperatorshipTransferred?: {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
             } | undefined;
         } & {
             chain?: string | undefined;
@@ -609,20 +593,6 @@ export declare const EventResponse: {
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["event"]["multisigOperatorshipTransferred"]["newWeights"], keyof Uint8Array[]>, never>) | undefined;
             } & Record<Exclude<keyof I["event"]["multisigOperatorshipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventMultisigOperatorshipTransferred>, never>) | undefined;
-            singlesigOwnershipTransferred?: ({
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } & {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } & Record<Exclude<keyof I["event"]["singlesigOwnershipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventSinglesigOwnershipTransferred>, never>) | undefined;
-            singlesigOperatorshipTransferred?: ({
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
-            } & {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
-            } & Record<Exclude<keyof I["event"]["singlesigOperatorshipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventSinglesigOperatorshipTransferred>, never>) | undefined;
         } & Record<Exclude<keyof I["event"], keyof Event>, never>) | undefined;
     } & Record<Exclude<keyof I, "event">, never>>(object: I): EventResponse;
 };

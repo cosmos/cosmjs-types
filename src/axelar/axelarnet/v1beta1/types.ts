@@ -14,6 +14,52 @@ export interface IBCTransfer {
   /** @deprecated */
   sequence: Long;
   id: Long;
+  status: IBCTransfer_Status;
+}
+
+export enum IBCTransfer_Status {
+  STATUS_UNSPECIFIED = 0,
+  STATUS_PENDING = 1,
+  STATUS_COMPLETED = 2,
+  STATUS_FAILED = 3,
+  UNRECOGNIZED = -1,
+}
+
+export function iBCTransfer_StatusFromJSON(object: any): IBCTransfer_Status {
+  switch (object) {
+    case 0:
+    case "STATUS_UNSPECIFIED":
+      return IBCTransfer_Status.STATUS_UNSPECIFIED;
+    case 1:
+    case "STATUS_PENDING":
+      return IBCTransfer_Status.STATUS_PENDING;
+    case 2:
+    case "STATUS_COMPLETED":
+      return IBCTransfer_Status.STATUS_COMPLETED;
+    case 3:
+    case "STATUS_FAILED":
+      return IBCTransfer_Status.STATUS_FAILED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return IBCTransfer_Status.UNRECOGNIZED;
+  }
+}
+
+export function iBCTransfer_StatusToJSON(object: IBCTransfer_Status): string {
+  switch (object) {
+    case IBCTransfer_Status.STATUS_UNSPECIFIED:
+      return "STATUS_UNSPECIFIED";
+    case IBCTransfer_Status.STATUS_PENDING:
+      return "STATUS_PENDING";
+    case IBCTransfer_Status.STATUS_COMPLETED:
+      return "STATUS_COMPLETED";
+    case IBCTransfer_Status.STATUS_FAILED:
+      return "STATUS_FAILED";
+    case IBCTransfer_Status.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
 }
 
 export interface CosmosChain {
@@ -39,6 +85,7 @@ function createBaseIBCTransfer(): IBCTransfer {
     channelId: "",
     sequence: Long.UZERO,
     id: Long.UZERO,
+    status: 0,
   };
 }
 
@@ -64,6 +111,9 @@ export const IBCTransfer = {
     }
     if (!message.id.isZero()) {
       writer.uint32(56).uint64(message.id);
+    }
+    if (message.status !== 0) {
+      writer.uint32(64).int32(message.status);
     }
     return writer;
   },
@@ -96,6 +146,9 @@ export const IBCTransfer = {
         case 7:
           message.id = reader.uint64() as Long;
           break;
+        case 8:
+          message.status = reader.int32() as any;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -113,6 +166,7 @@ export const IBCTransfer = {
       channelId: isSet(object.channelId) ? String(object.channelId) : "",
       sequence: isSet(object.sequence) ? Long.fromValue(object.sequence) : Long.UZERO,
       id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
+      status: isSet(object.status) ? iBCTransfer_StatusFromJSON(object.status) : 0,
     };
   },
 
@@ -126,6 +180,7 @@ export const IBCTransfer = {
     message.channelId !== undefined && (obj.channelId = message.channelId);
     message.sequence !== undefined && (obj.sequence = (message.sequence || Long.UZERO).toString());
     message.id !== undefined && (obj.id = (message.id || Long.UZERO).toString());
+    message.status !== undefined && (obj.status = iBCTransfer_StatusToJSON(message.status));
     return obj;
   },
 
@@ -142,6 +197,7 @@ export const IBCTransfer = {
         ? Long.fromValue(object.sequence)
         : Long.UZERO;
     message.id = object.id !== undefined && object.id !== null ? Long.fromValue(object.id) : Long.UZERO;
+    message.status = object.status ?? 0;
     return message;
   },
 };

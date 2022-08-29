@@ -92,11 +92,13 @@ export interface CreatePendingTransfersRequest {
 }
 export interface CreatePendingTransfersResponse {
 }
+/** @deprecated */
 export interface CreateTransferOwnershipRequest {
     sender: Uint8Array;
     chain: string;
     keyId: string;
 }
+/** @deprecated */
 export interface CreateTransferOwnershipResponse {
 }
 export interface CreateTransferOperatorshipRequest {

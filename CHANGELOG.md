@@ -8,13 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
-## [0.2.0] - 2021-07-29
+## [0.24.0] - 2022-08-29
 
 ### Added
 
-- wasmd 0.18 types (cosmwasm/wasm/v1/*)
-
-[unreleased]:
-  https://github.com/olivierlacan/keep-a-changelog/compare/v0.2.0...HEAD
-[0.2.0]:
-  https://github.com/olivierlacan/keep-a-changelog/compare/v0.1.0...v0.2.0
+- axelar-core v0.24.0

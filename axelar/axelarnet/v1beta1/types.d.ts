@@ -11,7 +11,17 @@ export interface IBCTransfer {
     /** @deprecated */
     sequence: Long;
     id: Long;
+    status: IBCTransfer_Status;
 }
+export declare enum IBCTransfer_Status {
+    STATUS_UNSPECIFIED = 0,
+    STATUS_PENDING = 1,
+    STATUS_COMPLETED = 2,
+    STATUS_FAILED = 3,
+    UNRECOGNIZED = -1
+}
+export declare function iBCTransfer_StatusFromJSON(object: any): IBCTransfer_Status;
+export declare function iBCTransfer_StatusToJSON(object: IBCTransfer_Status): string;
 export interface CosmosChain {
     name: string;
     ibcPath: string;
@@ -40,6 +50,7 @@ export declare const IBCTransfer: {
         channelId?: string | undefined;
         sequence?: string | number | Long.Long | undefined;
         id?: string | number | Long.Long | undefined;
+        status?: IBCTransfer_Status | undefined;
     } & {
         sender?: Uint8Array | undefined;
         receiver?: string | undefined;
@@ -168,6 +179,7 @@ export declare const IBCTransfer: {
             toUnsigned: () => Long.Long;
             xor: (other: string | number | Long.Long) => Long.Long;
         } & Record<Exclude<keyof I["id"], keyof Long.Long>, never>) | undefined;
+        status?: IBCTransfer_Status | undefined;
     } & Record<Exclude<keyof I, keyof IBCTransfer>, never>>(object: I): IBCTransfer;
 };
 export declare const CosmosChain: {

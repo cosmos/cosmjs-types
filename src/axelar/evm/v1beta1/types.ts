@@ -198,10 +198,9 @@ export interface Event {
   contractCallWithToken?: EventContractCallWithToken | undefined;
   transfer?: EventTransfer | undefined;
   tokenDeployed?: EventTokenDeployed | undefined;
+  /** @deprecated */
   multisigOwnershipTransferred?: EventMultisigOwnershipTransferred | undefined;
   multisigOperatorshipTransferred?: EventMultisigOperatorshipTransferred | undefined;
-  singlesigOwnershipTransferred?: EventSinglesigOwnershipTransferred | undefined;
-  singlesigOperatorshipTransferred?: EventSinglesigOperatorshipTransferred | undefined;
 }
 
 export enum Event_Status {
@@ -297,17 +296,6 @@ export interface EventMultisigOperatorshipTransferred {
   newWeights: Uint8Array[];
 }
 
-/** @deprecated */
-export interface EventSinglesigOwnershipTransferred {
-  preOwner: Uint8Array;
-  newOwner: Uint8Array;
-}
-
-export interface EventSinglesigOperatorshipTransferred {
-  preOperator: Uint8Array;
-  newOperator: Uint8Array;
-}
-
 /** NetworkInfo describes information about a network */
 export interface NetworkInfo {
   name: string;
@@ -382,7 +370,7 @@ export interface SigMetadata {
   commandBatchId: Uint8Array;
 }
 
-/** TransferKey contains information for a transfer ownership or operatorship */
+/** TransferKey contains information for a transfer operatorship */
 export interface TransferKey {
   txId: Uint8Array;
   nextKeyId: string;
@@ -525,8 +513,6 @@ function createBaseEvent(): Event {
     tokenDeployed: undefined,
     multisigOwnershipTransferred: undefined,
     multisigOperatorshipTransferred: undefined,
-    singlesigOwnershipTransferred: undefined,
-    singlesigOperatorshipTransferred: undefined,
   };
 }
 
@@ -569,18 +555,6 @@ export const Event = {
       EventMultisigOperatorshipTransferred.encode(
         message.multisigOperatorshipTransferred,
         writer.uint32(90).fork(),
-      ).ldelim();
-    }
-    if (message.singlesigOwnershipTransferred !== undefined) {
-      EventSinglesigOwnershipTransferred.encode(
-        message.singlesigOwnershipTransferred,
-        writer.uint32(98).fork(),
-      ).ldelim();
-    }
-    if (message.singlesigOperatorshipTransferred !== undefined) {
-      EventSinglesigOperatorshipTransferred.encode(
-        message.singlesigOperatorshipTransferred,
-        writer.uint32(106).fork(),
       ).ldelim();
     }
     return writer;
@@ -632,18 +606,6 @@ export const Event = {
             reader.uint32(),
           );
           break;
-        case 12:
-          message.singlesigOwnershipTransferred = EventSinglesigOwnershipTransferred.decode(
-            reader,
-            reader.uint32(),
-          );
-          break;
-        case 13:
-          message.singlesigOperatorshipTransferred = EventSinglesigOperatorshipTransferred.decode(
-            reader,
-            reader.uint32(),
-          );
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -672,12 +634,6 @@ export const Event = {
         : undefined,
       multisigOperatorshipTransferred: isSet(object.multisigOperatorshipTransferred)
         ? EventMultisigOperatorshipTransferred.fromJSON(object.multisigOperatorshipTransferred)
-        : undefined,
-      singlesigOwnershipTransferred: isSet(object.singlesigOwnershipTransferred)
-        ? EventSinglesigOwnershipTransferred.fromJSON(object.singlesigOwnershipTransferred)
-        : undefined,
-      singlesigOperatorshipTransferred: isSet(object.singlesigOperatorshipTransferred)
-        ? EventSinglesigOperatorshipTransferred.fromJSON(object.singlesigOperatorshipTransferred)
         : undefined,
     };
   },
@@ -710,14 +666,6 @@ export const Event = {
     message.multisigOperatorshipTransferred !== undefined &&
       (obj.multisigOperatorshipTransferred = message.multisigOperatorshipTransferred
         ? EventMultisigOperatorshipTransferred.toJSON(message.multisigOperatorshipTransferred)
-        : undefined);
-    message.singlesigOwnershipTransferred !== undefined &&
-      (obj.singlesigOwnershipTransferred = message.singlesigOwnershipTransferred
-        ? EventSinglesigOwnershipTransferred.toJSON(message.singlesigOwnershipTransferred)
-        : undefined);
-    message.singlesigOperatorshipTransferred !== undefined &&
-      (obj.singlesigOperatorshipTransferred = message.singlesigOperatorshipTransferred
-        ? EventSinglesigOperatorshipTransferred.toJSON(message.singlesigOperatorshipTransferred)
         : undefined);
     return obj;
   },
@@ -756,15 +704,6 @@ export const Event = {
     message.multisigOperatorshipTransferred =
       object.multisigOperatorshipTransferred !== undefined && object.multisigOperatorshipTransferred !== null
         ? EventMultisigOperatorshipTransferred.fromPartial(object.multisigOperatorshipTransferred)
-        : undefined;
-    message.singlesigOwnershipTransferred =
-      object.singlesigOwnershipTransferred !== undefined && object.singlesigOwnershipTransferred !== null
-        ? EventSinglesigOwnershipTransferred.fromPartial(object.singlesigOwnershipTransferred)
-        : undefined;
-    message.singlesigOperatorshipTransferred =
-      object.singlesigOperatorshipTransferred !== undefined &&
-      object.singlesigOperatorshipTransferred !== null
-        ? EventSinglesigOperatorshipTransferred.fromPartial(object.singlesigOperatorshipTransferred)
         : undefined;
     return message;
   },
@@ -1354,137 +1293,6 @@ export const EventMultisigOperatorshipTransferred = {
     message.newOperators = object.newOperators?.map((e) => e) || [];
     message.newThreshold = object.newThreshold ?? new Uint8Array();
     message.newWeights = object.newWeights?.map((e) => e) || [];
-    return message;
-  },
-};
-
-function createBaseEventSinglesigOwnershipTransferred(): EventSinglesigOwnershipTransferred {
-  return { preOwner: new Uint8Array(), newOwner: new Uint8Array() };
-}
-
-export const EventSinglesigOwnershipTransferred = {
-  encode(message: EventSinglesigOwnershipTransferred, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.preOwner.length !== 0) {
-      writer.uint32(10).bytes(message.preOwner);
-    }
-    if (message.newOwner.length !== 0) {
-      writer.uint32(18).bytes(message.newOwner);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSinglesigOwnershipTransferred {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEventSinglesigOwnershipTransferred();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.preOwner = reader.bytes();
-          break;
-        case 2:
-          message.newOwner = reader.bytes();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): EventSinglesigOwnershipTransferred {
-    return {
-      preOwner: isSet(object.preOwner) ? bytesFromBase64(object.preOwner) : new Uint8Array(),
-      newOwner: isSet(object.newOwner) ? bytesFromBase64(object.newOwner) : new Uint8Array(),
-    };
-  },
-
-  toJSON(message: EventSinglesigOwnershipTransferred): unknown {
-    const obj: any = {};
-    message.preOwner !== undefined &&
-      (obj.preOwner = base64FromBytes(message.preOwner !== undefined ? message.preOwner : new Uint8Array()));
-    message.newOwner !== undefined &&
-      (obj.newOwner = base64FromBytes(message.newOwner !== undefined ? message.newOwner : new Uint8Array()));
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<EventSinglesigOwnershipTransferred>, I>>(
-    object: I,
-  ): EventSinglesigOwnershipTransferred {
-    const message = createBaseEventSinglesigOwnershipTransferred();
-    message.preOwner = object.preOwner ?? new Uint8Array();
-    message.newOwner = object.newOwner ?? new Uint8Array();
-    return message;
-  },
-};
-
-function createBaseEventSinglesigOperatorshipTransferred(): EventSinglesigOperatorshipTransferred {
-  return { preOperator: new Uint8Array(), newOperator: new Uint8Array() };
-}
-
-export const EventSinglesigOperatorshipTransferred = {
-  encode(
-    message: EventSinglesigOperatorshipTransferred,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
-    if (message.preOperator.length !== 0) {
-      writer.uint32(10).bytes(message.preOperator);
-    }
-    if (message.newOperator.length !== 0) {
-      writer.uint32(18).bytes(message.newOperator);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): EventSinglesigOperatorshipTransferred {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEventSinglesigOperatorshipTransferred();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.preOperator = reader.bytes();
-          break;
-        case 2:
-          message.newOperator = reader.bytes();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): EventSinglesigOperatorshipTransferred {
-    return {
-      preOperator: isSet(object.preOperator) ? bytesFromBase64(object.preOperator) : new Uint8Array(),
-      newOperator: isSet(object.newOperator) ? bytesFromBase64(object.newOperator) : new Uint8Array(),
-    };
-  },
-
-  toJSON(message: EventSinglesigOperatorshipTransferred): unknown {
-    const obj: any = {};
-    message.preOperator !== undefined &&
-      (obj.preOperator = base64FromBytes(
-        message.preOperator !== undefined ? message.preOperator : new Uint8Array(),
-      ));
-    message.newOperator !== undefined &&
-      (obj.newOperator = base64FromBytes(
-        message.newOperator !== undefined ? message.newOperator : new Uint8Array(),
-      ));
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<EventSinglesigOperatorshipTransferred>, I>>(
-    object: I,
-  ): EventSinglesigOperatorshipTransferred {
-    const message = createBaseEventSinglesigOperatorshipTransferred();
-    message.preOperator = object.preOperator ?? new Uint8Array();
-    message.newOperator = object.newOperator ?? new Uint8Array();
     return message;
   },
 };

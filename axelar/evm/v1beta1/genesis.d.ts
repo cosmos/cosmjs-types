@@ -154,14 +154,6 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                     newWeights?: Uint8Array[] | undefined;
                 } | undefined;
-                singlesigOwnershipTransferred?: {
-                    preOwner?: Uint8Array | undefined;
-                    newOwner?: Uint8Array | undefined;
-                } | undefined;
-                singlesigOperatorshipTransferred?: {
-                    preOperator?: Uint8Array | undefined;
-                    newOperator?: Uint8Array | undefined;
-                } | undefined;
             }[] | undefined;
             confirmedEventQueue?: {
                 items?: {
@@ -301,14 +293,6 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                     newWeights?: Uint8Array[] | undefined;
                 } | undefined;
-                singlesigOwnershipTransferred?: {
-                    preOwner?: Uint8Array | undefined;
-                    newOwner?: Uint8Array | undefined;
-                } | undefined;
-                singlesigOperatorshipTransferred?: {
-                    preOperator?: Uint8Array | undefined;
-                    newOperator?: Uint8Array | undefined;
-                } | undefined;
             }[] | undefined;
             confirmedEventQueue?: {
                 items?: {
@@ -445,14 +429,6 @@ export declare const GenesisState: {
                     newOperators?: Uint8Array[] | undefined;
                     newThreshold?: Uint8Array | undefined;
                     newWeights?: Uint8Array[] | undefined;
-                } | undefined;
-                singlesigOwnershipTransferred?: {
-                    preOwner?: Uint8Array | undefined;
-                    newOwner?: Uint8Array | undefined;
-                } | undefined;
-                singlesigOperatorshipTransferred?: {
-                    preOperator?: Uint8Array | undefined;
-                    newOperator?: Uint8Array | undefined;
                 } | undefined;
             }[] | undefined;
             confirmedEventQueue?: {
@@ -1182,14 +1158,6 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                     newWeights?: Uint8Array[] | undefined;
                 } | undefined;
-                singlesigOwnershipTransferred?: {
-                    preOwner?: Uint8Array | undefined;
-                    newOwner?: Uint8Array | undefined;
-                } | undefined;
-                singlesigOperatorshipTransferred?: {
-                    preOperator?: Uint8Array | undefined;
-                    newOperator?: Uint8Array | undefined;
-                } | undefined;
             }[] & ({
                 chain?: string | undefined;
                 txId?: Uint8Array | undefined;
@@ -1234,14 +1202,6 @@ export declare const GenesisState: {
                     newOperators?: Uint8Array[] | undefined;
                     newThreshold?: Uint8Array | undefined;
                     newWeights?: Uint8Array[] | undefined;
-                } | undefined;
-                singlesigOwnershipTransferred?: {
-                    preOwner?: Uint8Array | undefined;
-                    newOwner?: Uint8Array | undefined;
-                } | undefined;
-                singlesigOperatorshipTransferred?: {
-                    preOperator?: Uint8Array | undefined;
-                    newOperator?: Uint8Array | undefined;
                 } | undefined;
             } & {
                 chain?: string | undefined;
@@ -1378,20 +1338,6 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                     newWeights?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["chains"][number]["events"][number]["multisigOperatorshipTransferred"]["newWeights"], keyof Uint8Array[]>, never>) | undefined;
                 } & Record<Exclude<keyof I["chains"][number]["events"][number]["multisigOperatorshipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventMultisigOperatorshipTransferred>, never>) | undefined;
-                singlesigOwnershipTransferred?: ({
-                    preOwner?: Uint8Array | undefined;
-                    newOwner?: Uint8Array | undefined;
-                } & {
-                    preOwner?: Uint8Array | undefined;
-                    newOwner?: Uint8Array | undefined;
-                } & Record<Exclude<keyof I["chains"][number]["events"][number]["singlesigOwnershipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventSinglesigOwnershipTransferred>, never>) | undefined;
-                singlesigOperatorshipTransferred?: ({
-                    preOperator?: Uint8Array | undefined;
-                    newOperator?: Uint8Array | undefined;
-                } & {
-                    preOperator?: Uint8Array | undefined;
-                    newOperator?: Uint8Array | undefined;
-                } & Record<Exclude<keyof I["chains"][number]["events"][number]["singlesigOperatorshipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventSinglesigOperatorshipTransferred>, never>) | undefined;
             } & Record<Exclude<keyof I["chains"][number]["events"][number], keyof Event>, never>)[] & Record<Exclude<keyof I["chains"][number]["events"], keyof {
                 chain?: string | undefined;
                 txId?: Uint8Array | undefined;
@@ -1436,14 +1382,6 @@ export declare const GenesisState: {
                     newOperators?: Uint8Array[] | undefined;
                     newThreshold?: Uint8Array | undefined;
                     newWeights?: Uint8Array[] | undefined;
-                } | undefined;
-                singlesigOwnershipTransferred?: {
-                    preOwner?: Uint8Array | undefined;
-                    newOwner?: Uint8Array | undefined;
-                } | undefined;
-                singlesigOperatorshipTransferred?: {
-                    preOperator?: Uint8Array | undefined;
-                    newOperator?: Uint8Array | undefined;
                 } | undefined;
             }[]>, never>) | undefined;
             confirmedEventQueue?: ({
@@ -1597,14 +1535,6 @@ export declare const GenesisState: {
                     newThreshold?: Uint8Array | undefined;
                     newWeights?: Uint8Array[] | undefined;
                 } | undefined;
-                singlesigOwnershipTransferred?: {
-                    preOwner?: Uint8Array | undefined;
-                    newOwner?: Uint8Array | undefined;
-                } | undefined;
-                singlesigOperatorshipTransferred?: {
-                    preOperator?: Uint8Array | undefined;
-                    newOperator?: Uint8Array | undefined;
-                } | undefined;
             }[] | undefined;
             confirmedEventQueue?: {
                 items?: {
@@ -1749,14 +1679,6 @@ export declare const GenesisState_Chain: {
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: Uint8Array[] | undefined;
-            } | undefined;
-            singlesigOwnershipTransferred?: {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } | undefined;
-            singlesigOperatorshipTransferred?: {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
             } | undefined;
         }[] | undefined;
         confirmedEventQueue?: {
@@ -2486,14 +2408,6 @@ export declare const GenesisState_Chain: {
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: Uint8Array[] | undefined;
             } | undefined;
-            singlesigOwnershipTransferred?: {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } | undefined;
-            singlesigOperatorshipTransferred?: {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
-            } | undefined;
         }[] & ({
             chain?: string | undefined;
             txId?: Uint8Array | undefined;
@@ -2538,14 +2452,6 @@ export declare const GenesisState_Chain: {
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: Uint8Array[] | undefined;
-            } | undefined;
-            singlesigOwnershipTransferred?: {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } | undefined;
-            singlesigOperatorshipTransferred?: {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
             } | undefined;
         } & {
             chain?: string | undefined;
@@ -2682,20 +2588,6 @@ export declare const GenesisState_Chain: {
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["events"][number]["multisigOperatorshipTransferred"]["newWeights"], keyof Uint8Array[]>, never>) | undefined;
             } & Record<Exclude<keyof I["events"][number]["multisigOperatorshipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventMultisigOperatorshipTransferred>, never>) | undefined;
-            singlesigOwnershipTransferred?: ({
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } & {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } & Record<Exclude<keyof I["events"][number]["singlesigOwnershipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventSinglesigOwnershipTransferred>, never>) | undefined;
-            singlesigOperatorshipTransferred?: ({
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
-            } & {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
-            } & Record<Exclude<keyof I["events"][number]["singlesigOperatorshipTransferred"], keyof import("../../../axelar/evm/v1beta1/types").EventSinglesigOperatorshipTransferred>, never>) | undefined;
         } & Record<Exclude<keyof I["events"][number], keyof Event>, never>)[] & Record<Exclude<keyof I["events"], keyof {
             chain?: string | undefined;
             txId?: Uint8Array | undefined;
@@ -2740,14 +2632,6 @@ export declare const GenesisState_Chain: {
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: Uint8Array[] | undefined;
-            } | undefined;
-            singlesigOwnershipTransferred?: {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } | undefined;
-            singlesigOperatorshipTransferred?: {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
             } | undefined;
         }[]>, never>) | undefined;
         confirmedEventQueue?: ({

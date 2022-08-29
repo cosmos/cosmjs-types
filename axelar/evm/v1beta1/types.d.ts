@@ -55,10 +55,9 @@ export interface Event {
     contractCallWithToken?: EventContractCallWithToken | undefined;
     transfer?: EventTransfer | undefined;
     tokenDeployed?: EventTokenDeployed | undefined;
+    /** @deprecated */
     multisigOwnershipTransferred?: EventMultisigOwnershipTransferred | undefined;
     multisigOperatorshipTransferred?: EventMultisigOperatorshipTransferred | undefined;
-    singlesigOwnershipTransferred?: EventSinglesigOwnershipTransferred | undefined;
-    singlesigOperatorshipTransferred?: EventSinglesigOperatorshipTransferred | undefined;
 }
 export declare enum Event_Status {
     STATUS_UNSPECIFIED = 0,
@@ -109,15 +108,6 @@ export interface EventMultisigOperatorshipTransferred {
     newOperators: Uint8Array[];
     newThreshold: Uint8Array;
     newWeights: Uint8Array[];
-}
-/** @deprecated */
-export interface EventSinglesigOwnershipTransferred {
-    preOwner: Uint8Array;
-    newOwner: Uint8Array;
-}
-export interface EventSinglesigOperatorshipTransferred {
-    preOperator: Uint8Array;
-    newOperator: Uint8Array;
 }
 /** NetworkInfo describes information about a network */
 export interface NetworkInfo {
@@ -185,7 +175,7 @@ export interface SigMetadata {
     chain: string;
     commandBatchId: Uint8Array;
 }
-/** TransferKey contains information for a transfer ownership or operatorship */
+/** TransferKey contains information for a transfer operatorship */
 export interface TransferKey {
     txId: Uint8Array;
     nextKeyId: string;
@@ -269,14 +259,6 @@ export declare const VoteEvents: {
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: Uint8Array[] | undefined;
             } | undefined;
-            singlesigOwnershipTransferred?: {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } | undefined;
-            singlesigOperatorshipTransferred?: {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
-            } | undefined;
         }[] | undefined;
     } & {
         chain?: string | undefined;
@@ -325,14 +307,6 @@ export declare const VoteEvents: {
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: Uint8Array[] | undefined;
             } | undefined;
-            singlesigOwnershipTransferred?: {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } | undefined;
-            singlesigOperatorshipTransferred?: {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
-            } | undefined;
         }[] & ({
             chain?: string | undefined;
             txId?: Uint8Array | undefined;
@@ -377,14 +351,6 @@ export declare const VoteEvents: {
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: Uint8Array[] | undefined;
-            } | undefined;
-            singlesigOwnershipTransferred?: {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } | undefined;
-            singlesigOperatorshipTransferred?: {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
             } | undefined;
         } & {
             chain?: string | undefined;
@@ -521,20 +487,6 @@ export declare const VoteEvents: {
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["events"][number]["multisigOperatorshipTransferred"]["newWeights"], keyof Uint8Array[]>, never>) | undefined;
             } & Record<Exclude<keyof I["events"][number]["multisigOperatorshipTransferred"], keyof EventMultisigOperatorshipTransferred>, never>) | undefined;
-            singlesigOwnershipTransferred?: ({
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } & {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } & Record<Exclude<keyof I["events"][number]["singlesigOwnershipTransferred"], keyof EventSinglesigOwnershipTransferred>, never>) | undefined;
-            singlesigOperatorshipTransferred?: ({
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
-            } & {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
-            } & Record<Exclude<keyof I["events"][number]["singlesigOperatorshipTransferred"], keyof EventSinglesigOperatorshipTransferred>, never>) | undefined;
         } & Record<Exclude<keyof I["events"][number], keyof Event>, never>)[] & Record<Exclude<keyof I["events"], keyof {
             chain?: string | undefined;
             txId?: Uint8Array | undefined;
@@ -579,14 +531,6 @@ export declare const VoteEvents: {
                 newOperators?: Uint8Array[] | undefined;
                 newThreshold?: Uint8Array | undefined;
                 newWeights?: Uint8Array[] | undefined;
-            } | undefined;
-            singlesigOwnershipTransferred?: {
-                preOwner?: Uint8Array | undefined;
-                newOwner?: Uint8Array | undefined;
-            } | undefined;
-            singlesigOperatorshipTransferred?: {
-                preOperator?: Uint8Array | undefined;
-                newOperator?: Uint8Array | undefined;
             } | undefined;
         }[]>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof VoteEvents>, never>>(object: I): VoteEvents;
@@ -640,14 +584,6 @@ export declare const Event: {
             newOperators?: Uint8Array[] | undefined;
             newThreshold?: Uint8Array | undefined;
             newWeights?: Uint8Array[] | undefined;
-        } | undefined;
-        singlesigOwnershipTransferred?: {
-            preOwner?: Uint8Array | undefined;
-            newOwner?: Uint8Array | undefined;
-        } | undefined;
-        singlesigOperatorshipTransferred?: {
-            preOperator?: Uint8Array | undefined;
-            newOperator?: Uint8Array | undefined;
         } | undefined;
     } & {
         chain?: string | undefined;
@@ -784,20 +720,6 @@ export declare const Event: {
             newThreshold?: Uint8Array | undefined;
             newWeights?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["multisigOperatorshipTransferred"]["newWeights"], keyof Uint8Array[]>, never>) | undefined;
         } & Record<Exclude<keyof I["multisigOperatorshipTransferred"], keyof EventMultisigOperatorshipTransferred>, never>) | undefined;
-        singlesigOwnershipTransferred?: ({
-            preOwner?: Uint8Array | undefined;
-            newOwner?: Uint8Array | undefined;
-        } & {
-            preOwner?: Uint8Array | undefined;
-            newOwner?: Uint8Array | undefined;
-        } & Record<Exclude<keyof I["singlesigOwnershipTransferred"], keyof EventSinglesigOwnershipTransferred>, never>) | undefined;
-        singlesigOperatorshipTransferred?: ({
-            preOperator?: Uint8Array | undefined;
-            newOperator?: Uint8Array | undefined;
-        } & {
-            preOperator?: Uint8Array | undefined;
-            newOperator?: Uint8Array | undefined;
-        } & Record<Exclude<keyof I["singlesigOperatorshipTransferred"], keyof EventSinglesigOperatorshipTransferred>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof Event>, never>>(object: I): Event;
 };
 export declare const EventTokenSent: {
@@ -914,32 +836,6 @@ export declare const EventMultisigOperatorshipTransferred: {
         newThreshold?: Uint8Array | undefined;
         newWeights?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["newWeights"], keyof Uint8Array[]>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof EventMultisigOperatorshipTransferred>, never>>(object: I): EventMultisigOperatorshipTransferred;
-};
-export declare const EventSinglesigOwnershipTransferred: {
-    encode(message: EventSinglesigOwnershipTransferred, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): EventSinglesigOwnershipTransferred;
-    fromJSON(object: any): EventSinglesigOwnershipTransferred;
-    toJSON(message: EventSinglesigOwnershipTransferred): unknown;
-    fromPartial<I extends {
-        preOwner?: Uint8Array | undefined;
-        newOwner?: Uint8Array | undefined;
-    } & {
-        preOwner?: Uint8Array | undefined;
-        newOwner?: Uint8Array | undefined;
-    } & Record<Exclude<keyof I, keyof EventSinglesigOwnershipTransferred>, never>>(object: I): EventSinglesigOwnershipTransferred;
-};
-export declare const EventSinglesigOperatorshipTransferred: {
-    encode(message: EventSinglesigOperatorshipTransferred, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): EventSinglesigOperatorshipTransferred;
-    fromJSON(object: any): EventSinglesigOperatorshipTransferred;
-    toJSON(message: EventSinglesigOperatorshipTransferred): unknown;
-    fromPartial<I extends {
-        preOperator?: Uint8Array | undefined;
-        newOperator?: Uint8Array | undefined;
-    } & {
-        preOperator?: Uint8Array | undefined;
-        newOperator?: Uint8Array | undefined;
-    } & Record<Exclude<keyof I, keyof EventSinglesigOperatorshipTransferred>, never>>(object: I): EventSinglesigOperatorshipTransferred;
 };
 export declare const NetworkInfo: {
     encode(message: NetworkInfo, writer?: _m0.Writer): _m0.Writer;

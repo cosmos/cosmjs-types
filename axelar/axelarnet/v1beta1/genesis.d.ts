@@ -49,6 +49,7 @@ export declare const GenesisState: {
             channelId?: string | undefined;
             sequence?: string | number | Long.Long | undefined;
             id?: string | number | Long.Long | undefined;
+            status?: import("../../../axelar/axelarnet/v1beta1/types").IBCTransfer_Status | undefined;
         }[] | undefined;
     } & {
         params?: ({
@@ -190,6 +191,7 @@ export declare const GenesisState: {
             channelId?: string | undefined;
             sequence?: string | number | Long.Long | undefined;
             id?: string | number | Long.Long | undefined;
+            status?: import("../../../axelar/axelarnet/v1beta1/types").IBCTransfer_Status | undefined;
         }[] & ({
             sender?: Uint8Array | undefined;
             receiver?: string | undefined;
@@ -201,6 +203,7 @@ export declare const GenesisState: {
             channelId?: string | undefined;
             sequence?: string | number | Long.Long | undefined;
             id?: string | number | Long.Long | undefined;
+            status?: import("../../../axelar/axelarnet/v1beta1/types").IBCTransfer_Status | undefined;
         } & {
             sender?: Uint8Array | undefined;
             receiver?: string | undefined;
@@ -329,6 +332,7 @@ export declare const GenesisState: {
                 toUnsigned: () => Long.Long;
                 xor: (other: string | number | Long.Long) => Long.Long;
             } & Record<Exclude<keyof I["failedTransfers"][number]["id"], keyof Long.Long>, never>) | undefined;
+            status?: import("../../../axelar/axelarnet/v1beta1/types").IBCTransfer_Status | undefined;
         } & Record<Exclude<keyof I["failedTransfers"][number], keyof IBCTransfer>, never>)[] & Record<Exclude<keyof I["failedTransfers"], keyof {
             sender?: Uint8Array | undefined;
             receiver?: string | undefined;
@@ -340,6 +344,7 @@ export declare const GenesisState: {
             channelId?: string | undefined;
             sequence?: string | number | Long.Long | undefined;
             id?: string | number | Long.Long | undefined;
+            status?: import("../../../axelar/axelarnet/v1beta1/types").IBCTransfer_Status | undefined;
         }[]>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof GenesisState>, never>>(object: I): GenesisState;
 };
