@@ -12,6 +12,14 @@ export declare enum TransferState {
 }
 export declare function transferStateFromJSON(object: any): TransferState;
 export declare function transferStateToJSON(object: TransferState): string;
+export declare enum TransferDirection {
+    TRANSFER_DIRECTION_UNSPECIFIED = 0,
+    TRANSFER_DIRECTION_INCOMING = 1,
+    TRANSFER_DIRECTION_OUTGOING = 2,
+    UNRECOGNIZED = -1
+}
+export declare function transferDirectionFromJSON(object: any): TransferDirection;
+export declare function transferDirectionToJSON(object: TransferDirection): string;
 /** Chain represents the properties of a registered blockchain */
 export interface Chain {
     name: string;

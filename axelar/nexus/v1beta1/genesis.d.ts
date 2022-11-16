@@ -2,7 +2,7 @@ import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { Params } from "../../../axelar/nexus/v1beta1/params";
 import { TransferFee, Chain, CrossChainTransfer, FeeInfo } from "../../../axelar/nexus/exported/v1beta1/types";
-import { ChainState, LinkedAddresses } from "../../../axelar/nexus/v1beta1/types";
+import { ChainState, LinkedAddresses, RateLimit, TransferEpoch } from "../../../axelar/nexus/v1beta1/types";
 export declare const protobufPackage = "axelar.nexus.v1beta1";
 /** GenesisState represents the genesis state */
 export interface GenesisState {
@@ -14,6 +14,8 @@ export interface GenesisState {
     transfers: CrossChainTransfer[];
     fee?: TransferFee;
     feeInfos: FeeInfo[];
+    rateLimits: RateLimit[];
+    transferEpochs: TransferEpoch[];
 }
 export declare const GenesisState: {
     encode(message: GenesisState, writer?: _m0.Writer): _m0.Writer;
@@ -50,7 +52,6 @@ export declare const GenesisState: {
                 keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
                 module?: string | undefined;
             } | undefined;
-            maintainers?: Uint8Array[] | undefined;
             activated?: boolean | undefined;
             assets?: {
                 denom?: string | undefined;
@@ -72,6 +73,7 @@ export declare const GenesisState: {
                         maxSize?: number | undefined;
                     } | undefined;
                 } | undefined;
+                chain?: string | undefined;
             }[] | undefined;
         }[] | undefined;
         linkedAddresses?: {
@@ -123,6 +125,26 @@ export declare const GenesisState: {
             feeRate?: Uint8Array | undefined;
             minFee?: Uint8Array | undefined;
             maxFee?: Uint8Array | undefined;
+        }[] | undefined;
+        rateLimits?: {
+            chain?: string | undefined;
+            limit?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            window?: {
+                seconds?: string | number | Long.Long | undefined;
+                nanos?: number | undefined;
+            } | undefined;
+        }[] | undefined;
+        transferEpochs?: {
+            chain?: string | undefined;
+            amount?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            epoch?: string | number | Long.Long | undefined;
+            direction?: import("../../../axelar/nexus/exported/v1beta1/types").TransferDirection | undefined;
         }[] | undefined;
     } & {
         params?: ({
@@ -591,7 +613,6 @@ export declare const GenesisState: {
                 keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
                 module?: string | undefined;
             } | undefined;
-            maintainers?: Uint8Array[] | undefined;
             activated?: boolean | undefined;
             assets?: {
                 denom?: string | undefined;
@@ -613,6 +634,7 @@ export declare const GenesisState: {
                         maxSize?: number | undefined;
                     } | undefined;
                 } | undefined;
+                chain?: string | undefined;
             }[] | undefined;
         }[] & ({
             chain?: {
@@ -621,7 +643,6 @@ export declare const GenesisState: {
                 keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
                 module?: string | undefined;
             } | undefined;
-            maintainers?: Uint8Array[] | undefined;
             activated?: boolean | undefined;
             assets?: {
                 denom?: string | undefined;
@@ -643,6 +664,7 @@ export declare const GenesisState: {
                         maxSize?: number | undefined;
                     } | undefined;
                 } | undefined;
+                chain?: string | undefined;
             }[] | undefined;
         } & {
             chain?: ({
@@ -656,7 +678,6 @@ export declare const GenesisState: {
                 keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
                 module?: string | undefined;
             } & Record<Exclude<keyof I["chainStates"][number]["chain"], keyof Chain>, never>) | undefined;
-            maintainers?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["chainStates"][number]["maintainers"], keyof Uint8Array[]>, never>) | undefined;
             activated?: boolean | undefined;
             assets?: ({
                 denom?: string | undefined;
@@ -687,6 +708,7 @@ export declare const GenesisState: {
                         maxSize?: number | undefined;
                     } | undefined;
                 } | undefined;
+                chain?: string | undefined;
             }[] & ({
                 address?: Uint8Array | undefined;
                 missingVotes?: {
@@ -703,6 +725,7 @@ export declare const GenesisState: {
                         maxSize?: number | undefined;
                     } | undefined;
                 } | undefined;
+                chain?: string | undefined;
             } & {
                 address?: Uint8Array | undefined;
                 missingVotes?: ({
@@ -853,6 +876,7 @@ export declare const GenesisState: {
                         maxSize?: number | undefined;
                     } & Record<Exclude<keyof I["chainStates"][number]["maintainerStates"][number]["incorrectVotes"]["trueCountCache"], keyof import("../../utils/v1beta1/bitmap").CircularBuffer>, never>) | undefined;
                 } & Record<Exclude<keyof I["chainStates"][number]["maintainerStates"][number]["incorrectVotes"], "trueCountCache">, never>) | undefined;
+                chain?: string | undefined;
             } & Record<Exclude<keyof I["chainStates"][number]["maintainerStates"][number], keyof import("../../../axelar/nexus/v1beta1/types").MaintainerState>, never>)[] & Record<Exclude<keyof I["chainStates"][number]["maintainerStates"], keyof {
                 address?: Uint8Array | undefined;
                 missingVotes?: {
@@ -869,6 +893,7 @@ export declare const GenesisState: {
                         maxSize?: number | undefined;
                     } | undefined;
                 } | undefined;
+                chain?: string | undefined;
             }[]>, never>) | undefined;
         } & Record<Exclude<keyof I["chainStates"][number], keyof ChainState>, never>)[] & Record<Exclude<keyof I["chainStates"], keyof {
             chain?: {
@@ -877,7 +902,6 @@ export declare const GenesisState: {
                 keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
                 module?: string | undefined;
             } | undefined;
-            maintainers?: Uint8Array[] | undefined;
             activated?: boolean | undefined;
             assets?: {
                 denom?: string | undefined;
@@ -899,6 +923,7 @@ export declare const GenesisState: {
                         maxSize?: number | undefined;
                     } | undefined;
                 } | undefined;
+                chain?: string | undefined;
             }[] | undefined;
         }[]>, never>) | undefined;
         linkedAddresses?: ({
@@ -1186,6 +1211,203 @@ export declare const GenesisState: {
             feeRate?: Uint8Array | undefined;
             minFee?: Uint8Array | undefined;
             maxFee?: Uint8Array | undefined;
+        }[]>, never>) | undefined;
+        rateLimits?: ({
+            chain?: string | undefined;
+            limit?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            window?: {
+                seconds?: string | number | Long.Long | undefined;
+                nanos?: number | undefined;
+            } | undefined;
+        }[] & ({
+            chain?: string | undefined;
+            limit?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            window?: {
+                seconds?: string | number | Long.Long | undefined;
+                nanos?: number | undefined;
+            } | undefined;
+        } & {
+            chain?: string | undefined;
+            limit?: ({
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } & {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } & Record<Exclude<keyof I["rateLimits"][number]["limit"], keyof import("../../../cosmos/base/v1beta1/coin").Coin>, never>) | undefined;
+            window?: ({
+                seconds?: string | number | Long.Long | undefined;
+                nanos?: number | undefined;
+            } & {
+                seconds?: string | number | (Long.Long & {
+                    high: number;
+                    low: number;
+                    unsigned: boolean;
+                    add: (addend: string | number | Long.Long) => Long.Long;
+                    and: (other: string | number | Long.Long) => Long.Long;
+                    compare: (other: string | number | Long.Long) => number;
+                    comp: (other: string | number | Long.Long) => number;
+                    divide: (divisor: string | number | Long.Long) => Long.Long;
+                    div: (divisor: string | number | Long.Long) => Long.Long;
+                    equals: (other: string | number | Long.Long) => boolean;
+                    eq: (other: string | number | Long.Long) => boolean;
+                    getHighBits: () => number;
+                    getHighBitsUnsigned: () => number;
+                    getLowBits: () => number;
+                    getLowBitsUnsigned: () => number;
+                    getNumBitsAbs: () => number;
+                    greaterThan: (other: string | number | Long.Long) => boolean;
+                    gt: (other: string | number | Long.Long) => boolean;
+                    greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    gte: (other: string | number | Long.Long) => boolean;
+                    isEven: () => boolean;
+                    isNegative: () => boolean;
+                    isOdd: () => boolean;
+                    isPositive: () => boolean;
+                    isZero: () => boolean;
+                    lessThan: (other: string | number | Long.Long) => boolean;
+                    lt: (other: string | number | Long.Long) => boolean;
+                    lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    lte: (other: string | number | Long.Long) => boolean;
+                    modulo: (other: string | number | Long.Long) => Long.Long;
+                    mod: (other: string | number | Long.Long) => Long.Long;
+                    multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                    mul: (multiplier: string | number | Long.Long) => Long.Long;
+                    negate: () => Long.Long;
+                    neg: () => Long.Long;
+                    not: () => Long.Long;
+                    notEquals: (other: string | number | Long.Long) => boolean;
+                    neq: (other: string | number | Long.Long) => boolean;
+                    or: (other: string | number | Long.Long) => Long.Long;
+                    shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                    shl: (numBits: number | Long.Long) => Long.Long;
+                    shiftRight: (numBits: number | Long.Long) => Long.Long;
+                    shr: (numBits: number | Long.Long) => Long.Long;
+                    shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                    shru: (numBits: number | Long.Long) => Long.Long;
+                    subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                    sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                    toInt: () => number;
+                    toNumber: () => number;
+                    toBytes: (le?: boolean | undefined) => number[];
+                    toBytesLE: () => number[];
+                    toBytesBE: () => number[];
+                    toSigned: () => Long.Long;
+                    toString: (radix?: number | undefined) => string;
+                    toUnsigned: () => Long.Long;
+                    xor: (other: string | number | Long.Long) => Long.Long;
+                } & Record<Exclude<keyof I["rateLimits"][number]["window"]["seconds"], keyof Long.Long>, never>) | undefined;
+                nanos?: number | undefined;
+            } & Record<Exclude<keyof I["rateLimits"][number]["window"], keyof import("../../../google/protobuf/duration").Duration>, never>) | undefined;
+        } & Record<Exclude<keyof I["rateLimits"][number], keyof RateLimit>, never>)[] & Record<Exclude<keyof I["rateLimits"], keyof {
+            chain?: string | undefined;
+            limit?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            window?: {
+                seconds?: string | number | Long.Long | undefined;
+                nanos?: number | undefined;
+            } | undefined;
+        }[]>, never>) | undefined;
+        transferEpochs?: ({
+            chain?: string | undefined;
+            amount?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            epoch?: string | number | Long.Long | undefined;
+            direction?: import("../../../axelar/nexus/exported/v1beta1/types").TransferDirection | undefined;
+        }[] & ({
+            chain?: string | undefined;
+            amount?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            epoch?: string | number | Long.Long | undefined;
+            direction?: import("../../../axelar/nexus/exported/v1beta1/types").TransferDirection | undefined;
+        } & {
+            chain?: string | undefined;
+            amount?: ({
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } & {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } & Record<Exclude<keyof I["transferEpochs"][number]["amount"], keyof import("../../../cosmos/base/v1beta1/coin").Coin>, never>) | undefined;
+            epoch?: string | number | (Long.Long & {
+                high: number;
+                low: number;
+                unsigned: boolean;
+                add: (addend: string | number | Long.Long) => Long.Long;
+                and: (other: string | number | Long.Long) => Long.Long;
+                compare: (other: string | number | Long.Long) => number;
+                comp: (other: string | number | Long.Long) => number;
+                divide: (divisor: string | number | Long.Long) => Long.Long;
+                div: (divisor: string | number | Long.Long) => Long.Long;
+                equals: (other: string | number | Long.Long) => boolean;
+                eq: (other: string | number | Long.Long) => boolean;
+                getHighBits: () => number;
+                getHighBitsUnsigned: () => number;
+                getLowBits: () => number;
+                getLowBitsUnsigned: () => number;
+                getNumBitsAbs: () => number;
+                greaterThan: (other: string | number | Long.Long) => boolean;
+                gt: (other: string | number | Long.Long) => boolean;
+                greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                gte: (other: string | number | Long.Long) => boolean;
+                isEven: () => boolean;
+                isNegative: () => boolean;
+                isOdd: () => boolean;
+                isPositive: () => boolean;
+                isZero: () => boolean;
+                lessThan: (other: string | number | Long.Long) => boolean;
+                lt: (other: string | number | Long.Long) => boolean;
+                lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                lte: (other: string | number | Long.Long) => boolean;
+                modulo: (other: string | number | Long.Long) => Long.Long;
+                mod: (other: string | number | Long.Long) => Long.Long;
+                multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                mul: (multiplier: string | number | Long.Long) => Long.Long;
+                negate: () => Long.Long;
+                neg: () => Long.Long;
+                not: () => Long.Long;
+                notEquals: (other: string | number | Long.Long) => boolean;
+                neq: (other: string | number | Long.Long) => boolean;
+                or: (other: string | number | Long.Long) => Long.Long;
+                shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                shl: (numBits: number | Long.Long) => Long.Long;
+                shiftRight: (numBits: number | Long.Long) => Long.Long;
+                shr: (numBits: number | Long.Long) => Long.Long;
+                shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                shru: (numBits: number | Long.Long) => Long.Long;
+                subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                toInt: () => number;
+                toNumber: () => number;
+                toBytes: (le?: boolean | undefined) => number[];
+                toBytesLE: () => number[];
+                toBytesBE: () => number[];
+                toSigned: () => Long.Long;
+                toString: (radix?: number | undefined) => string;
+                toUnsigned: () => Long.Long;
+                xor: (other: string | number | Long.Long) => Long.Long;
+            } & Record<Exclude<keyof I["transferEpochs"][number]["epoch"], keyof Long.Long>, never>) | undefined;
+            direction?: import("../../../axelar/nexus/exported/v1beta1/types").TransferDirection | undefined;
+        } & Record<Exclude<keyof I["transferEpochs"][number], keyof TransferEpoch>, never>)[] & Record<Exclude<keyof I["transferEpochs"], keyof {
+            chain?: string | undefined;
+            amount?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            epoch?: string | number | Long.Long | undefined;
+            direction?: import("../../../axelar/nexus/exported/v1beta1/types").TransferDirection | undefined;
         }[]>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof GenesisState>, never>>(object: I): GenesisState;
 };

@@ -46,6 +46,7 @@ export declare const GenesisState: {
                 commandsGasLimit?: number | undefined;
                 votingGracePeriod?: string | number | Long.Long | undefined;
                 endBlockerLimit?: string | number | Long.Long | undefined;
+                transferLimit?: string | number | Long.Long | undefined;
             } | undefined;
             burnerInfos?: {
                 burnerAddress?: Uint8Array | undefined;
@@ -69,6 +70,7 @@ export declare const GenesisState: {
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             }[] | undefined;
             burnedDeposits?: {
                 txId?: Uint8Array | undefined;
@@ -76,6 +78,7 @@ export declare const GenesisState: {
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             }[] | undefined;
             commandBatches?: {
                 id?: Uint8Array | undefined;
@@ -92,7 +95,6 @@ export declare const GenesisState: {
             }[] | undefined;
             gateway?: {
                 address?: Uint8Array | undefined;
-                status?: import("../../../axelar/evm/v1beta1/types").Gateway_Status | undefined;
             } | undefined;
             tokens?: {
                 asset?: string | undefined;
@@ -185,6 +187,7 @@ export declare const GenesisState: {
                 commandsGasLimit?: number | undefined;
                 votingGracePeriod?: string | number | Long.Long | undefined;
                 endBlockerLimit?: string | number | Long.Long | undefined;
+                transferLimit?: string | number | Long.Long | undefined;
             } | undefined;
             burnerInfos?: {
                 burnerAddress?: Uint8Array | undefined;
@@ -208,6 +211,7 @@ export declare const GenesisState: {
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             }[] | undefined;
             burnedDeposits?: {
                 txId?: Uint8Array | undefined;
@@ -215,6 +219,7 @@ export declare const GenesisState: {
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             }[] | undefined;
             commandBatches?: {
                 id?: Uint8Array | undefined;
@@ -231,7 +236,6 @@ export declare const GenesisState: {
             }[] | undefined;
             gateway?: {
                 address?: Uint8Array | undefined;
-                status?: import("../../../axelar/evm/v1beta1/types").Gateway_Status | undefined;
             } | undefined;
             tokens?: {
                 asset?: string | undefined;
@@ -322,6 +326,7 @@ export declare const GenesisState: {
                 commandsGasLimit?: number | undefined;
                 votingGracePeriod?: string | number | Long.Long | undefined;
                 endBlockerLimit?: string | number | Long.Long | undefined;
+                transferLimit?: string | number | Long.Long | undefined;
             } | undefined;
             burnerInfos?: {
                 burnerAddress?: Uint8Array | undefined;
@@ -345,6 +350,7 @@ export declare const GenesisState: {
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             }[] | undefined;
             burnedDeposits?: {
                 txId?: Uint8Array | undefined;
@@ -352,6 +358,7 @@ export declare const GenesisState: {
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             }[] | undefined;
             commandBatches?: {
                 id?: Uint8Array | undefined;
@@ -368,7 +375,6 @@ export declare const GenesisState: {
             }[] | undefined;
             gateway?: {
                 address?: Uint8Array | undefined;
-                status?: import("../../../axelar/evm/v1beta1/types").Gateway_Status | undefined;
             } | undefined;
             tokens?: {
                 asset?: string | undefined;
@@ -459,6 +465,7 @@ export declare const GenesisState: {
                 commandsGasLimit?: number | undefined;
                 votingGracePeriod?: string | number | Long.Long | undefined;
                 endBlockerLimit?: string | number | Long.Long | undefined;
+                transferLimit?: string | number | Long.Long | undefined;
             } & {
                 chain?: string | undefined;
                 confirmationHeight?: string | number | (Long.Long & {
@@ -889,6 +896,64 @@ export declare const GenesisState: {
                     toUnsigned: () => Long.Long;
                     xor: (other: string | number | Long.Long) => Long.Long;
                 } & Record<Exclude<keyof I["chains"][number]["params"]["endBlockerLimit"], keyof Long.Long>, never>) | undefined;
+                transferLimit?: string | number | (Long.Long & {
+                    high: number;
+                    low: number;
+                    unsigned: boolean;
+                    add: (addend: string | number | Long.Long) => Long.Long;
+                    and: (other: string | number | Long.Long) => Long.Long;
+                    compare: (other: string | number | Long.Long) => number;
+                    comp: (other: string | number | Long.Long) => number;
+                    divide: (divisor: string | number | Long.Long) => Long.Long;
+                    div: (divisor: string | number | Long.Long) => Long.Long;
+                    equals: (other: string | number | Long.Long) => boolean;
+                    eq: (other: string | number | Long.Long) => boolean;
+                    getHighBits: () => number;
+                    getHighBitsUnsigned: () => number;
+                    getLowBits: () => number;
+                    getLowBitsUnsigned: () => number;
+                    getNumBitsAbs: () => number;
+                    greaterThan: (other: string | number | Long.Long) => boolean;
+                    gt: (other: string | number | Long.Long) => boolean;
+                    greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    gte: (other: string | number | Long.Long) => boolean;
+                    isEven: () => boolean;
+                    isNegative: () => boolean;
+                    isOdd: () => boolean;
+                    isPositive: () => boolean;
+                    isZero: () => boolean;
+                    lessThan: (other: string | number | Long.Long) => boolean;
+                    lt: (other: string | number | Long.Long) => boolean;
+                    lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    lte: (other: string | number | Long.Long) => boolean;
+                    modulo: (other: string | number | Long.Long) => Long.Long;
+                    mod: (other: string | number | Long.Long) => Long.Long;
+                    multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                    mul: (multiplier: string | number | Long.Long) => Long.Long;
+                    negate: () => Long.Long;
+                    neg: () => Long.Long;
+                    not: () => Long.Long;
+                    notEquals: (other: string | number | Long.Long) => boolean;
+                    neq: (other: string | number | Long.Long) => boolean;
+                    or: (other: string | number | Long.Long) => Long.Long;
+                    shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                    shl: (numBits: number | Long.Long) => Long.Long;
+                    shiftRight: (numBits: number | Long.Long) => Long.Long;
+                    shr: (numBits: number | Long.Long) => Long.Long;
+                    shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                    shru: (numBits: number | Long.Long) => Long.Long;
+                    subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                    sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                    toInt: () => number;
+                    toNumber: () => number;
+                    toBytes: (le?: boolean | undefined) => number[];
+                    toBytesLE: () => number[];
+                    toBytesBE: () => number[];
+                    toSigned: () => Long.Long;
+                    toString: (radix?: number | undefined) => string;
+                    toUnsigned: () => Long.Long;
+                    xor: (other: string | number | Long.Long) => Long.Long;
+                } & Record<Exclude<keyof I["chains"][number]["params"]["transferLimit"], keyof Long.Long>, never>) | undefined;
             } & Record<Exclude<keyof I["chains"][number]["params"], keyof Params>, never>) | undefined;
             burnerInfos?: ({
                 burnerAddress?: Uint8Array | undefined;
@@ -948,24 +1013,85 @@ export declare const GenesisState: {
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             }[] & ({
                 txId?: Uint8Array | undefined;
                 amount?: Uint8Array | undefined;
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             } & {
                 txId?: Uint8Array | undefined;
                 amount?: Uint8Array | undefined;
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | (Long.Long & {
+                    high: number;
+                    low: number;
+                    unsigned: boolean;
+                    add: (addend: string | number | Long.Long) => Long.Long;
+                    and: (other: string | number | Long.Long) => Long.Long;
+                    compare: (other: string | number | Long.Long) => number;
+                    comp: (other: string | number | Long.Long) => number;
+                    divide: (divisor: string | number | Long.Long) => Long.Long;
+                    div: (divisor: string | number | Long.Long) => Long.Long;
+                    equals: (other: string | number | Long.Long) => boolean;
+                    eq: (other: string | number | Long.Long) => boolean;
+                    getHighBits: () => number;
+                    getHighBitsUnsigned: () => number;
+                    getLowBits: () => number;
+                    getLowBitsUnsigned: () => number;
+                    getNumBitsAbs: () => number;
+                    greaterThan: (other: string | number | Long.Long) => boolean;
+                    gt: (other: string | number | Long.Long) => boolean;
+                    greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    gte: (other: string | number | Long.Long) => boolean;
+                    isEven: () => boolean;
+                    isNegative: () => boolean;
+                    isOdd: () => boolean;
+                    isPositive: () => boolean;
+                    isZero: () => boolean;
+                    lessThan: (other: string | number | Long.Long) => boolean;
+                    lt: (other: string | number | Long.Long) => boolean;
+                    lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    lte: (other: string | number | Long.Long) => boolean;
+                    modulo: (other: string | number | Long.Long) => Long.Long;
+                    mod: (other: string | number | Long.Long) => Long.Long;
+                    multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                    mul: (multiplier: string | number | Long.Long) => Long.Long;
+                    negate: () => Long.Long;
+                    neg: () => Long.Long;
+                    not: () => Long.Long;
+                    notEquals: (other: string | number | Long.Long) => boolean;
+                    neq: (other: string | number | Long.Long) => boolean;
+                    or: (other: string | number | Long.Long) => Long.Long;
+                    shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                    shl: (numBits: number | Long.Long) => Long.Long;
+                    shiftRight: (numBits: number | Long.Long) => Long.Long;
+                    shr: (numBits: number | Long.Long) => Long.Long;
+                    shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                    shru: (numBits: number | Long.Long) => Long.Long;
+                    subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                    sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                    toInt: () => number;
+                    toNumber: () => number;
+                    toBytes: (le?: boolean | undefined) => number[];
+                    toBytesLE: () => number[];
+                    toBytesBE: () => number[];
+                    toSigned: () => Long.Long;
+                    toString: (radix?: number | undefined) => string;
+                    toUnsigned: () => Long.Long;
+                    xor: (other: string | number | Long.Long) => Long.Long;
+                } & Record<Exclude<keyof I["chains"][number]["confirmedDeposits"][number]["logIndex"], keyof Long.Long>, never>) | undefined;
             } & Record<Exclude<keyof I["chains"][number]["confirmedDeposits"][number], keyof ERC20Deposit>, never>)[] & Record<Exclude<keyof I["chains"][number]["confirmedDeposits"], keyof {
                 txId?: Uint8Array | undefined;
                 amount?: Uint8Array | undefined;
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             }[]>, never>) | undefined;
             burnedDeposits?: ({
                 txId?: Uint8Array | undefined;
@@ -973,24 +1099,85 @@ export declare const GenesisState: {
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             }[] & ({
                 txId?: Uint8Array | undefined;
                 amount?: Uint8Array | undefined;
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             } & {
                 txId?: Uint8Array | undefined;
                 amount?: Uint8Array | undefined;
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | (Long.Long & {
+                    high: number;
+                    low: number;
+                    unsigned: boolean;
+                    add: (addend: string | number | Long.Long) => Long.Long;
+                    and: (other: string | number | Long.Long) => Long.Long;
+                    compare: (other: string | number | Long.Long) => number;
+                    comp: (other: string | number | Long.Long) => number;
+                    divide: (divisor: string | number | Long.Long) => Long.Long;
+                    div: (divisor: string | number | Long.Long) => Long.Long;
+                    equals: (other: string | number | Long.Long) => boolean;
+                    eq: (other: string | number | Long.Long) => boolean;
+                    getHighBits: () => number;
+                    getHighBitsUnsigned: () => number;
+                    getLowBits: () => number;
+                    getLowBitsUnsigned: () => number;
+                    getNumBitsAbs: () => number;
+                    greaterThan: (other: string | number | Long.Long) => boolean;
+                    gt: (other: string | number | Long.Long) => boolean;
+                    greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    gte: (other: string | number | Long.Long) => boolean;
+                    isEven: () => boolean;
+                    isNegative: () => boolean;
+                    isOdd: () => boolean;
+                    isPositive: () => boolean;
+                    isZero: () => boolean;
+                    lessThan: (other: string | number | Long.Long) => boolean;
+                    lt: (other: string | number | Long.Long) => boolean;
+                    lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    lte: (other: string | number | Long.Long) => boolean;
+                    modulo: (other: string | number | Long.Long) => Long.Long;
+                    mod: (other: string | number | Long.Long) => Long.Long;
+                    multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                    mul: (multiplier: string | number | Long.Long) => Long.Long;
+                    negate: () => Long.Long;
+                    neg: () => Long.Long;
+                    not: () => Long.Long;
+                    notEquals: (other: string | number | Long.Long) => boolean;
+                    neq: (other: string | number | Long.Long) => boolean;
+                    or: (other: string | number | Long.Long) => Long.Long;
+                    shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                    shl: (numBits: number | Long.Long) => Long.Long;
+                    shiftRight: (numBits: number | Long.Long) => Long.Long;
+                    shr: (numBits: number | Long.Long) => Long.Long;
+                    shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                    shru: (numBits: number | Long.Long) => Long.Long;
+                    subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                    sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                    toInt: () => number;
+                    toNumber: () => number;
+                    toBytes: (le?: boolean | undefined) => number[];
+                    toBytesLE: () => number[];
+                    toBytesBE: () => number[];
+                    toSigned: () => Long.Long;
+                    toString: (radix?: number | undefined) => string;
+                    toUnsigned: () => Long.Long;
+                    xor: (other: string | number | Long.Long) => Long.Long;
+                } & Record<Exclude<keyof I["chains"][number]["burnedDeposits"][number]["logIndex"], keyof Long.Long>, never>) | undefined;
             } & Record<Exclude<keyof I["chains"][number]["burnedDeposits"][number], keyof ERC20Deposit>, never>)[] & Record<Exclude<keyof I["chains"][number]["burnedDeposits"], keyof {
                 txId?: Uint8Array | undefined;
                 amount?: Uint8Array | undefined;
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             }[]>, never>) | undefined;
             commandBatches?: ({
                 id?: Uint8Array | undefined;
@@ -1046,11 +1233,9 @@ export declare const GenesisState: {
             }[]>, never>) | undefined;
             gateway?: ({
                 address?: Uint8Array | undefined;
-                status?: import("../../../axelar/evm/v1beta1/types").Gateway_Status | undefined;
             } & {
                 address?: Uint8Array | undefined;
-                status?: import("../../../axelar/evm/v1beta1/types").Gateway_Status | undefined;
-            } & Record<Exclude<keyof I["chains"][number]["gateway"], keyof Gateway>, never>) | undefined;
+            } & Record<Exclude<keyof I["chains"][number]["gateway"], "address">, never>) | undefined;
             tokens?: ({
                 asset?: string | undefined;
                 chainId?: Uint8Array | undefined;
@@ -1427,6 +1612,7 @@ export declare const GenesisState: {
                 commandsGasLimit?: number | undefined;
                 votingGracePeriod?: string | number | Long.Long | undefined;
                 endBlockerLimit?: string | number | Long.Long | undefined;
+                transferLimit?: string | number | Long.Long | undefined;
             } | undefined;
             burnerInfos?: {
                 burnerAddress?: Uint8Array | undefined;
@@ -1450,6 +1636,7 @@ export declare const GenesisState: {
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             }[] | undefined;
             burnedDeposits?: {
                 txId?: Uint8Array | undefined;
@@ -1457,6 +1644,7 @@ export declare const GenesisState: {
                 asset?: string | undefined;
                 destinationChain?: string | undefined;
                 burnerAddress?: Uint8Array | undefined;
+                logIndex?: string | number | Long.Long | undefined;
             }[] | undefined;
             commandBatches?: {
                 id?: Uint8Array | undefined;
@@ -1473,7 +1661,6 @@ export declare const GenesisState: {
             }[] | undefined;
             gateway?: {
                 address?: Uint8Array | undefined;
-                status?: import("../../../axelar/evm/v1beta1/types").Gateway_Status | undefined;
             } | undefined;
             tokens?: {
                 asset?: string | undefined;
@@ -1572,6 +1759,7 @@ export declare const GenesisState_Chain: {
             commandsGasLimit?: number | undefined;
             votingGracePeriod?: string | number | Long.Long | undefined;
             endBlockerLimit?: string | number | Long.Long | undefined;
+            transferLimit?: string | number | Long.Long | undefined;
         } | undefined;
         burnerInfos?: {
             burnerAddress?: Uint8Array | undefined;
@@ -1595,6 +1783,7 @@ export declare const GenesisState_Chain: {
             asset?: string | undefined;
             destinationChain?: string | undefined;
             burnerAddress?: Uint8Array | undefined;
+            logIndex?: string | number | Long.Long | undefined;
         }[] | undefined;
         burnedDeposits?: {
             txId?: Uint8Array | undefined;
@@ -1602,6 +1791,7 @@ export declare const GenesisState_Chain: {
             asset?: string | undefined;
             destinationChain?: string | undefined;
             burnerAddress?: Uint8Array | undefined;
+            logIndex?: string | number | Long.Long | undefined;
         }[] | undefined;
         commandBatches?: {
             id?: Uint8Array | undefined;
@@ -1618,7 +1808,6 @@ export declare const GenesisState_Chain: {
         }[] | undefined;
         gateway?: {
             address?: Uint8Array | undefined;
-            status?: import("../../../axelar/evm/v1beta1/types").Gateway_Status | undefined;
         } | undefined;
         tokens?: {
             asset?: string | undefined;
@@ -1709,6 +1898,7 @@ export declare const GenesisState_Chain: {
             commandsGasLimit?: number | undefined;
             votingGracePeriod?: string | number | Long.Long | undefined;
             endBlockerLimit?: string | number | Long.Long | undefined;
+            transferLimit?: string | number | Long.Long | undefined;
         } & {
             chain?: string | undefined;
             confirmationHeight?: string | number | (Long.Long & {
@@ -2139,6 +2329,64 @@ export declare const GenesisState_Chain: {
                 toUnsigned: () => Long.Long;
                 xor: (other: string | number | Long.Long) => Long.Long;
             } & Record<Exclude<keyof I["params"]["endBlockerLimit"], keyof Long.Long>, never>) | undefined;
+            transferLimit?: string | number | (Long.Long & {
+                high: number;
+                low: number;
+                unsigned: boolean;
+                add: (addend: string | number | Long.Long) => Long.Long;
+                and: (other: string | number | Long.Long) => Long.Long;
+                compare: (other: string | number | Long.Long) => number;
+                comp: (other: string | number | Long.Long) => number;
+                divide: (divisor: string | number | Long.Long) => Long.Long;
+                div: (divisor: string | number | Long.Long) => Long.Long;
+                equals: (other: string | number | Long.Long) => boolean;
+                eq: (other: string | number | Long.Long) => boolean;
+                getHighBits: () => number;
+                getHighBitsUnsigned: () => number;
+                getLowBits: () => number;
+                getLowBitsUnsigned: () => number;
+                getNumBitsAbs: () => number;
+                greaterThan: (other: string | number | Long.Long) => boolean;
+                gt: (other: string | number | Long.Long) => boolean;
+                greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                gte: (other: string | number | Long.Long) => boolean;
+                isEven: () => boolean;
+                isNegative: () => boolean;
+                isOdd: () => boolean;
+                isPositive: () => boolean;
+                isZero: () => boolean;
+                lessThan: (other: string | number | Long.Long) => boolean;
+                lt: (other: string | number | Long.Long) => boolean;
+                lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                lte: (other: string | number | Long.Long) => boolean;
+                modulo: (other: string | number | Long.Long) => Long.Long;
+                mod: (other: string | number | Long.Long) => Long.Long;
+                multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                mul: (multiplier: string | number | Long.Long) => Long.Long;
+                negate: () => Long.Long;
+                neg: () => Long.Long;
+                not: () => Long.Long;
+                notEquals: (other: string | number | Long.Long) => boolean;
+                neq: (other: string | number | Long.Long) => boolean;
+                or: (other: string | number | Long.Long) => Long.Long;
+                shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                shl: (numBits: number | Long.Long) => Long.Long;
+                shiftRight: (numBits: number | Long.Long) => Long.Long;
+                shr: (numBits: number | Long.Long) => Long.Long;
+                shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                shru: (numBits: number | Long.Long) => Long.Long;
+                subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                toInt: () => number;
+                toNumber: () => number;
+                toBytes: (le?: boolean | undefined) => number[];
+                toBytesLE: () => number[];
+                toBytesBE: () => number[];
+                toSigned: () => Long.Long;
+                toString: (radix?: number | undefined) => string;
+                toUnsigned: () => Long.Long;
+                xor: (other: string | number | Long.Long) => Long.Long;
+            } & Record<Exclude<keyof I["params"]["transferLimit"], keyof Long.Long>, never>) | undefined;
         } & Record<Exclude<keyof I["params"], keyof Params>, never>) | undefined;
         burnerInfos?: ({
             burnerAddress?: Uint8Array | undefined;
@@ -2198,24 +2446,85 @@ export declare const GenesisState_Chain: {
             asset?: string | undefined;
             destinationChain?: string | undefined;
             burnerAddress?: Uint8Array | undefined;
+            logIndex?: string | number | Long.Long | undefined;
         }[] & ({
             txId?: Uint8Array | undefined;
             amount?: Uint8Array | undefined;
             asset?: string | undefined;
             destinationChain?: string | undefined;
             burnerAddress?: Uint8Array | undefined;
+            logIndex?: string | number | Long.Long | undefined;
         } & {
             txId?: Uint8Array | undefined;
             amount?: Uint8Array | undefined;
             asset?: string | undefined;
             destinationChain?: string | undefined;
             burnerAddress?: Uint8Array | undefined;
+            logIndex?: string | number | (Long.Long & {
+                high: number;
+                low: number;
+                unsigned: boolean;
+                add: (addend: string | number | Long.Long) => Long.Long;
+                and: (other: string | number | Long.Long) => Long.Long;
+                compare: (other: string | number | Long.Long) => number;
+                comp: (other: string | number | Long.Long) => number;
+                divide: (divisor: string | number | Long.Long) => Long.Long;
+                div: (divisor: string | number | Long.Long) => Long.Long;
+                equals: (other: string | number | Long.Long) => boolean;
+                eq: (other: string | number | Long.Long) => boolean;
+                getHighBits: () => number;
+                getHighBitsUnsigned: () => number;
+                getLowBits: () => number;
+                getLowBitsUnsigned: () => number;
+                getNumBitsAbs: () => number;
+                greaterThan: (other: string | number | Long.Long) => boolean;
+                gt: (other: string | number | Long.Long) => boolean;
+                greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                gte: (other: string | number | Long.Long) => boolean;
+                isEven: () => boolean;
+                isNegative: () => boolean;
+                isOdd: () => boolean;
+                isPositive: () => boolean;
+                isZero: () => boolean;
+                lessThan: (other: string | number | Long.Long) => boolean;
+                lt: (other: string | number | Long.Long) => boolean;
+                lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                lte: (other: string | number | Long.Long) => boolean;
+                modulo: (other: string | number | Long.Long) => Long.Long;
+                mod: (other: string | number | Long.Long) => Long.Long;
+                multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                mul: (multiplier: string | number | Long.Long) => Long.Long;
+                negate: () => Long.Long;
+                neg: () => Long.Long;
+                not: () => Long.Long;
+                notEquals: (other: string | number | Long.Long) => boolean;
+                neq: (other: string | number | Long.Long) => boolean;
+                or: (other: string | number | Long.Long) => Long.Long;
+                shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                shl: (numBits: number | Long.Long) => Long.Long;
+                shiftRight: (numBits: number | Long.Long) => Long.Long;
+                shr: (numBits: number | Long.Long) => Long.Long;
+                shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                shru: (numBits: number | Long.Long) => Long.Long;
+                subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                toInt: () => number;
+                toNumber: () => number;
+                toBytes: (le?: boolean | undefined) => number[];
+                toBytesLE: () => number[];
+                toBytesBE: () => number[];
+                toSigned: () => Long.Long;
+                toString: (radix?: number | undefined) => string;
+                toUnsigned: () => Long.Long;
+                xor: (other: string | number | Long.Long) => Long.Long;
+            } & Record<Exclude<keyof I["confirmedDeposits"][number]["logIndex"], keyof Long.Long>, never>) | undefined;
         } & Record<Exclude<keyof I["confirmedDeposits"][number], keyof ERC20Deposit>, never>)[] & Record<Exclude<keyof I["confirmedDeposits"], keyof {
             txId?: Uint8Array | undefined;
             amount?: Uint8Array | undefined;
             asset?: string | undefined;
             destinationChain?: string | undefined;
             burnerAddress?: Uint8Array | undefined;
+            logIndex?: string | number | Long.Long | undefined;
         }[]>, never>) | undefined;
         burnedDeposits?: ({
             txId?: Uint8Array | undefined;
@@ -2223,24 +2532,85 @@ export declare const GenesisState_Chain: {
             asset?: string | undefined;
             destinationChain?: string | undefined;
             burnerAddress?: Uint8Array | undefined;
+            logIndex?: string | number | Long.Long | undefined;
         }[] & ({
             txId?: Uint8Array | undefined;
             amount?: Uint8Array | undefined;
             asset?: string | undefined;
             destinationChain?: string | undefined;
             burnerAddress?: Uint8Array | undefined;
+            logIndex?: string | number | Long.Long | undefined;
         } & {
             txId?: Uint8Array | undefined;
             amount?: Uint8Array | undefined;
             asset?: string | undefined;
             destinationChain?: string | undefined;
             burnerAddress?: Uint8Array | undefined;
+            logIndex?: string | number | (Long.Long & {
+                high: number;
+                low: number;
+                unsigned: boolean;
+                add: (addend: string | number | Long.Long) => Long.Long;
+                and: (other: string | number | Long.Long) => Long.Long;
+                compare: (other: string | number | Long.Long) => number;
+                comp: (other: string | number | Long.Long) => number;
+                divide: (divisor: string | number | Long.Long) => Long.Long;
+                div: (divisor: string | number | Long.Long) => Long.Long;
+                equals: (other: string | number | Long.Long) => boolean;
+                eq: (other: string | number | Long.Long) => boolean;
+                getHighBits: () => number;
+                getHighBitsUnsigned: () => number;
+                getLowBits: () => number;
+                getLowBitsUnsigned: () => number;
+                getNumBitsAbs: () => number;
+                greaterThan: (other: string | number | Long.Long) => boolean;
+                gt: (other: string | number | Long.Long) => boolean;
+                greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                gte: (other: string | number | Long.Long) => boolean;
+                isEven: () => boolean;
+                isNegative: () => boolean;
+                isOdd: () => boolean;
+                isPositive: () => boolean;
+                isZero: () => boolean;
+                lessThan: (other: string | number | Long.Long) => boolean;
+                lt: (other: string | number | Long.Long) => boolean;
+                lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                lte: (other: string | number | Long.Long) => boolean;
+                modulo: (other: string | number | Long.Long) => Long.Long;
+                mod: (other: string | number | Long.Long) => Long.Long;
+                multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                mul: (multiplier: string | number | Long.Long) => Long.Long;
+                negate: () => Long.Long;
+                neg: () => Long.Long;
+                not: () => Long.Long;
+                notEquals: (other: string | number | Long.Long) => boolean;
+                neq: (other: string | number | Long.Long) => boolean;
+                or: (other: string | number | Long.Long) => Long.Long;
+                shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                shl: (numBits: number | Long.Long) => Long.Long;
+                shiftRight: (numBits: number | Long.Long) => Long.Long;
+                shr: (numBits: number | Long.Long) => Long.Long;
+                shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                shru: (numBits: number | Long.Long) => Long.Long;
+                subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                toInt: () => number;
+                toNumber: () => number;
+                toBytes: (le?: boolean | undefined) => number[];
+                toBytesLE: () => number[];
+                toBytesBE: () => number[];
+                toSigned: () => Long.Long;
+                toString: (radix?: number | undefined) => string;
+                toUnsigned: () => Long.Long;
+                xor: (other: string | number | Long.Long) => Long.Long;
+            } & Record<Exclude<keyof I["burnedDeposits"][number]["logIndex"], keyof Long.Long>, never>) | undefined;
         } & Record<Exclude<keyof I["burnedDeposits"][number], keyof ERC20Deposit>, never>)[] & Record<Exclude<keyof I["burnedDeposits"], keyof {
             txId?: Uint8Array | undefined;
             amount?: Uint8Array | undefined;
             asset?: string | undefined;
             destinationChain?: string | undefined;
             burnerAddress?: Uint8Array | undefined;
+            logIndex?: string | number | Long.Long | undefined;
         }[]>, never>) | undefined;
         commandBatches?: ({
             id?: Uint8Array | undefined;
@@ -2296,11 +2666,9 @@ export declare const GenesisState_Chain: {
         }[]>, never>) | undefined;
         gateway?: ({
             address?: Uint8Array | undefined;
-            status?: import("../../../axelar/evm/v1beta1/types").Gateway_Status | undefined;
         } & {
             address?: Uint8Array | undefined;
-            status?: import("../../../axelar/evm/v1beta1/types").Gateway_Status | undefined;
-        } & Record<Exclude<keyof I["gateway"], keyof Gateway>, never>) | undefined;
+        } & Record<Exclude<keyof I["gateway"], "address">, never>) | undefined;
         tokens?: ({
             asset?: string | undefined;
             chainId?: Uint8Array | undefined;

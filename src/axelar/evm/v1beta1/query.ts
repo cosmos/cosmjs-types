@@ -15,6 +15,45 @@ import {
 
 export const protobufPackage = "axelar.evm.v1beta1";
 
+export enum ChainStatus {
+  CHAIN_STATUS_UNSPECIFIED = 0,
+  CHAIN_STATUS_ACTIVATED = 1,
+  CHAIN_STATUS_DEACTIVATED = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function chainStatusFromJSON(object: any): ChainStatus {
+  switch (object) {
+    case 0:
+    case "CHAIN_STATUS_UNSPECIFIED":
+      return ChainStatus.CHAIN_STATUS_UNSPECIFIED;
+    case 1:
+    case "CHAIN_STATUS_ACTIVATED":
+      return ChainStatus.CHAIN_STATUS_ACTIVATED;
+    case 2:
+    case "CHAIN_STATUS_DEACTIVATED":
+      return ChainStatus.CHAIN_STATUS_DEACTIVATED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return ChainStatus.UNRECOGNIZED;
+  }
+}
+
+export function chainStatusToJSON(object: ChainStatus): string {
+  switch (object) {
+    case ChainStatus.CHAIN_STATUS_UNSPECIFIED:
+      return "CHAIN_STATUS_UNSPECIFIED";
+    case ChainStatus.CHAIN_STATUS_ACTIVATED:
+      return "CHAIN_STATUS_ACTIVATED";
+    case ChainStatus.CHAIN_STATUS_DEACTIVATED:
+      return "CHAIN_STATUS_DEACTIVATED";
+    case ChainStatus.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export enum TokenType {
   TOKEN_TYPE_UNSPECIFIED = 0,
   TOKEN_TYPE_INTERNAL = 1,
@@ -106,16 +145,19 @@ export interface QueryTokenAddressResponse {
   confirmed: boolean;
 }
 
+/** @deprecated */
 export interface QueryDepositStateParams {
   txId: Uint8Array;
   burnerAddress: Uint8Array;
 }
 
+/** @deprecated */
 export interface DepositStateRequest {
   chain: string;
   params?: QueryDepositStateParams;
 }
 
+/** @deprecated */
 export interface DepositStateResponse {
   status: DepositStatus;
 }
@@ -133,7 +175,9 @@ export interface QueryBurnerAddressResponse {
   address: string;
 }
 
-export interface ChainsRequest {}
+export interface ChainsRequest {
+  status: ChainStatus;
+}
 
 export interface ChainsResponse {
   chains: string[];
@@ -220,6 +264,7 @@ export interface TokenInfoRequest {
   chain: string;
   asset: string | undefined;
   symbol: string | undefined;
+  address: string | undefined;
 }
 
 export interface TokenInfoResponse {
@@ -1076,11 +1121,14 @@ export const QueryBurnerAddressResponse = {
 };
 
 function createBaseChainsRequest(): ChainsRequest {
-  return {};
+  return { status: 0 };
 }
 
 export const ChainsRequest = {
-  encode(_: ChainsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ChainsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.status !== 0) {
+      writer.uint32(8).int32(message.status);
+    }
     return writer;
   },
 
@@ -1091,6 +1139,9 @@ export const ChainsRequest = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.status = reader.int32() as any;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1099,17 +1150,21 @@ export const ChainsRequest = {
     return message;
   },
 
-  fromJSON(_: any): ChainsRequest {
-    return {};
+  fromJSON(object: any): ChainsRequest {
+    return {
+      status: isSet(object.status) ? chainStatusFromJSON(object.status) : 0,
+    };
   },
 
-  toJSON(_: ChainsRequest): unknown {
+  toJSON(message: ChainsRequest): unknown {
     const obj: any = {};
+    message.status !== undefined && (obj.status = chainStatusToJSON(message.status));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ChainsRequest>, I>>(_: I): ChainsRequest {
+  fromPartial<I extends Exact<DeepPartial<ChainsRequest>, I>>(object: I): ChainsRequest {
     const message = createBaseChainsRequest();
+    message.status = object.status ?? 0;
     return message;
   },
 };
@@ -2031,7 +2086,7 @@ export const ERC20TokensResponse_Token = {
 };
 
 function createBaseTokenInfoRequest(): TokenInfoRequest {
-  return { chain: "", asset: undefined, symbol: undefined };
+  return { chain: "", asset: undefined, symbol: undefined, address: undefined };
 }
 
 export const TokenInfoRequest = {
@@ -2044,6 +2099,9 @@ export const TokenInfoRequest = {
     }
     if (message.symbol !== undefined) {
       writer.uint32(26).string(message.symbol);
+    }
+    if (message.address !== undefined) {
+      writer.uint32(34).string(message.address);
     }
     return writer;
   },
@@ -2064,6 +2122,9 @@ export const TokenInfoRequest = {
         case 3:
           message.symbol = reader.string();
           break;
+        case 4:
+          message.address = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2077,6 +2138,7 @@ export const TokenInfoRequest = {
       chain: isSet(object.chain) ? String(object.chain) : "",
       asset: isSet(object.asset) ? String(object.asset) : undefined,
       symbol: isSet(object.symbol) ? String(object.symbol) : undefined,
+      address: isSet(object.address) ? String(object.address) : undefined,
     };
   },
 
@@ -2085,6 +2147,7 @@ export const TokenInfoRequest = {
     message.chain !== undefined && (obj.chain = message.chain);
     message.asset !== undefined && (obj.asset = message.asset);
     message.symbol !== undefined && (obj.symbol = message.symbol);
+    message.address !== undefined && (obj.address = message.address);
     return obj;
   },
 
@@ -2093,6 +2156,7 @@ export const TokenInfoRequest = {
     message.chain = object.chain ?? "";
     message.asset = object.asset ?? undefined;
     message.symbol = object.symbol ?? undefined;
+    message.address = object.address ?? undefined;
     return message;
   },
 };

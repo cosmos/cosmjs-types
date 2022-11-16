@@ -11,6 +11,7 @@ import {
 import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pagination";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import { ChainState } from "../../../axelar/nexus/v1beta1/types";
+import { Duration } from "../../../google/protobuf/duration";
 
 export const protobufPackage = "axelar.nexus.v1beta1";
 
@@ -173,6 +174,28 @@ export interface RecipientAddressRequest {
 export interface RecipientAddressResponse {
   recipientAddr: string;
   recipientChain: string;
+}
+
+/**
+ * TransferRateLimitRequest represents a message that queries the registered
+ * transfer rate limit and current transfer amounts for a given chain and asset
+ */
+export interface TransferRateLimitRequest {
+  chain: string;
+  asset: string;
+}
+
+export interface TransferRateLimitResponse {
+  transferRateLimit?: TransferRateLimit;
+}
+
+export interface TransferRateLimit {
+  limit: Uint8Array;
+  window?: Duration;
+  incoming: Uint8Array;
+  outgoing: Uint8Array;
+  /** time_left indicates the time left in the rate limit window */
+  timeLeft?: Duration;
 }
 
 function createBaseQueryChainMaintainersResponse(): QueryChainMaintainersResponse {
@@ -1243,6 +1266,225 @@ export const RecipientAddressResponse = {
     const message = createBaseRecipientAddressResponse();
     message.recipientAddr = object.recipientAddr ?? "";
     message.recipientChain = object.recipientChain ?? "";
+    return message;
+  },
+};
+
+function createBaseTransferRateLimitRequest(): TransferRateLimitRequest {
+  return { chain: "", asset: "" };
+}
+
+export const TransferRateLimitRequest = {
+  encode(message: TransferRateLimitRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    if (message.asset !== "") {
+      writer.uint32(18).string(message.asset);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TransferRateLimitRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTransferRateLimitRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        case 2:
+          message.asset = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TransferRateLimitRequest {
+    return {
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      asset: isSet(object.asset) ? String(object.asset) : "",
+    };
+  },
+
+  toJSON(message: TransferRateLimitRequest): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.asset !== undefined && (obj.asset = message.asset);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<TransferRateLimitRequest>, I>>(
+    object: I,
+  ): TransferRateLimitRequest {
+    const message = createBaseTransferRateLimitRequest();
+    message.chain = object.chain ?? "";
+    message.asset = object.asset ?? "";
+    return message;
+  },
+};
+
+function createBaseTransferRateLimitResponse(): TransferRateLimitResponse {
+  return { transferRateLimit: undefined };
+}
+
+export const TransferRateLimitResponse = {
+  encode(message: TransferRateLimitResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.transferRateLimit !== undefined) {
+      TransferRateLimit.encode(message.transferRateLimit, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TransferRateLimitResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTransferRateLimitResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.transferRateLimit = TransferRateLimit.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TransferRateLimitResponse {
+    return {
+      transferRateLimit: isSet(object.transferRateLimit)
+        ? TransferRateLimit.fromJSON(object.transferRateLimit)
+        : undefined,
+    };
+  },
+
+  toJSON(message: TransferRateLimitResponse): unknown {
+    const obj: any = {};
+    message.transferRateLimit !== undefined &&
+      (obj.transferRateLimit = message.transferRateLimit
+        ? TransferRateLimit.toJSON(message.transferRateLimit)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<TransferRateLimitResponse>, I>>(
+    object: I,
+  ): TransferRateLimitResponse {
+    const message = createBaseTransferRateLimitResponse();
+    message.transferRateLimit =
+      object.transferRateLimit !== undefined && object.transferRateLimit !== null
+        ? TransferRateLimit.fromPartial(object.transferRateLimit)
+        : undefined;
+    return message;
+  },
+};
+
+function createBaseTransferRateLimit(): TransferRateLimit {
+  return {
+    limit: new Uint8Array(),
+    window: undefined,
+    incoming: new Uint8Array(),
+    outgoing: new Uint8Array(),
+    timeLeft: undefined,
+  };
+}
+
+export const TransferRateLimit = {
+  encode(message: TransferRateLimit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.limit.length !== 0) {
+      writer.uint32(10).bytes(message.limit);
+    }
+    if (message.window !== undefined) {
+      Duration.encode(message.window, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.incoming.length !== 0) {
+      writer.uint32(26).bytes(message.incoming);
+    }
+    if (message.outgoing.length !== 0) {
+      writer.uint32(34).bytes(message.outgoing);
+    }
+    if (message.timeLeft !== undefined) {
+      Duration.encode(message.timeLeft, writer.uint32(42).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TransferRateLimit {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTransferRateLimit();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.limit = reader.bytes();
+          break;
+        case 2:
+          message.window = Duration.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.incoming = reader.bytes();
+          break;
+        case 4:
+          message.outgoing = reader.bytes();
+          break;
+        case 5:
+          message.timeLeft = Duration.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TransferRateLimit {
+    return {
+      limit: isSet(object.limit) ? bytesFromBase64(object.limit) : new Uint8Array(),
+      window: isSet(object.window) ? Duration.fromJSON(object.window) : undefined,
+      incoming: isSet(object.incoming) ? bytesFromBase64(object.incoming) : new Uint8Array(),
+      outgoing: isSet(object.outgoing) ? bytesFromBase64(object.outgoing) : new Uint8Array(),
+      timeLeft: isSet(object.timeLeft) ? Duration.fromJSON(object.timeLeft) : undefined,
+    };
+  },
+
+  toJSON(message: TransferRateLimit): unknown {
+    const obj: any = {};
+    message.limit !== undefined &&
+      (obj.limit = base64FromBytes(message.limit !== undefined ? message.limit : new Uint8Array()));
+    message.window !== undefined &&
+      (obj.window = message.window ? Duration.toJSON(message.window) : undefined);
+    message.incoming !== undefined &&
+      (obj.incoming = base64FromBytes(message.incoming !== undefined ? message.incoming : new Uint8Array()));
+    message.outgoing !== undefined &&
+      (obj.outgoing = base64FromBytes(message.outgoing !== undefined ? message.outgoing : new Uint8Array()));
+    message.timeLeft !== undefined &&
+      (obj.timeLeft = message.timeLeft ? Duration.toJSON(message.timeLeft) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<TransferRateLimit>, I>>(object: I): TransferRateLimit {
+    const message = createBaseTransferRateLimit();
+    message.limit = object.limit ?? new Uint8Array();
+    message.window =
+      object.window !== undefined && object.window !== null ? Duration.fromPartial(object.window) : undefined;
+    message.incoming = object.incoming ?? new Uint8Array();
+    message.outgoing = object.outgoing ?? new Uint8Array();
+    message.timeLeft =
+      object.timeLeft !== undefined && object.timeLeft !== null
+        ? Duration.fromPartial(object.timeLeft)
+        : undefined;
     return message;
   },
 };

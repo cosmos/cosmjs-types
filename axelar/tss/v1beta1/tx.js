@@ -716,16 +716,10 @@ exports.HeartBeatRequest = {
     },
 };
 function createBaseHeartBeatResponse() {
-    return { keygenIllegibility: 0, signingIllegibility: 0 };
+    return {};
 }
 exports.HeartBeatResponse = {
-    encode(message, writer = _m0.Writer.create()) {
-        if (message.keygenIllegibility !== 0) {
-            writer.uint32(8).int32(message.keygenIllegibility);
-        }
-        if (message.signingIllegibility !== 0) {
-            writer.uint32(16).int32(message.signingIllegibility);
-        }
+    encode(_, writer = _m0.Writer.create()) {
         return writer;
     },
     decode(input, length) {
@@ -735,12 +729,6 @@ exports.HeartBeatResponse = {
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
-                case 1:
-                    message.keygenIllegibility = reader.int32();
-                    break;
-                case 2:
-                    message.signingIllegibility = reader.int32();
-                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -748,25 +736,15 @@ exports.HeartBeatResponse = {
         }
         return message;
     },
-    fromJSON(object) {
-        return {
-            keygenIllegibility: isSet(object.keygenIllegibility) ? Number(object.keygenIllegibility) : 0,
-            signingIllegibility: isSet(object.signingIllegibility) ? Number(object.signingIllegibility) : 0,
-        };
+    fromJSON(_) {
+        return {};
     },
-    toJSON(message) {
+    toJSON(_) {
         const obj = {};
-        message.keygenIllegibility !== undefined &&
-            (obj.keygenIllegibility = Math.round(message.keygenIllegibility));
-        message.signingIllegibility !== undefined &&
-            (obj.signingIllegibility = Math.round(message.signingIllegibility));
         return obj;
     },
-    fromPartial(object) {
-        var _a, _b;
+    fromPartial(_) {
         const message = createBaseHeartBeatResponse();
-        message.keygenIllegibility = (_a = object.keygenIllegibility) !== null && _a !== void 0 ? _a : 0;
-        message.signingIllegibility = (_b = object.signingIllegibility) !== null && _b !== void 0 ? _b : 0;
         return message;
     },
 };

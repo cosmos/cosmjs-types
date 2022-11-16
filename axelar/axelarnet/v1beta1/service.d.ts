@@ -1,4 +1,4 @@
-import { LinkResponse, ConfirmDepositResponse, ExecutePendingTransfersResponse, RegisterIBCPathResponse, AddCosmosBasedChainResponse, RegisterAssetResponse, RouteIBCTransfersResponse, RegisterFeeCollectorResponse, RetryIBCTransferResponse, LinkRequest, ConfirmDepositRequest, ExecutePendingTransfersRequest, RegisterIBCPathRequest, AddCosmosBasedChainRequest, RegisterAssetRequest, RouteIBCTransfersRequest, RegisterFeeCollectorRequest, RetryIBCTransferRequest } from "../../../axelar/axelarnet/v1beta1/tx";
+import { LinkResponse, ConfirmDepositResponse, ExecutePendingTransfersResponse, AddCosmosBasedChainResponse, RegisterAssetResponse, RouteIBCTransfersResponse, RegisterFeeCollectorResponse, RetryIBCTransferResponse, LinkRequest, ConfirmDepositRequest, ExecutePendingTransfersRequest, AddCosmosBasedChainRequest, RegisterAssetRequest, RouteIBCTransfersRequest, RegisterFeeCollectorRequest, RetryIBCTransferRequest } from "../../../axelar/axelarnet/v1beta1/tx";
 import { PendingIBCTransferCountResponse, PendingIBCTransferCountRequest } from "../../../axelar/axelarnet/v1beta1/query";
 export declare const protobufPackage = "axelar.axelarnet.v1beta1";
 /** Msg defines the axelarnet Msg service. */
@@ -6,7 +6,6 @@ export interface MsgService {
     Link(request: LinkRequest): Promise<LinkResponse>;
     ConfirmDeposit(request: ConfirmDepositRequest): Promise<ConfirmDepositResponse>;
     ExecutePendingTransfers(request: ExecutePendingTransfersRequest): Promise<ExecutePendingTransfersResponse>;
-    RegisterIBCPath(request: RegisterIBCPathRequest): Promise<RegisterIBCPathResponse>;
     AddCosmosBasedChain(request: AddCosmosBasedChainRequest): Promise<AddCosmosBasedChainResponse>;
     RegisterAsset(request: RegisterAssetRequest): Promise<RegisterAssetResponse>;
     RouteIBCTransfers(request: RouteIBCTransfersRequest): Promise<RouteIBCTransfersResponse>;
@@ -19,7 +18,6 @@ export declare class MsgServiceClientImpl implements MsgService {
     Link(request: LinkRequest): Promise<LinkResponse>;
     ConfirmDeposit(request: ConfirmDepositRequest): Promise<ConfirmDepositResponse>;
     ExecutePendingTransfers(request: ExecutePendingTransfersRequest): Promise<ExecutePendingTransfersResponse>;
-    RegisterIBCPath(request: RegisterIBCPathRequest): Promise<RegisterIBCPathResponse>;
     AddCosmosBasedChain(request: AddCosmosBasedChainRequest): Promise<AddCosmosBasedChainResponse>;
     RegisterAsset(request: RegisterAssetRequest): Promise<RegisterAssetResponse>;
     RouteIBCTransfers(request: RouteIBCTransfersRequest): Promise<RouteIBCTransfersResponse>;

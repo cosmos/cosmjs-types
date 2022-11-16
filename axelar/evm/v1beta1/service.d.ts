@@ -46,7 +46,11 @@ export interface QueryService {
     BurnerInfo(request: BurnerInfoRequest): Promise<BurnerInfoResponse>;
     /** ConfirmationHeight queries the confirmation height for the specified chain */
     ConfirmationHeight(request: ConfirmationHeightRequest): Promise<ConfirmationHeightResponse>;
-    /** DepositState queries the state of the specified deposit */
+    /**
+     * DepositState queries the state of the specified deposit
+     *
+     * @deprecated
+     */
     DepositState(request: DepositStateRequest): Promise<DepositStateResponse>;
     /** PendingCommands queries the pending commands for the specified chain */
     PendingCommands(request: PendingCommandsRequest): Promise<PendingCommandsResponse>;

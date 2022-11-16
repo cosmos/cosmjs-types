@@ -4,6 +4,7 @@ import { TransferState, FeeInfo, CrossChainTransfer } from "../../../axelar/nexu
 import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pagination";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import { ChainState } from "../../../axelar/nexus/v1beta1/types";
+import { Duration } from "../../../google/protobuf/duration";
 export declare const protobufPackage = "axelar.nexus.v1beta1";
 export declare enum ChainStatus {
     CHAIN_STATUS_UNSPECIFIED = 0,
@@ -115,6 +116,25 @@ export interface RecipientAddressRequest {
 export interface RecipientAddressResponse {
     recipientAddr: string;
     recipientChain: string;
+}
+/**
+ * TransferRateLimitRequest represents a message that queries the registered
+ * transfer rate limit and current transfer amounts for a given chain and asset
+ */
+export interface TransferRateLimitRequest {
+    chain: string;
+    asset: string;
+}
+export interface TransferRateLimitResponse {
+    transferRateLimit?: TransferRateLimit;
+}
+export interface TransferRateLimit {
+    limit: Uint8Array;
+    window?: Duration;
+    incoming: Uint8Array;
+    outgoing: Uint8Array;
+    /** time_left indicates the time left in the rate limit window */
+    timeLeft?: Duration;
 }
 export declare const QueryChainMaintainersResponse: {
     encode(message: QueryChainMaintainersResponse, writer?: _m0.Writer): _m0.Writer;
@@ -677,7 +697,6 @@ export declare const ChainStateResponse: {
                 keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
                 module?: string | undefined;
             } | undefined;
-            maintainers?: Uint8Array[] | undefined;
             activated?: boolean | undefined;
             assets?: {
                 denom?: string | undefined;
@@ -699,6 +718,7 @@ export declare const ChainStateResponse: {
                         maxSize?: number | undefined;
                     } | undefined;
                 } | undefined;
+                chain?: string | undefined;
             }[] | undefined;
         } | undefined;
     } & {
@@ -709,7 +729,6 @@ export declare const ChainStateResponse: {
                 keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
                 module?: string | undefined;
             } | undefined;
-            maintainers?: Uint8Array[] | undefined;
             activated?: boolean | undefined;
             assets?: {
                 denom?: string | undefined;
@@ -731,6 +750,7 @@ export declare const ChainStateResponse: {
                         maxSize?: number | undefined;
                     } | undefined;
                 } | undefined;
+                chain?: string | undefined;
             }[] | undefined;
         } & {
             chain?: ({
@@ -744,7 +764,6 @@ export declare const ChainStateResponse: {
                 keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
                 module?: string | undefined;
             } & Record<Exclude<keyof I["state"]["chain"], keyof import("../../../axelar/nexus/exported/v1beta1/types").Chain>, never>) | undefined;
-            maintainers?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["state"]["maintainers"], keyof Uint8Array[]>, never>) | undefined;
             activated?: boolean | undefined;
             assets?: ({
                 denom?: string | undefined;
@@ -775,6 +794,7 @@ export declare const ChainStateResponse: {
                         maxSize?: number | undefined;
                     } | undefined;
                 } | undefined;
+                chain?: string | undefined;
             }[] & ({
                 address?: Uint8Array | undefined;
                 missingVotes?: {
@@ -791,6 +811,7 @@ export declare const ChainStateResponse: {
                         maxSize?: number | undefined;
                     } | undefined;
                 } | undefined;
+                chain?: string | undefined;
             } & {
                 address?: Uint8Array | undefined;
                 missingVotes?: ({
@@ -941,6 +962,7 @@ export declare const ChainStateResponse: {
                         maxSize?: number | undefined;
                     } & Record<Exclude<keyof I["state"]["maintainerStates"][number]["incorrectVotes"]["trueCountCache"], keyof import("../../utils/v1beta1/bitmap").CircularBuffer>, never>) | undefined;
                 } & Record<Exclude<keyof I["state"]["maintainerStates"][number]["incorrectVotes"], "trueCountCache">, never>) | undefined;
+                chain?: string | undefined;
             } & Record<Exclude<keyof I["state"]["maintainerStates"][number], keyof import("../../../axelar/nexus/v1beta1/types").MaintainerState>, never>)[] & Record<Exclude<keyof I["state"]["maintainerStates"], keyof {
                 address?: Uint8Array | undefined;
                 missingVotes?: {
@@ -957,6 +979,7 @@ export declare const ChainStateResponse: {
                         maxSize?: number | undefined;
                     } | undefined;
                 } | undefined;
+                chain?: string | undefined;
             }[]>, never>) | undefined;
         } & Record<Exclude<keyof I["state"], keyof ChainState>, never>) | undefined;
     } & Record<Exclude<keyof I, "state">, never>>(object: I): ChainStateResponse;
@@ -1008,6 +1031,337 @@ export declare const RecipientAddressResponse: {
         recipientAddr?: string | undefined;
         recipientChain?: string | undefined;
     } & Record<Exclude<keyof I, keyof RecipientAddressResponse>, never>>(object: I): RecipientAddressResponse;
+};
+export declare const TransferRateLimitRequest: {
+    encode(message: TransferRateLimitRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): TransferRateLimitRequest;
+    fromJSON(object: any): TransferRateLimitRequest;
+    toJSON(message: TransferRateLimitRequest): unknown;
+    fromPartial<I extends {
+        chain?: string | undefined;
+        asset?: string | undefined;
+    } & {
+        chain?: string | undefined;
+        asset?: string | undefined;
+    } & Record<Exclude<keyof I, keyof TransferRateLimitRequest>, never>>(object: I): TransferRateLimitRequest;
+};
+export declare const TransferRateLimitResponse: {
+    encode(message: TransferRateLimitResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): TransferRateLimitResponse;
+    fromJSON(object: any): TransferRateLimitResponse;
+    toJSON(message: TransferRateLimitResponse): unknown;
+    fromPartial<I extends {
+        transferRateLimit?: {
+            limit?: Uint8Array | undefined;
+            window?: {
+                seconds?: string | number | Long.Long | undefined;
+                nanos?: number | undefined;
+            } | undefined;
+            incoming?: Uint8Array | undefined;
+            outgoing?: Uint8Array | undefined;
+            timeLeft?: {
+                seconds?: string | number | Long.Long | undefined;
+                nanos?: number | undefined;
+            } | undefined;
+        } | undefined;
+    } & {
+        transferRateLimit?: ({
+            limit?: Uint8Array | undefined;
+            window?: {
+                seconds?: string | number | Long.Long | undefined;
+                nanos?: number | undefined;
+            } | undefined;
+            incoming?: Uint8Array | undefined;
+            outgoing?: Uint8Array | undefined;
+            timeLeft?: {
+                seconds?: string | number | Long.Long | undefined;
+                nanos?: number | undefined;
+            } | undefined;
+        } & {
+            limit?: Uint8Array | undefined;
+            window?: ({
+                seconds?: string | number | Long.Long | undefined;
+                nanos?: number | undefined;
+            } & {
+                seconds?: string | number | (Long.Long & {
+                    high: number;
+                    low: number;
+                    unsigned: boolean;
+                    add: (addend: string | number | Long.Long) => Long.Long;
+                    and: (other: string | number | Long.Long) => Long.Long;
+                    compare: (other: string | number | Long.Long) => number;
+                    comp: (other: string | number | Long.Long) => number;
+                    divide: (divisor: string | number | Long.Long) => Long.Long;
+                    div: (divisor: string | number | Long.Long) => Long.Long;
+                    equals: (other: string | number | Long.Long) => boolean;
+                    eq: (other: string | number | Long.Long) => boolean;
+                    getHighBits: () => number;
+                    getHighBitsUnsigned: () => number;
+                    getLowBits: () => number;
+                    getLowBitsUnsigned: () => number;
+                    getNumBitsAbs: () => number;
+                    greaterThan: (other: string | number | Long.Long) => boolean;
+                    gt: (other: string | number | Long.Long) => boolean;
+                    greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    gte: (other: string | number | Long.Long) => boolean;
+                    isEven: () => boolean;
+                    isNegative: () => boolean;
+                    isOdd: () => boolean;
+                    isPositive: () => boolean;
+                    isZero: () => boolean;
+                    lessThan: (other: string | number | Long.Long) => boolean;
+                    lt: (other: string | number | Long.Long) => boolean;
+                    lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    lte: (other: string | number | Long.Long) => boolean;
+                    modulo: (other: string | number | Long.Long) => Long.Long;
+                    mod: (other: string | number | Long.Long) => Long.Long;
+                    multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                    mul: (multiplier: string | number | Long.Long) => Long.Long;
+                    negate: () => Long.Long;
+                    neg: () => Long.Long;
+                    not: () => Long.Long;
+                    notEquals: (other: string | number | Long.Long) => boolean;
+                    neq: (other: string | number | Long.Long) => boolean;
+                    or: (other: string | number | Long.Long) => Long.Long;
+                    shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                    shl: (numBits: number | Long.Long) => Long.Long;
+                    shiftRight: (numBits: number | Long.Long) => Long.Long;
+                    shr: (numBits: number | Long.Long) => Long.Long;
+                    shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                    shru: (numBits: number | Long.Long) => Long.Long;
+                    subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                    sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                    toInt: () => number;
+                    toNumber: () => number;
+                    toBytes: (le?: boolean | undefined) => number[];
+                    toBytesLE: () => number[];
+                    toBytesBE: () => number[];
+                    toSigned: () => Long.Long;
+                    toString: (radix?: number | undefined) => string;
+                    toUnsigned: () => Long.Long;
+                    xor: (other: string | number | Long.Long) => Long.Long;
+                } & Record<Exclude<keyof I["transferRateLimit"]["window"]["seconds"], keyof Long.Long>, never>) | undefined;
+                nanos?: number | undefined;
+            } & Record<Exclude<keyof I["transferRateLimit"]["window"], keyof Duration>, never>) | undefined;
+            incoming?: Uint8Array | undefined;
+            outgoing?: Uint8Array | undefined;
+            timeLeft?: ({
+                seconds?: string | number | Long.Long | undefined;
+                nanos?: number | undefined;
+            } & {
+                seconds?: string | number | (Long.Long & {
+                    high: number;
+                    low: number;
+                    unsigned: boolean;
+                    add: (addend: string | number | Long.Long) => Long.Long;
+                    and: (other: string | number | Long.Long) => Long.Long;
+                    compare: (other: string | number | Long.Long) => number;
+                    comp: (other: string | number | Long.Long) => number;
+                    divide: (divisor: string | number | Long.Long) => Long.Long;
+                    div: (divisor: string | number | Long.Long) => Long.Long;
+                    equals: (other: string | number | Long.Long) => boolean;
+                    eq: (other: string | number | Long.Long) => boolean;
+                    getHighBits: () => number;
+                    getHighBitsUnsigned: () => number;
+                    getLowBits: () => number;
+                    getLowBitsUnsigned: () => number;
+                    getNumBitsAbs: () => number;
+                    greaterThan: (other: string | number | Long.Long) => boolean;
+                    gt: (other: string | number | Long.Long) => boolean;
+                    greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    gte: (other: string | number | Long.Long) => boolean;
+                    isEven: () => boolean;
+                    isNegative: () => boolean;
+                    isOdd: () => boolean;
+                    isPositive: () => boolean;
+                    isZero: () => boolean;
+                    lessThan: (other: string | number | Long.Long) => boolean;
+                    lt: (other: string | number | Long.Long) => boolean;
+                    lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                    lte: (other: string | number | Long.Long) => boolean;
+                    modulo: (other: string | number | Long.Long) => Long.Long;
+                    mod: (other: string | number | Long.Long) => Long.Long;
+                    multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                    mul: (multiplier: string | number | Long.Long) => Long.Long;
+                    negate: () => Long.Long;
+                    neg: () => Long.Long;
+                    not: () => Long.Long;
+                    notEquals: (other: string | number | Long.Long) => boolean;
+                    neq: (other: string | number | Long.Long) => boolean;
+                    or: (other: string | number | Long.Long) => Long.Long;
+                    shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                    shl: (numBits: number | Long.Long) => Long.Long;
+                    shiftRight: (numBits: number | Long.Long) => Long.Long;
+                    shr: (numBits: number | Long.Long) => Long.Long;
+                    shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                    shru: (numBits: number | Long.Long) => Long.Long;
+                    subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                    sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                    toInt: () => number;
+                    toNumber: () => number;
+                    toBytes: (le?: boolean | undefined) => number[];
+                    toBytesLE: () => number[];
+                    toBytesBE: () => number[];
+                    toSigned: () => Long.Long;
+                    toString: (radix?: number | undefined) => string;
+                    toUnsigned: () => Long.Long;
+                    xor: (other: string | number | Long.Long) => Long.Long;
+                } & Record<Exclude<keyof I["transferRateLimit"]["timeLeft"]["seconds"], keyof Long.Long>, never>) | undefined;
+                nanos?: number | undefined;
+            } & Record<Exclude<keyof I["transferRateLimit"]["timeLeft"], keyof Duration>, never>) | undefined;
+        } & Record<Exclude<keyof I["transferRateLimit"], keyof TransferRateLimit>, never>) | undefined;
+    } & Record<Exclude<keyof I, "transferRateLimit">, never>>(object: I): TransferRateLimitResponse;
+};
+export declare const TransferRateLimit: {
+    encode(message: TransferRateLimit, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): TransferRateLimit;
+    fromJSON(object: any): TransferRateLimit;
+    toJSON(message: TransferRateLimit): unknown;
+    fromPartial<I extends {
+        limit?: Uint8Array | undefined;
+        window?: {
+            seconds?: string | number | Long.Long | undefined;
+            nanos?: number | undefined;
+        } | undefined;
+        incoming?: Uint8Array | undefined;
+        outgoing?: Uint8Array | undefined;
+        timeLeft?: {
+            seconds?: string | number | Long.Long | undefined;
+            nanos?: number | undefined;
+        } | undefined;
+    } & {
+        limit?: Uint8Array | undefined;
+        window?: ({
+            seconds?: string | number | Long.Long | undefined;
+            nanos?: number | undefined;
+        } & {
+            seconds?: string | number | (Long.Long & {
+                high: number;
+                low: number;
+                unsigned: boolean;
+                add: (addend: string | number | Long.Long) => Long.Long;
+                and: (other: string | number | Long.Long) => Long.Long;
+                compare: (other: string | number | Long.Long) => number;
+                comp: (other: string | number | Long.Long) => number;
+                divide: (divisor: string | number | Long.Long) => Long.Long;
+                div: (divisor: string | number | Long.Long) => Long.Long;
+                equals: (other: string | number | Long.Long) => boolean;
+                eq: (other: string | number | Long.Long) => boolean;
+                getHighBits: () => number;
+                getHighBitsUnsigned: () => number;
+                getLowBits: () => number;
+                getLowBitsUnsigned: () => number;
+                getNumBitsAbs: () => number;
+                greaterThan: (other: string | number | Long.Long) => boolean;
+                gt: (other: string | number | Long.Long) => boolean;
+                greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                gte: (other: string | number | Long.Long) => boolean;
+                isEven: () => boolean;
+                isNegative: () => boolean;
+                isOdd: () => boolean;
+                isPositive: () => boolean;
+                isZero: () => boolean;
+                lessThan: (other: string | number | Long.Long) => boolean;
+                lt: (other: string | number | Long.Long) => boolean;
+                lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                lte: (other: string | number | Long.Long) => boolean;
+                modulo: (other: string | number | Long.Long) => Long.Long;
+                mod: (other: string | number | Long.Long) => Long.Long;
+                multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                mul: (multiplier: string | number | Long.Long) => Long.Long;
+                negate: () => Long.Long;
+                neg: () => Long.Long;
+                not: () => Long.Long;
+                notEquals: (other: string | number | Long.Long) => boolean;
+                neq: (other: string | number | Long.Long) => boolean;
+                or: (other: string | number | Long.Long) => Long.Long;
+                shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                shl: (numBits: number | Long.Long) => Long.Long;
+                shiftRight: (numBits: number | Long.Long) => Long.Long;
+                shr: (numBits: number | Long.Long) => Long.Long;
+                shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                shru: (numBits: number | Long.Long) => Long.Long;
+                subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                toInt: () => number;
+                toNumber: () => number;
+                toBytes: (le?: boolean | undefined) => number[];
+                toBytesLE: () => number[];
+                toBytesBE: () => number[];
+                toSigned: () => Long.Long;
+                toString: (radix?: number | undefined) => string;
+                toUnsigned: () => Long.Long;
+                xor: (other: string | number | Long.Long) => Long.Long;
+            } & Record<Exclude<keyof I["window"]["seconds"], keyof Long.Long>, never>) | undefined;
+            nanos?: number | undefined;
+        } & Record<Exclude<keyof I["window"], keyof Duration>, never>) | undefined;
+        incoming?: Uint8Array | undefined;
+        outgoing?: Uint8Array | undefined;
+        timeLeft?: ({
+            seconds?: string | number | Long.Long | undefined;
+            nanos?: number | undefined;
+        } & {
+            seconds?: string | number | (Long.Long & {
+                high: number;
+                low: number;
+                unsigned: boolean;
+                add: (addend: string | number | Long.Long) => Long.Long;
+                and: (other: string | number | Long.Long) => Long.Long;
+                compare: (other: string | number | Long.Long) => number;
+                comp: (other: string | number | Long.Long) => number;
+                divide: (divisor: string | number | Long.Long) => Long.Long;
+                div: (divisor: string | number | Long.Long) => Long.Long;
+                equals: (other: string | number | Long.Long) => boolean;
+                eq: (other: string | number | Long.Long) => boolean;
+                getHighBits: () => number;
+                getHighBitsUnsigned: () => number;
+                getLowBits: () => number;
+                getLowBitsUnsigned: () => number;
+                getNumBitsAbs: () => number;
+                greaterThan: (other: string | number | Long.Long) => boolean;
+                gt: (other: string | number | Long.Long) => boolean;
+                greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                gte: (other: string | number | Long.Long) => boolean;
+                isEven: () => boolean;
+                isNegative: () => boolean;
+                isOdd: () => boolean;
+                isPositive: () => boolean;
+                isZero: () => boolean;
+                lessThan: (other: string | number | Long.Long) => boolean;
+                lt: (other: string | number | Long.Long) => boolean;
+                lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                lte: (other: string | number | Long.Long) => boolean;
+                modulo: (other: string | number | Long.Long) => Long.Long;
+                mod: (other: string | number | Long.Long) => Long.Long;
+                multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                mul: (multiplier: string | number | Long.Long) => Long.Long;
+                negate: () => Long.Long;
+                neg: () => Long.Long;
+                not: () => Long.Long;
+                notEquals: (other: string | number | Long.Long) => boolean;
+                neq: (other: string | number | Long.Long) => boolean;
+                or: (other: string | number | Long.Long) => Long.Long;
+                shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                shl: (numBits: number | Long.Long) => Long.Long;
+                shiftRight: (numBits: number | Long.Long) => Long.Long;
+                shr: (numBits: number | Long.Long) => Long.Long;
+                shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                shru: (numBits: number | Long.Long) => Long.Long;
+                subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                toInt: () => number;
+                toNumber: () => number;
+                toBytes: (le?: boolean | undefined) => number[];
+                toBytesLE: () => number[];
+                toBytesBE: () => number[];
+                toSigned: () => Long.Long;
+                toString: (radix?: number | undefined) => string;
+                toUnsigned: () => Long.Long;
+                xor: (other: string | number | Long.Long) => Long.Long;
+            } & Record<Exclude<keyof I["timeLeft"]["seconds"], keyof Long.Long>, never>) | undefined;
+            nanos?: number | undefined;
+        } & Record<Exclude<keyof I["timeLeft"], keyof Duration>, never>) | undefined;
+    } & Record<Exclude<keyof I, keyof TransferRateLimit>, never>>(object: I): TransferRateLimit;
 };
 declare type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export declare type DeepPartial<T> = T extends Builtin ? T : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {

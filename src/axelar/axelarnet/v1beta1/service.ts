@@ -5,7 +5,6 @@ import {
   LinkResponse,
   ConfirmDepositResponse,
   ExecutePendingTransfersResponse,
-  RegisterIBCPathResponse,
   AddCosmosBasedChainResponse,
   RegisterAssetResponse,
   RouteIBCTransfersResponse,
@@ -14,7 +13,6 @@ import {
   LinkRequest,
   ConfirmDepositRequest,
   ExecutePendingTransfersRequest,
-  RegisterIBCPathRequest,
   AddCosmosBasedChainRequest,
   RegisterAssetRequest,
   RouteIBCTransfersRequest,
@@ -33,7 +31,6 @@ export interface MsgService {
   Link(request: LinkRequest): Promise<LinkResponse>;
   ConfirmDeposit(request: ConfirmDepositRequest): Promise<ConfirmDepositResponse>;
   ExecutePendingTransfers(request: ExecutePendingTransfersRequest): Promise<ExecutePendingTransfersResponse>;
-  RegisterIBCPath(request: RegisterIBCPathRequest): Promise<RegisterIBCPathResponse>;
   AddCosmosBasedChain(request: AddCosmosBasedChainRequest): Promise<AddCosmosBasedChainResponse>;
   RegisterAsset(request: RegisterAssetRequest): Promise<RegisterAssetResponse>;
   RouteIBCTransfers(request: RouteIBCTransfersRequest): Promise<RouteIBCTransfersResponse>;
@@ -48,7 +45,6 @@ export class MsgServiceClientImpl implements MsgService {
     this.Link = this.Link.bind(this);
     this.ConfirmDeposit = this.ConfirmDeposit.bind(this);
     this.ExecutePendingTransfers = this.ExecutePendingTransfers.bind(this);
-    this.RegisterIBCPath = this.RegisterIBCPath.bind(this);
     this.AddCosmosBasedChain = this.AddCosmosBasedChain.bind(this);
     this.RegisterAsset = this.RegisterAsset.bind(this);
     this.RouteIBCTransfers = this.RouteIBCTransfers.bind(this);
@@ -71,12 +67,6 @@ export class MsgServiceClientImpl implements MsgService {
     const data = ExecutePendingTransfersRequest.encode(request).finish();
     const promise = this.rpc.request("axelar.axelarnet.v1beta1.MsgService", "ExecutePendingTransfers", data);
     return promise.then((data) => ExecutePendingTransfersResponse.decode(new _m0.Reader(data)));
-  }
-
-  RegisterIBCPath(request: RegisterIBCPathRequest): Promise<RegisterIBCPathResponse> {
-    const data = RegisterIBCPathRequest.encode(request).finish();
-    const promise = this.rpc.request("axelar.axelarnet.v1beta1.MsgService", "RegisterIBCPath", data);
-    return promise.then((data) => RegisterIBCPathResponse.decode(new _m0.Reader(data)));
   }
 
   AddCosmosBasedChain(request: AddCosmosBasedChainRequest): Promise<AddCosmosBasedChainResponse> {

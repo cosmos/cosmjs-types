@@ -35,7 +35,6 @@ class MsgServiceClientImpl {
         this.Link = this.Link.bind(this);
         this.ConfirmDeposit = this.ConfirmDeposit.bind(this);
         this.ExecutePendingTransfers = this.ExecutePendingTransfers.bind(this);
-        this.RegisterIBCPath = this.RegisterIBCPath.bind(this);
         this.AddCosmosBasedChain = this.AddCosmosBasedChain.bind(this);
         this.RegisterAsset = this.RegisterAsset.bind(this);
         this.RouteIBCTransfers = this.RouteIBCTransfers.bind(this);
@@ -56,11 +55,6 @@ class MsgServiceClientImpl {
         const data = tx_1.ExecutePendingTransfersRequest.encode(request).finish();
         const promise = this.rpc.request("axelar.axelarnet.v1beta1.MsgService", "ExecutePendingTransfers", data);
         return promise.then((data) => tx_1.ExecutePendingTransfersResponse.decode(new _m0.Reader(data)));
-    }
-    RegisterIBCPath(request) {
-        const data = tx_1.RegisterIBCPathRequest.encode(request).finish();
-        const promise = this.rpc.request("axelar.axelarnet.v1beta1.MsgService", "RegisterIBCPath", data);
-        return promise.then((data) => tx_1.RegisterIBCPathResponse.decode(new _m0.Reader(data)));
     }
     AddCosmosBasedChain(request) {
         const data = tx_1.AddCosmosBasedChainRequest.encode(request).finish();

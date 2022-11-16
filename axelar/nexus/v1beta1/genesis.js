@@ -40,6 +40,8 @@ function createBaseGenesisState() {
         transfers: [],
         fee: undefined,
         feeInfos: [],
+        rateLimits: [],
+        transferEpochs: [],
     };
 }
 exports.GenesisState = {
@@ -67,6 +69,12 @@ exports.GenesisState = {
         }
         for (const v of message.feeInfos) {
             types_1.FeeInfo.encode(v, writer.uint32(66).fork()).ldelim();
+        }
+        for (const v of message.rateLimits) {
+            types_2.RateLimit.encode(v, writer.uint32(74).fork()).ldelim();
+        }
+        for (const v of message.transferEpochs) {
+            types_2.TransferEpoch.encode(v, writer.uint32(82).fork()).ldelim();
         }
         return writer;
     },
@@ -101,6 +109,12 @@ exports.GenesisState = {
                 case 8:
                     message.feeInfos.push(types_1.FeeInfo.decode(reader, reader.uint32()));
                     break;
+                case 9:
+                    message.rateLimits.push(types_2.RateLimit.decode(reader, reader.uint32()));
+                    break;
+                case 10:
+                    message.transferEpochs.push(types_2.TransferEpoch.decode(reader, reader.uint32()));
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -124,6 +138,12 @@ exports.GenesisState = {
                 : [],
             fee: isSet(object.fee) ? types_1.TransferFee.fromJSON(object.fee) : undefined,
             feeInfos: Array.isArray(object === null || object === void 0 ? void 0 : object.feeInfos) ? object.feeInfos.map((e) => types_1.FeeInfo.fromJSON(e)) : [],
+            rateLimits: Array.isArray(object === null || object === void 0 ? void 0 : object.rateLimits)
+                ? object.rateLimits.map((e) => types_2.RateLimit.fromJSON(e))
+                : [],
+            transferEpochs: Array.isArray(object === null || object === void 0 ? void 0 : object.transferEpochs)
+                ? object.transferEpochs.map((e) => types_2.TransferEpoch.fromJSON(e))
+                : [],
         };
     },
     toJSON(message) {
@@ -161,10 +181,22 @@ exports.GenesisState = {
         else {
             obj.feeInfos = [];
         }
+        if (message.rateLimits) {
+            obj.rateLimits = message.rateLimits.map((e) => (e ? types_2.RateLimit.toJSON(e) : undefined));
+        }
+        else {
+            obj.rateLimits = [];
+        }
+        if (message.transferEpochs) {
+            obj.transferEpochs = message.transferEpochs.map((e) => (e ? types_2.TransferEpoch.toJSON(e) : undefined));
+        }
+        else {
+            obj.transferEpochs = [];
+        }
         return obj;
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e;
+        var _a, _b, _c, _d, _e, _f, _g;
         const message = createBaseGenesisState();
         message.params =
             object.params !== undefined && object.params !== null ? params_1.Params.fromPartial(object.params) : undefined;
@@ -177,6 +209,8 @@ exports.GenesisState = {
         message.fee =
             object.fee !== undefined && object.fee !== null ? types_1.TransferFee.fromPartial(object.fee) : undefined;
         message.feeInfos = ((_e = object.feeInfos) === null || _e === void 0 ? void 0 : _e.map((e) => types_1.FeeInfo.fromPartial(e))) || [];
+        message.rateLimits = ((_f = object.rateLimits) === null || _f === void 0 ? void 0 : _f.map((e) => types_2.RateLimit.fromPartial(e))) || [];
+        message.transferEpochs = ((_g = object.transferEpochs) === null || _g === void 0 ? void 0 : _g.map((e) => types_2.TransferEpoch.fromPartial(e))) || [];
         return message;
     },
 };
