@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GenesisState = exports.protobufPackage = void 0;
+exports.GenesisState_SeqIdMappingEntry = exports.GenesisState = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
@@ -36,7 +36,8 @@ function createBaseGenesisState() {
         collectorAddress: new Uint8Array(),
         chains: [],
         transferQueue: undefined,
-        failedTransfers: [],
+        ibcTransfers: [],
+        seqIdMapping: {},
     };
 }
 exports.GenesisState = {
@@ -53,9 +54,12 @@ exports.GenesisState = {
         if (message.transferQueue !== undefined) {
             queuer_1.QueueState.encode(message.transferQueue, writer.uint32(42).fork()).ldelim();
         }
-        for (const v of message.failedTransfers) {
-            types_1.IBCTransfer.encode(v, writer.uint32(50).fork()).ldelim();
+        for (const v of message.ibcTransfers) {
+            types_1.IBCTransfer.encode(v, writer.uint32(58).fork()).ldelim();
         }
+        Object.entries(message.seqIdMapping).forEach(([key, value]) => {
+            exports.GenesisState_SeqIdMappingEntry.encode({ key: key, value }, writer.uint32(66).fork()).ldelim();
+        });
         return writer;
     },
     decode(input, length) {
@@ -77,8 +81,14 @@ exports.GenesisState = {
                 case 5:
                     message.transferQueue = queuer_1.QueueState.decode(reader, reader.uint32());
                     break;
-                case 6:
-                    message.failedTransfers.push(types_1.IBCTransfer.decode(reader, reader.uint32()));
+                case 7:
+                    message.ibcTransfers.push(types_1.IBCTransfer.decode(reader, reader.uint32()));
+                    break;
+                case 8:
+                    const entry8 = exports.GenesisState_SeqIdMappingEntry.decode(reader, reader.uint32());
+                    if (entry8.value !== undefined) {
+                        message.seqIdMapping[entry8.key] = entry8.value;
+                    }
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -95,9 +105,15 @@ exports.GenesisState = {
                 : new Uint8Array(),
             chains: Array.isArray(object === null || object === void 0 ? void 0 : object.chains) ? object.chains.map((e) => types_1.CosmosChain.fromJSON(e)) : [],
             transferQueue: isSet(object.transferQueue) ? queuer_1.QueueState.fromJSON(object.transferQueue) : undefined,
-            failedTransfers: Array.isArray(object === null || object === void 0 ? void 0 : object.failedTransfers)
-                ? object.failedTransfers.map((e) => types_1.IBCTransfer.fromJSON(e))
+            ibcTransfers: Array.isArray(object === null || object === void 0 ? void 0 : object.ibcTransfers)
+                ? object.ibcTransfers.map((e) => types_1.IBCTransfer.fromJSON(e))
                 : [],
+            seqIdMapping: isObject(object.seqIdMapping)
+                ? Object.entries(object.seqIdMapping).reduce((acc, [key, value]) => {
+                    acc[key] = long_1.default.fromValue(value);
+                    return acc;
+                }, {})
+                : {},
         };
     },
     toJSON(message) {
@@ -113,16 +129,22 @@ exports.GenesisState = {
         }
         message.transferQueue !== undefined &&
             (obj.transferQueue = message.transferQueue ? queuer_1.QueueState.toJSON(message.transferQueue) : undefined);
-        if (message.failedTransfers) {
-            obj.failedTransfers = message.failedTransfers.map((e) => (e ? types_1.IBCTransfer.toJSON(e) : undefined));
+        if (message.ibcTransfers) {
+            obj.ibcTransfers = message.ibcTransfers.map((e) => (e ? types_1.IBCTransfer.toJSON(e) : undefined));
         }
         else {
-            obj.failedTransfers = [];
+            obj.ibcTransfers = [];
+        }
+        obj.seqIdMapping = {};
+        if (message.seqIdMapping) {
+            Object.entries(message.seqIdMapping).forEach(([k, v]) => {
+                obj.seqIdMapping[k] = v.toString();
+            });
         }
         return obj;
     },
     fromPartial(object) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         const message = createBaseGenesisState();
         message.params =
             object.params !== undefined && object.params !== null ? params_1.Params.fromPartial(object.params) : undefined;
@@ -132,7 +154,67 @@ exports.GenesisState = {
             object.transferQueue !== undefined && object.transferQueue !== null
                 ? queuer_1.QueueState.fromPartial(object.transferQueue)
                 : undefined;
-        message.failedTransfers = ((_c = object.failedTransfers) === null || _c === void 0 ? void 0 : _c.map((e) => types_1.IBCTransfer.fromPartial(e))) || [];
+        message.ibcTransfers = ((_c = object.ibcTransfers) === null || _c === void 0 ? void 0 : _c.map((e) => types_1.IBCTransfer.fromPartial(e))) || [];
+        message.seqIdMapping = Object.entries((_d = object.seqIdMapping) !== null && _d !== void 0 ? _d : {}).reduce((acc, [key, value]) => {
+            if (value !== undefined) {
+                acc[key] = long_1.default.fromValue(value);
+            }
+            return acc;
+        }, {});
+        return message;
+    },
+};
+function createBaseGenesisState_SeqIdMappingEntry() {
+    return { key: "", value: long_1.default.UZERO };
+}
+exports.GenesisState_SeqIdMappingEntry = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.key !== "") {
+            writer.uint32(10).string(message.key);
+        }
+        if (!message.value.isZero()) {
+            writer.uint32(16).uint64(message.value);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseGenesisState_SeqIdMappingEntry();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.key = reader.string();
+                    break;
+                case 2:
+                    message.value = reader.uint64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            key: isSet(object.key) ? String(object.key) : "",
+            value: isSet(object.value) ? long_1.default.fromValue(object.value) : long_1.default.UZERO,
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.key !== undefined && (obj.key = message.key);
+        message.value !== undefined && (obj.value = (message.value || long_1.default.UZERO).toString());
+        return obj;
+    },
+    fromPartial(object) {
+        var _a;
+        const message = createBaseGenesisState_SeqIdMappingEntry();
+        message.key = (_a = object.key) !== null && _a !== void 0 ? _a : "";
+        message.value =
+            object.value !== undefined && object.value !== null ? long_1.default.fromValue(object.value) : long_1.default.UZERO;
         return message;
     },
 };
@@ -167,6 +249,9 @@ function base64FromBytes(arr) {
 if (_m0.util.Long !== long_1.default) {
     _m0.util.Long = long_1.default;
     _m0.configure();
+}
+function isObject(value) {
+    return typeof value === "object" && value !== null;
 }
 function isSet(value) {
     return value !== null && value !== undefined;

@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PollMetadata = exports.Gateway = exports.TokenDetails = exports.Asset = exports.TransferKey = exports.SigMetadata = exports.CommandBatchMetadata = exports.Command = exports.TransactionMetadata = exports.ERC20TokenMetadata = exports.ERC20Deposit = exports.BurnerInfo = exports.NetworkInfo = exports.EventMultisigOperatorshipTransferred = exports.EventMultisigOwnershipTransferred = exports.EventTokenDeployed = exports.EventTransfer = exports.EventContractCallWithToken = exports.EventContractCall = exports.EventTokenSent = exports.Event = exports.VoteEvents = exports.gateway_StatusToJSON = exports.gateway_StatusFromJSON = exports.Gateway_Status = exports.event_StatusToJSON = exports.event_StatusFromJSON = exports.Event_Status = exports.depositStatusToJSON = exports.depositStatusFromJSON = exports.DepositStatus = exports.sigTypeToJSON = exports.sigTypeFromJSON = exports.SigType = exports.batchedCommandsStatusToJSON = exports.batchedCommandsStatusFromJSON = exports.BatchedCommandsStatus = exports.statusToJSON = exports.statusFromJSON = exports.Status = exports.protobufPackage = void 0;
+exports.PollMetadata = exports.Gateway = exports.TokenDetails = exports.Asset = exports.TransferKey = exports.SigMetadata = exports.CommandBatchMetadata = exports.Command = exports.TransactionMetadata = exports.ERC20TokenMetadata = exports.ERC20Deposit = exports.BurnerInfo = exports.NetworkInfo = exports.EventMultisigOperatorshipTransferred = exports.EventMultisigOwnershipTransferred = exports.EventTokenDeployed = exports.EventTransfer = exports.EventContractCallWithToken = exports.EventContractCall = exports.EventTokenSent = exports.Event = exports.VoteEvents = exports.event_StatusToJSON = exports.event_StatusFromJSON = exports.Event_Status = exports.depositStatusToJSON = exports.depositStatusFromJSON = exports.DepositStatus = exports.sigTypeToJSON = exports.sigTypeFromJSON = exports.SigType = exports.batchedCommandsStatusToJSON = exports.batchedCommandsStatusFromJSON = exports.BatchedCommandsStatus = exports.commandTypeToJSON = exports.commandTypeFromJSON = exports.CommandType = exports.statusToJSON = exports.statusFromJSON = exports.Status = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
@@ -77,6 +77,69 @@ function statusToJSON(object) {
     }
 }
 exports.statusToJSON = statusToJSON;
+var CommandType;
+(function (CommandType) {
+    CommandType[CommandType["COMMAND_TYPE_UNSPECIFIED"] = 0] = "COMMAND_TYPE_UNSPECIFIED";
+    CommandType[CommandType["COMMAND_TYPE_MINT_TOKEN"] = 1] = "COMMAND_TYPE_MINT_TOKEN";
+    CommandType[CommandType["COMMAND_TYPE_DEPLOY_TOKEN"] = 2] = "COMMAND_TYPE_DEPLOY_TOKEN";
+    CommandType[CommandType["COMMAND_TYPE_BURN_TOKEN"] = 3] = "COMMAND_TYPE_BURN_TOKEN";
+    CommandType[CommandType["COMMAND_TYPE_TRANSFER_OPERATORSHIP"] = 4] = "COMMAND_TYPE_TRANSFER_OPERATORSHIP";
+    CommandType[CommandType["COMMAND_TYPE_APPROVE_CONTRACT_CALL_WITH_MINT"] = 5] = "COMMAND_TYPE_APPROVE_CONTRACT_CALL_WITH_MINT";
+    CommandType[CommandType["COMMAND_TYPE_APPROVE_CONTRACT_CALL"] = 6] = "COMMAND_TYPE_APPROVE_CONTRACT_CALL";
+    CommandType[CommandType["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
+})(CommandType = exports.CommandType || (exports.CommandType = {}));
+function commandTypeFromJSON(object) {
+    switch (object) {
+        case 0:
+        case "COMMAND_TYPE_UNSPECIFIED":
+            return CommandType.COMMAND_TYPE_UNSPECIFIED;
+        case 1:
+        case "COMMAND_TYPE_MINT_TOKEN":
+            return CommandType.COMMAND_TYPE_MINT_TOKEN;
+        case 2:
+        case "COMMAND_TYPE_DEPLOY_TOKEN":
+            return CommandType.COMMAND_TYPE_DEPLOY_TOKEN;
+        case 3:
+        case "COMMAND_TYPE_BURN_TOKEN":
+            return CommandType.COMMAND_TYPE_BURN_TOKEN;
+        case 4:
+        case "COMMAND_TYPE_TRANSFER_OPERATORSHIP":
+            return CommandType.COMMAND_TYPE_TRANSFER_OPERATORSHIP;
+        case 5:
+        case "COMMAND_TYPE_APPROVE_CONTRACT_CALL_WITH_MINT":
+            return CommandType.COMMAND_TYPE_APPROVE_CONTRACT_CALL_WITH_MINT;
+        case 6:
+        case "COMMAND_TYPE_APPROVE_CONTRACT_CALL":
+            return CommandType.COMMAND_TYPE_APPROVE_CONTRACT_CALL;
+        case -1:
+        case "UNRECOGNIZED":
+        default:
+            return CommandType.UNRECOGNIZED;
+    }
+}
+exports.commandTypeFromJSON = commandTypeFromJSON;
+function commandTypeToJSON(object) {
+    switch (object) {
+        case CommandType.COMMAND_TYPE_UNSPECIFIED:
+            return "COMMAND_TYPE_UNSPECIFIED";
+        case CommandType.COMMAND_TYPE_MINT_TOKEN:
+            return "COMMAND_TYPE_MINT_TOKEN";
+        case CommandType.COMMAND_TYPE_DEPLOY_TOKEN:
+            return "COMMAND_TYPE_DEPLOY_TOKEN";
+        case CommandType.COMMAND_TYPE_BURN_TOKEN:
+            return "COMMAND_TYPE_BURN_TOKEN";
+        case CommandType.COMMAND_TYPE_TRANSFER_OPERATORSHIP:
+            return "COMMAND_TYPE_TRANSFER_OPERATORSHIP";
+        case CommandType.COMMAND_TYPE_APPROVE_CONTRACT_CALL_WITH_MINT:
+            return "COMMAND_TYPE_APPROVE_CONTRACT_CALL_WITH_MINT";
+        case CommandType.COMMAND_TYPE_APPROVE_CONTRACT_CALL:
+            return "COMMAND_TYPE_APPROVE_CONTRACT_CALL";
+        case CommandType.UNRECOGNIZED:
+        default:
+            return "UNRECOGNIZED";
+    }
+}
+exports.commandTypeToJSON = commandTypeToJSON;
 var BatchedCommandsStatus;
 (function (BatchedCommandsStatus) {
     BatchedCommandsStatus[BatchedCommandsStatus["BATCHED_COMMANDS_STATUS_UNSPECIFIED"] = 0] = "BATCHED_COMMANDS_STATUS_UNSPECIFIED";
@@ -251,45 +314,6 @@ function event_StatusToJSON(object) {
     }
 }
 exports.event_StatusToJSON = event_StatusToJSON;
-var Gateway_Status;
-(function (Gateway_Status) {
-    Gateway_Status[Gateway_Status["STATUS_UNSPECIFIED"] = 0] = "STATUS_UNSPECIFIED";
-    Gateway_Status[Gateway_Status["STATUS_PENDING"] = 1] = "STATUS_PENDING";
-    Gateway_Status[Gateway_Status["STATUS_CONFIRMED"] = 2] = "STATUS_CONFIRMED";
-    Gateway_Status[Gateway_Status["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
-})(Gateway_Status = exports.Gateway_Status || (exports.Gateway_Status = {}));
-function gateway_StatusFromJSON(object) {
-    switch (object) {
-        case 0:
-        case "STATUS_UNSPECIFIED":
-            return Gateway_Status.STATUS_UNSPECIFIED;
-        case 1:
-        case "STATUS_PENDING":
-            return Gateway_Status.STATUS_PENDING;
-        case 2:
-        case "STATUS_CONFIRMED":
-            return Gateway_Status.STATUS_CONFIRMED;
-        case -1:
-        case "UNRECOGNIZED":
-        default:
-            return Gateway_Status.UNRECOGNIZED;
-    }
-}
-exports.gateway_StatusFromJSON = gateway_StatusFromJSON;
-function gateway_StatusToJSON(object) {
-    switch (object) {
-        case Gateway_Status.STATUS_UNSPECIFIED:
-            return "STATUS_UNSPECIFIED";
-        case Gateway_Status.STATUS_PENDING:
-            return "STATUS_PENDING";
-        case Gateway_Status.STATUS_CONFIRMED:
-            return "STATUS_CONFIRMED";
-        case Gateway_Status.UNRECOGNIZED:
-        default:
-            return "UNRECOGNIZED";
-    }
-}
-exports.gateway_StatusToJSON = gateway_StatusToJSON;
 function createBaseVoteEvents() {
     return { chain: "", events: [] };
 }
@@ -1234,6 +1258,7 @@ function createBaseERC20Deposit() {
         asset: "",
         destinationChain: "",
         burnerAddress: new Uint8Array(),
+        logIndex: long_1.default.UZERO,
     };
 }
 exports.ERC20Deposit = {
@@ -1252,6 +1277,9 @@ exports.ERC20Deposit = {
         }
         if (message.burnerAddress.length !== 0) {
             writer.uint32(42).bytes(message.burnerAddress);
+        }
+        if (!message.logIndex.isZero()) {
+            writer.uint32(48).uint64(message.logIndex);
         }
         return writer;
     },
@@ -1277,6 +1305,9 @@ exports.ERC20Deposit = {
                 case 5:
                     message.burnerAddress = reader.bytes();
                     break;
+                case 6:
+                    message.logIndex = reader.uint64();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -1291,6 +1322,7 @@ exports.ERC20Deposit = {
             asset: isSet(object.asset) ? String(object.asset) : "",
             destinationChain: isSet(object.destinationChain) ? String(object.destinationChain) : "",
             burnerAddress: isSet(object.burnerAddress) ? bytesFromBase64(object.burnerAddress) : new Uint8Array(),
+            logIndex: isSet(object.logIndex) ? long_1.default.fromValue(object.logIndex) : long_1.default.UZERO,
         };
     },
     toJSON(message) {
@@ -1303,6 +1335,7 @@ exports.ERC20Deposit = {
         message.destinationChain !== undefined && (obj.destinationChain = message.destinationChain);
         message.burnerAddress !== undefined &&
             (obj.burnerAddress = base64FromBytes(message.burnerAddress !== undefined ? message.burnerAddress : new Uint8Array()));
+        message.logIndex !== undefined && (obj.logIndex = (message.logIndex || long_1.default.UZERO).toString());
         return obj;
     },
     fromPartial(object) {
@@ -1313,6 +1346,10 @@ exports.ERC20Deposit = {
         message.asset = (_c = object.asset) !== null && _c !== void 0 ? _c : "";
         message.destinationChain = (_d = object.destinationChain) !== null && _d !== void 0 ? _d : "";
         message.burnerAddress = (_e = object.burnerAddress) !== null && _e !== void 0 ? _e : new Uint8Array();
+        message.logIndex =
+            object.logIndex !== undefined && object.logIndex !== null
+                ? long_1.default.fromValue(object.logIndex)
+                : long_1.default.UZERO;
         return message;
     },
 };
@@ -1494,7 +1531,7 @@ exports.TransactionMetadata = {
     },
 };
 function createBaseCommand() {
-    return { id: new Uint8Array(), command: "", params: new Uint8Array(), keyId: "", maxGasCost: 0 };
+    return { id: new Uint8Array(), command: "", params: new Uint8Array(), keyId: "", maxGasCost: 0, type: 0 };
 }
 exports.Command = {
     encode(message, writer = _m0.Writer.create()) {
@@ -1512,6 +1549,9 @@ exports.Command = {
         }
         if (message.maxGasCost !== 0) {
             writer.uint32(40).uint32(message.maxGasCost);
+        }
+        if (message.type !== 0) {
+            writer.uint32(48).int32(message.type);
         }
         return writer;
     },
@@ -1537,6 +1577,9 @@ exports.Command = {
                 case 5:
                     message.maxGasCost = reader.uint32();
                     break;
+                case 6:
+                    message.type = reader.int32();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -1551,6 +1594,7 @@ exports.Command = {
             params: isSet(object.params) ? bytesFromBase64(object.params) : new Uint8Array(),
             keyId: isSet(object.keyId) ? String(object.keyId) : "",
             maxGasCost: isSet(object.maxGasCost) ? Number(object.maxGasCost) : 0,
+            type: isSet(object.type) ? commandTypeFromJSON(object.type) : 0,
         };
     },
     toJSON(message) {
@@ -1562,16 +1606,18 @@ exports.Command = {
             (obj.params = base64FromBytes(message.params !== undefined ? message.params : new Uint8Array()));
         message.keyId !== undefined && (obj.keyId = message.keyId);
         message.maxGasCost !== undefined && (obj.maxGasCost = Math.round(message.maxGasCost));
+        message.type !== undefined && (obj.type = commandTypeToJSON(message.type));
         return obj;
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e;
+        var _a, _b, _c, _d, _e, _f;
         const message = createBaseCommand();
         message.id = (_a = object.id) !== null && _a !== void 0 ? _a : new Uint8Array();
         message.command = (_b = object.command) !== null && _b !== void 0 ? _b : "";
         message.params = (_c = object.params) !== null && _c !== void 0 ? _c : new Uint8Array();
         message.keyId = (_d = object.keyId) !== null && _d !== void 0 ? _d : "";
         message.maxGasCost = (_e = object.maxGasCost) !== null && _e !== void 0 ? _e : 0;
+        message.type = (_f = object.type) !== null && _f !== void 0 ? _f : 0;
         return message;
     },
 };
@@ -1953,15 +1999,12 @@ exports.TokenDetails = {
     },
 };
 function createBaseGateway() {
-    return { address: new Uint8Array(), status: 0 };
+    return { address: new Uint8Array() };
 }
 exports.Gateway = {
     encode(message, writer = _m0.Writer.create()) {
         if (message.address.length !== 0) {
             writer.uint32(10).bytes(message.address);
-        }
-        if (message.status !== 0) {
-            writer.uint32(16).int32(message.status);
         }
         return writer;
     },
@@ -1975,9 +2018,6 @@ exports.Gateway = {
                 case 1:
                     message.address = reader.bytes();
                     break;
-                case 2:
-                    message.status = reader.int32();
-                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -1988,21 +2028,18 @@ exports.Gateway = {
     fromJSON(object) {
         return {
             address: isSet(object.address) ? bytesFromBase64(object.address) : new Uint8Array(),
-            status: isSet(object.status) ? gateway_StatusFromJSON(object.status) : 0,
         };
     },
     toJSON(message) {
         const obj = {};
         message.address !== undefined &&
             (obj.address = base64FromBytes(message.address !== undefined ? message.address : new Uint8Array()));
-        message.status !== undefined && (obj.status = gateway_StatusToJSON(message.status));
         return obj;
     },
     fromPartial(object) {
-        var _a, _b;
+        var _a;
         const message = createBaseGateway();
         message.address = (_a = object.address) !== null && _a !== void 0 ? _a : new Uint8Array();
-        message.status = (_b = object.status) !== null && _b !== void 0 ? _b : 0;
         return message;
     },
 };

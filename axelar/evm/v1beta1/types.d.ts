@@ -15,6 +15,18 @@ export declare enum Status {
 }
 export declare function statusFromJSON(object: any): Status;
 export declare function statusToJSON(object: Status): string;
+export declare enum CommandType {
+    COMMAND_TYPE_UNSPECIFIED = 0,
+    COMMAND_TYPE_MINT_TOKEN = 1,
+    COMMAND_TYPE_DEPLOY_TOKEN = 2,
+    COMMAND_TYPE_BURN_TOKEN = 3,
+    COMMAND_TYPE_TRANSFER_OPERATORSHIP = 4,
+    COMMAND_TYPE_APPROVE_CONTRACT_CALL_WITH_MINT = 5,
+    COMMAND_TYPE_APPROVE_CONTRACT_CALL = 6,
+    UNRECOGNIZED = -1
+}
+export declare function commandTypeFromJSON(object: any): CommandType;
+export declare function commandTypeToJSON(object: CommandType): string;
 export declare enum BatchedCommandsStatus {
     BATCHED_COMMANDS_STATUS_UNSPECIFIED = 0,
     BATCHED_COMMANDS_STATUS_SIGNING = 1,
@@ -133,6 +145,7 @@ export interface ERC20Deposit {
     asset: string;
     destinationChain: string;
     burnerAddress: Uint8Array;
+    logIndex: Long;
 }
 /** ERC20TokenMetadata describes information about an ERC20 token */
 export interface ERC20TokenMetadata {
@@ -151,10 +164,12 @@ export interface TransactionMetadata {
 }
 export interface Command {
     id: Uint8Array;
+    /** @deprecated */
     command: string;
     params: Uint8Array;
     keyId: string;
     maxGasCost: number;
+    type: CommandType;
 }
 export interface CommandBatchMetadata {
     id: Uint8Array;
@@ -192,17 +207,7 @@ export interface TokenDetails {
 }
 export interface Gateway {
     address: Uint8Array;
-    /** @deprecated */
-    status: Gateway_Status;
 }
-export declare enum Gateway_Status {
-    STATUS_UNSPECIFIED = 0,
-    STATUS_PENDING = 1,
-    STATUS_CONFIRMED = 2,
-    UNRECOGNIZED = -1
-}
-export declare function gateway_StatusFromJSON(object: any): Gateway_Status;
-export declare function gateway_StatusToJSON(object: Gateway_Status): string;
 export interface PollMetadata {
     chain: string;
     txId: Uint8Array;
@@ -882,12 +887,71 @@ export declare const ERC20Deposit: {
         asset?: string | undefined;
         destinationChain?: string | undefined;
         burnerAddress?: Uint8Array | undefined;
+        logIndex?: string | number | Long.Long | undefined;
     } & {
         txId?: Uint8Array | undefined;
         amount?: Uint8Array | undefined;
         asset?: string | undefined;
         destinationChain?: string | undefined;
         burnerAddress?: Uint8Array | undefined;
+        logIndex?: string | number | (Long.Long & {
+            high: number;
+            low: number;
+            unsigned: boolean;
+            add: (addend: string | number | Long.Long) => Long.Long;
+            and: (other: string | number | Long.Long) => Long.Long;
+            compare: (other: string | number | Long.Long) => number;
+            comp: (other: string | number | Long.Long) => number;
+            divide: (divisor: string | number | Long.Long) => Long.Long;
+            div: (divisor: string | number | Long.Long) => Long.Long;
+            equals: (other: string | number | Long.Long) => boolean;
+            eq: (other: string | number | Long.Long) => boolean;
+            getHighBits: () => number;
+            getHighBitsUnsigned: () => number;
+            getLowBits: () => number;
+            getLowBitsUnsigned: () => number;
+            getNumBitsAbs: () => number;
+            greaterThan: (other: string | number | Long.Long) => boolean;
+            gt: (other: string | number | Long.Long) => boolean;
+            greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+            gte: (other: string | number | Long.Long) => boolean;
+            isEven: () => boolean;
+            isNegative: () => boolean;
+            isOdd: () => boolean;
+            isPositive: () => boolean;
+            isZero: () => boolean;
+            lessThan: (other: string | number | Long.Long) => boolean;
+            lt: (other: string | number | Long.Long) => boolean;
+            lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+            lte: (other: string | number | Long.Long) => boolean;
+            modulo: (other: string | number | Long.Long) => Long.Long;
+            mod: (other: string | number | Long.Long) => Long.Long;
+            multiply: (multiplier: string | number | Long.Long) => Long.Long;
+            mul: (multiplier: string | number | Long.Long) => Long.Long;
+            negate: () => Long.Long;
+            neg: () => Long.Long;
+            not: () => Long.Long;
+            notEquals: (other: string | number | Long.Long) => boolean;
+            neq: (other: string | number | Long.Long) => boolean;
+            or: (other: string | number | Long.Long) => Long.Long;
+            shiftLeft: (numBits: number | Long.Long) => Long.Long;
+            shl: (numBits: number | Long.Long) => Long.Long;
+            shiftRight: (numBits: number | Long.Long) => Long.Long;
+            shr: (numBits: number | Long.Long) => Long.Long;
+            shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+            shru: (numBits: number | Long.Long) => Long.Long;
+            subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+            sub: (subtrahend: string | number | Long.Long) => Long.Long;
+            toInt: () => number;
+            toNumber: () => number;
+            toBytes: (le?: boolean | undefined) => number[];
+            toBytesLE: () => number[];
+            toBytesBE: () => number[];
+            toSigned: () => Long.Long;
+            toString: (radix?: number | undefined) => string;
+            toUnsigned: () => Long.Long;
+            xor: (other: string | number | Long.Long) => Long.Long;
+        } & Record<Exclude<keyof I["logIndex"], keyof Long.Long>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof ERC20Deposit>, never>>(object: I): ERC20Deposit;
 };
 export declare const ERC20TokenMetadata: {
@@ -954,12 +1018,14 @@ export declare const Command: {
         params?: Uint8Array | undefined;
         keyId?: string | undefined;
         maxGasCost?: number | undefined;
+        type?: CommandType | undefined;
     } & {
         id?: Uint8Array | undefined;
         command?: string | undefined;
         params?: Uint8Array | undefined;
         keyId?: string | undefined;
         maxGasCost?: number | undefined;
+        type?: CommandType | undefined;
     } & Record<Exclude<keyof I, keyof Command>, never>>(object: I): Command;
 };
 export declare const CommandBatchMetadata: {
@@ -1061,11 +1127,9 @@ export declare const Gateway: {
     toJSON(message: Gateway): unknown;
     fromPartial<I extends {
         address?: Uint8Array | undefined;
-        status?: Gateway_Status | undefined;
     } & {
         address?: Uint8Array | undefined;
-        status?: Gateway_Status | undefined;
-    } & Record<Exclude<keyof I, keyof Gateway>, never>>(object: I): Gateway;
+    } & Record<Exclude<keyof I, "address">, never>>(object: I): Gateway;
 };
 export declare const PollMetadata: {
     encode(message: PollMetadata, writer?: _m0.Writer): _m0.Writer;

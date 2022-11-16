@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Asset = exports.FeeInfo = exports.TransferFee = exports.CrossChainTransfer = exports.CrossChainAddress = exports.Chain = exports.transferStateToJSON = exports.transferStateFromJSON = exports.TransferState = exports.protobufPackage = void 0;
+exports.Asset = exports.FeeInfo = exports.TransferFee = exports.CrossChainTransfer = exports.CrossChainAddress = exports.Chain = exports.transferDirectionToJSON = exports.transferDirectionFromJSON = exports.TransferDirection = exports.transferStateToJSON = exports.transferStateFromJSON = exports.TransferState = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
@@ -74,6 +74,45 @@ function transferStateToJSON(object) {
     }
 }
 exports.transferStateToJSON = transferStateToJSON;
+var TransferDirection;
+(function (TransferDirection) {
+    TransferDirection[TransferDirection["TRANSFER_DIRECTION_UNSPECIFIED"] = 0] = "TRANSFER_DIRECTION_UNSPECIFIED";
+    TransferDirection[TransferDirection["TRANSFER_DIRECTION_INCOMING"] = 1] = "TRANSFER_DIRECTION_INCOMING";
+    TransferDirection[TransferDirection["TRANSFER_DIRECTION_OUTGOING"] = 2] = "TRANSFER_DIRECTION_OUTGOING";
+    TransferDirection[TransferDirection["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
+})(TransferDirection = exports.TransferDirection || (exports.TransferDirection = {}));
+function transferDirectionFromJSON(object) {
+    switch (object) {
+        case 0:
+        case "TRANSFER_DIRECTION_UNSPECIFIED":
+            return TransferDirection.TRANSFER_DIRECTION_UNSPECIFIED;
+        case 1:
+        case "TRANSFER_DIRECTION_INCOMING":
+            return TransferDirection.TRANSFER_DIRECTION_INCOMING;
+        case 2:
+        case "TRANSFER_DIRECTION_OUTGOING":
+            return TransferDirection.TRANSFER_DIRECTION_OUTGOING;
+        case -1:
+        case "UNRECOGNIZED":
+        default:
+            return TransferDirection.UNRECOGNIZED;
+    }
+}
+exports.transferDirectionFromJSON = transferDirectionFromJSON;
+function transferDirectionToJSON(object) {
+    switch (object) {
+        case TransferDirection.TRANSFER_DIRECTION_UNSPECIFIED:
+            return "TRANSFER_DIRECTION_UNSPECIFIED";
+        case TransferDirection.TRANSFER_DIRECTION_INCOMING:
+            return "TRANSFER_DIRECTION_INCOMING";
+        case TransferDirection.TRANSFER_DIRECTION_OUTGOING:
+            return "TRANSFER_DIRECTION_OUTGOING";
+        case TransferDirection.UNRECOGNIZED:
+        default:
+            return "UNRECOGNIZED";
+    }
+}
+exports.transferDirectionToJSON = transferDirectionToJSON;
 function createBaseChain() {
     return { name: "", supportsForeignAssets: false, keyType: 0, module: "" };
 }

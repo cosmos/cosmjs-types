@@ -79,10 +79,7 @@ export interface HeartBeatRequest {
   keyIds: string[];
 }
 
-export interface HeartBeatResponse {
-  keygenIllegibility: number;
-  signingIllegibility: number;
-}
+export interface HeartBeatResponse {}
 
 export interface RegisterExternalKeysRequest {
   sender: Uint8Array;
@@ -872,17 +869,11 @@ export const HeartBeatRequest = {
 };
 
 function createBaseHeartBeatResponse(): HeartBeatResponse {
-  return { keygenIllegibility: 0, signingIllegibility: 0 };
+  return {};
 }
 
 export const HeartBeatResponse = {
-  encode(message: HeartBeatResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.keygenIllegibility !== 0) {
-      writer.uint32(8).int32(message.keygenIllegibility);
-    }
-    if (message.signingIllegibility !== 0) {
-      writer.uint32(16).int32(message.signingIllegibility);
-    }
+  encode(_: HeartBeatResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
@@ -893,12 +884,6 @@ export const HeartBeatResponse = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          message.keygenIllegibility = reader.int32();
-          break;
-        case 2:
-          message.signingIllegibility = reader.int32();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -907,26 +892,17 @@ export const HeartBeatResponse = {
     return message;
   },
 
-  fromJSON(object: any): HeartBeatResponse {
-    return {
-      keygenIllegibility: isSet(object.keygenIllegibility) ? Number(object.keygenIllegibility) : 0,
-      signingIllegibility: isSet(object.signingIllegibility) ? Number(object.signingIllegibility) : 0,
-    };
+  fromJSON(_: any): HeartBeatResponse {
+    return {};
   },
 
-  toJSON(message: HeartBeatResponse): unknown {
+  toJSON(_: HeartBeatResponse): unknown {
     const obj: any = {};
-    message.keygenIllegibility !== undefined &&
-      (obj.keygenIllegibility = Math.round(message.keygenIllegibility));
-    message.signingIllegibility !== undefined &&
-      (obj.signingIllegibility = Math.round(message.signingIllegibility));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<HeartBeatResponse>, I>>(object: I): HeartBeatResponse {
+  fromPartial<I extends Exact<DeepPartial<HeartBeatResponse>, I>>(_: I): HeartBeatResponse {
     const message = createBaseHeartBeatResponse();
-    message.keygenIllegibility = object.keygenIllegibility ?? 0;
-    message.signingIllegibility = object.signingIllegibility ?? 0;
     return message;
   },
 };

@@ -2,6 +2,14 @@ import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { BatchedCommandsStatus, DepositStatus, Event, BurnerInfo, TokenDetails } from "../../../axelar/evm/v1beta1/types";
 export declare const protobufPackage = "axelar.evm.v1beta1";
+export declare enum ChainStatus {
+    CHAIN_STATUS_UNSPECIFIED = 0,
+    CHAIN_STATUS_ACTIVATED = 1,
+    CHAIN_STATUS_DEACTIVATED = 2,
+    UNRECOGNIZED = -1
+}
+export declare function chainStatusFromJSON(object: any): ChainStatus;
+export declare function chainStatusToJSON(object: ChainStatus): string;
 export declare enum TokenType {
     TOKEN_TYPE_UNSPECIFIED = 0,
     TOKEN_TYPE_INTERNAL = 1,
@@ -55,14 +63,17 @@ export interface QueryTokenAddressResponse {
     address: string;
     confirmed: boolean;
 }
+/** @deprecated */
 export interface QueryDepositStateParams {
     txId: Uint8Array;
     burnerAddress: Uint8Array;
 }
+/** @deprecated */
 export interface DepositStateRequest {
     chain: string;
     params?: QueryDepositStateParams;
 }
+/** @deprecated */
 export interface DepositStateResponse {
     status: DepositStatus;
 }
@@ -77,6 +88,7 @@ export interface QueryBurnerAddressResponse {
     address: string;
 }
 export interface ChainsRequest {
+    status: ChainStatus;
 }
 export interface ChainsResponse {
     chains: string[];
@@ -149,6 +161,7 @@ export interface TokenInfoRequest {
     chain: string;
     asset: string | undefined;
     symbol: string | undefined;
+    address: string | undefined;
 }
 export interface TokenInfoResponse {
     asset: string;
@@ -608,11 +621,15 @@ export declare const QueryBurnerAddressResponse: {
     } & Record<Exclude<keyof I, "address">, never>>(object: I): QueryBurnerAddressResponse;
 };
 export declare const ChainsRequest: {
-    encode(_: ChainsRequest, writer?: _m0.Writer): _m0.Writer;
+    encode(message: ChainsRequest, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number | undefined): ChainsRequest;
-    fromJSON(_: any): ChainsRequest;
-    toJSON(_: ChainsRequest): unknown;
-    fromPartial<I extends {} & {} & Record<Exclude<keyof I, never>, never>>(_: I): ChainsRequest;
+    fromJSON(object: any): ChainsRequest;
+    toJSON(message: ChainsRequest): unknown;
+    fromPartial<I extends {
+        status?: ChainStatus | undefined;
+    } & {
+        status?: ChainStatus | undefined;
+    } & Record<Exclude<keyof I, "status">, never>>(object: I): ChainsRequest;
 };
 export declare const ChainsResponse: {
     encode(message: ChainsResponse, writer?: _m0.Writer): _m0.Writer;
@@ -958,10 +975,12 @@ export declare const TokenInfoRequest: {
         chain?: string | undefined;
         asset?: string | undefined;
         symbol?: string | undefined;
+        address?: string | undefined;
     } & {
         chain?: string | undefined;
         asset?: string | undefined;
         symbol?: string | undefined;
+        address?: string | undefined;
     } & Record<Exclude<keyof I, keyof TokenInfoRequest>, never>>(object: I): TokenInfoRequest;
 };
 export declare const TokenInfoResponse: {

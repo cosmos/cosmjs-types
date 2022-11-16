@@ -2,7 +2,16 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { Bitmap } from "../../../axelar/utils/v1beta1/bitmap";
-import { Chain, CrossChainAddress, Asset } from "../../../axelar/nexus/exported/v1beta1/types";
+import {
+  Chain,
+  CrossChainAddress,
+  TransferDirection,
+  Asset,
+  transferDirectionFromJSON,
+  transferDirectionToJSON,
+} from "../../../axelar/nexus/exported/v1beta1/types";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
+import { Duration } from "../../../google/protobuf/duration";
 
 export const protobufPackage = "axelar.nexus.v1beta1";
 
@@ -10,15 +19,15 @@ export interface MaintainerState {
   address: Uint8Array;
   missingVotes?: Bitmap;
   incorrectVotes?: Bitmap;
+  chain: string;
 }
 
 /** ChainState represents the state of a registered blockchain */
 export interface ChainState {
   chain?: Chain;
-  /** @deprecated */
-  maintainers: Uint8Array[];
   activated: boolean;
   assets: Asset[];
+  /** @deprecated */
   maintainerStates: MaintainerState[];
 }
 
@@ -27,8 +36,22 @@ export interface LinkedAddresses {
   recipientAddress?: CrossChainAddress;
 }
 
+export interface RateLimit {
+  chain: string;
+  limit?: Coin;
+  window?: Duration;
+}
+
+export interface TransferEpoch {
+  chain: string;
+  amount?: Coin;
+  epoch: Long;
+  /** indicates whether the tracking is for transfers outgoing */
+  direction: TransferDirection;
+}
+
 function createBaseMaintainerState(): MaintainerState {
-  return { address: new Uint8Array(), missingVotes: undefined, incorrectVotes: undefined };
+  return { address: new Uint8Array(), missingVotes: undefined, incorrectVotes: undefined, chain: "" };
 }
 
 export const MaintainerState = {
@@ -41,6 +64,9 @@ export const MaintainerState = {
     }
     if (message.incorrectVotes !== undefined) {
       Bitmap.encode(message.incorrectVotes, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.chain !== "") {
+      writer.uint32(34).string(message.chain);
     }
     return writer;
   },
@@ -61,6 +87,9 @@ export const MaintainerState = {
         case 3:
           message.incorrectVotes = Bitmap.decode(reader, reader.uint32());
           break;
+        case 4:
+          message.chain = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -74,6 +103,7 @@ export const MaintainerState = {
       address: isSet(object.address) ? bytesFromBase64(object.address) : new Uint8Array(),
       missingVotes: isSet(object.missingVotes) ? Bitmap.fromJSON(object.missingVotes) : undefined,
       incorrectVotes: isSet(object.incorrectVotes) ? Bitmap.fromJSON(object.incorrectVotes) : undefined,
+      chain: isSet(object.chain) ? String(object.chain) : "",
     };
   },
 
@@ -85,6 +115,7 @@ export const MaintainerState = {
       (obj.missingVotes = message.missingVotes ? Bitmap.toJSON(message.missingVotes) : undefined);
     message.incorrectVotes !== undefined &&
       (obj.incorrectVotes = message.incorrectVotes ? Bitmap.toJSON(message.incorrectVotes) : undefined);
+    message.chain !== undefined && (obj.chain = message.chain);
     return obj;
   },
 
@@ -99,21 +130,19 @@ export const MaintainerState = {
       object.incorrectVotes !== undefined && object.incorrectVotes !== null
         ? Bitmap.fromPartial(object.incorrectVotes)
         : undefined;
+    message.chain = object.chain ?? "";
     return message;
   },
 };
 
 function createBaseChainState(): ChainState {
-  return { chain: undefined, maintainers: [], activated: false, assets: [], maintainerStates: [] };
+  return { chain: undefined, activated: false, assets: [], maintainerStates: [] };
 }
 
 export const ChainState = {
   encode(message: ChainState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.chain !== undefined) {
       Chain.encode(message.chain, writer.uint32(10).fork()).ldelim();
-    }
-    for (const v of message.maintainers) {
-      writer.uint32(18).bytes(v!);
     }
     if (message.activated === true) {
       writer.uint32(24).bool(message.activated);
@@ -137,9 +166,6 @@ export const ChainState = {
         case 1:
           message.chain = Chain.decode(reader, reader.uint32());
           break;
-        case 2:
-          message.maintainers.push(reader.bytes());
-          break;
         case 3:
           message.activated = reader.bool();
           break;
@@ -160,9 +186,6 @@ export const ChainState = {
   fromJSON(object: any): ChainState {
     return {
       chain: isSet(object.chain) ? Chain.fromJSON(object.chain) : undefined,
-      maintainers: Array.isArray(object?.maintainers)
-        ? object.maintainers.map((e: any) => bytesFromBase64(e))
-        : [],
       activated: isSet(object.activated) ? Boolean(object.activated) : false,
       assets: Array.isArray(object?.assets) ? object.assets.map((e: any) => Asset.fromJSON(e)) : [],
       maintainerStates: Array.isArray(object?.maintainerStates)
@@ -174,13 +197,6 @@ export const ChainState = {
   toJSON(message: ChainState): unknown {
     const obj: any = {};
     message.chain !== undefined && (obj.chain = message.chain ? Chain.toJSON(message.chain) : undefined);
-    if (message.maintainers) {
-      obj.maintainers = message.maintainers.map((e) =>
-        base64FromBytes(e !== undefined ? e : new Uint8Array()),
-      );
-    } else {
-      obj.maintainers = [];
-    }
     message.activated !== undefined && (obj.activated = message.activated);
     if (message.assets) {
       obj.assets = message.assets.map((e) => (e ? Asset.toJSON(e) : undefined));
@@ -199,7 +215,6 @@ export const ChainState = {
     const message = createBaseChainState();
     message.chain =
       object.chain !== undefined && object.chain !== null ? Chain.fromPartial(object.chain) : undefined;
-    message.maintainers = object.maintainers?.map((e) => e) || [];
     message.activated = object.activated ?? false;
     message.assets = object.assets?.map((e) => Asset.fromPartial(e)) || [];
     message.maintainerStates = object.maintainerStates?.map((e) => MaintainerState.fromPartial(e)) || [];
@@ -277,6 +292,154 @@ export const LinkedAddresses = {
       object.recipientAddress !== undefined && object.recipientAddress !== null
         ? CrossChainAddress.fromPartial(object.recipientAddress)
         : undefined;
+    return message;
+  },
+};
+
+function createBaseRateLimit(): RateLimit {
+  return { chain: "", limit: undefined, window: undefined };
+}
+
+export const RateLimit = {
+  encode(message: RateLimit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    if (message.limit !== undefined) {
+      Coin.encode(message.limit, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.window !== undefined) {
+      Duration.encode(message.window, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RateLimit {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRateLimit();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        case 2:
+          message.limit = Coin.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.window = Duration.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RateLimit {
+    return {
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      limit: isSet(object.limit) ? Coin.fromJSON(object.limit) : undefined,
+      window: isSet(object.window) ? Duration.fromJSON(object.window) : undefined,
+    };
+  },
+
+  toJSON(message: RateLimit): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.limit !== undefined && (obj.limit = message.limit ? Coin.toJSON(message.limit) : undefined);
+    message.window !== undefined &&
+      (obj.window = message.window ? Duration.toJSON(message.window) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<RateLimit>, I>>(object: I): RateLimit {
+    const message = createBaseRateLimit();
+    message.chain = object.chain ?? "";
+    message.limit =
+      object.limit !== undefined && object.limit !== null ? Coin.fromPartial(object.limit) : undefined;
+    message.window =
+      object.window !== undefined && object.window !== null ? Duration.fromPartial(object.window) : undefined;
+    return message;
+  },
+};
+
+function createBaseTransferEpoch(): TransferEpoch {
+  return { chain: "", amount: undefined, epoch: Long.UZERO, direction: 0 };
+}
+
+export const TransferEpoch = {
+  encode(message: TransferEpoch, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    if (message.amount !== undefined) {
+      Coin.encode(message.amount, writer.uint32(18).fork()).ldelim();
+    }
+    if (!message.epoch.isZero()) {
+      writer.uint32(24).uint64(message.epoch);
+    }
+    if (message.direction !== 0) {
+      writer.uint32(32).int32(message.direction);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TransferEpoch {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTransferEpoch();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        case 2:
+          message.amount = Coin.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.epoch = reader.uint64() as Long;
+          break;
+        case 4:
+          message.direction = reader.int32() as any;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TransferEpoch {
+    return {
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
+      epoch: isSet(object.epoch) ? Long.fromValue(object.epoch) : Long.UZERO,
+      direction: isSet(object.direction) ? transferDirectionFromJSON(object.direction) : 0,
+    };
+  },
+
+  toJSON(message: TransferEpoch): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    message.epoch !== undefined && (obj.epoch = (message.epoch || Long.UZERO).toString());
+    message.direction !== undefined && (obj.direction = transferDirectionToJSON(message.direction));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<TransferEpoch>, I>>(object: I): TransferEpoch {
+    const message = createBaseTransferEpoch();
+    message.chain = object.chain ?? "";
+    message.amount =
+      object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
+    message.epoch =
+      object.epoch !== undefined && object.epoch !== null ? Long.fromValue(object.epoch) : Long.UZERO;
+    message.direction = object.direction ?? 0;
     return message;
   },
 };

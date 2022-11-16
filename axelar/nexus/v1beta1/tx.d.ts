@@ -1,6 +1,8 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { FeeInfo } from "../../../axelar/nexus/exported/v1beta1/types";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
+import { Duration } from "../../../google/protobuf/duration";
 export declare const protobufPackage = "axelar.nexus.v1beta1";
 export interface RegisterChainMaintainerRequest {
     sender: Uint8Array;
@@ -37,6 +39,18 @@ export interface RegisterAssetFeeRequest {
     feeInfo?: FeeInfo;
 }
 export interface RegisterAssetFeeResponse {
+}
+/**
+ * SetTransferRateLimitRequest represents a message to set rate limits on
+ * transfers
+ */
+export interface SetTransferRateLimitRequest {
+    sender: Uint8Array;
+    chain: string;
+    limit?: Coin;
+    window?: Duration;
+}
+export interface SetTransferRateLimitResponse {
 }
 export declare const RegisterChainMaintainerRequest: {
     encode(message: RegisterChainMaintainerRequest, writer?: _m0.Writer): _m0.Writer;
@@ -155,6 +169,105 @@ export declare const RegisterAssetFeeResponse: {
     fromJSON(_: any): RegisterAssetFeeResponse;
     toJSON(_: RegisterAssetFeeResponse): unknown;
     fromPartial<I extends {} & {} & Record<Exclude<keyof I, never>, never>>(_: I): RegisterAssetFeeResponse;
+};
+export declare const SetTransferRateLimitRequest: {
+    encode(message: SetTransferRateLimitRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): SetTransferRateLimitRequest;
+    fromJSON(object: any): SetTransferRateLimitRequest;
+    toJSON(message: SetTransferRateLimitRequest): unknown;
+    fromPartial<I extends {
+        sender?: Uint8Array | undefined;
+        chain?: string | undefined;
+        limit?: {
+            denom?: string | undefined;
+            amount?: string | undefined;
+        } | undefined;
+        window?: {
+            seconds?: string | number | Long.Long | undefined;
+            nanos?: number | undefined;
+        } | undefined;
+    } & {
+        sender?: Uint8Array | undefined;
+        chain?: string | undefined;
+        limit?: ({
+            denom?: string | undefined;
+            amount?: string | undefined;
+        } & {
+            denom?: string | undefined;
+            amount?: string | undefined;
+        } & Record<Exclude<keyof I["limit"], keyof Coin>, never>) | undefined;
+        window?: ({
+            seconds?: string | number | Long.Long | undefined;
+            nanos?: number | undefined;
+        } & {
+            seconds?: string | number | (Long.Long & {
+                high: number;
+                low: number;
+                unsigned: boolean;
+                add: (addend: string | number | Long.Long) => Long.Long;
+                and: (other: string | number | Long.Long) => Long.Long;
+                compare: (other: string | number | Long.Long) => number;
+                comp: (other: string | number | Long.Long) => number;
+                divide: (divisor: string | number | Long.Long) => Long.Long;
+                div: (divisor: string | number | Long.Long) => Long.Long;
+                equals: (other: string | number | Long.Long) => boolean;
+                eq: (other: string | number | Long.Long) => boolean;
+                getHighBits: () => number;
+                getHighBitsUnsigned: () => number;
+                getLowBits: () => number;
+                getLowBitsUnsigned: () => number;
+                getNumBitsAbs: () => number;
+                greaterThan: (other: string | number | Long.Long) => boolean;
+                gt: (other: string | number | Long.Long) => boolean;
+                greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                gte: (other: string | number | Long.Long) => boolean;
+                isEven: () => boolean;
+                isNegative: () => boolean;
+                isOdd: () => boolean;
+                isPositive: () => boolean;
+                isZero: () => boolean;
+                lessThan: (other: string | number | Long.Long) => boolean;
+                lt: (other: string | number | Long.Long) => boolean;
+                lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                lte: (other: string | number | Long.Long) => boolean;
+                modulo: (other: string | number | Long.Long) => Long.Long;
+                mod: (other: string | number | Long.Long) => Long.Long;
+                multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                mul: (multiplier: string | number | Long.Long) => Long.Long;
+                negate: () => Long.Long;
+                neg: () => Long.Long;
+                not: () => Long.Long;
+                notEquals: (other: string | number | Long.Long) => boolean;
+                neq: (other: string | number | Long.Long) => boolean;
+                or: (other: string | number | Long.Long) => Long.Long;
+                shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                shl: (numBits: number | Long.Long) => Long.Long;
+                shiftRight: (numBits: number | Long.Long) => Long.Long;
+                shr: (numBits: number | Long.Long) => Long.Long;
+                shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                shru: (numBits: number | Long.Long) => Long.Long;
+                subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                toInt: () => number;
+                toNumber: () => number;
+                toBytes: (le?: boolean | undefined) => number[];
+                toBytesLE: () => number[];
+                toBytesBE: () => number[];
+                toSigned: () => Long.Long;
+                toString: (radix?: number | undefined) => string;
+                toUnsigned: () => Long.Long;
+                xor: (other: string | number | Long.Long) => Long.Long;
+            } & Record<Exclude<keyof I["window"]["seconds"], keyof Long.Long>, never>) | undefined;
+            nanos?: number | undefined;
+        } & Record<Exclude<keyof I["window"], keyof Duration>, never>) | undefined;
+    } & Record<Exclude<keyof I, keyof SetTransferRateLimitRequest>, never>>(object: I): SetTransferRateLimitRequest;
+};
+export declare const SetTransferRateLimitResponse: {
+    encode(_: SetTransferRateLimitResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): SetTransferRateLimitResponse;
+    fromJSON(_: any): SetTransferRateLimitResponse;
+    toJSON(_: SetTransferRateLimitResponse): unknown;
+    fromPartial<I extends {} & {} & Record<Exclude<keyof I, never>, never>>(_: I): SetTransferRateLimitResponse;
 };
 declare type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export declare type DeepPartial<T> = T extends Builtin ? T : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {

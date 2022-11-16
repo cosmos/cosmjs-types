@@ -22,11 +22,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegisterAssetFeeResponse = exports.RegisterAssetFeeRequest = exports.DeactivateChainResponse = exports.DeactivateChainRequest = exports.ActivateChainResponse = exports.ActivateChainRequest = exports.DeregisterChainMaintainerResponse = exports.DeregisterChainMaintainerRequest = exports.RegisterChainMaintainerResponse = exports.RegisterChainMaintainerRequest = exports.protobufPackage = void 0;
+exports.SetTransferRateLimitResponse = exports.SetTransferRateLimitRequest = exports.RegisterAssetFeeResponse = exports.RegisterAssetFeeRequest = exports.DeactivateChainResponse = exports.DeactivateChainRequest = exports.ActivateChainResponse = exports.ActivateChainRequest = exports.DeregisterChainMaintainerResponse = exports.DeregisterChainMaintainerRequest = exports.RegisterChainMaintainerResponse = exports.RegisterChainMaintainerRequest = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
 const types_1 = require("../../../axelar/nexus/exported/v1beta1/types");
+const coin_1 = require("../../../cosmos/base/v1beta1/coin");
+const duration_1 = require("../../../google/protobuf/duration");
 exports.protobufPackage = "axelar.nexus.v1beta1";
 function createBaseRegisterChainMaintainerRequest() {
     return { sender: new Uint8Array(), chains: [] };
@@ -484,6 +486,114 @@ exports.RegisterAssetFeeResponse = {
     },
     fromPartial(_) {
         const message = createBaseRegisterAssetFeeResponse();
+        return message;
+    },
+};
+function createBaseSetTransferRateLimitRequest() {
+    return { sender: new Uint8Array(), chain: "", limit: undefined, window: undefined };
+}
+exports.SetTransferRateLimitRequest = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.sender.length !== 0) {
+            writer.uint32(10).bytes(message.sender);
+        }
+        if (message.chain !== "") {
+            writer.uint32(18).string(message.chain);
+        }
+        if (message.limit !== undefined) {
+            coin_1.Coin.encode(message.limit, writer.uint32(26).fork()).ldelim();
+        }
+        if (message.window !== undefined) {
+            duration_1.Duration.encode(message.window, writer.uint32(34).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseSetTransferRateLimitRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.sender = reader.bytes();
+                    break;
+                case 2:
+                    message.chain = reader.string();
+                    break;
+                case 3:
+                    message.limit = coin_1.Coin.decode(reader, reader.uint32());
+                    break;
+                case 4:
+                    message.window = duration_1.Duration.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
+            chain: isSet(object.chain) ? String(object.chain) : "",
+            limit: isSet(object.limit) ? coin_1.Coin.fromJSON(object.limit) : undefined,
+            window: isSet(object.window) ? duration_1.Duration.fromJSON(object.window) : undefined,
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.sender !== undefined &&
+            (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
+        message.chain !== undefined && (obj.chain = message.chain);
+        message.limit !== undefined && (obj.limit = message.limit ? coin_1.Coin.toJSON(message.limit) : undefined);
+        message.window !== undefined &&
+            (obj.window = message.window ? duration_1.Duration.toJSON(message.window) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b;
+        const message = createBaseSetTransferRateLimitRequest();
+        message.sender = (_a = object.sender) !== null && _a !== void 0 ? _a : new Uint8Array();
+        message.chain = (_b = object.chain) !== null && _b !== void 0 ? _b : "";
+        message.limit =
+            object.limit !== undefined && object.limit !== null ? coin_1.Coin.fromPartial(object.limit) : undefined;
+        message.window =
+            object.window !== undefined && object.window !== null ? duration_1.Duration.fromPartial(object.window) : undefined;
+        return message;
+    },
+};
+function createBaseSetTransferRateLimitResponse() {
+    return {};
+}
+exports.SetTransferRateLimitResponse = {
+    encode(_, writer = _m0.Writer.create()) {
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseSetTransferRateLimitResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(_) {
+        return {};
+    },
+    toJSON(_) {
+        const obj = {};
+        return obj;
+    },
+    fromPartial(_) {
+        const message = createBaseSetTransferRateLimitResponse();
         return message;
     },
 };

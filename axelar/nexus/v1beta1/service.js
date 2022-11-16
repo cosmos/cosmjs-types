@@ -37,6 +37,7 @@ class MsgServiceClientImpl {
         this.ActivateChain = this.ActivateChain.bind(this);
         this.DeactivateChain = this.DeactivateChain.bind(this);
         this.RegisterAssetFee = this.RegisterAssetFee.bind(this);
+        this.SetTransferRateLimit = this.SetTransferRateLimit.bind(this);
     }
     RegisterChainMaintainer(request) {
         const data = tx_1.RegisterChainMaintainerRequest.encode(request).finish();
@@ -63,6 +64,11 @@ class MsgServiceClientImpl {
         const promise = this.rpc.request("axelar.nexus.v1beta1.MsgService", "RegisterAssetFee", data);
         return promise.then((data) => tx_1.RegisterAssetFeeResponse.decode(new _m0.Reader(data)));
     }
+    SetTransferRateLimit(request) {
+        const data = tx_1.SetTransferRateLimitRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.nexus.v1beta1.MsgService", "SetTransferRateLimit", data);
+        return promise.then((data) => tx_1.SetTransferRateLimitResponse.decode(new _m0.Reader(data)));
+    }
 }
 exports.MsgServiceClientImpl = MsgServiceClientImpl;
 class QueryServiceClientImpl {
@@ -77,6 +83,7 @@ class QueryServiceClientImpl {
         this.ChainState = this.ChainState.bind(this);
         this.ChainsByAsset = this.ChainsByAsset.bind(this);
         this.RecipientAddress = this.RecipientAddress.bind(this);
+        this.TransferRateLimit = this.TransferRateLimit.bind(this);
     }
     LatestDepositAddress(request) {
         const data = query_1.LatestDepositAddressRequest.encode(request).finish();
@@ -122,6 +129,11 @@ class QueryServiceClientImpl {
         const data = query_1.RecipientAddressRequest.encode(request).finish();
         const promise = this.rpc.request("axelar.nexus.v1beta1.QueryService", "RecipientAddress", data);
         return promise.then((data) => query_1.RecipientAddressResponse.decode(new _m0.Reader(data)));
+    }
+    TransferRateLimit(request) {
+        const data = query_1.TransferRateLimitRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.nexus.v1beta1.QueryService", "TransferRateLimit", data);
+        return promise.then((data) => query_1.TransferRateLimitResponse.decode(new _m0.Reader(data)));
     }
 }
 exports.QueryServiceClientImpl = QueryServiceClientImpl;

@@ -54,6 +54,69 @@ export function statusToJSON(object: Status): string {
   }
 }
 
+export enum CommandType {
+  COMMAND_TYPE_UNSPECIFIED = 0,
+  COMMAND_TYPE_MINT_TOKEN = 1,
+  COMMAND_TYPE_DEPLOY_TOKEN = 2,
+  COMMAND_TYPE_BURN_TOKEN = 3,
+  COMMAND_TYPE_TRANSFER_OPERATORSHIP = 4,
+  COMMAND_TYPE_APPROVE_CONTRACT_CALL_WITH_MINT = 5,
+  COMMAND_TYPE_APPROVE_CONTRACT_CALL = 6,
+  UNRECOGNIZED = -1,
+}
+
+export function commandTypeFromJSON(object: any): CommandType {
+  switch (object) {
+    case 0:
+    case "COMMAND_TYPE_UNSPECIFIED":
+      return CommandType.COMMAND_TYPE_UNSPECIFIED;
+    case 1:
+    case "COMMAND_TYPE_MINT_TOKEN":
+      return CommandType.COMMAND_TYPE_MINT_TOKEN;
+    case 2:
+    case "COMMAND_TYPE_DEPLOY_TOKEN":
+      return CommandType.COMMAND_TYPE_DEPLOY_TOKEN;
+    case 3:
+    case "COMMAND_TYPE_BURN_TOKEN":
+      return CommandType.COMMAND_TYPE_BURN_TOKEN;
+    case 4:
+    case "COMMAND_TYPE_TRANSFER_OPERATORSHIP":
+      return CommandType.COMMAND_TYPE_TRANSFER_OPERATORSHIP;
+    case 5:
+    case "COMMAND_TYPE_APPROVE_CONTRACT_CALL_WITH_MINT":
+      return CommandType.COMMAND_TYPE_APPROVE_CONTRACT_CALL_WITH_MINT;
+    case 6:
+    case "COMMAND_TYPE_APPROVE_CONTRACT_CALL":
+      return CommandType.COMMAND_TYPE_APPROVE_CONTRACT_CALL;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return CommandType.UNRECOGNIZED;
+  }
+}
+
+export function commandTypeToJSON(object: CommandType): string {
+  switch (object) {
+    case CommandType.COMMAND_TYPE_UNSPECIFIED:
+      return "COMMAND_TYPE_UNSPECIFIED";
+    case CommandType.COMMAND_TYPE_MINT_TOKEN:
+      return "COMMAND_TYPE_MINT_TOKEN";
+    case CommandType.COMMAND_TYPE_DEPLOY_TOKEN:
+      return "COMMAND_TYPE_DEPLOY_TOKEN";
+    case CommandType.COMMAND_TYPE_BURN_TOKEN:
+      return "COMMAND_TYPE_BURN_TOKEN";
+    case CommandType.COMMAND_TYPE_TRANSFER_OPERATORSHIP:
+      return "COMMAND_TYPE_TRANSFER_OPERATORSHIP";
+    case CommandType.COMMAND_TYPE_APPROVE_CONTRACT_CALL_WITH_MINT:
+      return "COMMAND_TYPE_APPROVE_CONTRACT_CALL_WITH_MINT";
+    case CommandType.COMMAND_TYPE_APPROVE_CONTRACT_CALL:
+      return "COMMAND_TYPE_APPROVE_CONTRACT_CALL";
+    case CommandType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export enum BatchedCommandsStatus {
   BATCHED_COMMANDS_STATUS_UNSPECIFIED = 0,
   BATCHED_COMMANDS_STATUS_SIGNING = 1,
@@ -322,6 +385,7 @@ export interface ERC20Deposit {
   asset: string;
   destinationChain: string;
   burnerAddress: Uint8Array;
+  logIndex: Long;
 }
 
 /** ERC20TokenMetadata describes information about an ERC20 token */
@@ -343,10 +407,12 @@ export interface TransactionMetadata {
 
 export interface Command {
   id: Uint8Array;
+  /** @deprecated */
   command: string;
   params: Uint8Array;
   keyId: string;
   maxGasCost: number;
+  type: CommandType;
 }
 
 export interface CommandBatchMetadata {
@@ -390,47 +456,6 @@ export interface TokenDetails {
 
 export interface Gateway {
   address: Uint8Array;
-  /** @deprecated */
-  status: Gateway_Status;
-}
-
-export enum Gateway_Status {
-  STATUS_UNSPECIFIED = 0,
-  STATUS_PENDING = 1,
-  STATUS_CONFIRMED = 2,
-  UNRECOGNIZED = -1,
-}
-
-export function gateway_StatusFromJSON(object: any): Gateway_Status {
-  switch (object) {
-    case 0:
-    case "STATUS_UNSPECIFIED":
-      return Gateway_Status.STATUS_UNSPECIFIED;
-    case 1:
-    case "STATUS_PENDING":
-      return Gateway_Status.STATUS_PENDING;
-    case 2:
-    case "STATUS_CONFIRMED":
-      return Gateway_Status.STATUS_CONFIRMED;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return Gateway_Status.UNRECOGNIZED;
-  }
-}
-
-export function gateway_StatusToJSON(object: Gateway_Status): string {
-  switch (object) {
-    case Gateway_Status.STATUS_UNSPECIFIED:
-      return "STATUS_UNSPECIFIED";
-    case Gateway_Status.STATUS_PENDING:
-      return "STATUS_PENDING";
-    case Gateway_Status.STATUS_CONFIRMED:
-      return "STATUS_CONFIRMED";
-    case Gateway_Status.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
 }
 
 export interface PollMetadata {
@@ -1471,6 +1496,7 @@ function createBaseERC20Deposit(): ERC20Deposit {
     asset: "",
     destinationChain: "",
     burnerAddress: new Uint8Array(),
+    logIndex: Long.UZERO,
   };
 }
 
@@ -1490,6 +1516,9 @@ export const ERC20Deposit = {
     }
     if (message.burnerAddress.length !== 0) {
       writer.uint32(42).bytes(message.burnerAddress);
+    }
+    if (!message.logIndex.isZero()) {
+      writer.uint32(48).uint64(message.logIndex);
     }
     return writer;
   },
@@ -1516,6 +1545,9 @@ export const ERC20Deposit = {
         case 5:
           message.burnerAddress = reader.bytes();
           break;
+        case 6:
+          message.logIndex = reader.uint64() as Long;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1531,6 +1563,7 @@ export const ERC20Deposit = {
       asset: isSet(object.asset) ? String(object.asset) : "",
       destinationChain: isSet(object.destinationChain) ? String(object.destinationChain) : "",
       burnerAddress: isSet(object.burnerAddress) ? bytesFromBase64(object.burnerAddress) : new Uint8Array(),
+      logIndex: isSet(object.logIndex) ? Long.fromValue(object.logIndex) : Long.UZERO,
     };
   },
 
@@ -1546,6 +1579,7 @@ export const ERC20Deposit = {
       (obj.burnerAddress = base64FromBytes(
         message.burnerAddress !== undefined ? message.burnerAddress : new Uint8Array(),
       ));
+    message.logIndex !== undefined && (obj.logIndex = (message.logIndex || Long.UZERO).toString());
     return obj;
   },
 
@@ -1556,6 +1590,10 @@ export const ERC20Deposit = {
     message.asset = object.asset ?? "";
     message.destinationChain = object.destinationChain ?? "";
     message.burnerAddress = object.burnerAddress ?? new Uint8Array();
+    message.logIndex =
+      object.logIndex !== undefined && object.logIndex !== null
+        ? Long.fromValue(object.logIndex)
+        : Long.UZERO;
     return message;
   },
 };
@@ -1750,7 +1788,7 @@ export const TransactionMetadata = {
 };
 
 function createBaseCommand(): Command {
-  return { id: new Uint8Array(), command: "", params: new Uint8Array(), keyId: "", maxGasCost: 0 };
+  return { id: new Uint8Array(), command: "", params: new Uint8Array(), keyId: "", maxGasCost: 0, type: 0 };
 }
 
 export const Command = {
@@ -1769,6 +1807,9 @@ export const Command = {
     }
     if (message.maxGasCost !== 0) {
       writer.uint32(40).uint32(message.maxGasCost);
+    }
+    if (message.type !== 0) {
+      writer.uint32(48).int32(message.type);
     }
     return writer;
   },
@@ -1795,6 +1836,9 @@ export const Command = {
         case 5:
           message.maxGasCost = reader.uint32();
           break;
+        case 6:
+          message.type = reader.int32() as any;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1810,6 +1854,7 @@ export const Command = {
       params: isSet(object.params) ? bytesFromBase64(object.params) : new Uint8Array(),
       keyId: isSet(object.keyId) ? String(object.keyId) : "",
       maxGasCost: isSet(object.maxGasCost) ? Number(object.maxGasCost) : 0,
+      type: isSet(object.type) ? commandTypeFromJSON(object.type) : 0,
     };
   },
 
@@ -1822,6 +1867,7 @@ export const Command = {
       (obj.params = base64FromBytes(message.params !== undefined ? message.params : new Uint8Array()));
     message.keyId !== undefined && (obj.keyId = message.keyId);
     message.maxGasCost !== undefined && (obj.maxGasCost = Math.round(message.maxGasCost));
+    message.type !== undefined && (obj.type = commandTypeToJSON(message.type));
     return obj;
   },
 
@@ -1832,6 +1878,7 @@ export const Command = {
     message.params = object.params ?? new Uint8Array();
     message.keyId = object.keyId ?? "";
     message.maxGasCost = object.maxGasCost ?? 0;
+    message.type = object.type ?? 0;
     return message;
   },
 };
@@ -2242,16 +2289,13 @@ export const TokenDetails = {
 };
 
 function createBaseGateway(): Gateway {
-  return { address: new Uint8Array(), status: 0 };
+  return { address: new Uint8Array() };
 }
 
 export const Gateway = {
   encode(message: Gateway, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address.length !== 0) {
       writer.uint32(10).bytes(message.address);
-    }
-    if (message.status !== 0) {
-      writer.uint32(16).int32(message.status);
     }
     return writer;
   },
@@ -2266,9 +2310,6 @@ export const Gateway = {
         case 1:
           message.address = reader.bytes();
           break;
-        case 2:
-          message.status = reader.int32() as any;
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2280,7 +2321,6 @@ export const Gateway = {
   fromJSON(object: any): Gateway {
     return {
       address: isSet(object.address) ? bytesFromBase64(object.address) : new Uint8Array(),
-      status: isSet(object.status) ? gateway_StatusFromJSON(object.status) : 0,
     };
   },
 
@@ -2288,14 +2328,12 @@ export const Gateway = {
     const obj: any = {};
     message.address !== undefined &&
       (obj.address = base64FromBytes(message.address !== undefined ? message.address : new Uint8Array()));
-    message.status !== undefined && (obj.status = gateway_StatusToJSON(message.status));
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Gateway>, I>>(object: I): Gateway {
     const message = createBaseGateway();
     message.address = object.address ?? new Uint8Array();
-    message.status = object.status ?? 0;
     return message;
   },
 };

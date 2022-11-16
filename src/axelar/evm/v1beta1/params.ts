@@ -21,6 +21,7 @@ export interface Params {
   commandsGasLimit: number;
   votingGracePeriod: Long;
   endBlockerLimit: Long;
+  transferLimit: Long;
 }
 
 export interface PendingChain {
@@ -42,6 +43,7 @@ function createBaseParams(): Params {
     commandsGasLimit: 0,
     votingGracePeriod: Long.ZERO,
     endBlockerLimit: Long.ZERO,
+    transferLimit: Long.UZERO,
   };
 }
 
@@ -82,6 +84,9 @@ export const Params = {
     }
     if (!message.endBlockerLimit.isZero()) {
       writer.uint32(112).int64(message.endBlockerLimit);
+    }
+    if (!message.transferLimit.isZero()) {
+      writer.uint32(120).uint64(message.transferLimit);
     }
     return writer;
   },
@@ -129,6 +134,9 @@ export const Params = {
         case 14:
           message.endBlockerLimit = reader.int64() as Long;
           break;
+        case 15:
+          message.transferLimit = reader.uint64() as Long;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -159,6 +167,7 @@ export const Params = {
         ? Long.fromValue(object.votingGracePeriod)
         : Long.ZERO,
       endBlockerLimit: isSet(object.endBlockerLimit) ? Long.fromValue(object.endBlockerLimit) : Long.ZERO,
+      transferLimit: isSet(object.transferLimit) ? Long.fromValue(object.transferLimit) : Long.UZERO,
     };
   },
 
@@ -190,6 +199,8 @@ export const Params = {
       (obj.votingGracePeriod = (message.votingGracePeriod || Long.ZERO).toString());
     message.endBlockerLimit !== undefined &&
       (obj.endBlockerLimit = (message.endBlockerLimit || Long.ZERO).toString());
+    message.transferLimit !== undefined &&
+      (obj.transferLimit = (message.transferLimit || Long.UZERO).toString());
     return obj;
   },
 
@@ -225,6 +236,10 @@ export const Params = {
       object.endBlockerLimit !== undefined && object.endBlockerLimit !== null
         ? Long.fromValue(object.endBlockerLimit)
         : Long.ZERO;
+    message.transferLimit =
+      object.transferLimit !== undefined && object.transferLimit !== null
+        ? Long.fromValue(object.transferLimit)
+        : Long.UZERO;
     return message;
   },
 };

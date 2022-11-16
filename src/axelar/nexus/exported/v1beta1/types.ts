@@ -51,6 +51,45 @@ export function transferStateToJSON(object: TransferState): string {
   }
 }
 
+export enum TransferDirection {
+  TRANSFER_DIRECTION_UNSPECIFIED = 0,
+  TRANSFER_DIRECTION_INCOMING = 1,
+  TRANSFER_DIRECTION_OUTGOING = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function transferDirectionFromJSON(object: any): TransferDirection {
+  switch (object) {
+    case 0:
+    case "TRANSFER_DIRECTION_UNSPECIFIED":
+      return TransferDirection.TRANSFER_DIRECTION_UNSPECIFIED;
+    case 1:
+    case "TRANSFER_DIRECTION_INCOMING":
+      return TransferDirection.TRANSFER_DIRECTION_INCOMING;
+    case 2:
+    case "TRANSFER_DIRECTION_OUTGOING":
+      return TransferDirection.TRANSFER_DIRECTION_OUTGOING;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return TransferDirection.UNRECOGNIZED;
+  }
+}
+
+export function transferDirectionToJSON(object: TransferDirection): string {
+  switch (object) {
+    case TransferDirection.TRANSFER_DIRECTION_UNSPECIFIED:
+      return "TRANSFER_DIRECTION_UNSPECIFIED";
+    case TransferDirection.TRANSFER_DIRECTION_INCOMING:
+      return "TRANSFER_DIRECTION_INCOMING";
+    case TransferDirection.TRANSFER_DIRECTION_OUTGOING:
+      return "TRANSFER_DIRECTION_OUTGOING";
+    case TransferDirection.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 /** Chain represents the properties of a registered blockchain */
 export interface Chain {
   name: string;

@@ -59,8 +59,6 @@ export interface HeartBeatRequest {
     keyIds: string[];
 }
 export interface HeartBeatResponse {
-    keygenIllegibility: number;
-    signingIllegibility: number;
 }
 export interface RegisterExternalKeysRequest {
     sender: Uint8Array;
@@ -387,17 +385,11 @@ export declare const HeartBeatRequest: {
     } & Record<Exclude<keyof I, keyof HeartBeatRequest>, never>>(object: I): HeartBeatRequest;
 };
 export declare const HeartBeatResponse: {
-    encode(message: HeartBeatResponse, writer?: _m0.Writer): _m0.Writer;
+    encode(_: HeartBeatResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number | undefined): HeartBeatResponse;
-    fromJSON(object: any): HeartBeatResponse;
-    toJSON(message: HeartBeatResponse): unknown;
-    fromPartial<I extends {
-        keygenIllegibility?: number | undefined;
-        signingIllegibility?: number | undefined;
-    } & {
-        keygenIllegibility?: number | undefined;
-        signingIllegibility?: number | undefined;
-    } & Record<Exclude<keyof I, keyof HeartBeatResponse>, never>>(object: I): HeartBeatResponse;
+    fromJSON(_: any): HeartBeatResponse;
+    toJSON(_: HeartBeatResponse): unknown;
+    fromPartial<I extends {} & {} & Record<Exclude<keyof I, never>, never>>(_: I): HeartBeatResponse;
 };
 export declare const RegisterExternalKeysRequest: {
     encode(message: RegisterExternalKeysRequest, writer?: _m0.Writer): _m0.Writer;

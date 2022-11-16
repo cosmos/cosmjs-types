@@ -1,87 +1,9 @@
 /* eslint-disable */
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
-import { Any } from "../../../../google/protobuf/any";
-import {
-  KeyShareDistributionPolicy,
-  keyShareDistributionPolicyFromJSON,
-  keyShareDistributionPolicyToJSON,
-} from "../../../../axelar/tss/exported/v1beta1/types";
 import { Timestamp } from "../../../../google/protobuf/timestamp";
 
 export const protobufPackage = "axelar.snapshot.exported.v1beta1";
-
-export enum ValidatorIllegibility {
-  /**
-   * VALIDATOR_ILLEGIBILITY_UNSPECIFIED - these enum values are used for bitwise operations, therefore they need to
-   * be powers of 2
-   */
-  VALIDATOR_ILLEGIBILITY_UNSPECIFIED = 0,
-  VALIDATOR_ILLEGIBILITY_TOMBSTONED = 1,
-  VALIDATOR_ILLEGIBILITY_JAILED = 2,
-  VALIDATOR_ILLEGIBILITY_MISSED_TOO_MANY_BLOCKS = 4,
-  VALIDATOR_ILLEGIBILITY_NO_PROXY_REGISTERED = 8,
-  VALIDATOR_ILLEGIBILITY_TSS_SUSPENDED = 16,
-  VALIDATOR_ILLEGIBILITY_PROXY_INSUFICIENT_FUNDS = 32,
-  UNRECOGNIZED = -1,
-}
-
-export function validatorIllegibilityFromJSON(object: any): ValidatorIllegibility {
-  switch (object) {
-    case 0:
-    case "VALIDATOR_ILLEGIBILITY_UNSPECIFIED":
-      return ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_UNSPECIFIED;
-    case 1:
-    case "VALIDATOR_ILLEGIBILITY_TOMBSTONED":
-      return ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_TOMBSTONED;
-    case 2:
-    case "VALIDATOR_ILLEGIBILITY_JAILED":
-      return ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_JAILED;
-    case 4:
-    case "VALIDATOR_ILLEGIBILITY_MISSED_TOO_MANY_BLOCKS":
-      return ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_MISSED_TOO_MANY_BLOCKS;
-    case 8:
-    case "VALIDATOR_ILLEGIBILITY_NO_PROXY_REGISTERED":
-      return ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_NO_PROXY_REGISTERED;
-    case 16:
-    case "VALIDATOR_ILLEGIBILITY_TSS_SUSPENDED":
-      return ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_TSS_SUSPENDED;
-    case 32:
-    case "VALIDATOR_ILLEGIBILITY_PROXY_INSUFICIENT_FUNDS":
-      return ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_PROXY_INSUFICIENT_FUNDS;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return ValidatorIllegibility.UNRECOGNIZED;
-  }
-}
-
-export function validatorIllegibilityToJSON(object: ValidatorIllegibility): string {
-  switch (object) {
-    case ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_UNSPECIFIED:
-      return "VALIDATOR_ILLEGIBILITY_UNSPECIFIED";
-    case ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_TOMBSTONED:
-      return "VALIDATOR_ILLEGIBILITY_TOMBSTONED";
-    case ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_JAILED:
-      return "VALIDATOR_ILLEGIBILITY_JAILED";
-    case ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_MISSED_TOO_MANY_BLOCKS:
-      return "VALIDATOR_ILLEGIBILITY_MISSED_TOO_MANY_BLOCKS";
-    case ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_NO_PROXY_REGISTERED:
-      return "VALIDATOR_ILLEGIBILITY_NO_PROXY_REGISTERED";
-    case ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_TSS_SUSPENDED:
-      return "VALIDATOR_ILLEGIBILITY_TSS_SUSPENDED";
-    case ValidatorIllegibility.VALIDATOR_ILLEGIBILITY_PROXY_INSUFICIENT_FUNDS:
-      return "VALIDATOR_ILLEGIBILITY_PROXY_INSUFICIENT_FUNDS";
-    case ValidatorIllegibility.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-export interface Validator {
-  sdkValidator?: Any;
-  shareCount: Long;
-}
 
 export interface Participant {
   address: Uint8Array;
@@ -89,16 +11,6 @@ export interface Participant {
 }
 
 export interface Snapshot {
-  /** @deprecated */
-  validators: Validator[];
-  /** @deprecated */
-  totalShareCount: Uint8Array;
-  /** @deprecated */
-  counter: Long;
-  /** @deprecated */
-  keyShareDistributionPolicy: KeyShareDistributionPolicy;
-  /** @deprecated */
-  corruptionThreshold: Long;
   timestamp?: Timestamp;
   height: Long;
   participants: { [key: string]: Participant };
@@ -109,71 +21,6 @@ export interface Snapshot_ParticipantsEntry {
   key: string;
   value?: Participant;
 }
-
-function createBaseValidator(): Validator {
-  return { sdkValidator: undefined, shareCount: Long.ZERO };
-}
-
-export const Validator = {
-  encode(message: Validator, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.sdkValidator !== undefined) {
-      Any.encode(message.sdkValidator, writer.uint32(10).fork()).ldelim();
-    }
-    if (!message.shareCount.isZero()) {
-      writer.uint32(16).int64(message.shareCount);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): Validator {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseValidator();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.sdkValidator = Any.decode(reader, reader.uint32());
-          break;
-        case 2:
-          message.shareCount = reader.int64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Validator {
-    return {
-      sdkValidator: isSet(object.sdkValidator) ? Any.fromJSON(object.sdkValidator) : undefined,
-      shareCount: isSet(object.shareCount) ? Long.fromValue(object.shareCount) : Long.ZERO,
-    };
-  },
-
-  toJSON(message: Validator): unknown {
-    const obj: any = {};
-    message.sdkValidator !== undefined &&
-      (obj.sdkValidator = message.sdkValidator ? Any.toJSON(message.sdkValidator) : undefined);
-    message.shareCount !== undefined && (obj.shareCount = (message.shareCount || Long.ZERO).toString());
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<Validator>, I>>(object: I): Validator {
-    const message = createBaseValidator();
-    message.sdkValidator =
-      object.sdkValidator !== undefined && object.sdkValidator !== null
-        ? Any.fromPartial(object.sdkValidator)
-        : undefined;
-    message.shareCount =
-      object.shareCount !== undefined && object.shareCount !== null
-        ? Long.fromValue(object.shareCount)
-        : Long.ZERO;
-    return message;
-  },
-};
 
 function createBaseParticipant(): Participant {
   return { address: new Uint8Array(), weight: new Uint8Array() };
@@ -236,36 +83,11 @@ export const Participant = {
 };
 
 function createBaseSnapshot(): Snapshot {
-  return {
-    validators: [],
-    totalShareCount: new Uint8Array(),
-    counter: Long.ZERO,
-    keyShareDistributionPolicy: 0,
-    corruptionThreshold: Long.ZERO,
-    timestamp: undefined,
-    height: Long.ZERO,
-    participants: {},
-    bondedWeight: new Uint8Array(),
-  };
+  return { timestamp: undefined, height: Long.ZERO, participants: {}, bondedWeight: new Uint8Array() };
 }
 
 export const Snapshot = {
   encode(message: Snapshot, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.validators) {
-      Validator.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalShareCount.length !== 0) {
-      writer.uint32(34).bytes(message.totalShareCount);
-    }
-    if (!message.counter.isZero()) {
-      writer.uint32(40).int64(message.counter);
-    }
-    if (message.keyShareDistributionPolicy !== 0) {
-      writer.uint32(48).int32(message.keyShareDistributionPolicy);
-    }
-    if (!message.corruptionThreshold.isZero()) {
-      writer.uint32(56).int64(message.corruptionThreshold);
-    }
     if (message.timestamp !== undefined) {
       Timestamp.encode(message.timestamp, writer.uint32(18).fork()).ldelim();
     }
@@ -288,21 +110,6 @@ export const Snapshot = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          message.validators.push(Validator.decode(reader, reader.uint32()));
-          break;
-        case 4:
-          message.totalShareCount = reader.bytes();
-          break;
-        case 5:
-          message.counter = reader.int64() as Long;
-          break;
-        case 6:
-          message.keyShareDistributionPolicy = reader.int32() as any;
-          break;
-        case 7:
-          message.corruptionThreshold = reader.int64() as Long;
-          break;
         case 2:
           message.timestamp = Timestamp.decode(reader, reader.uint32());
           break;
@@ -328,19 +135,6 @@ export const Snapshot = {
 
   fromJSON(object: any): Snapshot {
     return {
-      validators: Array.isArray(object?.validators)
-        ? object.validators.map((e: any) => Validator.fromJSON(e))
-        : [],
-      totalShareCount: isSet(object.totalShareCount)
-        ? bytesFromBase64(object.totalShareCount)
-        : new Uint8Array(),
-      counter: isSet(object.counter) ? Long.fromValue(object.counter) : Long.ZERO,
-      keyShareDistributionPolicy: isSet(object.keyShareDistributionPolicy)
-        ? keyShareDistributionPolicyFromJSON(object.keyShareDistributionPolicy)
-        : 0,
-      corruptionThreshold: isSet(object.corruptionThreshold)
-        ? Long.fromValue(object.corruptionThreshold)
-        : Long.ZERO,
       timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
       height: isSet(object.height) ? Long.fromValue(object.height) : Long.ZERO,
       participants: isObject(object.participants)
@@ -355,20 +149,6 @@ export const Snapshot = {
 
   toJSON(message: Snapshot): unknown {
     const obj: any = {};
-    if (message.validators) {
-      obj.validators = message.validators.map((e) => (e ? Validator.toJSON(e) : undefined));
-    } else {
-      obj.validators = [];
-    }
-    message.totalShareCount !== undefined &&
-      (obj.totalShareCount = base64FromBytes(
-        message.totalShareCount !== undefined ? message.totalShareCount : new Uint8Array(),
-      ));
-    message.counter !== undefined && (obj.counter = (message.counter || Long.ZERO).toString());
-    message.keyShareDistributionPolicy !== undefined &&
-      (obj.keyShareDistributionPolicy = keyShareDistributionPolicyToJSON(message.keyShareDistributionPolicy));
-    message.corruptionThreshold !== undefined &&
-      (obj.corruptionThreshold = (message.corruptionThreshold || Long.ZERO).toString());
     message.timestamp !== undefined && (obj.timestamp = fromTimestamp(message.timestamp).toISOString());
     message.height !== undefined && (obj.height = (message.height || Long.ZERO).toString());
     obj.participants = {};
@@ -386,15 +166,6 @@ export const Snapshot = {
 
   fromPartial<I extends Exact<DeepPartial<Snapshot>, I>>(object: I): Snapshot {
     const message = createBaseSnapshot();
-    message.validators = object.validators?.map((e) => Validator.fromPartial(e)) || [];
-    message.totalShareCount = object.totalShareCount ?? new Uint8Array();
-    message.counter =
-      object.counter !== undefined && object.counter !== null ? Long.fromValue(object.counter) : Long.ZERO;
-    message.keyShareDistributionPolicy = object.keyShareDistributionPolicy ?? 0;
-    message.corruptionThreshold =
-      object.corruptionThreshold !== undefined && object.corruptionThreshold !== null
-        ? Long.fromValue(object.corruptionThreshold)
-        : Long.ZERO;
     message.timestamp =
       object.timestamp !== undefined && object.timestamp !== null
         ? Timestamp.fromPartial(object.timestamp)

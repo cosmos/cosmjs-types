@@ -27,7 +27,6 @@ exports.QueryServiceClientImpl = exports.MsgServiceClientImpl = exports.protobuf
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
 const tx_1 = require("../../../axelar/tss/v1beta1/tx");
-const query_1 = require("../../../axelar/tss/v1beta1/query");
 exports.protobufPackage = "axelar.tss.v1beta1";
 class MsgServiceClientImpl {
     constructor(rpc) {
@@ -44,24 +43,6 @@ exports.MsgServiceClientImpl = MsgServiceClientImpl;
 class QueryServiceClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
-        this.NextKeyID = this.NextKeyID.bind(this);
-        this.AssignableKey = this.AssignableKey.bind(this);
-        this.ValidatorMultisigKeys = this.ValidatorMultisigKeys.bind(this);
-    }
-    NextKeyID(request) {
-        const data = query_1.NextKeyIDRequest.encode(request).finish();
-        const promise = this.rpc.request("axelar.tss.v1beta1.QueryService", "NextKeyID", data);
-        return promise.then((data) => query_1.NextKeyIDResponse.decode(new _m0.Reader(data)));
-    }
-    AssignableKey(request) {
-        const data = query_1.AssignableKeyRequest.encode(request).finish();
-        const promise = this.rpc.request("axelar.tss.v1beta1.QueryService", "AssignableKey", data);
-        return promise.then((data) => query_1.AssignableKeyResponse.decode(new _m0.Reader(data)));
-    }
-    ValidatorMultisigKeys(request) {
-        const data = query_1.ValidatorMultisigKeysRequest.encode(request).finish();
-        const promise = this.rpc.request("axelar.tss.v1beta1.QueryService", "ValidatorMultisigKeys", data);
-        return promise.then((data) => query_1.ValidatorMultisigKeysResponse.decode(new _m0.Reader(data)));
     }
 }
 exports.QueryServiceClientImpl = QueryServiceClientImpl;

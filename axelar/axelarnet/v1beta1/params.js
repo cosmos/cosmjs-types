@@ -28,12 +28,18 @@ const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
 exports.protobufPackage = "axelar.axelarnet.v1beta1";
 function createBaseParams() {
-    return { routeTimeoutWindow: long_1.default.UZERO };
+    return { routeTimeoutWindow: long_1.default.UZERO, transferLimit: long_1.default.UZERO, endBlockerLimit: long_1.default.UZERO };
 }
 exports.Params = {
     encode(message, writer = _m0.Writer.create()) {
         if (!message.routeTimeoutWindow.isZero()) {
             writer.uint32(8).uint64(message.routeTimeoutWindow);
+        }
+        if (!message.transferLimit.isZero()) {
+            writer.uint32(24).uint64(message.transferLimit);
+        }
+        if (!message.endBlockerLimit.isZero()) {
+            writer.uint32(32).uint64(message.endBlockerLimit);
         }
         return writer;
     },
@@ -47,6 +53,12 @@ exports.Params = {
                 case 1:
                     message.routeTimeoutWindow = reader.uint64();
                     break;
+                case 3:
+                    message.transferLimit = reader.uint64();
+                    break;
+                case 4:
+                    message.endBlockerLimit = reader.uint64();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -59,12 +71,18 @@ exports.Params = {
             routeTimeoutWindow: isSet(object.routeTimeoutWindow)
                 ? long_1.default.fromValue(object.routeTimeoutWindow)
                 : long_1.default.UZERO,
+            transferLimit: isSet(object.transferLimit) ? long_1.default.fromValue(object.transferLimit) : long_1.default.UZERO,
+            endBlockerLimit: isSet(object.endBlockerLimit) ? long_1.default.fromValue(object.endBlockerLimit) : long_1.default.UZERO,
         };
     },
     toJSON(message) {
         const obj = {};
         message.routeTimeoutWindow !== undefined &&
             (obj.routeTimeoutWindow = (message.routeTimeoutWindow || long_1.default.UZERO).toString());
+        message.transferLimit !== undefined &&
+            (obj.transferLimit = (message.transferLimit || long_1.default.UZERO).toString());
+        message.endBlockerLimit !== undefined &&
+            (obj.endBlockerLimit = (message.endBlockerLimit || long_1.default.UZERO).toString());
         return obj;
     },
     fromPartial(object) {
@@ -72,6 +90,14 @@ exports.Params = {
         message.routeTimeoutWindow =
             object.routeTimeoutWindow !== undefined && object.routeTimeoutWindow !== null
                 ? long_1.default.fromValue(object.routeTimeoutWindow)
+                : long_1.default.UZERO;
+        message.transferLimit =
+            object.transferLimit !== undefined && object.transferLimit !== null
+                ? long_1.default.fromValue(object.transferLimit)
+                : long_1.default.UZERO;
+        message.endBlockerLimit =
+            object.endBlockerLimit !== undefined && object.endBlockerLimit !== null
+                ? long_1.default.fromValue(object.endBlockerLimit)
                 : long_1.default.UZERO;
         return message;
     },

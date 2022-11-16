@@ -2,6 +2,7 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { Chain, Asset } from "../../../axelar/nexus/exported/v1beta1/types";
+import { Duration } from "../../../google/protobuf/duration";
 
 export const protobufPackage = "axelar.axelarnet.v1beta1";
 
@@ -42,6 +43,8 @@ export interface ExecutePendingTransfersResponse {}
 /**
  * MSgRegisterIBCPath represents a message to register an IBC tracing path for
  * a cosmos chain
+ *
+ * @deprecated
  */
 export interface RegisterIBCPathRequest {
   sender: Uint8Array;
@@ -57,9 +60,22 @@ export interface RegisterIBCPathResponse {}
  */
 export interface AddCosmosBasedChainRequest {
   sender: Uint8Array;
+  /**
+   * chain was deprecated in v0.27
+   *
+   * @deprecated
+   */
   chain?: Chain;
   addrPrefix: string;
+  /**
+   * native_assets was deprecated in v0.27
+   *
+   * @deprecated
+   */
   nativeAssets: Asset[];
+  /** TODO: Rename this to `chain` after v1beta1 -> v1 version bump */
+  cosmosChain: string;
+  ibcPath: string;
 }
 
 export interface AddCosmosBasedChainResponse {}
@@ -72,6 +88,8 @@ export interface RegisterAssetRequest {
   sender: Uint8Array;
   chain: string;
   asset?: Asset;
+  limit: Uint8Array;
+  window?: Duration;
 }
 
 export interface RegisterAssetResponse {}
@@ -544,7 +562,14 @@ export const RegisterIBCPathResponse = {
 };
 
 function createBaseAddCosmosBasedChainRequest(): AddCosmosBasedChainRequest {
-  return { sender: new Uint8Array(), chain: undefined, addrPrefix: "", nativeAssets: [] };
+  return {
+    sender: new Uint8Array(),
+    chain: undefined,
+    addrPrefix: "",
+    nativeAssets: [],
+    cosmosChain: "",
+    ibcPath: "",
+  };
 }
 
 export const AddCosmosBasedChainRequest = {
@@ -560,6 +585,12 @@ export const AddCosmosBasedChainRequest = {
     }
     for (const v of message.nativeAssets) {
       Asset.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    if (message.cosmosChain !== "") {
+      writer.uint32(50).string(message.cosmosChain);
+    }
+    if (message.ibcPath !== "") {
+      writer.uint32(58).string(message.ibcPath);
     }
     return writer;
   },
@@ -583,6 +614,12 @@ export const AddCosmosBasedChainRequest = {
         case 5:
           message.nativeAssets.push(Asset.decode(reader, reader.uint32()));
           break;
+        case 6:
+          message.cosmosChain = reader.string();
+          break;
+        case 7:
+          message.ibcPath = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -599,6 +636,8 @@ export const AddCosmosBasedChainRequest = {
       nativeAssets: Array.isArray(object?.nativeAssets)
         ? object.nativeAssets.map((e: any) => Asset.fromJSON(e))
         : [],
+      cosmosChain: isSet(object.cosmosChain) ? String(object.cosmosChain) : "",
+      ibcPath: isSet(object.ibcPath) ? String(object.ibcPath) : "",
     };
   },
 
@@ -613,6 +652,8 @@ export const AddCosmosBasedChainRequest = {
     } else {
       obj.nativeAssets = [];
     }
+    message.cosmosChain !== undefined && (obj.cosmosChain = message.cosmosChain);
+    message.ibcPath !== undefined && (obj.ibcPath = message.ibcPath);
     return obj;
   },
 
@@ -625,6 +666,8 @@ export const AddCosmosBasedChainRequest = {
       object.chain !== undefined && object.chain !== null ? Chain.fromPartial(object.chain) : undefined;
     message.addrPrefix = object.addrPrefix ?? "";
     message.nativeAssets = object.nativeAssets?.map((e) => Asset.fromPartial(e)) || [];
+    message.cosmosChain = object.cosmosChain ?? "";
+    message.ibcPath = object.ibcPath ?? "";
     return message;
   },
 };
@@ -671,7 +714,13 @@ export const AddCosmosBasedChainResponse = {
 };
 
 function createBaseRegisterAssetRequest(): RegisterAssetRequest {
-  return { sender: new Uint8Array(), chain: "", asset: undefined };
+  return {
+    sender: new Uint8Array(),
+    chain: "",
+    asset: undefined,
+    limit: new Uint8Array(),
+    window: undefined,
+  };
 }
 
 export const RegisterAssetRequest = {
@@ -684,6 +733,12 @@ export const RegisterAssetRequest = {
     }
     if (message.asset !== undefined) {
       Asset.encode(message.asset, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.limit.length !== 0) {
+      writer.uint32(34).bytes(message.limit);
+    }
+    if (message.window !== undefined) {
+      Duration.encode(message.window, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -704,6 +759,12 @@ export const RegisterAssetRequest = {
         case 3:
           message.asset = Asset.decode(reader, reader.uint32());
           break;
+        case 4:
+          message.limit = reader.bytes();
+          break;
+        case 5:
+          message.window = Duration.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -717,6 +778,8 @@ export const RegisterAssetRequest = {
       sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
       chain: isSet(object.chain) ? String(object.chain) : "",
       asset: isSet(object.asset) ? Asset.fromJSON(object.asset) : undefined,
+      limit: isSet(object.limit) ? bytesFromBase64(object.limit) : new Uint8Array(),
+      window: isSet(object.window) ? Duration.fromJSON(object.window) : undefined,
     };
   },
 
@@ -726,6 +789,10 @@ export const RegisterAssetRequest = {
       (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
     message.chain !== undefined && (obj.chain = message.chain);
     message.asset !== undefined && (obj.asset = message.asset ? Asset.toJSON(message.asset) : undefined);
+    message.limit !== undefined &&
+      (obj.limit = base64FromBytes(message.limit !== undefined ? message.limit : new Uint8Array()));
+    message.window !== undefined &&
+      (obj.window = message.window ? Duration.toJSON(message.window) : undefined);
     return obj;
   },
 
@@ -735,6 +802,9 @@ export const RegisterAssetRequest = {
     message.chain = object.chain ?? "";
     message.asset =
       object.asset !== undefined && object.asset !== null ? Asset.fromPartial(object.asset) : undefined;
+    message.limit = object.limit ?? new Uint8Array();
+    message.window =
+      object.window !== undefined && object.window !== null ? Duration.fromPartial(object.window) : undefined;
     return message;
   },
 };

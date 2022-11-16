@@ -27,6 +27,7 @@ exports.RetryIBCTransferResponse = exports.RetryIBCTransferRequest = exports.Reg
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
 const types_1 = require("../../../axelar/nexus/exported/v1beta1/types");
+const duration_1 = require("../../../google/protobuf/duration");
 exports.protobufPackage = "axelar.axelarnet.v1beta1";
 function createBaseLinkRequest() {
     return { sender: new Uint8Array(), recipientAddr: "", recipientChain: "", asset: "" };
@@ -418,7 +419,14 @@ exports.RegisterIBCPathResponse = {
     },
 };
 function createBaseAddCosmosBasedChainRequest() {
-    return { sender: new Uint8Array(), chain: undefined, addrPrefix: "", nativeAssets: [] };
+    return {
+        sender: new Uint8Array(),
+        chain: undefined,
+        addrPrefix: "",
+        nativeAssets: [],
+        cosmosChain: "",
+        ibcPath: "",
+    };
 }
 exports.AddCosmosBasedChainRequest = {
     encode(message, writer = _m0.Writer.create()) {
@@ -433,6 +441,12 @@ exports.AddCosmosBasedChainRequest = {
         }
         for (const v of message.nativeAssets) {
             types_1.Asset.encode(v, writer.uint32(42).fork()).ldelim();
+        }
+        if (message.cosmosChain !== "") {
+            writer.uint32(50).string(message.cosmosChain);
+        }
+        if (message.ibcPath !== "") {
+            writer.uint32(58).string(message.ibcPath);
         }
         return writer;
     },
@@ -455,6 +469,12 @@ exports.AddCosmosBasedChainRequest = {
                 case 5:
                     message.nativeAssets.push(types_1.Asset.decode(reader, reader.uint32()));
                     break;
+                case 6:
+                    message.cosmosChain = reader.string();
+                    break;
+                case 7:
+                    message.ibcPath = reader.string();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -470,6 +490,8 @@ exports.AddCosmosBasedChainRequest = {
             nativeAssets: Array.isArray(object === null || object === void 0 ? void 0 : object.nativeAssets)
                 ? object.nativeAssets.map((e) => types_1.Asset.fromJSON(e))
                 : [],
+            cosmosChain: isSet(object.cosmosChain) ? String(object.cosmosChain) : "",
+            ibcPath: isSet(object.ibcPath) ? String(object.ibcPath) : "",
         };
     },
     toJSON(message) {
@@ -484,16 +506,20 @@ exports.AddCosmosBasedChainRequest = {
         else {
             obj.nativeAssets = [];
         }
+        message.cosmosChain !== undefined && (obj.cosmosChain = message.cosmosChain);
+        message.ibcPath !== undefined && (obj.ibcPath = message.ibcPath);
         return obj;
     },
     fromPartial(object) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d, _e;
         const message = createBaseAddCosmosBasedChainRequest();
         message.sender = (_a = object.sender) !== null && _a !== void 0 ? _a : new Uint8Array();
         message.chain =
             object.chain !== undefined && object.chain !== null ? types_1.Chain.fromPartial(object.chain) : undefined;
         message.addrPrefix = (_b = object.addrPrefix) !== null && _b !== void 0 ? _b : "";
         message.nativeAssets = ((_c = object.nativeAssets) === null || _c === void 0 ? void 0 : _c.map((e) => types_1.Asset.fromPartial(e))) || [];
+        message.cosmosChain = (_d = object.cosmosChain) !== null && _d !== void 0 ? _d : "";
+        message.ibcPath = (_e = object.ibcPath) !== null && _e !== void 0 ? _e : "";
         return message;
     },
 };
@@ -531,7 +557,13 @@ exports.AddCosmosBasedChainResponse = {
     },
 };
 function createBaseRegisterAssetRequest() {
-    return { sender: new Uint8Array(), chain: "", asset: undefined };
+    return {
+        sender: new Uint8Array(),
+        chain: "",
+        asset: undefined,
+        limit: new Uint8Array(),
+        window: undefined,
+    };
 }
 exports.RegisterAssetRequest = {
     encode(message, writer = _m0.Writer.create()) {
@@ -543,6 +575,12 @@ exports.RegisterAssetRequest = {
         }
         if (message.asset !== undefined) {
             types_1.Asset.encode(message.asset, writer.uint32(26).fork()).ldelim();
+        }
+        if (message.limit.length !== 0) {
+            writer.uint32(34).bytes(message.limit);
+        }
+        if (message.window !== undefined) {
+            duration_1.Duration.encode(message.window, writer.uint32(42).fork()).ldelim();
         }
         return writer;
     },
@@ -562,6 +600,12 @@ exports.RegisterAssetRequest = {
                 case 3:
                     message.asset = types_1.Asset.decode(reader, reader.uint32());
                     break;
+                case 4:
+                    message.limit = reader.bytes();
+                    break;
+                case 5:
+                    message.window = duration_1.Duration.decode(reader, reader.uint32());
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -574,6 +618,8 @@ exports.RegisterAssetRequest = {
             sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
             chain: isSet(object.chain) ? String(object.chain) : "",
             asset: isSet(object.asset) ? types_1.Asset.fromJSON(object.asset) : undefined,
+            limit: isSet(object.limit) ? bytesFromBase64(object.limit) : new Uint8Array(),
+            window: isSet(object.window) ? duration_1.Duration.fromJSON(object.window) : undefined,
         };
     },
     toJSON(message) {
@@ -582,15 +628,22 @@ exports.RegisterAssetRequest = {
             (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
         message.chain !== undefined && (obj.chain = message.chain);
         message.asset !== undefined && (obj.asset = message.asset ? types_1.Asset.toJSON(message.asset) : undefined);
+        message.limit !== undefined &&
+            (obj.limit = base64FromBytes(message.limit !== undefined ? message.limit : new Uint8Array()));
+        message.window !== undefined &&
+            (obj.window = message.window ? duration_1.Duration.toJSON(message.window) : undefined);
         return obj;
     },
     fromPartial(object) {
-        var _a, _b;
+        var _a, _b, _c;
         const message = createBaseRegisterAssetRequest();
         message.sender = (_a = object.sender) !== null && _a !== void 0 ? _a : new Uint8Array();
         message.chain = (_b = object.chain) !== null && _b !== void 0 ? _b : "";
         message.asset =
             object.asset !== undefined && object.asset !== null ? types_1.Asset.fromPartial(object.asset) : undefined;
+        message.limit = (_c = object.limit) !== null && _c !== void 0 ? _c : new Uint8Array();
+        message.window =
+            object.window !== undefined && object.window !== null ? duration_1.Duration.fromPartial(object.window) : undefined;
         return message;
     },
 };

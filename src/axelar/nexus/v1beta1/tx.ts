@@ -2,6 +2,8 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { FeeInfo } from "../../../axelar/nexus/exported/v1beta1/types";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
+import { Duration } from "../../../google/protobuf/duration";
 
 export const protobufPackage = "axelar.nexus.v1beta1";
 
@@ -45,6 +47,19 @@ export interface RegisterAssetFeeRequest {
 }
 
 export interface RegisterAssetFeeResponse {}
+
+/**
+ * SetTransferRateLimitRequest represents a message to set rate limits on
+ * transfers
+ */
+export interface SetTransferRateLimitRequest {
+  sender: Uint8Array;
+  chain: string;
+  limit?: Coin;
+  window?: Duration;
+}
+
+export interface SetTransferRateLimitResponse {}
 
 function createBaseRegisterChainMaintainerRequest(): RegisterChainMaintainerRequest {
   return { sender: new Uint8Array(), chains: [] };
@@ -560,6 +575,129 @@ export const RegisterAssetFeeResponse = {
 
   fromPartial<I extends Exact<DeepPartial<RegisterAssetFeeResponse>, I>>(_: I): RegisterAssetFeeResponse {
     const message = createBaseRegisterAssetFeeResponse();
+    return message;
+  },
+};
+
+function createBaseSetTransferRateLimitRequest(): SetTransferRateLimitRequest {
+  return { sender: new Uint8Array(), chain: "", limit: undefined, window: undefined };
+}
+
+export const SetTransferRateLimitRequest = {
+  encode(message: SetTransferRateLimitRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.sender.length !== 0) {
+      writer.uint32(10).bytes(message.sender);
+    }
+    if (message.chain !== "") {
+      writer.uint32(18).string(message.chain);
+    }
+    if (message.limit !== undefined) {
+      Coin.encode(message.limit, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.window !== undefined) {
+      Duration.encode(message.window, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SetTransferRateLimitRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSetTransferRateLimitRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sender = reader.bytes();
+          break;
+        case 2:
+          message.chain = reader.string();
+          break;
+        case 3:
+          message.limit = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.window = Duration.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SetTransferRateLimitRequest {
+    return {
+      sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      limit: isSet(object.limit) ? Coin.fromJSON(object.limit) : undefined,
+      window: isSet(object.window) ? Duration.fromJSON(object.window) : undefined,
+    };
+  },
+
+  toJSON(message: SetTransferRateLimitRequest): unknown {
+    const obj: any = {};
+    message.sender !== undefined &&
+      (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.limit !== undefined && (obj.limit = message.limit ? Coin.toJSON(message.limit) : undefined);
+    message.window !== undefined &&
+      (obj.window = message.window ? Duration.toJSON(message.window) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<SetTransferRateLimitRequest>, I>>(
+    object: I,
+  ): SetTransferRateLimitRequest {
+    const message = createBaseSetTransferRateLimitRequest();
+    message.sender = object.sender ?? new Uint8Array();
+    message.chain = object.chain ?? "";
+    message.limit =
+      object.limit !== undefined && object.limit !== null ? Coin.fromPartial(object.limit) : undefined;
+    message.window =
+      object.window !== undefined && object.window !== null ? Duration.fromPartial(object.window) : undefined;
+    return message;
+  },
+};
+
+function createBaseSetTransferRateLimitResponse(): SetTransferRateLimitResponse {
+  return {};
+}
+
+export const SetTransferRateLimitResponse = {
+  encode(_: SetTransferRateLimitResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SetTransferRateLimitResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSetTransferRateLimitResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): SetTransferRateLimitResponse {
+    return {};
+  },
+
+  toJSON(_: SetTransferRateLimitResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<SetTransferRateLimitResponse>, I>>(
+    _: I,
+  ): SetTransferRateLimitResponse {
+    const message = createBaseSetTransferRateLimitResponse();
     return message;
   },
 };

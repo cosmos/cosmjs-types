@@ -8,7 +8,7 @@ import {
   CrossChainTransfer,
   FeeInfo,
 } from "../../../axelar/nexus/exported/v1beta1/types";
-import { ChainState, LinkedAddresses } from "../../../axelar/nexus/v1beta1/types";
+import { ChainState, LinkedAddresses, RateLimit, TransferEpoch } from "../../../axelar/nexus/v1beta1/types";
 
 export const protobufPackage = "axelar.nexus.v1beta1";
 
@@ -22,6 +22,8 @@ export interface GenesisState {
   transfers: CrossChainTransfer[];
   fee?: TransferFee;
   feeInfos: FeeInfo[];
+  rateLimits: RateLimit[];
+  transferEpochs: TransferEpoch[];
 }
 
 function createBaseGenesisState(): GenesisState {
@@ -34,6 +36,8 @@ function createBaseGenesisState(): GenesisState {
     transfers: [],
     fee: undefined,
     feeInfos: [],
+    rateLimits: [],
+    transferEpochs: [],
   };
 }
 
@@ -62,6 +66,12 @@ export const GenesisState = {
     }
     for (const v of message.feeInfos) {
       FeeInfo.encode(v!, writer.uint32(66).fork()).ldelim();
+    }
+    for (const v of message.rateLimits) {
+      RateLimit.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
+    for (const v of message.transferEpochs) {
+      TransferEpoch.encode(v!, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -97,6 +107,12 @@ export const GenesisState = {
         case 8:
           message.feeInfos.push(FeeInfo.decode(reader, reader.uint32()));
           break;
+        case 9:
+          message.rateLimits.push(RateLimit.decode(reader, reader.uint32()));
+          break;
+        case 10:
+          message.transferEpochs.push(TransferEpoch.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -121,6 +137,12 @@ export const GenesisState = {
         : [],
       fee: isSet(object.fee) ? TransferFee.fromJSON(object.fee) : undefined,
       feeInfos: Array.isArray(object?.feeInfos) ? object.feeInfos.map((e: any) => FeeInfo.fromJSON(e)) : [],
+      rateLimits: Array.isArray(object?.rateLimits)
+        ? object.rateLimits.map((e: any) => RateLimit.fromJSON(e))
+        : [],
+      transferEpochs: Array.isArray(object?.transferEpochs)
+        ? object.transferEpochs.map((e: any) => TransferEpoch.fromJSON(e))
+        : [],
     };
   },
 
@@ -154,6 +176,16 @@ export const GenesisState = {
     } else {
       obj.feeInfos = [];
     }
+    if (message.rateLimits) {
+      obj.rateLimits = message.rateLimits.map((e) => (e ? RateLimit.toJSON(e) : undefined));
+    } else {
+      obj.rateLimits = [];
+    }
+    if (message.transferEpochs) {
+      obj.transferEpochs = message.transferEpochs.map((e) => (e ? TransferEpoch.toJSON(e) : undefined));
+    } else {
+      obj.transferEpochs = [];
+    }
     return obj;
   },
 
@@ -170,6 +202,8 @@ export const GenesisState = {
     message.fee =
       object.fee !== undefined && object.fee !== null ? TransferFee.fromPartial(object.fee) : undefined;
     message.feeInfos = object.feeInfos?.map((e) => FeeInfo.fromPartial(e)) || [];
+    message.rateLimits = object.rateLimits?.map((e) => RateLimit.fromPartial(e)) || [];
+    message.transferEpochs = object.transferEpochs?.map((e) => TransferEpoch.fromPartial(e)) || [];
     return message;
   },
 };

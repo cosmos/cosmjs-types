@@ -44,6 +44,7 @@ function createBaseParams() {
         commandsGasLimit: 0,
         votingGracePeriod: long_1.default.ZERO,
         endBlockerLimit: long_1.default.ZERO,
+        transferLimit: long_1.default.UZERO,
     };
 }
 exports.Params = {
@@ -83,6 +84,9 @@ exports.Params = {
         }
         if (!message.endBlockerLimit.isZero()) {
             writer.uint32(112).int64(message.endBlockerLimit);
+        }
+        if (!message.transferLimit.isZero()) {
+            writer.uint32(120).uint64(message.transferLimit);
         }
         return writer;
     },
@@ -129,6 +133,9 @@ exports.Params = {
                 case 14:
                     message.endBlockerLimit = reader.int64();
                     break;
+                case 15:
+                    message.transferLimit = reader.uint64();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -158,6 +165,7 @@ exports.Params = {
                 ? long_1.default.fromValue(object.votingGracePeriod)
                 : long_1.default.ZERO,
             endBlockerLimit: isSet(object.endBlockerLimit) ? long_1.default.fromValue(object.endBlockerLimit) : long_1.default.ZERO,
+            transferLimit: isSet(object.transferLimit) ? long_1.default.fromValue(object.transferLimit) : long_1.default.UZERO,
         };
     },
     toJSON(message) {
@@ -187,6 +195,8 @@ exports.Params = {
             (obj.votingGracePeriod = (message.votingGracePeriod || long_1.default.ZERO).toString());
         message.endBlockerLimit !== undefined &&
             (obj.endBlockerLimit = (message.endBlockerLimit || long_1.default.ZERO).toString());
+        message.transferLimit !== undefined &&
+            (obj.transferLimit = (message.transferLimit || long_1.default.UZERO).toString());
         return obj;
     },
     fromPartial(object) {
@@ -222,6 +232,10 @@ exports.Params = {
             object.endBlockerLimit !== undefined && object.endBlockerLimit !== null
                 ? long_1.default.fromValue(object.endBlockerLimit)
                 : long_1.default.ZERO;
+        message.transferLimit =
+            object.transferLimit !== undefined && object.transferLimit !== null
+                ? long_1.default.fromValue(object.transferLimit)
+                : long_1.default.UZERO;
         return message;
     },
 };

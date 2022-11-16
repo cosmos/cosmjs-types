@@ -1,6 +1,6 @@
 {
   "name": "@axelar-network/axelarjs-types",
-  "version": "0.24.0",
+  "version": "0.27.0",
   "description": "JS and TS types relating to Protocol Buffers used by AxelarJS-SDK and other related projects",
   "license": "Apache-2.0",
   "repository": {
