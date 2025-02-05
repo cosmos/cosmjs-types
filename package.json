@@ -15,19 +15,22 @@
   "publishConfig": {
     "access": "public"
   },
+  "exports": {
+    "./*": "./src/*.ts"
+  },
   "files": [
-    "cosmos/",
-    "cosmos_proto/",
-    "cosmwasm/",
-    "gogoproto/",
-    "google/",
-    "ibc/",
-    "tendermint/",
-    "/binary.*",
-    "/helpers.*",
-    "/utf8.*",
-    "/varint.*",
-    "/index.*",
+    "src/cosmos/",
+    "src/cosmos_proto/",
+    "src/cosmwasm/",
+    "src/gogoproto/",
+    "src/google/",
+    "src/ibc/",
+    "src/tendermint/",
+    "/src/binary.*",
+    "/src/helpers.*",
+    "/src/utf8.*",
+    "/src/varint.*",
+    "/src/index.*",
     "*.md",
     "!wasmd-*/**/*.md",
     "!cosmos-sdk-*/**/*.md"
