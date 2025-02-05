@@ -41,18 +41,18 @@
 
 import { utf8Length, utf8Read, utf8Write } from "./utf8";
 import {
+  int64FromString,
+  int64Length,
   int64ToString,
   readInt32,
   readUInt32,
   uInt64ToString,
   varint32read,
   varint64read,
+  writeByte,
+  writeFixed32,
   writeVarint32,
   writeVarint64,
-  int64FromString,
-  int64Length,
-  writeFixed32,
-  writeByte,
   zzDecode,
   zzEncode,
 } from "./varint";
@@ -126,7 +126,7 @@ export class BinaryReader implements IBinaryReader {
     } else {
       do {
         if (this.pos >= this.len) throw indexOutOfRange(this);
-      } while (this.buf[this.pos++] & 128);
+      } while (this.buf[this.pos++]! & 128);
     }
     return this;
   }
@@ -196,7 +196,7 @@ export class BinaryReader implements IBinaryReader {
   sint64(): bigint {
     let [lo, hi] = varint64read.bind(this)();
     // zig zag
-    [lo, hi] = zzDecode(lo, hi);
+    [lo, hi] = zzDecode(lo, hi) as [number, number];
     return BigInt(int64ToString(lo, hi));
   }
 
@@ -419,7 +419,7 @@ export class BinaryWriter implements IBinaryWriter {
   sint64(value: string | number | bigint): BinaryWriter {
     let { lo, hi } = int64FromString(value.toString());
     // zig zag
-    [lo, hi] = zzEncode(lo, hi);
+    [lo, hi] = zzEncode(lo, hi) as [number, number];
     return this._push(writeVarint64, int64Length(lo, hi), { lo, hi });
   }
 
@@ -466,7 +466,7 @@ function writeBytes(val: Uint8Array | number[], buf: Uint8Array | number[], pos:
   if (typeof Uint8Array !== "undefined") {
     (buf as Uint8Array).set(val, pos);
   } else {
-    for (let i = 0; i < val.length; ++i) buf[pos + i] = val[i];
+    for (let i = 0; i < val.length; ++i) buf[pos + i] = val[i]!;
   }
 }
 

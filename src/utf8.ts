@@ -69,19 +69,19 @@ export function utf8Read(buffer: ArrayLike<number>, start: number, end: number) 
     i = 0, // char offset
     t; // temporary
   while (start < end) {
-    t = buffer[start++];
+    t = buffer[start++] as number;
     if (t < 128) chunk[i++] = t;
-    else if (t > 191 && t < 224) chunk[i++] = ((t & 31) << 6) | (buffer[start++] & 63);
+    else if (t > 191 && t < 224) chunk[i++] = ((t & 31) << 6) | (buffer[start++]! & 63);
     else if (t > 239 && t < 365) {
       t =
         (((t & 7) << 18) |
-          ((buffer[start++] & 63) << 12) |
-          ((buffer[start++] & 63) << 6) |
-          (buffer[start++] & 63)) -
+          ((buffer[start++]! & 63) << 12) |
+          ((buffer[start++]! & 63) << 6) |
+          (buffer[start++]! & 63)) -
         0x10000;
       chunk[i++] = 0xd800 + (t >> 10);
       chunk[i++] = 0xdc00 + (t & 1023);
-    } else chunk[i++] = ((t & 15) << 12) | ((buffer[start++] & 63) << 6) | (buffer[start++] & 63);
+    } else chunk[i++] = ((t & 15) << 12) | ((buffer[start++]! & 63) << 6) | (buffer[start++]! & 63);
     if (i > 8191) {
       (parts || (parts = [])).push(String.fromCharCode(...chunk));
       i = 0;

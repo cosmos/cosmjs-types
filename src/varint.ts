@@ -56,7 +56,7 @@ export function varint64read(this: ReaderLike): [number, number] {
   let highBits = 0;
 
   for (let shift = 0; shift < 28; shift += 7) {
-    let b = this.buf[this.pos++];
+    let b = this.buf[this.pos++]!;
     lowBits |= (b & 0x7f) << shift;
     if ((b & 0x80) == 0) {
       this.assertBounds();
@@ -64,7 +64,7 @@ export function varint64read(this: ReaderLike): [number, number] {
     }
   }
 
-  let middleByte = this.buf[this.pos++];
+  let middleByte = this.buf[this.pos++]!;
 
   // last four bits of the first 32 bit number
   lowBits |= (middleByte & 0x0f) << 28;
@@ -78,7 +78,7 @@ export function varint64read(this: ReaderLike): [number, number] {
   }
 
   for (let shift = 3; shift <= 31; shift += 7) {
-    let b = this.buf[this.pos++];
+    let b = this.buf[this.pos++]!;
     highBits |= (b & 0x7f) << shift;
     if ((b & 0x80) == 0) {
       this.assertBounds();
@@ -314,28 +314,28 @@ export function varint32write(value: number, bytes: number[]): void {
  * See https://github.com/protocolbuffers/protobuf/blob/8a71927d74a4ce34efe2d8769fda198f52d20d12/js/experimental/runtime/kernel/buffer_decoder.js#L220
  */
 export function varint32read(this: ReaderLike): number {
-  let b = this.buf[this.pos++];
+  let b = this.buf[this.pos++]!;
   let result = b & 0x7f;
   if ((b & 0x80) == 0) {
     this.assertBounds();
     return result;
   }
 
-  b = this.buf[this.pos++];
+  b = this.buf[this.pos++]!;
   result |= (b & 0x7f) << 7;
   if ((b & 0x80) == 0) {
     this.assertBounds();
     return result;
   }
 
-  b = this.buf[this.pos++];
+  b = this.buf[this.pos++]!;
   result |= (b & 0x7f) << 14;
   if ((b & 0x80) == 0) {
     this.assertBounds();
     return result;
   }
 
-  b = this.buf[this.pos++];
+  b = this.buf[this.pos++]!;
   result |= (b & 0x7f) << 21;
   if ((b & 0x80) == 0) {
     this.assertBounds();
@@ -343,10 +343,10 @@ export function varint32read(this: ReaderLike): number {
   }
 
   // Extract only last 4 bits
-  b = this.buf[this.pos++];
+  b = this.buf[this.pos++]!;
   result |= (b & 0x0f) << 28;
 
-  for (let readBytes = 5; (b & 0x80) !== 0 && readBytes < 10; readBytes++) b = this.buf[this.pos++];
+  for (let readBytes = 5; (b & 0x80) !== 0 && readBytes < 10; readBytes++) b = this.buf[this.pos++]!;
 
   if ((b & 0x80) != 0) throw new Error("invalid varint");
 
@@ -387,14 +387,14 @@ export function zzDecode(lo: number, hi: number) {
  * unsigned int32 without moving pos.
  */
 export function readUInt32(buf: Uint8Array, pos: number) {
-  return (buf[pos] | (buf[pos + 1] << 8) | (buf[pos + 2] << 16)) + buf[pos + 3] * 0x1000000;
+  return (buf[pos]! | (buf[pos + 1]! << 8) | (buf[pos + 2]! << 16)) + buf[pos + 3]! * 0x1000000;
 }
 
 /**
  * signed int32 without moving pos.
  */
 export function readInt32(buf: Uint8Array, pos: number) {
-  return (buf[pos] | (buf[pos + 1] << 8) | (buf[pos + 2] << 16)) + (buf[pos + 3] << 24);
+  return (buf[pos]! | (buf[pos + 1]! << 8) | (buf[pos + 2]! << 16)) + (buf[pos + 3]! << 24);
 }
 
 /**
