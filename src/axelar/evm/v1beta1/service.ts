@@ -4,6 +4,7 @@ import * as _m0 from "protobufjs/minimal";
 import {
   SetGatewayResponse,
   ConfirmGatewayTxResponse,
+  ConfirmGatewayTxsResponse,
   LinkResponse,
   ConfirmTokenResponse,
   ConfirmDepositResponse,
@@ -17,6 +18,7 @@ import {
   RetryFailedEventResponse,
   SetGatewayRequest,
   ConfirmGatewayTxRequest,
+  ConfirmGatewayTxsRequest,
   LinkRequest,
   ConfirmTokenRequest,
   ConfirmDepositRequest,
@@ -36,24 +38,28 @@ import {
   DepositStateResponse,
   PendingCommandsResponse,
   ChainsResponse,
+  CommandResponse,
   KeyAddressResponse,
   GatewayAddressResponse,
   BytecodeResponse,
   EventResponse,
   ERC20TokensResponse,
   TokenInfoResponse,
+  ParamsResponse,
   BatchedCommandsRequest,
   BurnerInfoRequest,
   ConfirmationHeightRequest,
   DepositStateRequest,
   PendingCommandsRequest,
   ChainsRequest,
+  CommandRequest,
   KeyAddressRequest,
   GatewayAddressRequest,
   BytecodeRequest,
   EventRequest,
   ERC20TokensRequest,
   TokenInfoRequest,
+  ParamsRequest,
 } from "../../../axelar/evm/v1beta1/query";
 
 export const protobufPackage = "axelar.evm.v1beta1";
@@ -61,7 +67,9 @@ export const protobufPackage = "axelar.evm.v1beta1";
 /** Msg defines the evm Msg service. */
 export interface MsgService {
   SetGateway(request: SetGatewayRequest): Promise<SetGatewayResponse>;
+  /** Deprecated: use ConfirmGatewayTxs instead */
   ConfirmGatewayTx(request: ConfirmGatewayTxRequest): Promise<ConfirmGatewayTxResponse>;
+  ConfirmGatewayTxs(request: ConfirmGatewayTxsRequest): Promise<ConfirmGatewayTxsResponse>;
   Link(request: LinkRequest): Promise<LinkResponse>;
   ConfirmToken(request: ConfirmTokenRequest): Promise<ConfirmTokenResponse>;
   ConfirmDeposit(request: ConfirmDepositRequest): Promise<ConfirmDepositResponse>;
@@ -83,6 +91,7 @@ export class MsgServiceClientImpl implements MsgService {
     this.rpc = rpc;
     this.SetGateway = this.SetGateway.bind(this);
     this.ConfirmGatewayTx = this.ConfirmGatewayTx.bind(this);
+    this.ConfirmGatewayTxs = this.ConfirmGatewayTxs.bind(this);
     this.Link = this.Link.bind(this);
     this.ConfirmToken = this.ConfirmToken.bind(this);
     this.ConfirmDeposit = this.ConfirmDeposit.bind(this);
@@ -105,6 +114,12 @@ export class MsgServiceClientImpl implements MsgService {
     const data = ConfirmGatewayTxRequest.encode(request).finish();
     const promise = this.rpc.request("axelar.evm.v1beta1.MsgService", "ConfirmGatewayTx", data);
     return promise.then((data) => ConfirmGatewayTxResponse.decode(new _m0.Reader(data)));
+  }
+
+  ConfirmGatewayTxs(request: ConfirmGatewayTxsRequest): Promise<ConfirmGatewayTxsResponse> {
+    const data = ConfirmGatewayTxsRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.evm.v1beta1.MsgService", "ConfirmGatewayTxs", data);
+    return promise.then((data) => ConfirmGatewayTxsResponse.decode(new _m0.Reader(data)));
   }
 
   Link(request: LinkRequest): Promise<LinkResponse> {
@@ -198,11 +213,19 @@ export interface QueryService {
   PendingCommands(request: PendingCommandsRequest): Promise<PendingCommandsResponse>;
   /** Chains queries the available evm chains */
   Chains(request: ChainsRequest): Promise<ChainsResponse>;
+  /** Command queries the command of a chain provided the command id */
+  Command(request: CommandRequest): Promise<CommandResponse>;
   /** KeyAddress queries the address of key of a chain */
   KeyAddress(request: KeyAddressRequest): Promise<KeyAddressResponse>;
-  /** GatewayAddress queries the address of axelar gateway at the specified chain */
+  /**
+   * GatewayAddress queries the address of axelar gateway at the specified
+   * chain
+   */
   GatewayAddress(request: GatewayAddressRequest): Promise<GatewayAddressResponse>;
-  /** Bytecode queries the bytecode of a specified gateway at the specified chain */
+  /**
+   * Bytecode queries the bytecode of a specified gateway at the specified
+   * chain
+   */
   Bytecode(request: BytecodeRequest): Promise<BytecodeResponse>;
   /** Event queries an event at the specified chain */
   Event(request: EventRequest): Promise<EventResponse>;
@@ -210,6 +233,7 @@ export interface QueryService {
   ERC20Tokens(request: ERC20TokensRequest): Promise<ERC20TokensResponse>;
   /** TokenInfo queries the token info for a registered ERC20 Token */
   TokenInfo(request: TokenInfoRequest): Promise<TokenInfoResponse>;
+  Params(request: ParamsRequest): Promise<ParamsResponse>;
 }
 
 export class QueryServiceClientImpl implements QueryService {
@@ -222,12 +246,14 @@ export class QueryServiceClientImpl implements QueryService {
     this.DepositState = this.DepositState.bind(this);
     this.PendingCommands = this.PendingCommands.bind(this);
     this.Chains = this.Chains.bind(this);
+    this.Command = this.Command.bind(this);
     this.KeyAddress = this.KeyAddress.bind(this);
     this.GatewayAddress = this.GatewayAddress.bind(this);
     this.Bytecode = this.Bytecode.bind(this);
     this.Event = this.Event.bind(this);
     this.ERC20Tokens = this.ERC20Tokens.bind(this);
     this.TokenInfo = this.TokenInfo.bind(this);
+    this.Params = this.Params.bind(this);
   }
   BatchedCommands(request: BatchedCommandsRequest): Promise<BatchedCommandsResponse> {
     const data = BatchedCommandsRequest.encode(request).finish();
@@ -265,6 +291,12 @@ export class QueryServiceClientImpl implements QueryService {
     return promise.then((data) => ChainsResponse.decode(new _m0.Reader(data)));
   }
 
+  Command(request: CommandRequest): Promise<CommandResponse> {
+    const data = CommandRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "Command", data);
+    return promise.then((data) => CommandResponse.decode(new _m0.Reader(data)));
+  }
+
   KeyAddress(request: KeyAddressRequest): Promise<KeyAddressResponse> {
     const data = KeyAddressRequest.encode(request).finish();
     const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "KeyAddress", data);
@@ -299,6 +331,12 @@ export class QueryServiceClientImpl implements QueryService {
     const data = TokenInfoRequest.encode(request).finish();
     const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "TokenInfo", data);
     return promise.then((data) => TokenInfoResponse.decode(new _m0.Reader(data)));
+  }
+
+  Params(request: ParamsRequest): Promise<ParamsResponse> {
+    const data = ParamsRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "Params", data);
+    return promise.then((data) => ParamsResponse.decode(new _m0.Reader(data)));
   }
 }
 

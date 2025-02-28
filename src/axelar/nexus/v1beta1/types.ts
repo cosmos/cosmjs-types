@@ -46,7 +46,7 @@ export interface TransferEpoch {
   chain: string;
   amount?: Coin;
   epoch: Long;
-  /** indicates whether the tracking is for transfers outgoing */
+  /** indicates whether the rate tracking is for transfers going */
   direction: TransferDirection;
 }
 

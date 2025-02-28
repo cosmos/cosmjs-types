@@ -93,6 +93,8 @@ function createBaseGenesisState_Chain() {
         tokens: [],
         events: [],
         confirmedEventQueue: undefined,
+        legacyConfirmedDeposits: [],
+        legacyBurnedDeposits: [],
     };
 }
 exports.GenesisState_Chain = {
@@ -126,6 +128,12 @@ exports.GenesisState_Chain = {
         }
         if (message.confirmedEventQueue !== undefined) {
             queuer_1.QueueState.encode(message.confirmedEventQueue, writer.uint32(98).fork()).ldelim();
+        }
+        for (const v of message.legacyConfirmedDeposits) {
+            types_1.ERC20Deposit.encode(v, writer.uint32(106).fork()).ldelim();
+        }
+        for (const v of message.legacyBurnedDeposits) {
+            types_1.ERC20Deposit.encode(v, writer.uint32(114).fork()).ldelim();
         }
         return writer;
     },
@@ -166,6 +174,12 @@ exports.GenesisState_Chain = {
                 case 12:
                     message.confirmedEventQueue = queuer_1.QueueState.decode(reader, reader.uint32());
                     break;
+                case 13:
+                    message.legacyConfirmedDeposits.push(types_1.ERC20Deposit.decode(reader, reader.uint32()));
+                    break;
+                case 14:
+                    message.legacyBurnedDeposits.push(types_1.ERC20Deposit.decode(reader, reader.uint32()));
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -197,6 +211,12 @@ exports.GenesisState_Chain = {
             confirmedEventQueue: isSet(object.confirmedEventQueue)
                 ? queuer_1.QueueState.fromJSON(object.confirmedEventQueue)
                 : undefined,
+            legacyConfirmedDeposits: Array.isArray(object === null || object === void 0 ? void 0 : object.legacyConfirmedDeposits)
+                ? object.legacyConfirmedDeposits.map((e) => types_1.ERC20Deposit.fromJSON(e))
+                : [],
+            legacyBurnedDeposits: Array.isArray(object === null || object === void 0 ? void 0 : object.legacyBurnedDeposits)
+                ? object.legacyBurnedDeposits.map((e) => types_1.ERC20Deposit.fromJSON(e))
+                : [],
         };
     },
     toJSON(message) {
@@ -246,10 +266,22 @@ exports.GenesisState_Chain = {
             (obj.confirmedEventQueue = message.confirmedEventQueue
                 ? queuer_1.QueueState.toJSON(message.confirmedEventQueue)
                 : undefined);
+        if (message.legacyConfirmedDeposits) {
+            obj.legacyConfirmedDeposits = message.legacyConfirmedDeposits.map((e) => e ? types_1.ERC20Deposit.toJSON(e) : undefined);
+        }
+        else {
+            obj.legacyConfirmedDeposits = [];
+        }
+        if (message.legacyBurnedDeposits) {
+            obj.legacyBurnedDeposits = message.legacyBurnedDeposits.map((e) => e ? types_1.ERC20Deposit.toJSON(e) : undefined);
+        }
+        else {
+            obj.legacyBurnedDeposits = [];
+        }
         return obj;
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f;
+        var _a, _b, _c, _d, _e, _f, _g, _h;
         const message = createBaseGenesisState_Chain();
         message.params =
             object.params !== undefined && object.params !== null ? params_1.Params.fromPartial(object.params) : undefined;
@@ -271,6 +303,9 @@ exports.GenesisState_Chain = {
             object.confirmedEventQueue !== undefined && object.confirmedEventQueue !== null
                 ? queuer_1.QueueState.fromPartial(object.confirmedEventQueue)
                 : undefined;
+        message.legacyConfirmedDeposits =
+            ((_g = object.legacyConfirmedDeposits) === null || _g === void 0 ? void 0 : _g.map((e) => types_1.ERC20Deposit.fromPartial(e))) || [];
+        message.legacyBurnedDeposits = ((_h = object.legacyBurnedDeposits) === null || _h === void 0 ? void 0 : _h.map((e) => types_1.ERC20Deposit.fromPartial(e))) || [];
         return message;
     },
 };

@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RetryFailedEventResponse = exports.RetryFailedEventRequest = exports.AddChainResponse = exports.AddChainRequest = exports.SignCommandsResponse = exports.SignCommandsRequest = exports.CreateTransferOperatorshipResponse = exports.CreateTransferOperatorshipRequest = exports.CreateTransferOwnershipResponse = exports.CreateTransferOwnershipRequest = exports.CreatePendingTransfersResponse = exports.CreatePendingTransfersRequest = exports.CreateDeployTokenResponse = exports.CreateDeployTokenRequest = exports.CreateBurnTokensResponse = exports.CreateBurnTokensRequest = exports.LinkResponse = exports.LinkRequest = exports.ConfirmTransferKeyResponse = exports.ConfirmTransferKeyRequest = exports.ConfirmTokenResponse = exports.ConfirmTokenRequest = exports.ConfirmDepositResponse = exports.ConfirmDepositRequest = exports.ConfirmGatewayTxResponse = exports.ConfirmGatewayTxRequest = exports.SetGatewayResponse = exports.SetGatewayRequest = exports.protobufPackage = void 0;
+exports.RetryFailedEventResponse = exports.RetryFailedEventRequest = exports.AddChainResponse = exports.AddChainRequest = exports.SignCommandsResponse = exports.SignCommandsRequest = exports.CreateTransferOperatorshipResponse = exports.CreateTransferOperatorshipRequest = exports.CreateTransferOwnershipResponse = exports.CreateTransferOwnershipRequest = exports.CreatePendingTransfersResponse = exports.CreatePendingTransfersRequest = exports.CreateDeployTokenResponse = exports.CreateDeployTokenRequest = exports.CreateBurnTokensResponse = exports.CreateBurnTokensRequest = exports.LinkResponse = exports.LinkRequest = exports.ConfirmTransferKeyResponse = exports.ConfirmTransferKeyRequest = exports.ConfirmTokenResponse = exports.ConfirmTokenRequest = exports.ConfirmDepositResponse = exports.ConfirmDepositRequest = exports.ConfirmGatewayTxsResponse = exports.ConfirmGatewayTxsRequest = exports.ConfirmGatewayTxResponse = exports.ConfirmGatewayTxRequest = exports.SetGatewayResponse = exports.SetGatewayRequest = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
@@ -220,6 +220,107 @@ exports.ConfirmGatewayTxResponse = {
     },
     fromPartial(_) {
         const message = createBaseConfirmGatewayTxResponse();
+        return message;
+    },
+};
+function createBaseConfirmGatewayTxsRequest() {
+    return { sender: new Uint8Array(), chain: "", txIds: [] };
+}
+exports.ConfirmGatewayTxsRequest = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.sender.length !== 0) {
+            writer.uint32(10).bytes(message.sender);
+        }
+        if (message.chain !== "") {
+            writer.uint32(18).string(message.chain);
+        }
+        for (const v of message.txIds) {
+            writer.uint32(26).bytes(v);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseConfirmGatewayTxsRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.sender = reader.bytes();
+                    break;
+                case 2:
+                    message.chain = reader.string();
+                    break;
+                case 3:
+                    message.txIds.push(reader.bytes());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
+            chain: isSet(object.chain) ? String(object.chain) : "",
+            txIds: Array.isArray(object === null || object === void 0 ? void 0 : object.txIds) ? object.txIds.map((e) => bytesFromBase64(e)) : [],
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.sender !== undefined &&
+            (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
+        message.chain !== undefined && (obj.chain = message.chain);
+        if (message.txIds) {
+            obj.txIds = message.txIds.map((e) => base64FromBytes(e !== undefined ? e : new Uint8Array()));
+        }
+        else {
+            obj.txIds = [];
+        }
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b, _c;
+        const message = createBaseConfirmGatewayTxsRequest();
+        message.sender = (_a = object.sender) !== null && _a !== void 0 ? _a : new Uint8Array();
+        message.chain = (_b = object.chain) !== null && _b !== void 0 ? _b : "";
+        message.txIds = ((_c = object.txIds) === null || _c === void 0 ? void 0 : _c.map((e) => e)) || [];
+        return message;
+    },
+};
+function createBaseConfirmGatewayTxsResponse() {
+    return {};
+}
+exports.ConfirmGatewayTxsResponse = {
+    encode(_, writer = _m0.Writer.create()) {
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseConfirmGatewayTxsResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(_) {
+        return {};
+    },
+    toJSON(_) {
+        const obj = {};
+        return obj;
+    },
+    fromPartial(_) {
+        const message = createBaseConfirmGatewayTxsResponse();
         return message;
     },
 };

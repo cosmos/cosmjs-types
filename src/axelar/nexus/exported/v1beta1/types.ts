@@ -11,6 +11,7 @@ export enum TransferState {
   TRANSFER_STATE_PENDING = 1,
   TRANSFER_STATE_ARCHIVED = 2,
   TRANSFER_STATE_INSUFFICIENT_AMOUNT = 3,
+  TRANSFER_STATE_FAILED = 4,
   UNRECOGNIZED = -1,
 }
 
@@ -28,6 +29,9 @@ export function transferStateFromJSON(object: any): TransferState {
     case 3:
     case "TRANSFER_STATE_INSUFFICIENT_AMOUNT":
       return TransferState.TRANSFER_STATE_INSUFFICIENT_AMOUNT;
+    case 4:
+    case "TRANSFER_STATE_FAILED":
+      return TransferState.TRANSFER_STATE_FAILED;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -45,6 +49,8 @@ export function transferStateToJSON(object: TransferState): string {
       return "TRANSFER_STATE_ARCHIVED";
     case TransferState.TRANSFER_STATE_INSUFFICIENT_AMOUNT:
       return "TRANSFER_STATE_INSUFFICIENT_AMOUNT";
+    case TransferState.TRANSFER_STATE_FAILED:
+      return "TRANSFER_STATE_FAILED";
     case TransferState.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -53,8 +59,8 @@ export function transferStateToJSON(object: TransferState): string {
 
 export enum TransferDirection {
   TRANSFER_DIRECTION_UNSPECIFIED = 0,
-  TRANSFER_DIRECTION_INCOMING = 1,
-  TRANSFER_DIRECTION_OUTGOING = 2,
+  TRANSFER_DIRECTION_FROM = 1,
+  TRANSFER_DIRECTION_TO = 2,
   UNRECOGNIZED = -1,
 }
 
@@ -64,11 +70,11 @@ export function transferDirectionFromJSON(object: any): TransferDirection {
     case "TRANSFER_DIRECTION_UNSPECIFIED":
       return TransferDirection.TRANSFER_DIRECTION_UNSPECIFIED;
     case 1:
-    case "TRANSFER_DIRECTION_INCOMING":
-      return TransferDirection.TRANSFER_DIRECTION_INCOMING;
+    case "TRANSFER_DIRECTION_FROM":
+      return TransferDirection.TRANSFER_DIRECTION_FROM;
     case 2:
-    case "TRANSFER_DIRECTION_OUTGOING":
-      return TransferDirection.TRANSFER_DIRECTION_OUTGOING;
+    case "TRANSFER_DIRECTION_TO":
+      return TransferDirection.TRANSFER_DIRECTION_TO;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -80,10 +86,10 @@ export function transferDirectionToJSON(object: TransferDirection): string {
   switch (object) {
     case TransferDirection.TRANSFER_DIRECTION_UNSPECIFIED:
       return "TRANSFER_DIRECTION_UNSPECIFIED";
-    case TransferDirection.TRANSFER_DIRECTION_INCOMING:
-      return "TRANSFER_DIRECTION_INCOMING";
-    case TransferDirection.TRANSFER_DIRECTION_OUTGOING:
-      return "TRANSFER_DIRECTION_OUTGOING";
+    case TransferDirection.TRANSFER_DIRECTION_FROM:
+      return "TRANSFER_DIRECTION_FROM";
+    case TransferDirection.TRANSFER_DIRECTION_TO:
+      return "TRANSFER_DIRECTION_TO";
     case TransferDirection.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -131,6 +137,80 @@ export interface FeeInfo {
 export interface Asset {
   denom: string;
   isNativeAsset: boolean;
+}
+
+export interface GeneralMessage {
+  id: string;
+  sender?: CrossChainAddress;
+  recipient?: CrossChainAddress;
+  payloadHash: Uint8Array;
+  status: GeneralMessage_Status;
+  asset?: Coin;
+  sourceTxId: Uint8Array;
+  sourceTxIndex: Long;
+}
+
+export enum GeneralMessage_Status {
+  STATUS_UNSPECIFIED = 0,
+  STATUS_APPROVED = 1,
+  STATUS_PROCESSING = 2,
+  STATUS_EXECUTED = 3,
+  STATUS_FAILED = 4,
+  UNRECOGNIZED = -1,
+}
+
+export function generalMessage_StatusFromJSON(object: any): GeneralMessage_Status {
+  switch (object) {
+    case 0:
+    case "STATUS_UNSPECIFIED":
+      return GeneralMessage_Status.STATUS_UNSPECIFIED;
+    case 1:
+    case "STATUS_APPROVED":
+      return GeneralMessage_Status.STATUS_APPROVED;
+    case 2:
+    case "STATUS_PROCESSING":
+      return GeneralMessage_Status.STATUS_PROCESSING;
+    case 3:
+    case "STATUS_EXECUTED":
+      return GeneralMessage_Status.STATUS_EXECUTED;
+    case 4:
+    case "STATUS_FAILED":
+      return GeneralMessage_Status.STATUS_FAILED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return GeneralMessage_Status.UNRECOGNIZED;
+  }
+}
+
+export function generalMessage_StatusToJSON(object: GeneralMessage_Status): string {
+  switch (object) {
+    case GeneralMessage_Status.STATUS_UNSPECIFIED:
+      return "STATUS_UNSPECIFIED";
+    case GeneralMessage_Status.STATUS_APPROVED:
+      return "STATUS_APPROVED";
+    case GeneralMessage_Status.STATUS_PROCESSING:
+      return "STATUS_PROCESSING";
+    case GeneralMessage_Status.STATUS_EXECUTED:
+      return "STATUS_EXECUTED";
+    case GeneralMessage_Status.STATUS_FAILED:
+      return "STATUS_FAILED";
+    case GeneralMessage_Status.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export interface WasmMessage {
+  sourceChain: string;
+  sourceAddress: string;
+  destinationChain: string;
+  destinationAddress: string;
+  payloadHash: Uint8Array;
+  sourceTxId: Uint8Array;
+  sourceTxIndex: Long;
+  sender: Uint8Array;
+  id: string;
 }
 
 function createBaseChain(): Chain {
@@ -553,6 +633,288 @@ export const Asset = {
     const message = createBaseAsset();
     message.denom = object.denom ?? "";
     message.isNativeAsset = object.isNativeAsset ?? false;
+    return message;
+  },
+};
+
+function createBaseGeneralMessage(): GeneralMessage {
+  return {
+    id: "",
+    sender: undefined,
+    recipient: undefined,
+    payloadHash: new Uint8Array(),
+    status: 0,
+    asset: undefined,
+    sourceTxId: new Uint8Array(),
+    sourceTxIndex: Long.UZERO,
+  };
+}
+
+export const GeneralMessage = {
+  encode(message: GeneralMessage, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.sender !== undefined) {
+      CrossChainAddress.encode(message.sender, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.recipient !== undefined) {
+      CrossChainAddress.encode(message.recipient, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.payloadHash.length !== 0) {
+      writer.uint32(34).bytes(message.payloadHash);
+    }
+    if (message.status !== 0) {
+      writer.uint32(40).int32(message.status);
+    }
+    if (message.asset !== undefined) {
+      Coin.encode(message.asset, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.sourceTxId.length !== 0) {
+      writer.uint32(58).bytes(message.sourceTxId);
+    }
+    if (!message.sourceTxIndex.isZero()) {
+      writer.uint32(64).uint64(message.sourceTxIndex);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GeneralMessage {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGeneralMessage();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        case 2:
+          message.sender = CrossChainAddress.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.recipient = CrossChainAddress.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.payloadHash = reader.bytes();
+          break;
+        case 5:
+          message.status = reader.int32() as any;
+          break;
+        case 6:
+          message.asset = Coin.decode(reader, reader.uint32());
+          break;
+        case 7:
+          message.sourceTxId = reader.bytes();
+          break;
+        case 8:
+          message.sourceTxIndex = reader.uint64() as Long;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GeneralMessage {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      sender: isSet(object.sender) ? CrossChainAddress.fromJSON(object.sender) : undefined,
+      recipient: isSet(object.recipient) ? CrossChainAddress.fromJSON(object.recipient) : undefined,
+      payloadHash: isSet(object.payloadHash) ? bytesFromBase64(object.payloadHash) : new Uint8Array(),
+      status: isSet(object.status) ? generalMessage_StatusFromJSON(object.status) : 0,
+      asset: isSet(object.asset) ? Coin.fromJSON(object.asset) : undefined,
+      sourceTxId: isSet(object.sourceTxId) ? bytesFromBase64(object.sourceTxId) : new Uint8Array(),
+      sourceTxIndex: isSet(object.sourceTxIndex) ? Long.fromValue(object.sourceTxIndex) : Long.UZERO,
+    };
+  },
+
+  toJSON(message: GeneralMessage): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.sender !== undefined &&
+      (obj.sender = message.sender ? CrossChainAddress.toJSON(message.sender) : undefined);
+    message.recipient !== undefined &&
+      (obj.recipient = message.recipient ? CrossChainAddress.toJSON(message.recipient) : undefined);
+    message.payloadHash !== undefined &&
+      (obj.payloadHash = base64FromBytes(
+        message.payloadHash !== undefined ? message.payloadHash : new Uint8Array(),
+      ));
+    message.status !== undefined && (obj.status = generalMessage_StatusToJSON(message.status));
+    message.asset !== undefined && (obj.asset = message.asset ? Coin.toJSON(message.asset) : undefined);
+    message.sourceTxId !== undefined &&
+      (obj.sourceTxId = base64FromBytes(
+        message.sourceTxId !== undefined ? message.sourceTxId : new Uint8Array(),
+      ));
+    message.sourceTxIndex !== undefined &&
+      (obj.sourceTxIndex = (message.sourceTxIndex || Long.UZERO).toString());
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<GeneralMessage>, I>>(object: I): GeneralMessage {
+    const message = createBaseGeneralMessage();
+    message.id = object.id ?? "";
+    message.sender =
+      object.sender !== undefined && object.sender !== null
+        ? CrossChainAddress.fromPartial(object.sender)
+        : undefined;
+    message.recipient =
+      object.recipient !== undefined && object.recipient !== null
+        ? CrossChainAddress.fromPartial(object.recipient)
+        : undefined;
+    message.payloadHash = object.payloadHash ?? new Uint8Array();
+    message.status = object.status ?? 0;
+    message.asset =
+      object.asset !== undefined && object.asset !== null ? Coin.fromPartial(object.asset) : undefined;
+    message.sourceTxId = object.sourceTxId ?? new Uint8Array();
+    message.sourceTxIndex =
+      object.sourceTxIndex !== undefined && object.sourceTxIndex !== null
+        ? Long.fromValue(object.sourceTxIndex)
+        : Long.UZERO;
+    return message;
+  },
+};
+
+function createBaseWasmMessage(): WasmMessage {
+  return {
+    sourceChain: "",
+    sourceAddress: "",
+    destinationChain: "",
+    destinationAddress: "",
+    payloadHash: new Uint8Array(),
+    sourceTxId: new Uint8Array(),
+    sourceTxIndex: Long.UZERO,
+    sender: new Uint8Array(),
+    id: "",
+  };
+}
+
+export const WasmMessage = {
+  encode(message: WasmMessage, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.sourceChain !== "") {
+      writer.uint32(10).string(message.sourceChain);
+    }
+    if (message.sourceAddress !== "") {
+      writer.uint32(18).string(message.sourceAddress);
+    }
+    if (message.destinationChain !== "") {
+      writer.uint32(26).string(message.destinationChain);
+    }
+    if (message.destinationAddress !== "") {
+      writer.uint32(34).string(message.destinationAddress);
+    }
+    if (message.payloadHash.length !== 0) {
+      writer.uint32(42).bytes(message.payloadHash);
+    }
+    if (message.sourceTxId.length !== 0) {
+      writer.uint32(50).bytes(message.sourceTxId);
+    }
+    if (!message.sourceTxIndex.isZero()) {
+      writer.uint32(56).uint64(message.sourceTxIndex);
+    }
+    if (message.sender.length !== 0) {
+      writer.uint32(66).bytes(message.sender);
+    }
+    if (message.id !== "") {
+      writer.uint32(74).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): WasmMessage {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseWasmMessage();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sourceChain = reader.string();
+          break;
+        case 2:
+          message.sourceAddress = reader.string();
+          break;
+        case 3:
+          message.destinationChain = reader.string();
+          break;
+        case 4:
+          message.destinationAddress = reader.string();
+          break;
+        case 5:
+          message.payloadHash = reader.bytes();
+          break;
+        case 6:
+          message.sourceTxId = reader.bytes();
+          break;
+        case 7:
+          message.sourceTxIndex = reader.uint64() as Long;
+          break;
+        case 8:
+          message.sender = reader.bytes();
+          break;
+        case 9:
+          message.id = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): WasmMessage {
+    return {
+      sourceChain: isSet(object.sourceChain) ? String(object.sourceChain) : "",
+      sourceAddress: isSet(object.sourceAddress) ? String(object.sourceAddress) : "",
+      destinationChain: isSet(object.destinationChain) ? String(object.destinationChain) : "",
+      destinationAddress: isSet(object.destinationAddress) ? String(object.destinationAddress) : "",
+      payloadHash: isSet(object.payloadHash) ? bytesFromBase64(object.payloadHash) : new Uint8Array(),
+      sourceTxId: isSet(object.sourceTxId) ? bytesFromBase64(object.sourceTxId) : new Uint8Array(),
+      sourceTxIndex: isSet(object.sourceTxIndex) ? Long.fromValue(object.sourceTxIndex) : Long.UZERO,
+      sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
+      id: isSet(object.id) ? String(object.id) : "",
+    };
+  },
+
+  toJSON(message: WasmMessage): unknown {
+    const obj: any = {};
+    message.sourceChain !== undefined && (obj.sourceChain = message.sourceChain);
+    message.sourceAddress !== undefined && (obj.sourceAddress = message.sourceAddress);
+    message.destinationChain !== undefined && (obj.destinationChain = message.destinationChain);
+    message.destinationAddress !== undefined && (obj.destinationAddress = message.destinationAddress);
+    message.payloadHash !== undefined &&
+      (obj.payloadHash = base64FromBytes(
+        message.payloadHash !== undefined ? message.payloadHash : new Uint8Array(),
+      ));
+    message.sourceTxId !== undefined &&
+      (obj.sourceTxId = base64FromBytes(
+        message.sourceTxId !== undefined ? message.sourceTxId : new Uint8Array(),
+      ));
+    message.sourceTxIndex !== undefined &&
+      (obj.sourceTxIndex = (message.sourceTxIndex || Long.UZERO).toString());
+    message.sender !== undefined &&
+      (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<WasmMessage>, I>>(object: I): WasmMessage {
+    const message = createBaseWasmMessage();
+    message.sourceChain = object.sourceChain ?? "";
+    message.sourceAddress = object.sourceAddress ?? "";
+    message.destinationChain = object.destinationChain ?? "";
+    message.destinationAddress = object.destinationAddress ?? "";
+    message.payloadHash = object.payloadHash ?? new Uint8Array();
+    message.sourceTxId = object.sourceTxId ?? new Uint8Array();
+    message.sourceTxIndex =
+      object.sourceTxIndex !== undefined && object.sourceTxIndex !== null
+        ? Long.fromValue(object.sourceTxIndex)
+        : Long.UZERO;
+    message.sender = object.sender ?? new Uint8Array();
+    message.id = object.id ?? "";
     return message;
   },
 };

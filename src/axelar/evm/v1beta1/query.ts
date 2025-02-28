@@ -12,6 +12,7 @@ import {
   depositStatusFromJSON,
   depositStatusToJSON,
 } from "../../../axelar/evm/v1beta1/types";
+import { Params } from "../../../axelar/evm/v1beta1/params";
 
 export const protobufPackage = "axelar.evm.v1beta1";
 
@@ -183,6 +184,24 @@ export interface ChainsResponse {
   chains: string[];
 }
 
+export interface CommandRequest {
+  chain: string;
+  id: string;
+}
+
+export interface CommandResponse {
+  id: string;
+  type: string;
+  params: { [key: string]: string };
+  keyId: string;
+  maxGasCost: number;
+}
+
+export interface CommandResponse_ParamsEntry {
+  key: string;
+  value: string;
+}
+
 export interface PendingCommandsRequest {
   chain: string;
 }
@@ -281,6 +300,15 @@ export interface Proof {
   weights: string[];
   threshold: string;
   signatures: string[];
+}
+
+/** ParamsRequest represents a message that queries the params */
+export interface ParamsRequest {
+  chain: string;
+}
+
+export interface ParamsResponse {
+  params?: Params;
 }
 
 function createBaseDepositQueryParams(): DepositQueryParams {
@@ -1218,6 +1246,230 @@ export const ChainsResponse = {
   fromPartial<I extends Exact<DeepPartial<ChainsResponse>, I>>(object: I): ChainsResponse {
     const message = createBaseChainsResponse();
     message.chains = object.chains?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseCommandRequest(): CommandRequest {
+  return { chain: "", id: "" };
+}
+
+export const CommandRequest = {
+  encode(message: CommandRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    if (message.id !== "") {
+      writer.uint32(18).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommandRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCommandRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        case 2:
+          message.id = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CommandRequest {
+    return {
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      id: isSet(object.id) ? String(object.id) : "",
+    };
+  },
+
+  toJSON(message: CommandRequest): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<CommandRequest>, I>>(object: I): CommandRequest {
+    const message = createBaseCommandRequest();
+    message.chain = object.chain ?? "";
+    message.id = object.id ?? "";
+    return message;
+  },
+};
+
+function createBaseCommandResponse(): CommandResponse {
+  return { id: "", type: "", params: {}, keyId: "", maxGasCost: 0 };
+}
+
+export const CommandResponse = {
+  encode(message: CommandResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.type !== "") {
+      writer.uint32(18).string(message.type);
+    }
+    Object.entries(message.params).forEach(([key, value]) => {
+      CommandResponse_ParamsEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).ldelim();
+    });
+    if (message.keyId !== "") {
+      writer.uint32(34).string(message.keyId);
+    }
+    if (message.maxGasCost !== 0) {
+      writer.uint32(40).uint32(message.maxGasCost);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommandResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCommandResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        case 2:
+          message.type = reader.string();
+          break;
+        case 3:
+          const entry3 = CommandResponse_ParamsEntry.decode(reader, reader.uint32());
+          if (entry3.value !== undefined) {
+            message.params[entry3.key] = entry3.value;
+          }
+          break;
+        case 4:
+          message.keyId = reader.string();
+          break;
+        case 5:
+          message.maxGasCost = reader.uint32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CommandResponse {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      type: isSet(object.type) ? String(object.type) : "",
+      params: isObject(object.params)
+        ? Object.entries(object.params).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+            acc[key] = String(value);
+            return acc;
+          }, {})
+        : {},
+      keyId: isSet(object.keyId) ? String(object.keyId) : "",
+      maxGasCost: isSet(object.maxGasCost) ? Number(object.maxGasCost) : 0,
+    };
+  },
+
+  toJSON(message: CommandResponse): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.type !== undefined && (obj.type = message.type);
+    obj.params = {};
+    if (message.params) {
+      Object.entries(message.params).forEach(([k, v]) => {
+        obj.params[k] = v;
+      });
+    }
+    message.keyId !== undefined && (obj.keyId = message.keyId);
+    message.maxGasCost !== undefined && (obj.maxGasCost = Math.round(message.maxGasCost));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<CommandResponse>, I>>(object: I): CommandResponse {
+    const message = createBaseCommandResponse();
+    message.id = object.id ?? "";
+    message.type = object.type ?? "";
+    message.params = Object.entries(object.params ?? {}).reduce<{ [key: string]: string }>(
+      (acc, [key, value]) => {
+        if (value !== undefined) {
+          acc[key] = String(value);
+        }
+        return acc;
+      },
+      {},
+    );
+    message.keyId = object.keyId ?? "";
+    message.maxGasCost = object.maxGasCost ?? 0;
+    return message;
+  },
+};
+
+function createBaseCommandResponse_ParamsEntry(): CommandResponse_ParamsEntry {
+  return { key: "", value: "" };
+}
+
+export const CommandResponse_ParamsEntry = {
+  encode(message: CommandResponse_ParamsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommandResponse_ParamsEntry {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCommandResponse_ParamsEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.key = reader.string();
+          break;
+        case 2:
+          message.value = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CommandResponse_ParamsEntry {
+    return {
+      key: isSet(object.key) ? String(object.key) : "",
+      value: isSet(object.value) ? String(object.value) : "",
+    };
+  },
+
+  toJSON(message: CommandResponse_ParamsEntry): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<CommandResponse_ParamsEntry>, I>>(
+    object: I,
+  ): CommandResponse_ParamsEntry {
+    const message = createBaseCommandResponse_ParamsEntry();
+    message.key = object.key ?? "";
+    message.value = object.value ?? "";
     return message;
   },
 };
@@ -2350,6 +2602,105 @@ export const Proof = {
     message.weights = object.weights?.map((e) => e) || [];
     message.threshold = object.threshold ?? "";
     message.signatures = object.signatures?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseParamsRequest(): ParamsRequest {
+  return { chain: "" };
+}
+
+export const ParamsRequest = {
+  encode(message: ParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ParamsRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseParamsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ParamsRequest {
+    return {
+      chain: isSet(object.chain) ? String(object.chain) : "",
+    };
+  },
+
+  toJSON(message: ParamsRequest): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ParamsRequest>, I>>(object: I): ParamsRequest {
+    const message = createBaseParamsRequest();
+    message.chain = object.chain ?? "";
+    return message;
+  },
+};
+
+function createBaseParamsResponse(): ParamsResponse {
+  return { params: undefined };
+}
+
+export const ParamsResponse = {
+  encode(message: ParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ParamsResponse {
+    return {
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
+    };
+  },
+
+  toJSON(message: ParamsResponse): unknown {
+    const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ParamsResponse>, I>>(object: I): ParamsResponse {
+    const message = createBaseParamsResponse();
+    message.params =
+      object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
   },
 };

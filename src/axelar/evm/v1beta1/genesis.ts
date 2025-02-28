@@ -30,6 +30,8 @@ export interface GenesisState_Chain {
   tokens: ERC20TokenMetadata[];
   events: Event[];
   confirmedEventQueue?: QueueState;
+  legacyConfirmedDeposits: ERC20Deposit[];
+  legacyBurnedDeposits: ERC20Deposit[];
 }
 
 function createBaseGenesisState(): GenesisState {
@@ -99,6 +101,8 @@ function createBaseGenesisState_Chain(): GenesisState_Chain {
     tokens: [],
     events: [],
     confirmedEventQueue: undefined,
+    legacyConfirmedDeposits: [],
+    legacyBurnedDeposits: [],
   };
 }
 
@@ -133,6 +137,12 @@ export const GenesisState_Chain = {
     }
     if (message.confirmedEventQueue !== undefined) {
       QueueState.encode(message.confirmedEventQueue, writer.uint32(98).fork()).ldelim();
+    }
+    for (const v of message.legacyConfirmedDeposits) {
+      ERC20Deposit.encode(v!, writer.uint32(106).fork()).ldelim();
+    }
+    for (const v of message.legacyBurnedDeposits) {
+      ERC20Deposit.encode(v!, writer.uint32(114).fork()).ldelim();
     }
     return writer;
   },
@@ -174,6 +184,12 @@ export const GenesisState_Chain = {
         case 12:
           message.confirmedEventQueue = QueueState.decode(reader, reader.uint32());
           break;
+        case 13:
+          message.legacyConfirmedDeposits.push(ERC20Deposit.decode(reader, reader.uint32()));
+          break;
+        case 14:
+          message.legacyBurnedDeposits.push(ERC20Deposit.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -206,6 +222,12 @@ export const GenesisState_Chain = {
       confirmedEventQueue: isSet(object.confirmedEventQueue)
         ? QueueState.fromJSON(object.confirmedEventQueue)
         : undefined,
+      legacyConfirmedDeposits: Array.isArray(object?.legacyConfirmedDeposits)
+        ? object.legacyConfirmedDeposits.map((e: any) => ERC20Deposit.fromJSON(e))
+        : [],
+      legacyBurnedDeposits: Array.isArray(object?.legacyBurnedDeposits)
+        ? object.legacyBurnedDeposits.map((e: any) => ERC20Deposit.fromJSON(e))
+        : [],
     };
   },
 
@@ -252,6 +274,20 @@ export const GenesisState_Chain = {
       (obj.confirmedEventQueue = message.confirmedEventQueue
         ? QueueState.toJSON(message.confirmedEventQueue)
         : undefined);
+    if (message.legacyConfirmedDeposits) {
+      obj.legacyConfirmedDeposits = message.legacyConfirmedDeposits.map((e) =>
+        e ? ERC20Deposit.toJSON(e) : undefined,
+      );
+    } else {
+      obj.legacyConfirmedDeposits = [];
+    }
+    if (message.legacyBurnedDeposits) {
+      obj.legacyBurnedDeposits = message.legacyBurnedDeposits.map((e) =>
+        e ? ERC20Deposit.toJSON(e) : undefined,
+      );
+    } else {
+      obj.legacyBurnedDeposits = [];
+    }
     return obj;
   },
 
@@ -277,6 +313,9 @@ export const GenesisState_Chain = {
       object.confirmedEventQueue !== undefined && object.confirmedEventQueue !== null
         ? QueueState.fromPartial(object.confirmedEventQueue)
         : undefined;
+    message.legacyConfirmedDeposits =
+      object.legacyConfirmedDeposits?.map((e) => ERC20Deposit.fromPartial(e)) || [];
+    message.legacyBurnedDeposits = object.legacyBurnedDeposits?.map((e) => ERC20Deposit.fromPartial(e)) || [];
     return message;
   },
 };

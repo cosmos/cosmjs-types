@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Asset = exports.CosmosChain = exports.IBCTransfer = exports.iBCTransfer_StatusToJSON = exports.iBCTransfer_StatusFromJSON = exports.IBCTransfer_Status = exports.protobufPackage = void 0;
+exports.Fee = exports.Asset = exports.CosmosChain = exports.IBCTransfer = exports.iBCTransfer_StatusToJSON = exports.iBCTransfer_StatusFromJSON = exports.IBCTransfer_Status = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
@@ -321,6 +321,73 @@ exports.Asset = {
         const message = createBaseAsset();
         message.denom = (_a = object.denom) !== null && _a !== void 0 ? _a : "";
         message.minAmount = (_b = object.minAmount) !== null && _b !== void 0 ? _b : new Uint8Array();
+        return message;
+    },
+};
+function createBaseFee() {
+    return { amount: undefined, recipient: new Uint8Array(), refundRecipient: new Uint8Array() };
+}
+exports.Fee = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.amount !== undefined) {
+            coin_1.Coin.encode(message.amount, writer.uint32(10).fork()).ldelim();
+        }
+        if (message.recipient.length !== 0) {
+            writer.uint32(18).bytes(message.recipient);
+        }
+        if (message.refundRecipient.length !== 0) {
+            writer.uint32(26).bytes(message.refundRecipient);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseFee();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.amount = coin_1.Coin.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.recipient = reader.bytes();
+                    break;
+                case 3:
+                    message.refundRecipient = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            amount: isSet(object.amount) ? coin_1.Coin.fromJSON(object.amount) : undefined,
+            recipient: isSet(object.recipient) ? bytesFromBase64(object.recipient) : new Uint8Array(),
+            refundRecipient: isSet(object.refundRecipient)
+                ? bytesFromBase64(object.refundRecipient)
+                : new Uint8Array(),
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.amount !== undefined && (obj.amount = message.amount ? coin_1.Coin.toJSON(message.amount) : undefined);
+        message.recipient !== undefined &&
+            (obj.recipient = base64FromBytes(message.recipient !== undefined ? message.recipient : new Uint8Array()));
+        message.refundRecipient !== undefined &&
+            (obj.refundRecipient = base64FromBytes(message.refundRecipient !== undefined ? message.refundRecipient : new Uint8Array()));
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b;
+        const message = createBaseFee();
+        message.amount =
+            object.amount !== undefined && object.amount !== null ? coin_1.Coin.fromPartial(object.amount) : undefined;
+        message.recipient = (_a = object.recipient) !== null && _a !== void 0 ? _a : new Uint8Array();
+        message.refundRecipient = (_b = object.refundRecipient) !== null && _b !== void 0 ? _b : new Uint8Array();
         return message;
     },
 };

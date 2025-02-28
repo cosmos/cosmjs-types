@@ -42,6 +42,8 @@ function createBaseGenesisState() {
         feeInfos: [],
         rateLimits: [],
         transferEpochs: [],
+        messages: [],
+        messageNonce: long_1.default.UZERO,
     };
 }
 exports.GenesisState = {
@@ -75,6 +77,12 @@ exports.GenesisState = {
         }
         for (const v of message.transferEpochs) {
             types_2.TransferEpoch.encode(v, writer.uint32(82).fork()).ldelim();
+        }
+        for (const v of message.messages) {
+            types_1.GeneralMessage.encode(v, writer.uint32(90).fork()).ldelim();
+        }
+        if (!message.messageNonce.isZero()) {
+            writer.uint32(96).uint64(message.messageNonce);
         }
         return writer;
     },
@@ -115,6 +123,12 @@ exports.GenesisState = {
                 case 10:
                     message.transferEpochs.push(types_2.TransferEpoch.decode(reader, reader.uint32()));
                     break;
+                case 11:
+                    message.messages.push(types_1.GeneralMessage.decode(reader, reader.uint32()));
+                    break;
+                case 12:
+                    message.messageNonce = reader.uint64();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -144,6 +158,10 @@ exports.GenesisState = {
             transferEpochs: Array.isArray(object === null || object === void 0 ? void 0 : object.transferEpochs)
                 ? object.transferEpochs.map((e) => types_2.TransferEpoch.fromJSON(e))
                 : [],
+            messages: Array.isArray(object === null || object === void 0 ? void 0 : object.messages)
+                ? object.messages.map((e) => types_1.GeneralMessage.fromJSON(e))
+                : [],
+            messageNonce: isSet(object.messageNonce) ? long_1.default.fromValue(object.messageNonce) : long_1.default.UZERO,
         };
     },
     toJSON(message) {
@@ -193,10 +211,18 @@ exports.GenesisState = {
         else {
             obj.transferEpochs = [];
         }
+        if (message.messages) {
+            obj.messages = message.messages.map((e) => (e ? types_1.GeneralMessage.toJSON(e) : undefined));
+        }
+        else {
+            obj.messages = [];
+        }
+        message.messageNonce !== undefined &&
+            (obj.messageNonce = (message.messageNonce || long_1.default.UZERO).toString());
         return obj;
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f, _g;
+        var _a, _b, _c, _d, _e, _f, _g, _h;
         const message = createBaseGenesisState();
         message.params =
             object.params !== undefined && object.params !== null ? params_1.Params.fromPartial(object.params) : undefined;
@@ -211,6 +237,11 @@ exports.GenesisState = {
         message.feeInfos = ((_e = object.feeInfos) === null || _e === void 0 ? void 0 : _e.map((e) => types_1.FeeInfo.fromPartial(e))) || [];
         message.rateLimits = ((_f = object.rateLimits) === null || _f === void 0 ? void 0 : _f.map((e) => types_2.RateLimit.fromPartial(e))) || [];
         message.transferEpochs = ((_g = object.transferEpochs) === null || _g === void 0 ? void 0 : _g.map((e) => types_2.TransferEpoch.fromPartial(e))) || [];
+        message.messages = ((_h = object.messages) === null || _h === void 0 ? void 0 : _h.map((e) => types_1.GeneralMessage.fromPartial(e))) || [];
+        message.messageNonce =
+            object.messageNonce !== undefined && object.messageNonce !== null
+                ? long_1.default.fromValue(object.messageNonce)
+                : long_1.default.UZERO;
         return message;
     },
 };

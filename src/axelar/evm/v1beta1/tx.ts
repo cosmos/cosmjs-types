@@ -14,13 +14,23 @@ export interface SetGatewayRequest {
 
 export interface SetGatewayResponse {}
 
+/** @deprecated */
 export interface ConfirmGatewayTxRequest {
   sender: Uint8Array;
   chain: string;
   txId: Uint8Array;
 }
 
+/** @deprecated */
 export interface ConfirmGatewayTxResponse {}
+
+export interface ConfirmGatewayTxsRequest {
+  sender: Uint8Array;
+  chain: string;
+  txIds: Uint8Array[];
+}
+
+export interface ConfirmGatewayTxsResponse {}
 
 /** MsgConfirmDeposit represents an erc20 deposit confirmation message */
 export interface ConfirmDepositRequest {
@@ -363,6 +373,119 @@ export const ConfirmGatewayTxResponse = {
 
   fromPartial<I extends Exact<DeepPartial<ConfirmGatewayTxResponse>, I>>(_: I): ConfirmGatewayTxResponse {
     const message = createBaseConfirmGatewayTxResponse();
+    return message;
+  },
+};
+
+function createBaseConfirmGatewayTxsRequest(): ConfirmGatewayTxsRequest {
+  return { sender: new Uint8Array(), chain: "", txIds: [] };
+}
+
+export const ConfirmGatewayTxsRequest = {
+  encode(message: ConfirmGatewayTxsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.sender.length !== 0) {
+      writer.uint32(10).bytes(message.sender);
+    }
+    if (message.chain !== "") {
+      writer.uint32(18).string(message.chain);
+    }
+    for (const v of message.txIds) {
+      writer.uint32(26).bytes(v!);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ConfirmGatewayTxsRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseConfirmGatewayTxsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sender = reader.bytes();
+          break;
+        case 2:
+          message.chain = reader.string();
+          break;
+        case 3:
+          message.txIds.push(reader.bytes());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ConfirmGatewayTxsRequest {
+    return {
+      sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      txIds: Array.isArray(object?.txIds) ? object.txIds.map((e: any) => bytesFromBase64(e)) : [],
+    };
+  },
+
+  toJSON(message: ConfirmGatewayTxsRequest): unknown {
+    const obj: any = {};
+    message.sender !== undefined &&
+      (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
+    message.chain !== undefined && (obj.chain = message.chain);
+    if (message.txIds) {
+      obj.txIds = message.txIds.map((e) => base64FromBytes(e !== undefined ? e : new Uint8Array()));
+    } else {
+      obj.txIds = [];
+    }
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ConfirmGatewayTxsRequest>, I>>(
+    object: I,
+  ): ConfirmGatewayTxsRequest {
+    const message = createBaseConfirmGatewayTxsRequest();
+    message.sender = object.sender ?? new Uint8Array();
+    message.chain = object.chain ?? "";
+    message.txIds = object.txIds?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseConfirmGatewayTxsResponse(): ConfirmGatewayTxsResponse {
+  return {};
+}
+
+export const ConfirmGatewayTxsResponse = {
+  encode(_: ConfirmGatewayTxsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ConfirmGatewayTxsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseConfirmGatewayTxsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): ConfirmGatewayTxsResponse {
+    return {};
+  },
+
+  toJSON(_: ConfirmGatewayTxsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ConfirmGatewayTxsResponse>, I>>(_: I): ConfirmGatewayTxsResponse {
+    const message = createBaseConfirmGatewayTxsResponse();
     return message;
   },
 };

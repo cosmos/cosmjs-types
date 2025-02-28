@@ -22,10 +22,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PendingIBCTransferCountResponse_TransfersByChainEntry = exports.PendingIBCTransferCountResponse = exports.PendingIBCTransferCountRequest = exports.protobufPackage = void 0;
+exports.ChainByIBCPathResponse = exports.ChainByIBCPathRequest = exports.IBCPathResponse = exports.IBCPathRequest = exports.ParamsResponse = exports.ParamsRequest = exports.PendingIBCTransferCountResponse_TransfersByChainEntry = exports.PendingIBCTransferCountResponse = exports.PendingIBCTransferCountRequest = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
+const params_1 = require("../../../axelar/axelarnet/v1beta1/params");
 exports.protobufPackage = "axelar.axelarnet.v1beta1";
 function createBasePendingIBCTransferCountRequest() {
     return {};
@@ -172,6 +173,259 @@ exports.PendingIBCTransferCountResponse_TransfersByChainEntry = {
         const message = createBasePendingIBCTransferCountResponse_TransfersByChainEntry();
         message.key = (_a = object.key) !== null && _a !== void 0 ? _a : "";
         message.value = (_b = object.value) !== null && _b !== void 0 ? _b : 0;
+        return message;
+    },
+};
+function createBaseParamsRequest() {
+    return {};
+}
+exports.ParamsRequest = {
+    encode(_, writer = _m0.Writer.create()) {
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseParamsRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(_) {
+        return {};
+    },
+    toJSON(_) {
+        const obj = {};
+        return obj;
+    },
+    fromPartial(_) {
+        const message = createBaseParamsRequest();
+        return message;
+    },
+};
+function createBaseParamsResponse() {
+    return { params: undefined };
+}
+exports.ParamsResponse = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.params !== undefined) {
+            params_1.Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseParamsResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.params = params_1.Params.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            params: isSet(object.params) ? params_1.Params.fromJSON(object.params) : undefined,
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.params !== undefined && (obj.params = message.params ? params_1.Params.toJSON(message.params) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = createBaseParamsResponse();
+        message.params =
+            object.params !== undefined && object.params !== null ? params_1.Params.fromPartial(object.params) : undefined;
+        return message;
+    },
+};
+function createBaseIBCPathRequest() {
+    return { chain: "" };
+}
+exports.IBCPathRequest = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.chain !== "") {
+            writer.uint32(10).string(message.chain);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseIBCPathRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.chain = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            chain: isSet(object.chain) ? String(object.chain) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.chain !== undefined && (obj.chain = message.chain);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a;
+        const message = createBaseIBCPathRequest();
+        message.chain = (_a = object.chain) !== null && _a !== void 0 ? _a : "";
+        return message;
+    },
+};
+function createBaseIBCPathResponse() {
+    return { ibcPath: "" };
+}
+exports.IBCPathResponse = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.ibcPath !== "") {
+            writer.uint32(10).string(message.ibcPath);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseIBCPathResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.ibcPath = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            ibcPath: isSet(object.ibcPath) ? String(object.ibcPath) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.ibcPath !== undefined && (obj.ibcPath = message.ibcPath);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a;
+        const message = createBaseIBCPathResponse();
+        message.ibcPath = (_a = object.ibcPath) !== null && _a !== void 0 ? _a : "";
+        return message;
+    },
+};
+function createBaseChainByIBCPathRequest() {
+    return { ibcPath: "" };
+}
+exports.ChainByIBCPathRequest = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.ibcPath !== "") {
+            writer.uint32(10).string(message.ibcPath);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseChainByIBCPathRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.ibcPath = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            ibcPath: isSet(object.ibcPath) ? String(object.ibcPath) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.ibcPath !== undefined && (obj.ibcPath = message.ibcPath);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a;
+        const message = createBaseChainByIBCPathRequest();
+        message.ibcPath = (_a = object.ibcPath) !== null && _a !== void 0 ? _a : "";
+        return message;
+    },
+};
+function createBaseChainByIBCPathResponse() {
+    return { chain: "" };
+}
+exports.ChainByIBCPathResponse = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.chain !== "") {
+            writer.uint32(10).string(message.chain);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseChainByIBCPathResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.chain = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            chain: isSet(object.chain) ? String(object.chain) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.chain !== undefined && (obj.chain = message.chain);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a;
+        const message = createBaseChainByIBCPathResponse();
+        message.chain = (_a = object.chain) !== null && _a !== void 0 ? _a : "";
         return message;
     },
 };

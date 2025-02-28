@@ -2,6 +2,7 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { HeartBeatResponse, HeartBeatRequest } from "../../../axelar/tss/v1beta1/tx";
+import { ParamsResponse, ParamsRequest } from "../../../axelar/tss/v1beta1/query";
 
 export const protobufPackage = "axelar.tss.v1beta1";
 
@@ -24,12 +25,20 @@ export class MsgServiceClientImpl implements MsgService {
 }
 
 /** Query defines the gRPC querier service. */
-export interface QueryService {}
+export interface QueryService {
+  Params(request: ParamsRequest): Promise<ParamsResponse>;
+}
 
 export class QueryServiceClientImpl implements QueryService {
   private readonly rpc: Rpc;
   constructor(rpc: Rpc) {
     this.rpc = rpc;
+    this.Params = this.Params.bind(this);
+  }
+  Params(request: ParamsRequest): Promise<ParamsResponse> {
+    const data = ParamsRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.tss.v1beta1.QueryService", "Params", data);
+    return promise.then((data) => ParamsResponse.decode(new _m0.Reader(data)));
   }
 }
 

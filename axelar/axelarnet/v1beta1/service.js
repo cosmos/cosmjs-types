@@ -40,6 +40,8 @@ class MsgServiceClientImpl {
         this.RouteIBCTransfers = this.RouteIBCTransfers.bind(this);
         this.RegisterFeeCollector = this.RegisterFeeCollector.bind(this);
         this.RetryIBCTransfer = this.RetryIBCTransfer.bind(this);
+        this.RouteMessage = this.RouteMessage.bind(this);
+        this.CallContract = this.CallContract.bind(this);
     }
     Link(request) {
         const data = tx_1.LinkRequest.encode(request).finish();
@@ -81,17 +83,45 @@ class MsgServiceClientImpl {
         const promise = this.rpc.request("axelar.axelarnet.v1beta1.MsgService", "RetryIBCTransfer", data);
         return promise.then((data) => tx_1.RetryIBCTransferResponse.decode(new _m0.Reader(data)));
     }
+    RouteMessage(request) {
+        const data = tx_1.RouteMessageRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.axelarnet.v1beta1.MsgService", "RouteMessage", data);
+        return promise.then((data) => tx_1.RouteMessageResponse.decode(new _m0.Reader(data)));
+    }
+    CallContract(request) {
+        const data = tx_1.CallContractRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.axelarnet.v1beta1.MsgService", "CallContract", data);
+        return promise.then((data) => tx_1.CallContractResponse.decode(new _m0.Reader(data)));
+    }
 }
 exports.MsgServiceClientImpl = MsgServiceClientImpl;
 class QueryServiceClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
         this.PendingIBCTransferCount = this.PendingIBCTransferCount.bind(this);
+        this.Params = this.Params.bind(this);
+        this.IBCPath = this.IBCPath.bind(this);
+        this.ChainByIBCPath = this.ChainByIBCPath.bind(this);
     }
     PendingIBCTransferCount(request) {
         const data = query_1.PendingIBCTransferCountRequest.encode(request).finish();
         const promise = this.rpc.request("axelar.axelarnet.v1beta1.QueryService", "PendingIBCTransferCount", data);
         return promise.then((data) => query_1.PendingIBCTransferCountResponse.decode(new _m0.Reader(data)));
+    }
+    Params(request) {
+        const data = query_1.ParamsRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.axelarnet.v1beta1.QueryService", "Params", data);
+        return promise.then((data) => query_1.ParamsResponse.decode(new _m0.Reader(data)));
+    }
+    IBCPath(request) {
+        const data = query_1.IBCPathRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.axelarnet.v1beta1.QueryService", "IBCPath", data);
+        return promise.then((data) => query_1.IBCPathResponse.decode(new _m0.Reader(data)));
+    }
+    ChainByIBCPath(request) {
+        const data = query_1.ChainByIBCPathRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.axelarnet.v1beta1.QueryService", "ChainByIBCPath", data);
+        return promise.then((data) => query_1.ChainByIBCPathResponse.decode(new _m0.Reader(data)));
     }
 }
 exports.QueryServiceClientImpl = QueryServiceClientImpl;

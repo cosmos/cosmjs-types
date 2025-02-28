@@ -10,6 +10,8 @@ import {
   RouteIBCTransfersResponse,
   RegisterFeeCollectorResponse,
   RetryIBCTransferResponse,
+  RouteMessageResponse,
+  CallContractResponse,
   LinkRequest,
   ConfirmDepositRequest,
   ExecutePendingTransfersRequest,
@@ -18,10 +20,18 @@ import {
   RouteIBCTransfersRequest,
   RegisterFeeCollectorRequest,
   RetryIBCTransferRequest,
+  RouteMessageRequest,
+  CallContractRequest,
 } from "../../../axelar/axelarnet/v1beta1/tx";
 import {
   PendingIBCTransferCountResponse,
+  ParamsResponse,
+  IBCPathResponse,
+  ChainByIBCPathResponse,
   PendingIBCTransferCountRequest,
+  ParamsRequest,
+  IBCPathRequest,
+  ChainByIBCPathRequest,
 } from "../../../axelar/axelarnet/v1beta1/query";
 
 export const protobufPackage = "axelar.axelarnet.v1beta1";
@@ -36,6 +46,8 @@ export interface MsgService {
   RouteIBCTransfers(request: RouteIBCTransfersRequest): Promise<RouteIBCTransfersResponse>;
   RegisterFeeCollector(request: RegisterFeeCollectorRequest): Promise<RegisterFeeCollectorResponse>;
   RetryIBCTransfer(request: RetryIBCTransferRequest): Promise<RetryIBCTransferResponse>;
+  RouteMessage(request: RouteMessageRequest): Promise<RouteMessageResponse>;
+  CallContract(request: CallContractRequest): Promise<CallContractResponse>;
 }
 
 export class MsgServiceClientImpl implements MsgService {
@@ -50,6 +62,8 @@ export class MsgServiceClientImpl implements MsgService {
     this.RouteIBCTransfers = this.RouteIBCTransfers.bind(this);
     this.RegisterFeeCollector = this.RegisterFeeCollector.bind(this);
     this.RetryIBCTransfer = this.RetryIBCTransfer.bind(this);
+    this.RouteMessage = this.RouteMessage.bind(this);
+    this.CallContract = this.CallContract.bind(this);
   }
   Link(request: LinkRequest): Promise<LinkResponse> {
     const data = LinkRequest.encode(request).finish();
@@ -98,12 +112,27 @@ export class MsgServiceClientImpl implements MsgService {
     const promise = this.rpc.request("axelar.axelarnet.v1beta1.MsgService", "RetryIBCTransfer", data);
     return promise.then((data) => RetryIBCTransferResponse.decode(new _m0.Reader(data)));
   }
+
+  RouteMessage(request: RouteMessageRequest): Promise<RouteMessageResponse> {
+    const data = RouteMessageRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.axelarnet.v1beta1.MsgService", "RouteMessage", data);
+    return promise.then((data) => RouteMessageResponse.decode(new _m0.Reader(data)));
+  }
+
+  CallContract(request: CallContractRequest): Promise<CallContractResponse> {
+    const data = CallContractRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.axelarnet.v1beta1.MsgService", "CallContract", data);
+    return promise.then((data) => CallContractResponse.decode(new _m0.Reader(data)));
+  }
 }
 
 /** QueryService defines the gRPC querier service. */
 export interface QueryService {
   /** PendingIBCTransferCount queries the pending ibc transfers for all chains */
   PendingIBCTransferCount(request: PendingIBCTransferCountRequest): Promise<PendingIBCTransferCountResponse>;
+  Params(request: ParamsRequest): Promise<ParamsResponse>;
+  IBCPath(request: IBCPathRequest): Promise<IBCPathResponse>;
+  ChainByIBCPath(request: ChainByIBCPathRequest): Promise<ChainByIBCPathResponse>;
 }
 
 export class QueryServiceClientImpl implements QueryService {
@@ -111,6 +140,9 @@ export class QueryServiceClientImpl implements QueryService {
   constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.PendingIBCTransferCount = this.PendingIBCTransferCount.bind(this);
+    this.Params = this.Params.bind(this);
+    this.IBCPath = this.IBCPath.bind(this);
+    this.ChainByIBCPath = this.ChainByIBCPath.bind(this);
   }
   PendingIBCTransferCount(request: PendingIBCTransferCountRequest): Promise<PendingIBCTransferCountResponse> {
     const data = PendingIBCTransferCountRequest.encode(request).finish();
@@ -120,6 +152,24 @@ export class QueryServiceClientImpl implements QueryService {
       data,
     );
     return promise.then((data) => PendingIBCTransferCountResponse.decode(new _m0.Reader(data)));
+  }
+
+  Params(request: ParamsRequest): Promise<ParamsResponse> {
+    const data = ParamsRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.axelarnet.v1beta1.QueryService", "Params", data);
+    return promise.then((data) => ParamsResponse.decode(new _m0.Reader(data)));
+  }
+
+  IBCPath(request: IBCPathRequest): Promise<IBCPathResponse> {
+    const data = IBCPathRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.axelarnet.v1beta1.QueryService", "IBCPath", data);
+    return promise.then((data) => IBCPathResponse.decode(new _m0.Reader(data)));
+  }
+
+  ChainByIBCPath(request: ChainByIBCPathRequest): Promise<ChainByIBCPathResponse> {
+    const data = ChainByIBCPathRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.axelarnet.v1beta1.QueryService", "ChainByIBCPath", data);
+    return promise.then((data) => ChainByIBCPathResponse.decode(new _m0.Reader(data)));
   }
 }
 

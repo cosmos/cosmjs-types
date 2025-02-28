@@ -76,6 +76,11 @@ export interface VoteSigResponse {
 
 export interface HeartBeatRequest {
   sender: Uint8Array;
+  /**
+   * Deprecated: this field will be removed in the next release
+   *
+   * @deprecated
+   */
   keyIds: string[];
 }
 

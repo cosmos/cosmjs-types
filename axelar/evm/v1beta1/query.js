@@ -22,11 +22,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Proof = exports.TokenInfoResponse = exports.TokenInfoRequest = exports.ERC20TokensResponse_Token = exports.ERC20TokensResponse = exports.ERC20TokensRequest = exports.BytecodeResponse = exports.BytecodeRequest = exports.GatewayAddressResponse = exports.GatewayAddressRequest = exports.ConfirmationHeightResponse = exports.ConfirmationHeightRequest = exports.BurnerInfoResponse = exports.BurnerInfoRequest = exports.QueryCommandResponse_ParamsEntry = exports.QueryCommandResponse = exports.PendingCommandsResponse = exports.PendingCommandsRequest = exports.ChainsResponse = exports.ChainsRequest = exports.QueryBurnerAddressResponse = exports.EventResponse = exports.EventRequest = exports.DepositStateResponse = exports.DepositStateRequest = exports.QueryDepositStateParams = exports.QueryTokenAddressResponse = exports.KeyAddressResponse_WeightedAddress = exports.KeyAddressResponse = exports.KeyAddressRequest = exports.BatchedCommandsResponse = exports.BatchedCommandsRequest = exports.DepositQueryParams = exports.tokenTypeToJSON = exports.tokenTypeFromJSON = exports.TokenType = exports.chainStatusToJSON = exports.chainStatusFromJSON = exports.ChainStatus = exports.protobufPackage = void 0;
+exports.ParamsResponse = exports.ParamsRequest = exports.Proof = exports.TokenInfoResponse = exports.TokenInfoRequest = exports.ERC20TokensResponse_Token = exports.ERC20TokensResponse = exports.ERC20TokensRequest = exports.BytecodeResponse = exports.BytecodeRequest = exports.GatewayAddressResponse = exports.GatewayAddressRequest = exports.ConfirmationHeightResponse = exports.ConfirmationHeightRequest = exports.BurnerInfoResponse = exports.BurnerInfoRequest = exports.QueryCommandResponse_ParamsEntry = exports.QueryCommandResponse = exports.PendingCommandsResponse = exports.PendingCommandsRequest = exports.CommandResponse_ParamsEntry = exports.CommandResponse = exports.CommandRequest = exports.ChainsResponse = exports.ChainsRequest = exports.QueryBurnerAddressResponse = exports.EventResponse = exports.EventRequest = exports.DepositStateResponse = exports.DepositStateRequest = exports.QueryDepositStateParams = exports.QueryTokenAddressResponse = exports.KeyAddressResponse_WeightedAddress = exports.KeyAddressResponse = exports.KeyAddressRequest = exports.BatchedCommandsResponse = exports.BatchedCommandsRequest = exports.DepositQueryParams = exports.tokenTypeToJSON = exports.tokenTypeFromJSON = exports.TokenType = exports.chainStatusToJSON = exports.chainStatusFromJSON = exports.ChainStatus = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
 const types_1 = require("../../../axelar/evm/v1beta1/types");
+const params_1 = require("../../../axelar/evm/v1beta1/params");
 exports.protobufPackage = "axelar.evm.v1beta1";
 var ChainStatus;
 (function (ChainStatus) {
@@ -959,6 +960,210 @@ exports.ChainsResponse = {
         var _a;
         const message = createBaseChainsResponse();
         message.chains = ((_a = object.chains) === null || _a === void 0 ? void 0 : _a.map((e) => e)) || [];
+        return message;
+    },
+};
+function createBaseCommandRequest() {
+    return { chain: "", id: "" };
+}
+exports.CommandRequest = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.chain !== "") {
+            writer.uint32(10).string(message.chain);
+        }
+        if (message.id !== "") {
+            writer.uint32(18).string(message.id);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseCommandRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.chain = reader.string();
+                    break;
+                case 2:
+                    message.id = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            chain: isSet(object.chain) ? String(object.chain) : "",
+            id: isSet(object.id) ? String(object.id) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.chain !== undefined && (obj.chain = message.chain);
+        message.id !== undefined && (obj.id = message.id);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b;
+        const message = createBaseCommandRequest();
+        message.chain = (_a = object.chain) !== null && _a !== void 0 ? _a : "";
+        message.id = (_b = object.id) !== null && _b !== void 0 ? _b : "";
+        return message;
+    },
+};
+function createBaseCommandResponse() {
+    return { id: "", type: "", params: {}, keyId: "", maxGasCost: 0 };
+}
+exports.CommandResponse = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.id !== "") {
+            writer.uint32(10).string(message.id);
+        }
+        if (message.type !== "") {
+            writer.uint32(18).string(message.type);
+        }
+        Object.entries(message.params).forEach(([key, value]) => {
+            exports.CommandResponse_ParamsEntry.encode({ key: key, value }, writer.uint32(26).fork()).ldelim();
+        });
+        if (message.keyId !== "") {
+            writer.uint32(34).string(message.keyId);
+        }
+        if (message.maxGasCost !== 0) {
+            writer.uint32(40).uint32(message.maxGasCost);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseCommandResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                case 2:
+                    message.type = reader.string();
+                    break;
+                case 3:
+                    const entry3 = exports.CommandResponse_ParamsEntry.decode(reader, reader.uint32());
+                    if (entry3.value !== undefined) {
+                        message.params[entry3.key] = entry3.value;
+                    }
+                    break;
+                case 4:
+                    message.keyId = reader.string();
+                    break;
+                case 5:
+                    message.maxGasCost = reader.uint32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            id: isSet(object.id) ? String(object.id) : "",
+            type: isSet(object.type) ? String(object.type) : "",
+            params: isObject(object.params)
+                ? Object.entries(object.params).reduce((acc, [key, value]) => {
+                    acc[key] = String(value);
+                    return acc;
+                }, {})
+                : {},
+            keyId: isSet(object.keyId) ? String(object.keyId) : "",
+            maxGasCost: isSet(object.maxGasCost) ? Number(object.maxGasCost) : 0,
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.id !== undefined && (obj.id = message.id);
+        message.type !== undefined && (obj.type = message.type);
+        obj.params = {};
+        if (message.params) {
+            Object.entries(message.params).forEach(([k, v]) => {
+                obj.params[k] = v;
+            });
+        }
+        message.keyId !== undefined && (obj.keyId = message.keyId);
+        message.maxGasCost !== undefined && (obj.maxGasCost = Math.round(message.maxGasCost));
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b, _c, _d, _e;
+        const message = createBaseCommandResponse();
+        message.id = (_a = object.id) !== null && _a !== void 0 ? _a : "";
+        message.type = (_b = object.type) !== null && _b !== void 0 ? _b : "";
+        message.params = Object.entries((_c = object.params) !== null && _c !== void 0 ? _c : {}).reduce((acc, [key, value]) => {
+            if (value !== undefined) {
+                acc[key] = String(value);
+            }
+            return acc;
+        }, {});
+        message.keyId = (_d = object.keyId) !== null && _d !== void 0 ? _d : "";
+        message.maxGasCost = (_e = object.maxGasCost) !== null && _e !== void 0 ? _e : 0;
+        return message;
+    },
+};
+function createBaseCommandResponse_ParamsEntry() {
+    return { key: "", value: "" };
+}
+exports.CommandResponse_ParamsEntry = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.key !== "") {
+            writer.uint32(10).string(message.key);
+        }
+        if (message.value !== "") {
+            writer.uint32(18).string(message.value);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseCommandResponse_ParamsEntry();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.key = reader.string();
+                    break;
+                case 2:
+                    message.value = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            key: isSet(object.key) ? String(object.key) : "",
+            value: isSet(object.value) ? String(object.value) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.key !== undefined && (obj.key = message.key);
+        message.value !== undefined && (obj.value = message.value);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b;
+        const message = createBaseCommandResponse_ParamsEntry();
+        message.key = (_a = object.key) !== null && _a !== void 0 ? _a : "";
+        message.value = (_b = object.value) !== null && _b !== void 0 ? _b : "";
         return message;
     },
 };
@@ -1994,6 +2199,94 @@ exports.Proof = {
         message.weights = ((_b = object.weights) === null || _b === void 0 ? void 0 : _b.map((e) => e)) || [];
         message.threshold = (_c = object.threshold) !== null && _c !== void 0 ? _c : "";
         message.signatures = ((_d = object.signatures) === null || _d === void 0 ? void 0 : _d.map((e) => e)) || [];
+        return message;
+    },
+};
+function createBaseParamsRequest() {
+    return { chain: "" };
+}
+exports.ParamsRequest = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.chain !== "") {
+            writer.uint32(10).string(message.chain);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseParamsRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.chain = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            chain: isSet(object.chain) ? String(object.chain) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.chain !== undefined && (obj.chain = message.chain);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a;
+        const message = createBaseParamsRequest();
+        message.chain = (_a = object.chain) !== null && _a !== void 0 ? _a : "";
+        return message;
+    },
+};
+function createBaseParamsResponse() {
+    return { params: undefined };
+}
+exports.ParamsResponse = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.params !== undefined) {
+            params_1.Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseParamsResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.params = params_1.Params.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            params: isSet(object.params) ? params_1.Params.fromJSON(object.params) : undefined,
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.params !== undefined && (obj.params = message.params ? params_1.Params.toJSON(message.params) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = createBaseParamsResponse();
+        message.params =
+            object.params !== undefined && object.params !== null ? params_1.Params.fromPartial(object.params) : undefined;
         return message;
     },
 };

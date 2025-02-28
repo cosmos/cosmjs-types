@@ -4,6 +4,7 @@ import * as _m0 from "protobufjs/minimal";
 import {
   TransferState,
   FeeInfo,
+  GeneralMessage,
   CrossChainTransfer,
   transferStateFromJSON,
   transferStateToJSON,
@@ -12,6 +13,7 @@ import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pa
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import { ChainState } from "../../../axelar/nexus/v1beta1/types";
 import { Duration } from "../../../google/protobuf/duration";
+import { Params } from "../../../axelar/nexus/v1beta1/params";
 
 export const protobufPackage = "axelar.nexus.v1beta1";
 
@@ -54,7 +56,15 @@ export function chainStatusToJSON(object: ChainStatus): string {
   }
 }
 
-export interface QueryChainMaintainersResponse {
+/**
+ * ChainMaintainersRequest represents a message that queries
+ * the chain maintainers for the specified chain
+ */
+export interface ChainMaintainersRequest {
+  chain: string;
+}
+
+export interface ChainMaintainersResponse {
   maintainers: Uint8Array[];
 }
 
@@ -192,28 +202,96 @@ export interface TransferRateLimitResponse {
 export interface TransferRateLimit {
   limit: Uint8Array;
   window?: Duration;
+  /** @deprecated */
   incoming: Uint8Array;
+  /** @deprecated */
   outgoing: Uint8Array;
   /** time_left indicates the time left in the rate limit window */
   timeLeft?: Duration;
+  from: Uint8Array;
+  to: Uint8Array;
 }
 
-function createBaseQueryChainMaintainersResponse(): QueryChainMaintainersResponse {
+export interface MessageRequest {
+  id: string;
+}
+
+export interface MessageResponse {
+  message?: GeneralMessage;
+}
+
+/** ParamsRequest represents a message that queries the params */
+export interface ParamsRequest {}
+
+export interface ParamsResponse {
+  params?: Params;
+}
+
+function createBaseChainMaintainersRequest(): ChainMaintainersRequest {
+  return { chain: "" };
+}
+
+export const ChainMaintainersRequest = {
+  encode(message: ChainMaintainersRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ChainMaintainersRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseChainMaintainersRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ChainMaintainersRequest {
+    return {
+      chain: isSet(object.chain) ? String(object.chain) : "",
+    };
+  },
+
+  toJSON(message: ChainMaintainersRequest): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ChainMaintainersRequest>, I>>(object: I): ChainMaintainersRequest {
+    const message = createBaseChainMaintainersRequest();
+    message.chain = object.chain ?? "";
+    return message;
+  },
+};
+
+function createBaseChainMaintainersResponse(): ChainMaintainersResponse {
   return { maintainers: [] };
 }
 
-export const QueryChainMaintainersResponse = {
-  encode(message: QueryChainMaintainersResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const ChainMaintainersResponse = {
+  encode(message: ChainMaintainersResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.maintainers) {
       writer.uint32(10).bytes(v!);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryChainMaintainersResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ChainMaintainersResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryChainMaintainersResponse();
+    const message = createBaseChainMaintainersResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -228,7 +306,7 @@ export const QueryChainMaintainersResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryChainMaintainersResponse {
+  fromJSON(object: any): ChainMaintainersResponse {
     return {
       maintainers: Array.isArray(object?.maintainers)
         ? object.maintainers.map((e: any) => bytesFromBase64(e))
@@ -236,7 +314,7 @@ export const QueryChainMaintainersResponse = {
     };
   },
 
-  toJSON(message: QueryChainMaintainersResponse): unknown {
+  toJSON(message: ChainMaintainersResponse): unknown {
     const obj: any = {};
     if (message.maintainers) {
       obj.maintainers = message.maintainers.map((e) =>
@@ -248,10 +326,10 @@ export const QueryChainMaintainersResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryChainMaintainersResponse>, I>>(
+  fromPartial<I extends Exact<DeepPartial<ChainMaintainersResponse>, I>>(
     object: I,
-  ): QueryChainMaintainersResponse {
-    const message = createBaseQueryChainMaintainersResponse();
+  ): ChainMaintainersResponse {
+    const message = createBaseChainMaintainersResponse();
     message.maintainers = object.maintainers?.map((e) => e) || [];
     return message;
   },
@@ -1396,6 +1474,8 @@ function createBaseTransferRateLimit(): TransferRateLimit {
     incoming: new Uint8Array(),
     outgoing: new Uint8Array(),
     timeLeft: undefined,
+    from: new Uint8Array(),
+    to: new Uint8Array(),
   };
 }
 
@@ -1415,6 +1495,12 @@ export const TransferRateLimit = {
     }
     if (message.timeLeft !== undefined) {
       Duration.encode(message.timeLeft, writer.uint32(42).fork()).ldelim();
+    }
+    if (message.from.length !== 0) {
+      writer.uint32(50).bytes(message.from);
+    }
+    if (message.to.length !== 0) {
+      writer.uint32(58).bytes(message.to);
     }
     return writer;
   },
@@ -1441,6 +1527,12 @@ export const TransferRateLimit = {
         case 5:
           message.timeLeft = Duration.decode(reader, reader.uint32());
           break;
+        case 6:
+          message.from = reader.bytes();
+          break;
+        case 7:
+          message.to = reader.bytes();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1456,6 +1548,8 @@ export const TransferRateLimit = {
       incoming: isSet(object.incoming) ? bytesFromBase64(object.incoming) : new Uint8Array(),
       outgoing: isSet(object.outgoing) ? bytesFromBase64(object.outgoing) : new Uint8Array(),
       timeLeft: isSet(object.timeLeft) ? Duration.fromJSON(object.timeLeft) : undefined,
+      from: isSet(object.from) ? bytesFromBase64(object.from) : new Uint8Array(),
+      to: isSet(object.to) ? bytesFromBase64(object.to) : new Uint8Array(),
     };
   },
 
@@ -1471,6 +1565,10 @@ export const TransferRateLimit = {
       (obj.outgoing = base64FromBytes(message.outgoing !== undefined ? message.outgoing : new Uint8Array()));
     message.timeLeft !== undefined &&
       (obj.timeLeft = message.timeLeft ? Duration.toJSON(message.timeLeft) : undefined);
+    message.from !== undefined &&
+      (obj.from = base64FromBytes(message.from !== undefined ? message.from : new Uint8Array()));
+    message.to !== undefined &&
+      (obj.to = base64FromBytes(message.to !== undefined ? message.to : new Uint8Array()));
     return obj;
   },
 
@@ -1485,6 +1583,199 @@ export const TransferRateLimit = {
       object.timeLeft !== undefined && object.timeLeft !== null
         ? Duration.fromPartial(object.timeLeft)
         : undefined;
+    message.from = object.from ?? new Uint8Array();
+    message.to = object.to ?? new Uint8Array();
+    return message;
+  },
+};
+
+function createBaseMessageRequest(): MessageRequest {
+  return { id: "" };
+}
+
+export const MessageRequest = {
+  encode(message: MessageRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MessageRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMessageRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MessageRequest {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
+  },
+
+  toJSON(message: MessageRequest): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MessageRequest>, I>>(object: I): MessageRequest {
+    const message = createBaseMessageRequest();
+    message.id = object.id ?? "";
+    return message;
+  },
+};
+
+function createBaseMessageResponse(): MessageResponse {
+  return { message: undefined };
+}
+
+export const MessageResponse = {
+  encode(message: MessageResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.message !== undefined) {
+      GeneralMessage.encode(message.message, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MessageResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMessageResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.message = GeneralMessage.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MessageResponse {
+    return {
+      message: isSet(object.message) ? GeneralMessage.fromJSON(object.message) : undefined,
+    };
+  },
+
+  toJSON(message: MessageResponse): unknown {
+    const obj: any = {};
+    message.message !== undefined &&
+      (obj.message = message.message ? GeneralMessage.toJSON(message.message) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MessageResponse>, I>>(object: I): MessageResponse {
+    const message = createBaseMessageResponse();
+    message.message =
+      object.message !== undefined && object.message !== null
+        ? GeneralMessage.fromPartial(object.message)
+        : undefined;
+    return message;
+  },
+};
+
+function createBaseParamsRequest(): ParamsRequest {
+  return {};
+}
+
+export const ParamsRequest = {
+  encode(_: ParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ParamsRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseParamsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): ParamsRequest {
+    return {};
+  },
+
+  toJSON(_: ParamsRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ParamsRequest>, I>>(_: I): ParamsRequest {
+    const message = createBaseParamsRequest();
+    return message;
+  },
+};
+
+function createBaseParamsResponse(): ParamsResponse {
+  return { params: undefined };
+}
+
+export const ParamsResponse = {
+  encode(message: ParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ParamsResponse {
+    return {
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
+    };
+  },
+
+  toJSON(message: ParamsResponse): unknown {
+    const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ParamsResponse>, I>>(object: I): ParamsResponse {
+    const message = createBaseParamsResponse();
+    message.params =
+      object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
   },
 };

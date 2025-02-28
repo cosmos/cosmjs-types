@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Asset = exports.FeeInfo = exports.TransferFee = exports.CrossChainTransfer = exports.CrossChainAddress = exports.Chain = exports.transferDirectionToJSON = exports.transferDirectionFromJSON = exports.TransferDirection = exports.transferStateToJSON = exports.transferStateFromJSON = exports.TransferState = exports.protobufPackage = void 0;
+exports.WasmMessage = exports.GeneralMessage = exports.Asset = exports.FeeInfo = exports.TransferFee = exports.CrossChainTransfer = exports.CrossChainAddress = exports.Chain = exports.generalMessage_StatusToJSON = exports.generalMessage_StatusFromJSON = exports.GeneralMessage_Status = exports.transferDirectionToJSON = exports.transferDirectionFromJSON = exports.TransferDirection = exports.transferStateToJSON = exports.transferStateFromJSON = exports.TransferState = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
@@ -35,6 +35,7 @@ var TransferState;
     TransferState[TransferState["TRANSFER_STATE_PENDING"] = 1] = "TRANSFER_STATE_PENDING";
     TransferState[TransferState["TRANSFER_STATE_ARCHIVED"] = 2] = "TRANSFER_STATE_ARCHIVED";
     TransferState[TransferState["TRANSFER_STATE_INSUFFICIENT_AMOUNT"] = 3] = "TRANSFER_STATE_INSUFFICIENT_AMOUNT";
+    TransferState[TransferState["TRANSFER_STATE_FAILED"] = 4] = "TRANSFER_STATE_FAILED";
     TransferState[TransferState["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
 })(TransferState = exports.TransferState || (exports.TransferState = {}));
 function transferStateFromJSON(object) {
@@ -51,6 +52,9 @@ function transferStateFromJSON(object) {
         case 3:
         case "TRANSFER_STATE_INSUFFICIENT_AMOUNT":
             return TransferState.TRANSFER_STATE_INSUFFICIENT_AMOUNT;
+        case 4:
+        case "TRANSFER_STATE_FAILED":
+            return TransferState.TRANSFER_STATE_FAILED;
         case -1:
         case "UNRECOGNIZED":
         default:
@@ -68,6 +72,8 @@ function transferStateToJSON(object) {
             return "TRANSFER_STATE_ARCHIVED";
         case TransferState.TRANSFER_STATE_INSUFFICIENT_AMOUNT:
             return "TRANSFER_STATE_INSUFFICIENT_AMOUNT";
+        case TransferState.TRANSFER_STATE_FAILED:
+            return "TRANSFER_STATE_FAILED";
         case TransferState.UNRECOGNIZED:
         default:
             return "UNRECOGNIZED";
@@ -77,8 +83,8 @@ exports.transferStateToJSON = transferStateToJSON;
 var TransferDirection;
 (function (TransferDirection) {
     TransferDirection[TransferDirection["TRANSFER_DIRECTION_UNSPECIFIED"] = 0] = "TRANSFER_DIRECTION_UNSPECIFIED";
-    TransferDirection[TransferDirection["TRANSFER_DIRECTION_INCOMING"] = 1] = "TRANSFER_DIRECTION_INCOMING";
-    TransferDirection[TransferDirection["TRANSFER_DIRECTION_OUTGOING"] = 2] = "TRANSFER_DIRECTION_OUTGOING";
+    TransferDirection[TransferDirection["TRANSFER_DIRECTION_FROM"] = 1] = "TRANSFER_DIRECTION_FROM";
+    TransferDirection[TransferDirection["TRANSFER_DIRECTION_TO"] = 2] = "TRANSFER_DIRECTION_TO";
     TransferDirection[TransferDirection["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
 })(TransferDirection = exports.TransferDirection || (exports.TransferDirection = {}));
 function transferDirectionFromJSON(object) {
@@ -87,11 +93,11 @@ function transferDirectionFromJSON(object) {
         case "TRANSFER_DIRECTION_UNSPECIFIED":
             return TransferDirection.TRANSFER_DIRECTION_UNSPECIFIED;
         case 1:
-        case "TRANSFER_DIRECTION_INCOMING":
-            return TransferDirection.TRANSFER_DIRECTION_INCOMING;
+        case "TRANSFER_DIRECTION_FROM":
+            return TransferDirection.TRANSFER_DIRECTION_FROM;
         case 2:
-        case "TRANSFER_DIRECTION_OUTGOING":
-            return TransferDirection.TRANSFER_DIRECTION_OUTGOING;
+        case "TRANSFER_DIRECTION_TO":
+            return TransferDirection.TRANSFER_DIRECTION_TO;
         case -1:
         case "UNRECOGNIZED":
         default:
@@ -103,16 +109,67 @@ function transferDirectionToJSON(object) {
     switch (object) {
         case TransferDirection.TRANSFER_DIRECTION_UNSPECIFIED:
             return "TRANSFER_DIRECTION_UNSPECIFIED";
-        case TransferDirection.TRANSFER_DIRECTION_INCOMING:
-            return "TRANSFER_DIRECTION_INCOMING";
-        case TransferDirection.TRANSFER_DIRECTION_OUTGOING:
-            return "TRANSFER_DIRECTION_OUTGOING";
+        case TransferDirection.TRANSFER_DIRECTION_FROM:
+            return "TRANSFER_DIRECTION_FROM";
+        case TransferDirection.TRANSFER_DIRECTION_TO:
+            return "TRANSFER_DIRECTION_TO";
         case TransferDirection.UNRECOGNIZED:
         default:
             return "UNRECOGNIZED";
     }
 }
 exports.transferDirectionToJSON = transferDirectionToJSON;
+var GeneralMessage_Status;
+(function (GeneralMessage_Status) {
+    GeneralMessage_Status[GeneralMessage_Status["STATUS_UNSPECIFIED"] = 0] = "STATUS_UNSPECIFIED";
+    GeneralMessage_Status[GeneralMessage_Status["STATUS_APPROVED"] = 1] = "STATUS_APPROVED";
+    GeneralMessage_Status[GeneralMessage_Status["STATUS_PROCESSING"] = 2] = "STATUS_PROCESSING";
+    GeneralMessage_Status[GeneralMessage_Status["STATUS_EXECUTED"] = 3] = "STATUS_EXECUTED";
+    GeneralMessage_Status[GeneralMessage_Status["STATUS_FAILED"] = 4] = "STATUS_FAILED";
+    GeneralMessage_Status[GeneralMessage_Status["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
+})(GeneralMessage_Status = exports.GeneralMessage_Status || (exports.GeneralMessage_Status = {}));
+function generalMessage_StatusFromJSON(object) {
+    switch (object) {
+        case 0:
+        case "STATUS_UNSPECIFIED":
+            return GeneralMessage_Status.STATUS_UNSPECIFIED;
+        case 1:
+        case "STATUS_APPROVED":
+            return GeneralMessage_Status.STATUS_APPROVED;
+        case 2:
+        case "STATUS_PROCESSING":
+            return GeneralMessage_Status.STATUS_PROCESSING;
+        case 3:
+        case "STATUS_EXECUTED":
+            return GeneralMessage_Status.STATUS_EXECUTED;
+        case 4:
+        case "STATUS_FAILED":
+            return GeneralMessage_Status.STATUS_FAILED;
+        case -1:
+        case "UNRECOGNIZED":
+        default:
+            return GeneralMessage_Status.UNRECOGNIZED;
+    }
+}
+exports.generalMessage_StatusFromJSON = generalMessage_StatusFromJSON;
+function generalMessage_StatusToJSON(object) {
+    switch (object) {
+        case GeneralMessage_Status.STATUS_UNSPECIFIED:
+            return "STATUS_UNSPECIFIED";
+        case GeneralMessage_Status.STATUS_APPROVED:
+            return "STATUS_APPROVED";
+        case GeneralMessage_Status.STATUS_PROCESSING:
+            return "STATUS_PROCESSING";
+        case GeneralMessage_Status.STATUS_EXECUTED:
+            return "STATUS_EXECUTED";
+        case GeneralMessage_Status.STATUS_FAILED:
+            return "STATUS_FAILED";
+        case GeneralMessage_Status.UNRECOGNIZED:
+        default:
+            return "UNRECOGNIZED";
+    }
+}
+exports.generalMessage_StatusToJSON = generalMessage_StatusToJSON;
 function createBaseChain() {
     return { name: "", supportsForeignAssets: false, keyType: 0, module: "" };
 }
@@ -505,6 +562,270 @@ exports.Asset = {
         const message = createBaseAsset();
         message.denom = (_a = object.denom) !== null && _a !== void 0 ? _a : "";
         message.isNativeAsset = (_b = object.isNativeAsset) !== null && _b !== void 0 ? _b : false;
+        return message;
+    },
+};
+function createBaseGeneralMessage() {
+    return {
+        id: "",
+        sender: undefined,
+        recipient: undefined,
+        payloadHash: new Uint8Array(),
+        status: 0,
+        asset: undefined,
+        sourceTxId: new Uint8Array(),
+        sourceTxIndex: long_1.default.UZERO,
+    };
+}
+exports.GeneralMessage = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.id !== "") {
+            writer.uint32(10).string(message.id);
+        }
+        if (message.sender !== undefined) {
+            exports.CrossChainAddress.encode(message.sender, writer.uint32(18).fork()).ldelim();
+        }
+        if (message.recipient !== undefined) {
+            exports.CrossChainAddress.encode(message.recipient, writer.uint32(26).fork()).ldelim();
+        }
+        if (message.payloadHash.length !== 0) {
+            writer.uint32(34).bytes(message.payloadHash);
+        }
+        if (message.status !== 0) {
+            writer.uint32(40).int32(message.status);
+        }
+        if (message.asset !== undefined) {
+            coin_1.Coin.encode(message.asset, writer.uint32(50).fork()).ldelim();
+        }
+        if (message.sourceTxId.length !== 0) {
+            writer.uint32(58).bytes(message.sourceTxId);
+        }
+        if (!message.sourceTxIndex.isZero()) {
+            writer.uint32(64).uint64(message.sourceTxIndex);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseGeneralMessage();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                case 2:
+                    message.sender = exports.CrossChainAddress.decode(reader, reader.uint32());
+                    break;
+                case 3:
+                    message.recipient = exports.CrossChainAddress.decode(reader, reader.uint32());
+                    break;
+                case 4:
+                    message.payloadHash = reader.bytes();
+                    break;
+                case 5:
+                    message.status = reader.int32();
+                    break;
+                case 6:
+                    message.asset = coin_1.Coin.decode(reader, reader.uint32());
+                    break;
+                case 7:
+                    message.sourceTxId = reader.bytes();
+                    break;
+                case 8:
+                    message.sourceTxIndex = reader.uint64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            id: isSet(object.id) ? String(object.id) : "",
+            sender: isSet(object.sender) ? exports.CrossChainAddress.fromJSON(object.sender) : undefined,
+            recipient: isSet(object.recipient) ? exports.CrossChainAddress.fromJSON(object.recipient) : undefined,
+            payloadHash: isSet(object.payloadHash) ? bytesFromBase64(object.payloadHash) : new Uint8Array(),
+            status: isSet(object.status) ? generalMessage_StatusFromJSON(object.status) : 0,
+            asset: isSet(object.asset) ? coin_1.Coin.fromJSON(object.asset) : undefined,
+            sourceTxId: isSet(object.sourceTxId) ? bytesFromBase64(object.sourceTxId) : new Uint8Array(),
+            sourceTxIndex: isSet(object.sourceTxIndex) ? long_1.default.fromValue(object.sourceTxIndex) : long_1.default.UZERO,
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.id !== undefined && (obj.id = message.id);
+        message.sender !== undefined &&
+            (obj.sender = message.sender ? exports.CrossChainAddress.toJSON(message.sender) : undefined);
+        message.recipient !== undefined &&
+            (obj.recipient = message.recipient ? exports.CrossChainAddress.toJSON(message.recipient) : undefined);
+        message.payloadHash !== undefined &&
+            (obj.payloadHash = base64FromBytes(message.payloadHash !== undefined ? message.payloadHash : new Uint8Array()));
+        message.status !== undefined && (obj.status = generalMessage_StatusToJSON(message.status));
+        message.asset !== undefined && (obj.asset = message.asset ? coin_1.Coin.toJSON(message.asset) : undefined);
+        message.sourceTxId !== undefined &&
+            (obj.sourceTxId = base64FromBytes(message.sourceTxId !== undefined ? message.sourceTxId : new Uint8Array()));
+        message.sourceTxIndex !== undefined &&
+            (obj.sourceTxIndex = (message.sourceTxIndex || long_1.default.UZERO).toString());
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b, _c, _d;
+        const message = createBaseGeneralMessage();
+        message.id = (_a = object.id) !== null && _a !== void 0 ? _a : "";
+        message.sender =
+            object.sender !== undefined && object.sender !== null
+                ? exports.CrossChainAddress.fromPartial(object.sender)
+                : undefined;
+        message.recipient =
+            object.recipient !== undefined && object.recipient !== null
+                ? exports.CrossChainAddress.fromPartial(object.recipient)
+                : undefined;
+        message.payloadHash = (_b = object.payloadHash) !== null && _b !== void 0 ? _b : new Uint8Array();
+        message.status = (_c = object.status) !== null && _c !== void 0 ? _c : 0;
+        message.asset =
+            object.asset !== undefined && object.asset !== null ? coin_1.Coin.fromPartial(object.asset) : undefined;
+        message.sourceTxId = (_d = object.sourceTxId) !== null && _d !== void 0 ? _d : new Uint8Array();
+        message.sourceTxIndex =
+            object.sourceTxIndex !== undefined && object.sourceTxIndex !== null
+                ? long_1.default.fromValue(object.sourceTxIndex)
+                : long_1.default.UZERO;
+        return message;
+    },
+};
+function createBaseWasmMessage() {
+    return {
+        sourceChain: "",
+        sourceAddress: "",
+        destinationChain: "",
+        destinationAddress: "",
+        payloadHash: new Uint8Array(),
+        sourceTxId: new Uint8Array(),
+        sourceTxIndex: long_1.default.UZERO,
+        sender: new Uint8Array(),
+        id: "",
+    };
+}
+exports.WasmMessage = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.sourceChain !== "") {
+            writer.uint32(10).string(message.sourceChain);
+        }
+        if (message.sourceAddress !== "") {
+            writer.uint32(18).string(message.sourceAddress);
+        }
+        if (message.destinationChain !== "") {
+            writer.uint32(26).string(message.destinationChain);
+        }
+        if (message.destinationAddress !== "") {
+            writer.uint32(34).string(message.destinationAddress);
+        }
+        if (message.payloadHash.length !== 0) {
+            writer.uint32(42).bytes(message.payloadHash);
+        }
+        if (message.sourceTxId.length !== 0) {
+            writer.uint32(50).bytes(message.sourceTxId);
+        }
+        if (!message.sourceTxIndex.isZero()) {
+            writer.uint32(56).uint64(message.sourceTxIndex);
+        }
+        if (message.sender.length !== 0) {
+            writer.uint32(66).bytes(message.sender);
+        }
+        if (message.id !== "") {
+            writer.uint32(74).string(message.id);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseWasmMessage();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.sourceChain = reader.string();
+                    break;
+                case 2:
+                    message.sourceAddress = reader.string();
+                    break;
+                case 3:
+                    message.destinationChain = reader.string();
+                    break;
+                case 4:
+                    message.destinationAddress = reader.string();
+                    break;
+                case 5:
+                    message.payloadHash = reader.bytes();
+                    break;
+                case 6:
+                    message.sourceTxId = reader.bytes();
+                    break;
+                case 7:
+                    message.sourceTxIndex = reader.uint64();
+                    break;
+                case 8:
+                    message.sender = reader.bytes();
+                    break;
+                case 9:
+                    message.id = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            sourceChain: isSet(object.sourceChain) ? String(object.sourceChain) : "",
+            sourceAddress: isSet(object.sourceAddress) ? String(object.sourceAddress) : "",
+            destinationChain: isSet(object.destinationChain) ? String(object.destinationChain) : "",
+            destinationAddress: isSet(object.destinationAddress) ? String(object.destinationAddress) : "",
+            payloadHash: isSet(object.payloadHash) ? bytesFromBase64(object.payloadHash) : new Uint8Array(),
+            sourceTxId: isSet(object.sourceTxId) ? bytesFromBase64(object.sourceTxId) : new Uint8Array(),
+            sourceTxIndex: isSet(object.sourceTxIndex) ? long_1.default.fromValue(object.sourceTxIndex) : long_1.default.UZERO,
+            sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
+            id: isSet(object.id) ? String(object.id) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.sourceChain !== undefined && (obj.sourceChain = message.sourceChain);
+        message.sourceAddress !== undefined && (obj.sourceAddress = message.sourceAddress);
+        message.destinationChain !== undefined && (obj.destinationChain = message.destinationChain);
+        message.destinationAddress !== undefined && (obj.destinationAddress = message.destinationAddress);
+        message.payloadHash !== undefined &&
+            (obj.payloadHash = base64FromBytes(message.payloadHash !== undefined ? message.payloadHash : new Uint8Array()));
+        message.sourceTxId !== undefined &&
+            (obj.sourceTxId = base64FromBytes(message.sourceTxId !== undefined ? message.sourceTxId : new Uint8Array()));
+        message.sourceTxIndex !== undefined &&
+            (obj.sourceTxIndex = (message.sourceTxIndex || long_1.default.UZERO).toString());
+        message.sender !== undefined &&
+            (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
+        message.id !== undefined && (obj.id = message.id);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b, _c, _d, _e, _f, _g, _h;
+        const message = createBaseWasmMessage();
+        message.sourceChain = (_a = object.sourceChain) !== null && _a !== void 0 ? _a : "";
+        message.sourceAddress = (_b = object.sourceAddress) !== null && _b !== void 0 ? _b : "";
+        message.destinationChain = (_c = object.destinationChain) !== null && _c !== void 0 ? _c : "";
+        message.destinationAddress = (_d = object.destinationAddress) !== null && _d !== void 0 ? _d : "";
+        message.payloadHash = (_e = object.payloadHash) !== null && _e !== void 0 ? _e : new Uint8Array();
+        message.sourceTxId = (_f = object.sourceTxId) !== null && _f !== void 0 ? _f : new Uint8Array();
+        message.sourceTxIndex =
+            object.sourceTxIndex !== undefined && object.sourceTxIndex !== null
+                ? long_1.default.fromValue(object.sourceTxIndex)
+                : long_1.default.UZERO;
+        message.sender = (_g = object.sender) !== null && _g !== void 0 ? _g : new Uint8Array();
+        message.id = (_h = object.id) !== null && _h !== void 0 ? _h : "";
         return message;
     },
 };

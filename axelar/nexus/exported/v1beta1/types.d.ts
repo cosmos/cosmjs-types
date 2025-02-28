@@ -8,14 +8,15 @@ export declare enum TransferState {
     TRANSFER_STATE_PENDING = 1,
     TRANSFER_STATE_ARCHIVED = 2,
     TRANSFER_STATE_INSUFFICIENT_AMOUNT = 3,
+    TRANSFER_STATE_FAILED = 4,
     UNRECOGNIZED = -1
 }
 export declare function transferStateFromJSON(object: any): TransferState;
 export declare function transferStateToJSON(object: TransferState): string;
 export declare enum TransferDirection {
     TRANSFER_DIRECTION_UNSPECIFIED = 0,
-    TRANSFER_DIRECTION_INCOMING = 1,
-    TRANSFER_DIRECTION_OUTGOING = 2,
+    TRANSFER_DIRECTION_FROM = 1,
+    TRANSFER_DIRECTION_TO = 2,
     UNRECOGNIZED = -1
 }
 export declare function transferDirectionFromJSON(object: any): TransferDirection;
@@ -56,6 +57,37 @@ export interface FeeInfo {
 export interface Asset {
     denom: string;
     isNativeAsset: boolean;
+}
+export interface GeneralMessage {
+    id: string;
+    sender?: CrossChainAddress;
+    recipient?: CrossChainAddress;
+    payloadHash: Uint8Array;
+    status: GeneralMessage_Status;
+    asset?: Coin;
+    sourceTxId: Uint8Array;
+    sourceTxIndex: Long;
+}
+export declare enum GeneralMessage_Status {
+    STATUS_UNSPECIFIED = 0,
+    STATUS_APPROVED = 1,
+    STATUS_PROCESSING = 2,
+    STATUS_EXECUTED = 3,
+    STATUS_FAILED = 4,
+    UNRECOGNIZED = -1
+}
+export declare function generalMessage_StatusFromJSON(object: any): GeneralMessage_Status;
+export declare function generalMessage_StatusToJSON(object: GeneralMessage_Status): string;
+export interface WasmMessage {
+    sourceChain: string;
+    sourceAddress: string;
+    destinationChain: string;
+    destinationAddress: string;
+    payloadHash: Uint8Array;
+    sourceTxId: Uint8Array;
+    sourceTxIndex: Long;
+    sender: Uint8Array;
+    id: string;
 }
 export declare const Chain: {
     encode(message: Chain, writer?: _m0.Writer): _m0.Writer;
@@ -271,6 +303,239 @@ export declare const Asset: {
         denom?: string | undefined;
         isNativeAsset?: boolean | undefined;
     } & Record<Exclude<keyof I, keyof Asset>, never>>(object: I): Asset;
+};
+export declare const GeneralMessage: {
+    encode(message: GeneralMessage, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): GeneralMessage;
+    fromJSON(object: any): GeneralMessage;
+    toJSON(message: GeneralMessage): unknown;
+    fromPartial<I extends {
+        id?: string | undefined;
+        sender?: {
+            chain?: {
+                name?: string | undefined;
+                supportsForeignAssets?: boolean | undefined;
+                keyType?: KeyType | undefined;
+                module?: string | undefined;
+            } | undefined;
+            address?: string | undefined;
+        } | undefined;
+        recipient?: {
+            chain?: {
+                name?: string | undefined;
+                supportsForeignAssets?: boolean | undefined;
+                keyType?: KeyType | undefined;
+                module?: string | undefined;
+            } | undefined;
+            address?: string | undefined;
+        } | undefined;
+        payloadHash?: Uint8Array | undefined;
+        status?: GeneralMessage_Status | undefined;
+        asset?: {
+            denom?: string | undefined;
+            amount?: string | undefined;
+        } | undefined;
+        sourceTxId?: Uint8Array | undefined;
+        sourceTxIndex?: string | number | Long.Long | undefined;
+    } & {
+        id?: string | undefined;
+        sender?: ({
+            chain?: {
+                name?: string | undefined;
+                supportsForeignAssets?: boolean | undefined;
+                keyType?: KeyType | undefined;
+                module?: string | undefined;
+            } | undefined;
+            address?: string | undefined;
+        } & {
+            chain?: ({
+                name?: string | undefined;
+                supportsForeignAssets?: boolean | undefined;
+                keyType?: KeyType | undefined;
+                module?: string | undefined;
+            } & {
+                name?: string | undefined;
+                supportsForeignAssets?: boolean | undefined;
+                keyType?: KeyType | undefined;
+                module?: string | undefined;
+            } & Record<Exclude<keyof I["sender"]["chain"], keyof Chain>, never>) | undefined;
+            address?: string | undefined;
+        } & Record<Exclude<keyof I["sender"], keyof CrossChainAddress>, never>) | undefined;
+        recipient?: ({
+            chain?: {
+                name?: string | undefined;
+                supportsForeignAssets?: boolean | undefined;
+                keyType?: KeyType | undefined;
+                module?: string | undefined;
+            } | undefined;
+            address?: string | undefined;
+        } & {
+            chain?: ({
+                name?: string | undefined;
+                supportsForeignAssets?: boolean | undefined;
+                keyType?: KeyType | undefined;
+                module?: string | undefined;
+            } & {
+                name?: string | undefined;
+                supportsForeignAssets?: boolean | undefined;
+                keyType?: KeyType | undefined;
+                module?: string | undefined;
+            } & Record<Exclude<keyof I["recipient"]["chain"], keyof Chain>, never>) | undefined;
+            address?: string | undefined;
+        } & Record<Exclude<keyof I["recipient"], keyof CrossChainAddress>, never>) | undefined;
+        payloadHash?: Uint8Array | undefined;
+        status?: GeneralMessage_Status | undefined;
+        asset?: ({
+            denom?: string | undefined;
+            amount?: string | undefined;
+        } & {
+            denom?: string | undefined;
+            amount?: string | undefined;
+        } & Record<Exclude<keyof I["asset"], keyof Coin>, never>) | undefined;
+        sourceTxId?: Uint8Array | undefined;
+        sourceTxIndex?: string | number | (Long.Long & {
+            high: number;
+            low: number;
+            unsigned: boolean;
+            add: (addend: string | number | Long.Long) => Long.Long;
+            and: (other: string | number | Long.Long) => Long.Long;
+            compare: (other: string | number | Long.Long) => number;
+            comp: (other: string | number | Long.Long) => number;
+            divide: (divisor: string | number | Long.Long) => Long.Long;
+            div: (divisor: string | number | Long.Long) => Long.Long;
+            equals: (other: string | number | Long.Long) => boolean;
+            eq: (other: string | number | Long.Long) => boolean;
+            getHighBits: () => number;
+            getHighBitsUnsigned: () => number;
+            getLowBits: () => number;
+            getLowBitsUnsigned: () => number;
+            getNumBitsAbs: () => number;
+            greaterThan: (other: string | number | Long.Long) => boolean;
+            gt: (other: string | number | Long.Long) => boolean;
+            greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+            gte: (other: string | number | Long.Long) => boolean;
+            isEven: () => boolean;
+            isNegative: () => boolean;
+            isOdd: () => boolean;
+            isPositive: () => boolean;
+            isZero: () => boolean;
+            lessThan: (other: string | number | Long.Long) => boolean;
+            lt: (other: string | number | Long.Long) => boolean;
+            lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+            lte: (other: string | number | Long.Long) => boolean;
+            modulo: (other: string | number | Long.Long) => Long.Long;
+            mod: (other: string | number | Long.Long) => Long.Long;
+            multiply: (multiplier: string | number | Long.Long) => Long.Long;
+            mul: (multiplier: string | number | Long.Long) => Long.Long;
+            negate: () => Long.Long;
+            neg: () => Long.Long;
+            not: () => Long.Long;
+            notEquals: (other: string | number | Long.Long) => boolean;
+            neq: (other: string | number | Long.Long) => boolean;
+            or: (other: string | number | Long.Long) => Long.Long;
+            shiftLeft: (numBits: number | Long.Long) => Long.Long;
+            shl: (numBits: number | Long.Long) => Long.Long;
+            shiftRight: (numBits: number | Long.Long) => Long.Long;
+            shr: (numBits: number | Long.Long) => Long.Long;
+            shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+            shru: (numBits: number | Long.Long) => Long.Long;
+            subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+            sub: (subtrahend: string | number | Long.Long) => Long.Long;
+            toInt: () => number;
+            toNumber: () => number;
+            toBytes: (le?: boolean | undefined) => number[];
+            toBytesLE: () => number[];
+            toBytesBE: () => number[];
+            toSigned: () => Long.Long;
+            toString: (radix?: number | undefined) => string;
+            toUnsigned: () => Long.Long;
+            xor: (other: string | number | Long.Long) => Long.Long;
+        } & Record<Exclude<keyof I["sourceTxIndex"], keyof Long.Long>, never>) | undefined;
+    } & Record<Exclude<keyof I, keyof GeneralMessage>, never>>(object: I): GeneralMessage;
+};
+export declare const WasmMessage: {
+    encode(message: WasmMessage, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): WasmMessage;
+    fromJSON(object: any): WasmMessage;
+    toJSON(message: WasmMessage): unknown;
+    fromPartial<I extends {
+        sourceChain?: string | undefined;
+        sourceAddress?: string | undefined;
+        destinationChain?: string | undefined;
+        destinationAddress?: string | undefined;
+        payloadHash?: Uint8Array | undefined;
+        sourceTxId?: Uint8Array | undefined;
+        sourceTxIndex?: string | number | Long.Long | undefined;
+        sender?: Uint8Array | undefined;
+        id?: string | undefined;
+    } & {
+        sourceChain?: string | undefined;
+        sourceAddress?: string | undefined;
+        destinationChain?: string | undefined;
+        destinationAddress?: string | undefined;
+        payloadHash?: Uint8Array | undefined;
+        sourceTxId?: Uint8Array | undefined;
+        sourceTxIndex?: string | number | (Long.Long & {
+            high: number;
+            low: number;
+            unsigned: boolean;
+            add: (addend: string | number | Long.Long) => Long.Long;
+            and: (other: string | number | Long.Long) => Long.Long;
+            compare: (other: string | number | Long.Long) => number;
+            comp: (other: string | number | Long.Long) => number;
+            divide: (divisor: string | number | Long.Long) => Long.Long;
+            div: (divisor: string | number | Long.Long) => Long.Long;
+            equals: (other: string | number | Long.Long) => boolean;
+            eq: (other: string | number | Long.Long) => boolean;
+            getHighBits: () => number;
+            getHighBitsUnsigned: () => number;
+            getLowBits: () => number;
+            getLowBitsUnsigned: () => number;
+            getNumBitsAbs: () => number;
+            greaterThan: (other: string | number | Long.Long) => boolean;
+            gt: (other: string | number | Long.Long) => boolean;
+            greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+            gte: (other: string | number | Long.Long) => boolean;
+            isEven: () => boolean;
+            isNegative: () => boolean;
+            isOdd: () => boolean;
+            isPositive: () => boolean;
+            isZero: () => boolean;
+            lessThan: (other: string | number | Long.Long) => boolean;
+            lt: (other: string | number | Long.Long) => boolean;
+            lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+            lte: (other: string | number | Long.Long) => boolean;
+            modulo: (other: string | number | Long.Long) => Long.Long;
+            mod: (other: string | number | Long.Long) => Long.Long;
+            multiply: (multiplier: string | number | Long.Long) => Long.Long;
+            mul: (multiplier: string | number | Long.Long) => Long.Long;
+            negate: () => Long.Long;
+            neg: () => Long.Long;
+            not: () => Long.Long;
+            notEquals: (other: string | number | Long.Long) => boolean;
+            neq: (other: string | number | Long.Long) => boolean;
+            or: (other: string | number | Long.Long) => Long.Long;
+            shiftLeft: (numBits: number | Long.Long) => Long.Long;
+            shl: (numBits: number | Long.Long) => Long.Long;
+            shiftRight: (numBits: number | Long.Long) => Long.Long;
+            shr: (numBits: number | Long.Long) => Long.Long;
+            shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+            shru: (numBits: number | Long.Long) => Long.Long;
+            subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+            sub: (subtrahend: string | number | Long.Long) => Long.Long;
+            toInt: () => number;
+            toNumber: () => number;
+            toBytes: (le?: boolean | undefined) => number[];
+            toBytesLE: () => number[];
+            toBytesBE: () => number[];
+            toSigned: () => Long.Long;
+            toString: (radix?: number | undefined) => string;
+            toUnsigned: () => Long.Long;
+            xor: (other: string | number | Long.Long) => Long.Long;
+        } & Record<Exclude<keyof I["sourceTxIndex"], keyof Long.Long>, never>) | undefined;
+        sender?: Uint8Array | undefined;
+        id?: string | undefined;
+    } & Record<Exclude<keyof I, keyof WasmMessage>, never>>(object: I): WasmMessage;
 };
 declare type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export declare type DeepPartial<T> = T extends Builtin ? T : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {

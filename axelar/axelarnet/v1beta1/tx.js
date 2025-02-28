@@ -22,12 +22,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RetryIBCTransferResponse = exports.RetryIBCTransferRequest = exports.RegisterFeeCollectorResponse = exports.RegisterFeeCollectorRequest = exports.RouteIBCTransfersResponse = exports.RouteIBCTransfersRequest = exports.RegisterAssetResponse = exports.RegisterAssetRequest = exports.AddCosmosBasedChainResponse = exports.AddCosmosBasedChainRequest = exports.RegisterIBCPathResponse = exports.RegisterIBCPathRequest = exports.ExecutePendingTransfersResponse = exports.ExecutePendingTransfersRequest = exports.ConfirmDepositResponse = exports.ConfirmDepositRequest = exports.LinkResponse = exports.LinkRequest = exports.protobufPackage = void 0;
+exports.CallContractResponse = exports.CallContractRequest = exports.RouteMessageResponse = exports.RouteMessageRequest = exports.RetryIBCTransferResponse = exports.RetryIBCTransferRequest = exports.RegisterFeeCollectorResponse = exports.RegisterFeeCollectorRequest = exports.RouteIBCTransfersResponse = exports.RouteIBCTransfersRequest = exports.RegisterAssetResponse = exports.RegisterAssetRequest = exports.AddCosmosBasedChainResponse = exports.AddCosmosBasedChainRequest = exports.RegisterIBCPathResponse = exports.RegisterIBCPathRequest = exports.ExecutePendingTransfersResponse = exports.ExecutePendingTransfersRequest = exports.ConfirmDepositResponse = exports.ConfirmDepositRequest = exports.LinkResponse = exports.LinkRequest = exports.protobufPackage = void 0;
 /* eslint-disable */
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
 const types_1 = require("../../../axelar/nexus/exported/v1beta1/types");
 const duration_1 = require("../../../google/protobuf/duration");
+const types_2 = require("../../../axelar/axelarnet/v1beta1/types");
 exports.protobufPackage = "axelar.axelarnet.v1beta1";
 function createBaseLinkRequest() {
     return { sender: new Uint8Array(), recipientAddr: "", recipientChain: "", asset: "" };
@@ -939,6 +940,234 @@ exports.RetryIBCTransferResponse = {
     },
     fromPartial(_) {
         const message = createBaseRetryIBCTransferResponse();
+        return message;
+    },
+};
+function createBaseRouteMessageRequest() {
+    return { sender: new Uint8Array(), id: "", payload: new Uint8Array(), feegranter: new Uint8Array() };
+}
+exports.RouteMessageRequest = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.sender.length !== 0) {
+            writer.uint32(10).bytes(message.sender);
+        }
+        if (message.id !== "") {
+            writer.uint32(18).string(message.id);
+        }
+        if (message.payload.length !== 0) {
+            writer.uint32(26).bytes(message.payload);
+        }
+        if (message.feegranter.length !== 0) {
+            writer.uint32(34).bytes(message.feegranter);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseRouteMessageRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.sender = reader.bytes();
+                    break;
+                case 2:
+                    message.id = reader.string();
+                    break;
+                case 3:
+                    message.payload = reader.bytes();
+                    break;
+                case 4:
+                    message.feegranter = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
+            id: isSet(object.id) ? String(object.id) : "",
+            payload: isSet(object.payload) ? bytesFromBase64(object.payload) : new Uint8Array(),
+            feegranter: isSet(object.feegranter) ? bytesFromBase64(object.feegranter) : new Uint8Array(),
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.sender !== undefined &&
+            (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
+        message.id !== undefined && (obj.id = message.id);
+        message.payload !== undefined &&
+            (obj.payload = base64FromBytes(message.payload !== undefined ? message.payload : new Uint8Array()));
+        message.feegranter !== undefined &&
+            (obj.feegranter = base64FromBytes(message.feegranter !== undefined ? message.feegranter : new Uint8Array()));
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b, _c, _d;
+        const message = createBaseRouteMessageRequest();
+        message.sender = (_a = object.sender) !== null && _a !== void 0 ? _a : new Uint8Array();
+        message.id = (_b = object.id) !== null && _b !== void 0 ? _b : "";
+        message.payload = (_c = object.payload) !== null && _c !== void 0 ? _c : new Uint8Array();
+        message.feegranter = (_d = object.feegranter) !== null && _d !== void 0 ? _d : new Uint8Array();
+        return message;
+    },
+};
+function createBaseRouteMessageResponse() {
+    return {};
+}
+exports.RouteMessageResponse = {
+    encode(_, writer = _m0.Writer.create()) {
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseRouteMessageResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(_) {
+        return {};
+    },
+    toJSON(_) {
+        const obj = {};
+        return obj;
+    },
+    fromPartial(_) {
+        const message = createBaseRouteMessageResponse();
+        return message;
+    },
+};
+function createBaseCallContractRequest() {
+    return {
+        sender: new Uint8Array(),
+        chain: "",
+        contractAddress: "",
+        payload: new Uint8Array(),
+        fee: undefined,
+    };
+}
+exports.CallContractRequest = {
+    encode(message, writer = _m0.Writer.create()) {
+        if (message.sender.length !== 0) {
+            writer.uint32(10).bytes(message.sender);
+        }
+        if (message.chain !== "") {
+            writer.uint32(18).string(message.chain);
+        }
+        if (message.contractAddress !== "") {
+            writer.uint32(26).string(message.contractAddress);
+        }
+        if (message.payload.length !== 0) {
+            writer.uint32(34).bytes(message.payload);
+        }
+        if (message.fee !== undefined) {
+            types_2.Fee.encode(message.fee, writer.uint32(42).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseCallContractRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.sender = reader.bytes();
+                    break;
+                case 2:
+                    message.chain = reader.string();
+                    break;
+                case 3:
+                    message.contractAddress = reader.string();
+                    break;
+                case 4:
+                    message.payload = reader.bytes();
+                    break;
+                case 5:
+                    message.fee = types_2.Fee.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
+            chain: isSet(object.chain) ? String(object.chain) : "",
+            contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
+            payload: isSet(object.payload) ? bytesFromBase64(object.payload) : new Uint8Array(),
+            fee: isSet(object.fee) ? types_2.Fee.fromJSON(object.fee) : undefined,
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        message.sender !== undefined &&
+            (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
+        message.chain !== undefined && (obj.chain = message.chain);
+        message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
+        message.payload !== undefined &&
+            (obj.payload = base64FromBytes(message.payload !== undefined ? message.payload : new Uint8Array()));
+        message.fee !== undefined && (obj.fee = message.fee ? types_2.Fee.toJSON(message.fee) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        var _a, _b, _c, _d;
+        const message = createBaseCallContractRequest();
+        message.sender = (_a = object.sender) !== null && _a !== void 0 ? _a : new Uint8Array();
+        message.chain = (_b = object.chain) !== null && _b !== void 0 ? _b : "";
+        message.contractAddress = (_c = object.contractAddress) !== null && _c !== void 0 ? _c : "";
+        message.payload = (_d = object.payload) !== null && _d !== void 0 ? _d : new Uint8Array();
+        message.fee = object.fee !== undefined && object.fee !== null ? types_2.Fee.fromPartial(object.fee) : undefined;
+        return message;
+    },
+};
+function createBaseCallContractResponse() {
+    return {};
+}
+exports.CallContractResponse = {
+    encode(_, writer = _m0.Writer.create()) {
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseCallContractResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(_) {
+        return {};
+    },
+    toJSON(_) {
+        const obj = {};
+        return obj;
+    },
+    fromPartial(_) {
+        const message = createBaseCallContractResponse();
         return message;
     },
 };

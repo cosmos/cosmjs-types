@@ -10,12 +10,21 @@ export interface SetGatewayRequest {
 }
 export interface SetGatewayResponse {
 }
+/** @deprecated */
 export interface ConfirmGatewayTxRequest {
     sender: Uint8Array;
     chain: string;
     txId: Uint8Array;
 }
+/** @deprecated */
 export interface ConfirmGatewayTxResponse {
+}
+export interface ConfirmGatewayTxsRequest {
+    sender: Uint8Array;
+    chain: string;
+    txIds: Uint8Array[];
+}
+export interface ConfirmGatewayTxsResponse {
 }
 /** MsgConfirmDeposit represents an erc20 deposit confirmation message */
 export interface ConfirmDepositRequest {
@@ -175,6 +184,28 @@ export declare const ConfirmGatewayTxResponse: {
     fromJSON(_: any): ConfirmGatewayTxResponse;
     toJSON(_: ConfirmGatewayTxResponse): unknown;
     fromPartial<I extends {} & {} & Record<Exclude<keyof I, never>, never>>(_: I): ConfirmGatewayTxResponse;
+};
+export declare const ConfirmGatewayTxsRequest: {
+    encode(message: ConfirmGatewayTxsRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): ConfirmGatewayTxsRequest;
+    fromJSON(object: any): ConfirmGatewayTxsRequest;
+    toJSON(message: ConfirmGatewayTxsRequest): unknown;
+    fromPartial<I extends {
+        sender?: Uint8Array | undefined;
+        chain?: string | undefined;
+        txIds?: Uint8Array[] | undefined;
+    } & {
+        sender?: Uint8Array | undefined;
+        chain?: string | undefined;
+        txIds?: (Uint8Array[] & Uint8Array[] & Record<Exclude<keyof I["txIds"], keyof Uint8Array[]>, never>) | undefined;
+    } & Record<Exclude<keyof I, keyof ConfirmGatewayTxsRequest>, never>>(object: I): ConfirmGatewayTxsRequest;
+};
+export declare const ConfirmGatewayTxsResponse: {
+    encode(_: ConfirmGatewayTxsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): ConfirmGatewayTxsResponse;
+    fromJSON(_: any): ConfirmGatewayTxsResponse;
+    toJSON(_: ConfirmGatewayTxsResponse): unknown;
+    fromPartial<I extends {} & {} & Record<Exclude<keyof I, never>, never>>(_: I): ConfirmGatewayTxsResponse;
 };
 export declare const ConfirmDepositRequest: {
     encode(message: ConfirmDepositRequest, writer?: _m0.Writer): _m0.Writer;

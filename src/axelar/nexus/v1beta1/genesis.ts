@@ -7,6 +7,7 @@ import {
   Chain,
   CrossChainTransfer,
   FeeInfo,
+  GeneralMessage,
 } from "../../../axelar/nexus/exported/v1beta1/types";
 import { ChainState, LinkedAddresses, RateLimit, TransferEpoch } from "../../../axelar/nexus/v1beta1/types";
 
@@ -24,6 +25,8 @@ export interface GenesisState {
   feeInfos: FeeInfo[];
   rateLimits: RateLimit[];
   transferEpochs: TransferEpoch[];
+  messages: GeneralMessage[];
+  messageNonce: Long;
 }
 
 function createBaseGenesisState(): GenesisState {
@@ -38,6 +41,8 @@ function createBaseGenesisState(): GenesisState {
     feeInfos: [],
     rateLimits: [],
     transferEpochs: [],
+    messages: [],
+    messageNonce: Long.UZERO,
   };
 }
 
@@ -72,6 +77,12 @@ export const GenesisState = {
     }
     for (const v of message.transferEpochs) {
       TransferEpoch.encode(v!, writer.uint32(82).fork()).ldelim();
+    }
+    for (const v of message.messages) {
+      GeneralMessage.encode(v!, writer.uint32(90).fork()).ldelim();
+    }
+    if (!message.messageNonce.isZero()) {
+      writer.uint32(96).uint64(message.messageNonce);
     }
     return writer;
   },
@@ -113,6 +124,12 @@ export const GenesisState = {
         case 10:
           message.transferEpochs.push(TransferEpoch.decode(reader, reader.uint32()));
           break;
+        case 11:
+          message.messages.push(GeneralMessage.decode(reader, reader.uint32()));
+          break;
+        case 12:
+          message.messageNonce = reader.uint64() as Long;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -143,6 +160,10 @@ export const GenesisState = {
       transferEpochs: Array.isArray(object?.transferEpochs)
         ? object.transferEpochs.map((e: any) => TransferEpoch.fromJSON(e))
         : [],
+      messages: Array.isArray(object?.messages)
+        ? object.messages.map((e: any) => GeneralMessage.fromJSON(e))
+        : [],
+      messageNonce: isSet(object.messageNonce) ? Long.fromValue(object.messageNonce) : Long.UZERO,
     };
   },
 
@@ -186,6 +207,13 @@ export const GenesisState = {
     } else {
       obj.transferEpochs = [];
     }
+    if (message.messages) {
+      obj.messages = message.messages.map((e) => (e ? GeneralMessage.toJSON(e) : undefined));
+    } else {
+      obj.messages = [];
+    }
+    message.messageNonce !== undefined &&
+      (obj.messageNonce = (message.messageNonce || Long.UZERO).toString());
     return obj;
   },
 
@@ -204,6 +232,11 @@ export const GenesisState = {
     message.feeInfos = object.feeInfos?.map((e) => FeeInfo.fromPartial(e)) || [];
     message.rateLimits = object.rateLimits?.map((e) => RateLimit.fromPartial(e)) || [];
     message.transferEpochs = object.transferEpochs?.map((e) => TransferEpoch.fromPartial(e)) || [];
+    message.messages = object.messages?.map((e) => GeneralMessage.fromPartial(e)) || [];
+    message.messageNonce =
+      object.messageNonce !== undefined && object.messageNonce !== null
+        ? Long.fromValue(object.messageNonce)
+        : Long.UZERO;
     return message;
   },
 };

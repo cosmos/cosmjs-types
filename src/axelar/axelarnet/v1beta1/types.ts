@@ -76,6 +76,12 @@ export interface Asset {
   minAmount: Uint8Array;
 }
 
+export interface Fee {
+  amount?: Coin;
+  recipient: Uint8Array;
+  refundRecipient: Uint8Array;
+}
+
 function createBaseIBCTransfer(): IBCTransfer {
   return {
     sender: new Uint8Array(),
@@ -339,6 +345,82 @@ export const Asset = {
     const message = createBaseAsset();
     message.denom = object.denom ?? "";
     message.minAmount = object.minAmount ?? new Uint8Array();
+    return message;
+  },
+};
+
+function createBaseFee(): Fee {
+  return { amount: undefined, recipient: new Uint8Array(), refundRecipient: new Uint8Array() };
+}
+
+export const Fee = {
+  encode(message: Fee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.amount !== undefined) {
+      Coin.encode(message.amount, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.recipient.length !== 0) {
+      writer.uint32(18).bytes(message.recipient);
+    }
+    if (message.refundRecipient.length !== 0) {
+      writer.uint32(26).bytes(message.refundRecipient);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Fee {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseFee();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.amount = Coin.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.recipient = reader.bytes();
+          break;
+        case 3:
+          message.refundRecipient = reader.bytes();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Fee {
+    return {
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
+      recipient: isSet(object.recipient) ? bytesFromBase64(object.recipient) : new Uint8Array(),
+      refundRecipient: isSet(object.refundRecipient)
+        ? bytesFromBase64(object.refundRecipient)
+        : new Uint8Array(),
+    };
+  },
+
+  toJSON(message: Fee): unknown {
+    const obj: any = {};
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    message.recipient !== undefined &&
+      (obj.recipient = base64FromBytes(
+        message.recipient !== undefined ? message.recipient : new Uint8Array(),
+      ));
+    message.refundRecipient !== undefined &&
+      (obj.refundRecipient = base64FromBytes(
+        message.refundRecipient !== undefined ? message.refundRecipient : new Uint8Array(),
+      ));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<Fee>, I>>(object: I): Fee {
+    const message = createBaseFee();
+    message.amount =
+      object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
+    message.recipient = object.recipient ?? new Uint8Array();
+    message.refundRecipient = object.refundRecipient ?? new Uint8Array();
     return message;
   },
 };

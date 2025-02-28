@@ -1,5 +1,6 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
 export declare const protobufPackage = "axelar.axelarnet.v1beta1";
 /** Params represent the genesis parameters for the module */
 export interface Params {
@@ -7,6 +8,12 @@ export interface Params {
     routeTimeoutWindow: Long;
     transferLimit: Long;
     endBlockerLimit: Long;
+    callContractsProposalMinDeposits: CallContractProposalMinDeposit[];
+}
+export interface CallContractProposalMinDeposit {
+    chain: string;
+    contractAddress: string;
+    minDeposits: Coin[];
 }
 export declare const Params: {
     encode(message: Params, writer?: _m0.Writer): _m0.Writer;
@@ -17,6 +24,14 @@ export declare const Params: {
         routeTimeoutWindow?: string | number | Long.Long | undefined;
         transferLimit?: string | number | Long.Long | undefined;
         endBlockerLimit?: string | number | Long.Long | undefined;
+        callContractsProposalMinDeposits?: {
+            chain?: string | undefined;
+            contractAddress?: string | undefined;
+            minDeposits?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            }[] | undefined;
+        }[] | undefined;
     } & {
         routeTimeoutWindow?: string | number | (Long.Long & {
             high: number;
@@ -192,7 +207,75 @@ export declare const Params: {
             toUnsigned: () => Long.Long;
             xor: (other: string | number | Long.Long) => Long.Long;
         } & Record<Exclude<keyof I["endBlockerLimit"], keyof Long.Long>, never>) | undefined;
+        callContractsProposalMinDeposits?: ({
+            chain?: string | undefined;
+            contractAddress?: string | undefined;
+            minDeposits?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            }[] | undefined;
+        }[] & ({
+            chain?: string | undefined;
+            contractAddress?: string | undefined;
+            minDeposits?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            }[] | undefined;
+        } & {
+            chain?: string | undefined;
+            contractAddress?: string | undefined;
+            minDeposits?: ({
+                denom?: string | undefined;
+                amount?: string | undefined;
+            }[] & ({
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } & {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } & Record<Exclude<keyof I["callContractsProposalMinDeposits"][number]["minDeposits"][number], keyof Coin>, never>)[] & Record<Exclude<keyof I["callContractsProposalMinDeposits"][number]["minDeposits"], keyof {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            }[]>, never>) | undefined;
+        } & Record<Exclude<keyof I["callContractsProposalMinDeposits"][number], keyof CallContractProposalMinDeposit>, never>)[] & Record<Exclude<keyof I["callContractsProposalMinDeposits"], keyof {
+            chain?: string | undefined;
+            contractAddress?: string | undefined;
+            minDeposits?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            }[] | undefined;
+        }[]>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof Params>, never>>(object: I): Params;
+};
+export declare const CallContractProposalMinDeposit: {
+    encode(message: CallContractProposalMinDeposit, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): CallContractProposalMinDeposit;
+    fromJSON(object: any): CallContractProposalMinDeposit;
+    toJSON(message: CallContractProposalMinDeposit): unknown;
+    fromPartial<I extends {
+        chain?: string | undefined;
+        contractAddress?: string | undefined;
+        minDeposits?: {
+            denom?: string | undefined;
+            amount?: string | undefined;
+        }[] | undefined;
+    } & {
+        chain?: string | undefined;
+        contractAddress?: string | undefined;
+        minDeposits?: ({
+            denom?: string | undefined;
+            amount?: string | undefined;
+        }[] & ({
+            denom?: string | undefined;
+            amount?: string | undefined;
+        } & {
+            denom?: string | undefined;
+            amount?: string | undefined;
+        } & Record<Exclude<keyof I["minDeposits"][number], keyof Coin>, never>)[] & Record<Exclude<keyof I["minDeposits"], keyof {
+            denom?: string | undefined;
+            amount?: string | undefined;
+        }[]>, never>) | undefined;
+    } & Record<Exclude<keyof I, keyof CallContractProposalMinDeposit>, never>>(object: I): CallContractProposalMinDeposit;
 };
 declare type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export declare type DeepPartial<T> = T extends Builtin ? T : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {

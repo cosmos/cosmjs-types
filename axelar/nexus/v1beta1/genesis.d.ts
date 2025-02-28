@@ -1,7 +1,7 @@
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { Params } from "../../../axelar/nexus/v1beta1/params";
-import { TransferFee, Chain, CrossChainTransfer, FeeInfo } from "../../../axelar/nexus/exported/v1beta1/types";
+import { TransferFee, Chain, CrossChainTransfer, FeeInfo, GeneralMessage } from "../../../axelar/nexus/exported/v1beta1/types";
 import { ChainState, LinkedAddresses, RateLimit, TransferEpoch } from "../../../axelar/nexus/v1beta1/types";
 export declare const protobufPackage = "axelar.nexus.v1beta1";
 /** GenesisState represents the genesis state */
@@ -16,6 +16,8 @@ export interface GenesisState {
     feeInfos: FeeInfo[];
     rateLimits: RateLimit[];
     transferEpochs: TransferEpoch[];
+    messages: GeneralMessage[];
+    messageNonce: Long;
 }
 export declare const GenesisState: {
     encode(message: GenesisState, writer?: _m0.Writer): _m0.Writer;
@@ -37,6 +39,8 @@ export declare const GenesisState: {
                 denominator?: string | number | Long.Long | undefined;
             } | undefined;
             chainMaintainerCheckWindow?: number | undefined;
+            gateway?: Uint8Array | undefined;
+            endBlockerLimit?: string | number | Long.Long | undefined;
         } | undefined;
         nonce?: string | number | Long.Long | undefined;
         chains?: {
@@ -146,6 +150,36 @@ export declare const GenesisState: {
             epoch?: string | number | Long.Long | undefined;
             direction?: import("../../../axelar/nexus/exported/v1beta1/types").TransferDirection | undefined;
         }[] | undefined;
+        messages?: {
+            id?: string | undefined;
+            sender?: {
+                chain?: {
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } | undefined;
+                address?: string | undefined;
+            } | undefined;
+            recipient?: {
+                chain?: {
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } | undefined;
+                address?: string | undefined;
+            } | undefined;
+            payloadHash?: Uint8Array | undefined;
+            status?: import("../../../axelar/nexus/exported/v1beta1/types").GeneralMessage_Status | undefined;
+            asset?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            sourceTxId?: Uint8Array | undefined;
+            sourceTxIndex?: string | number | Long.Long | undefined;
+        }[] | undefined;
+        messageNonce?: string | number | Long.Long | undefined;
     } & {
         params?: ({
             chainActivationThreshold?: {
@@ -161,6 +195,8 @@ export declare const GenesisState: {
                 denominator?: string | number | Long.Long | undefined;
             } | undefined;
             chainMaintainerCheckWindow?: number | undefined;
+            gateway?: Uint8Array | undefined;
+            endBlockerLimit?: string | number | Long.Long | undefined;
         } & {
             chainActivationThreshold?: ({
                 numerator?: string | number | Long.Long | undefined;
@@ -526,6 +562,65 @@ export declare const GenesisState: {
                 } & Record<Exclude<keyof I["params"]["chainMaintainerIncorrectVoteThreshold"]["denominator"], keyof Long.Long>, never>) | undefined;
             } & Record<Exclude<keyof I["params"]["chainMaintainerIncorrectVoteThreshold"], keyof import("../../utils/v1beta1/threshold").Threshold>, never>) | undefined;
             chainMaintainerCheckWindow?: number | undefined;
+            gateway?: Uint8Array | undefined;
+            endBlockerLimit?: string | number | (Long.Long & {
+                high: number;
+                low: number;
+                unsigned: boolean;
+                add: (addend: string | number | Long.Long) => Long.Long;
+                and: (other: string | number | Long.Long) => Long.Long;
+                compare: (other: string | number | Long.Long) => number;
+                comp: (other: string | number | Long.Long) => number;
+                divide: (divisor: string | number | Long.Long) => Long.Long;
+                div: (divisor: string | number | Long.Long) => Long.Long;
+                equals: (other: string | number | Long.Long) => boolean;
+                eq: (other: string | number | Long.Long) => boolean;
+                getHighBits: () => number;
+                getHighBitsUnsigned: () => number;
+                getLowBits: () => number;
+                getLowBitsUnsigned: () => number;
+                getNumBitsAbs: () => number;
+                greaterThan: (other: string | number | Long.Long) => boolean;
+                gt: (other: string | number | Long.Long) => boolean;
+                greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                gte: (other: string | number | Long.Long) => boolean;
+                isEven: () => boolean;
+                isNegative: () => boolean;
+                isOdd: () => boolean;
+                isPositive: () => boolean;
+                isZero: () => boolean;
+                lessThan: (other: string | number | Long.Long) => boolean;
+                lt: (other: string | number | Long.Long) => boolean;
+                lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                lte: (other: string | number | Long.Long) => boolean;
+                modulo: (other: string | number | Long.Long) => Long.Long;
+                mod: (other: string | number | Long.Long) => Long.Long;
+                multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                mul: (multiplier: string | number | Long.Long) => Long.Long;
+                negate: () => Long.Long;
+                neg: () => Long.Long;
+                not: () => Long.Long;
+                notEquals: (other: string | number | Long.Long) => boolean;
+                neq: (other: string | number | Long.Long) => boolean;
+                or: (other: string | number | Long.Long) => Long.Long;
+                shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                shl: (numBits: number | Long.Long) => Long.Long;
+                shiftRight: (numBits: number | Long.Long) => Long.Long;
+                shr: (numBits: number | Long.Long) => Long.Long;
+                shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                shru: (numBits: number | Long.Long) => Long.Long;
+                subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                toInt: () => number;
+                toNumber: () => number;
+                toBytes: (le?: boolean | undefined) => number[];
+                toBytesLE: () => number[];
+                toBytesBE: () => number[];
+                toSigned: () => Long.Long;
+                toString: (radix?: number | undefined) => string;
+                toUnsigned: () => Long.Long;
+                xor: (other: string | number | Long.Long) => Long.Long;
+            } & Record<Exclude<keyof I["params"]["endBlockerLimit"], keyof Long.Long>, never>) | undefined;
         } & Record<Exclude<keyof I["params"], keyof Params>, never>) | undefined;
         nonce?: string | number | (Long.Long & {
             high: number;
@@ -1409,6 +1504,263 @@ export declare const GenesisState: {
             epoch?: string | number | Long.Long | undefined;
             direction?: import("../../../axelar/nexus/exported/v1beta1/types").TransferDirection | undefined;
         }[]>, never>) | undefined;
+        messages?: ({
+            id?: string | undefined;
+            sender?: {
+                chain?: {
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } | undefined;
+                address?: string | undefined;
+            } | undefined;
+            recipient?: {
+                chain?: {
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } | undefined;
+                address?: string | undefined;
+            } | undefined;
+            payloadHash?: Uint8Array | undefined;
+            status?: import("../../../axelar/nexus/exported/v1beta1/types").GeneralMessage_Status | undefined;
+            asset?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            sourceTxId?: Uint8Array | undefined;
+            sourceTxIndex?: string | number | Long.Long | undefined;
+        }[] & ({
+            id?: string | undefined;
+            sender?: {
+                chain?: {
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } | undefined;
+                address?: string | undefined;
+            } | undefined;
+            recipient?: {
+                chain?: {
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } | undefined;
+                address?: string | undefined;
+            } | undefined;
+            payloadHash?: Uint8Array | undefined;
+            status?: import("../../../axelar/nexus/exported/v1beta1/types").GeneralMessage_Status | undefined;
+            asset?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            sourceTxId?: Uint8Array | undefined;
+            sourceTxIndex?: string | number | Long.Long | undefined;
+        } & {
+            id?: string | undefined;
+            sender?: ({
+                chain?: {
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } | undefined;
+                address?: string | undefined;
+            } & {
+                chain?: ({
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } & {
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } & Record<Exclude<keyof I["messages"][number]["sender"]["chain"], keyof Chain>, never>) | undefined;
+                address?: string | undefined;
+            } & Record<Exclude<keyof I["messages"][number]["sender"], keyof import("../../../axelar/nexus/exported/v1beta1/types").CrossChainAddress>, never>) | undefined;
+            recipient?: ({
+                chain?: {
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } | undefined;
+                address?: string | undefined;
+            } & {
+                chain?: ({
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } & {
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } & Record<Exclude<keyof I["messages"][number]["recipient"]["chain"], keyof Chain>, never>) | undefined;
+                address?: string | undefined;
+            } & Record<Exclude<keyof I["messages"][number]["recipient"], keyof import("../../../axelar/nexus/exported/v1beta1/types").CrossChainAddress>, never>) | undefined;
+            payloadHash?: Uint8Array | undefined;
+            status?: import("../../../axelar/nexus/exported/v1beta1/types").GeneralMessage_Status | undefined;
+            asset?: ({
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } & {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } & Record<Exclude<keyof I["messages"][number]["asset"], keyof import("../../../cosmos/base/v1beta1/coin").Coin>, never>) | undefined;
+            sourceTxId?: Uint8Array | undefined;
+            sourceTxIndex?: string | number | (Long.Long & {
+                high: number;
+                low: number;
+                unsigned: boolean;
+                add: (addend: string | number | Long.Long) => Long.Long;
+                and: (other: string | number | Long.Long) => Long.Long;
+                compare: (other: string | number | Long.Long) => number;
+                comp: (other: string | number | Long.Long) => number;
+                divide: (divisor: string | number | Long.Long) => Long.Long;
+                div: (divisor: string | number | Long.Long) => Long.Long;
+                equals: (other: string | number | Long.Long) => boolean;
+                eq: (other: string | number | Long.Long) => boolean;
+                getHighBits: () => number;
+                getHighBitsUnsigned: () => number;
+                getLowBits: () => number;
+                getLowBitsUnsigned: () => number;
+                getNumBitsAbs: () => number;
+                greaterThan: (other: string | number | Long.Long) => boolean;
+                gt: (other: string | number | Long.Long) => boolean;
+                greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+                gte: (other: string | number | Long.Long) => boolean;
+                isEven: () => boolean;
+                isNegative: () => boolean;
+                isOdd: () => boolean;
+                isPositive: () => boolean;
+                isZero: () => boolean;
+                lessThan: (other: string | number | Long.Long) => boolean;
+                lt: (other: string | number | Long.Long) => boolean;
+                lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+                lte: (other: string | number | Long.Long) => boolean;
+                modulo: (other: string | number | Long.Long) => Long.Long;
+                mod: (other: string | number | Long.Long) => Long.Long;
+                multiply: (multiplier: string | number | Long.Long) => Long.Long;
+                mul: (multiplier: string | number | Long.Long) => Long.Long;
+                negate: () => Long.Long;
+                neg: () => Long.Long;
+                not: () => Long.Long;
+                notEquals: (other: string | number | Long.Long) => boolean;
+                neq: (other: string | number | Long.Long) => boolean;
+                or: (other: string | number | Long.Long) => Long.Long;
+                shiftLeft: (numBits: number | Long.Long) => Long.Long;
+                shl: (numBits: number | Long.Long) => Long.Long;
+                shiftRight: (numBits: number | Long.Long) => Long.Long;
+                shr: (numBits: number | Long.Long) => Long.Long;
+                shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+                shru: (numBits: number | Long.Long) => Long.Long;
+                subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+                sub: (subtrahend: string | number | Long.Long) => Long.Long;
+                toInt: () => number;
+                toNumber: () => number;
+                toBytes: (le?: boolean | undefined) => number[];
+                toBytesLE: () => number[];
+                toBytesBE: () => number[];
+                toSigned: () => Long.Long;
+                toString: (radix?: number | undefined) => string;
+                toUnsigned: () => Long.Long;
+                xor: (other: string | number | Long.Long) => Long.Long;
+            } & Record<Exclude<keyof I["messages"][number]["sourceTxIndex"], keyof Long.Long>, never>) | undefined;
+        } & Record<Exclude<keyof I["messages"][number], keyof GeneralMessage>, never>)[] & Record<Exclude<keyof I["messages"], keyof {
+            id?: string | undefined;
+            sender?: {
+                chain?: {
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } | undefined;
+                address?: string | undefined;
+            } | undefined;
+            recipient?: {
+                chain?: {
+                    name?: string | undefined;
+                    supportsForeignAssets?: boolean | undefined;
+                    keyType?: import("../../tss/exported/v1beta1/types").KeyType | undefined;
+                    module?: string | undefined;
+                } | undefined;
+                address?: string | undefined;
+            } | undefined;
+            payloadHash?: Uint8Array | undefined;
+            status?: import("../../../axelar/nexus/exported/v1beta1/types").GeneralMessage_Status | undefined;
+            asset?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            sourceTxId?: Uint8Array | undefined;
+            sourceTxIndex?: string | number | Long.Long | undefined;
+        }[]>, never>) | undefined;
+        messageNonce?: string | number | (Long.Long & {
+            high: number;
+            low: number;
+            unsigned: boolean;
+            add: (addend: string | number | Long.Long) => Long.Long;
+            and: (other: string | number | Long.Long) => Long.Long;
+            compare: (other: string | number | Long.Long) => number;
+            comp: (other: string | number | Long.Long) => number;
+            divide: (divisor: string | number | Long.Long) => Long.Long;
+            div: (divisor: string | number | Long.Long) => Long.Long;
+            equals: (other: string | number | Long.Long) => boolean;
+            eq: (other: string | number | Long.Long) => boolean;
+            getHighBits: () => number;
+            getHighBitsUnsigned: () => number;
+            getLowBits: () => number;
+            getLowBitsUnsigned: () => number;
+            getNumBitsAbs: () => number;
+            greaterThan: (other: string | number | Long.Long) => boolean;
+            gt: (other: string | number | Long.Long) => boolean;
+            greaterThanOrEqual: (other: string | number | Long.Long) => boolean;
+            gte: (other: string | number | Long.Long) => boolean;
+            isEven: () => boolean;
+            isNegative: () => boolean;
+            isOdd: () => boolean;
+            isPositive: () => boolean;
+            isZero: () => boolean;
+            lessThan: (other: string | number | Long.Long) => boolean;
+            lt: (other: string | number | Long.Long) => boolean;
+            lessThanOrEqual: (other: string | number | Long.Long) => boolean;
+            lte: (other: string | number | Long.Long) => boolean;
+            modulo: (other: string | number | Long.Long) => Long.Long;
+            mod: (other: string | number | Long.Long) => Long.Long;
+            multiply: (multiplier: string | number | Long.Long) => Long.Long;
+            mul: (multiplier: string | number | Long.Long) => Long.Long;
+            negate: () => Long.Long;
+            neg: () => Long.Long;
+            not: () => Long.Long;
+            notEquals: (other: string | number | Long.Long) => boolean;
+            neq: (other: string | number | Long.Long) => boolean;
+            or: (other: string | number | Long.Long) => Long.Long;
+            shiftLeft: (numBits: number | Long.Long) => Long.Long;
+            shl: (numBits: number | Long.Long) => Long.Long;
+            shiftRight: (numBits: number | Long.Long) => Long.Long;
+            shr: (numBits: number | Long.Long) => Long.Long;
+            shiftRightUnsigned: (numBits: number | Long.Long) => Long.Long;
+            shru: (numBits: number | Long.Long) => Long.Long;
+            subtract: (subtrahend: string | number | Long.Long) => Long.Long;
+            sub: (subtrahend: string | number | Long.Long) => Long.Long;
+            toInt: () => number;
+            toNumber: () => number;
+            toBytes: (le?: boolean | undefined) => number[];
+            toBytesLE: () => number[];
+            toBytesBE: () => number[];
+            toSigned: () => Long.Long;
+            toString: (radix?: number | undefined) => string;
+            toUnsigned: () => Long.Long;
+            xor: (other: string | number | Long.Long) => Long.Long;
+        } & Record<Exclude<keyof I["messageNonce"], keyof Long.Long>, never>) | undefined;
     } & Record<Exclude<keyof I, keyof GenesisState>, never>>(object: I): GenesisState;
 };
 declare type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

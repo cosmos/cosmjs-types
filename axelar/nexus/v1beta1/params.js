@@ -34,6 +34,8 @@ function createBaseParams() {
         chainMaintainerMissingVoteThreshold: undefined,
         chainMaintainerIncorrectVoteThreshold: undefined,
         chainMaintainerCheckWindow: 0,
+        gateway: new Uint8Array(),
+        endBlockerLimit: long_1.default.UZERO,
     };
 }
 exports.Params = {
@@ -49,6 +51,12 @@ exports.Params = {
         }
         if (message.chainMaintainerCheckWindow !== 0) {
             writer.uint32(32).int32(message.chainMaintainerCheckWindow);
+        }
+        if (message.gateway.length !== 0) {
+            writer.uint32(42).bytes(message.gateway);
+        }
+        if (!message.endBlockerLimit.isZero()) {
+            writer.uint32(48).uint64(message.endBlockerLimit);
         }
         return writer;
     },
@@ -71,6 +79,12 @@ exports.Params = {
                 case 4:
                     message.chainMaintainerCheckWindow = reader.int32();
                     break;
+                case 5:
+                    message.gateway = reader.bytes();
+                    break;
+                case 6:
+                    message.endBlockerLimit = reader.uint64();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -92,6 +106,8 @@ exports.Params = {
             chainMaintainerCheckWindow: isSet(object.chainMaintainerCheckWindow)
                 ? Number(object.chainMaintainerCheckWindow)
                 : 0,
+            gateway: isSet(object.gateway) ? bytesFromBase64(object.gateway) : new Uint8Array(),
+            endBlockerLimit: isSet(object.endBlockerLimit) ? long_1.default.fromValue(object.endBlockerLimit) : long_1.default.UZERO,
         };
     },
     toJSON(message) {
@@ -110,10 +126,14 @@ exports.Params = {
                 : undefined);
         message.chainMaintainerCheckWindow !== undefined &&
             (obj.chainMaintainerCheckWindow = Math.round(message.chainMaintainerCheckWindow));
+        message.gateway !== undefined &&
+            (obj.gateway = base64FromBytes(message.gateway !== undefined ? message.gateway : new Uint8Array()));
+        message.endBlockerLimit !== undefined &&
+            (obj.endBlockerLimit = (message.endBlockerLimit || long_1.default.UZERO).toString());
         return obj;
     },
     fromPartial(object) {
-        var _a;
+        var _a, _b;
         const message = createBaseParams();
         message.chainActivationThreshold =
             object.chainActivationThreshold !== undefined && object.chainActivationThreshold !== null
@@ -130,9 +150,42 @@ exports.Params = {
                 ? threshold_1.Threshold.fromPartial(object.chainMaintainerIncorrectVoteThreshold)
                 : undefined;
         message.chainMaintainerCheckWindow = (_a = object.chainMaintainerCheckWindow) !== null && _a !== void 0 ? _a : 0;
+        message.gateway = (_b = object.gateway) !== null && _b !== void 0 ? _b : new Uint8Array();
+        message.endBlockerLimit =
+            object.endBlockerLimit !== undefined && object.endBlockerLimit !== null
+                ? long_1.default.fromValue(object.endBlockerLimit)
+                : long_1.default.UZERO;
         return message;
     },
 };
+var globalThis = (() => {
+    if (typeof globalThis !== "undefined")
+        return globalThis;
+    if (typeof self !== "undefined")
+        return self;
+    if (typeof window !== "undefined")
+        return window;
+    if (typeof global !== "undefined")
+        return global;
+    throw "Unable to locate global object";
+})();
+const atob = globalThis.atob || ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
+function bytesFromBase64(b64) {
+    const bin = atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+        arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
+}
+const btoa = globalThis.btoa || ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
+function base64FromBytes(arr) {
+    const bin = [];
+    arr.forEach((byte) => {
+        bin.push(String.fromCharCode(byte));
+    });
+    return btoa(bin.join(""));
+}
 if (_m0.util.Long !== long_1.default) {
     _m0.util.Long = long_1.default;
     _m0.configure();

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
+import { Params } from "../../../axelar/axelarnet/v1beta1/params";
 
 export const protobufPackage = "axelar.axelarnet.v1beta1";
 
@@ -13,6 +14,37 @@ export interface PendingIBCTransferCountResponse {
 export interface PendingIBCTransferCountResponse_TransfersByChainEntry {
   key: string;
   value: number;
+}
+
+/** ParamsRequest represents a message that queries the params */
+export interface ParamsRequest {}
+
+export interface ParamsResponse {
+  params?: Params;
+}
+
+/**
+ * IBCPathRequest represents a message that queries the IBC path registered for
+ * a given chain
+ */
+export interface IBCPathRequest {
+  chain: string;
+}
+
+export interface IBCPathResponse {
+  ibcPath: string;
+}
+
+/**
+ * ChainByIBCPathRequest represents a message that queries the chain that an IBC
+ * path is registered to
+ */
+export interface ChainByIBCPathRequest {
+  ibcPath: string;
+}
+
+export interface ChainByIBCPathResponse {
+  chain: string;
 }
 
 function createBasePendingIBCTransferCountRequest(): PendingIBCTransferCountRequest {
@@ -195,6 +227,291 @@ export const PendingIBCTransferCountResponse_TransfersByChainEntry = {
     const message = createBasePendingIBCTransferCountResponse_TransfersByChainEntry();
     message.key = object.key ?? "";
     message.value = object.value ?? 0;
+    return message;
+  },
+};
+
+function createBaseParamsRequest(): ParamsRequest {
+  return {};
+}
+
+export const ParamsRequest = {
+  encode(_: ParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ParamsRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseParamsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): ParamsRequest {
+    return {};
+  },
+
+  toJSON(_: ParamsRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ParamsRequest>, I>>(_: I): ParamsRequest {
+    const message = createBaseParamsRequest();
+    return message;
+  },
+};
+
+function createBaseParamsResponse(): ParamsResponse {
+  return { params: undefined };
+}
+
+export const ParamsResponse = {
+  encode(message: ParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ParamsResponse {
+    return {
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
+    };
+  },
+
+  toJSON(message: ParamsResponse): unknown {
+    const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ParamsResponse>, I>>(object: I): ParamsResponse {
+    const message = createBaseParamsResponse();
+    message.params =
+      object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    return message;
+  },
+};
+
+function createBaseIBCPathRequest(): IBCPathRequest {
+  return { chain: "" };
+}
+
+export const IBCPathRequest = {
+  encode(message: IBCPathRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): IBCPathRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseIBCPathRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): IBCPathRequest {
+    return {
+      chain: isSet(object.chain) ? String(object.chain) : "",
+    };
+  },
+
+  toJSON(message: IBCPathRequest): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<IBCPathRequest>, I>>(object: I): IBCPathRequest {
+    const message = createBaseIBCPathRequest();
+    message.chain = object.chain ?? "";
+    return message;
+  },
+};
+
+function createBaseIBCPathResponse(): IBCPathResponse {
+  return { ibcPath: "" };
+}
+
+export const IBCPathResponse = {
+  encode(message: IBCPathResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.ibcPath !== "") {
+      writer.uint32(10).string(message.ibcPath);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): IBCPathResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseIBCPathResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ibcPath = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): IBCPathResponse {
+    return {
+      ibcPath: isSet(object.ibcPath) ? String(object.ibcPath) : "",
+    };
+  },
+
+  toJSON(message: IBCPathResponse): unknown {
+    const obj: any = {};
+    message.ibcPath !== undefined && (obj.ibcPath = message.ibcPath);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<IBCPathResponse>, I>>(object: I): IBCPathResponse {
+    const message = createBaseIBCPathResponse();
+    message.ibcPath = object.ibcPath ?? "";
+    return message;
+  },
+};
+
+function createBaseChainByIBCPathRequest(): ChainByIBCPathRequest {
+  return { ibcPath: "" };
+}
+
+export const ChainByIBCPathRequest = {
+  encode(message: ChainByIBCPathRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.ibcPath !== "") {
+      writer.uint32(10).string(message.ibcPath);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ChainByIBCPathRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseChainByIBCPathRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ibcPath = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ChainByIBCPathRequest {
+    return {
+      ibcPath: isSet(object.ibcPath) ? String(object.ibcPath) : "",
+    };
+  },
+
+  toJSON(message: ChainByIBCPathRequest): unknown {
+    const obj: any = {};
+    message.ibcPath !== undefined && (obj.ibcPath = message.ibcPath);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ChainByIBCPathRequest>, I>>(object: I): ChainByIBCPathRequest {
+    const message = createBaseChainByIBCPathRequest();
+    message.ibcPath = object.ibcPath ?? "";
+    return message;
+  },
+};
+
+function createBaseChainByIBCPathResponse(): ChainByIBCPathResponse {
+  return { chain: "" };
+}
+
+export const ChainByIBCPathResponse = {
+  encode(message: ChainByIBCPathResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ChainByIBCPathResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseChainByIBCPathResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ChainByIBCPathResponse {
+    return {
+      chain: isSet(object.chain) ? String(object.chain) : "",
+    };
+  },
+
+  toJSON(message: ChainByIBCPathResponse): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<ChainByIBCPathResponse>, I>>(object: I): ChainByIBCPathResponse {
+    const message = createBaseChainByIBCPathResponse();
+    message.chain = object.chain ?? "";
     return message;
   },
 };

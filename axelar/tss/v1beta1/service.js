@@ -27,6 +27,7 @@ exports.QueryServiceClientImpl = exports.MsgServiceClientImpl = exports.protobuf
 const long_1 = __importDefault(require("long"));
 const _m0 = __importStar(require("protobufjs/minimal"));
 const tx_1 = require("../../../axelar/tss/v1beta1/tx");
+const query_1 = require("../../../axelar/tss/v1beta1/query");
 exports.protobufPackage = "axelar.tss.v1beta1";
 class MsgServiceClientImpl {
     constructor(rpc) {
@@ -43,6 +44,12 @@ exports.MsgServiceClientImpl = MsgServiceClientImpl;
 class QueryServiceClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
+        this.Params = this.Params.bind(this);
+    }
+    Params(request) {
+        const data = query_1.ParamsRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.tss.v1beta1.QueryService", "Params", data);
+        return promise.then((data) => query_1.ParamsResponse.decode(new _m0.Reader(data)));
     }
 }
 exports.QueryServiceClientImpl = QueryServiceClientImpl;

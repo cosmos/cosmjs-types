@@ -19,6 +19,7 @@ protoc \
   --proto_path="$AXELAR_SDK_THIRD_PARTY_DIR" \
   --ts_proto_yarn_2_opt="$TS_PROTO_OPTS" \
   "$AXELAR_SDK_DIR/axelar/axelarnet/v1beta1/genesis.proto" \
+  "$AXELAR_SDK_DIR/axelar/axelarnet/v1beta1/proposal.proto" \
   "$AXELAR_SDK_DIR/axelar/axelarnet/v1beta1/params.proto" \
   "$AXELAR_SDK_DIR/axelar/axelarnet/v1beta1/query.proto" \
   "$AXELAR_SDK_DIR/axelar/axelarnet/v1beta1/service.proto" \
@@ -30,6 +31,8 @@ protoc \
   "$AXELAR_SDK_DIR/axelar/evm/v1beta1/service.proto" \
   "$AXELAR_SDK_DIR/axelar/evm/v1beta1/tx.proto" \
   "$AXELAR_SDK_DIR/axelar/evm/v1beta1/types.proto" \
+  "$AXELAR_SDK_DIR/axelar/multisig/v1beta1/tx.proto" \
+  "$AXELAR_SDK_DIR/axelar/multisig/v1beta1/service.proto" \
   "$AXELAR_SDK_DIR/axelar/nexus/v1beta1/genesis.proto" \
   "$AXELAR_SDK_DIR/axelar/nexus/v1beta1/params.proto" \
   "$AXELAR_SDK_DIR/axelar/nexus/v1beta1/query.proto" \

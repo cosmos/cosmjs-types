@@ -2,6 +2,7 @@ import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { Chain, Asset } from "../../../axelar/nexus/exported/v1beta1/types";
 import { Duration } from "../../../google/protobuf/duration";
+import { Fee } from "../../../axelar/axelarnet/v1beta1/types";
 export declare const protobufPackage = "axelar.axelarnet.v1beta1";
 /**
  * MsgLink represents a message to link a cross-chain address to an Axelar
@@ -105,10 +106,28 @@ export interface RegisterFeeCollectorResponse {
 }
 export interface RetryIBCTransferRequest {
     sender: Uint8Array;
+    /** @deprecated */
     chain: string;
     id: Long;
 }
 export interface RetryIBCTransferResponse {
+}
+export interface RouteMessageRequest {
+    sender: Uint8Array;
+    id: string;
+    payload: Uint8Array;
+    feegranter: Uint8Array;
+}
+export interface RouteMessageResponse {
+}
+export interface CallContractRequest {
+    sender: Uint8Array;
+    chain: string;
+    contractAddress: string;
+    payload: Uint8Array;
+    fee?: Fee;
+}
+export interface CallContractResponse {
 }
 export declare const LinkRequest: {
     encode(message: LinkRequest, writer?: _m0.Writer): _m0.Writer;
@@ -475,6 +494,80 @@ export declare const RetryIBCTransferResponse: {
     fromJSON(_: any): RetryIBCTransferResponse;
     toJSON(_: RetryIBCTransferResponse): unknown;
     fromPartial<I extends {} & {} & Record<Exclude<keyof I, never>, never>>(_: I): RetryIBCTransferResponse;
+};
+export declare const RouteMessageRequest: {
+    encode(message: RouteMessageRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): RouteMessageRequest;
+    fromJSON(object: any): RouteMessageRequest;
+    toJSON(message: RouteMessageRequest): unknown;
+    fromPartial<I extends {
+        sender?: Uint8Array | undefined;
+        id?: string | undefined;
+        payload?: Uint8Array | undefined;
+        feegranter?: Uint8Array | undefined;
+    } & {
+        sender?: Uint8Array | undefined;
+        id?: string | undefined;
+        payload?: Uint8Array | undefined;
+        feegranter?: Uint8Array | undefined;
+    } & Record<Exclude<keyof I, keyof RouteMessageRequest>, never>>(object: I): RouteMessageRequest;
+};
+export declare const RouteMessageResponse: {
+    encode(_: RouteMessageResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): RouteMessageResponse;
+    fromJSON(_: any): RouteMessageResponse;
+    toJSON(_: RouteMessageResponse): unknown;
+    fromPartial<I extends {} & {} & Record<Exclude<keyof I, never>, never>>(_: I): RouteMessageResponse;
+};
+export declare const CallContractRequest: {
+    encode(message: CallContractRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): CallContractRequest;
+    fromJSON(object: any): CallContractRequest;
+    toJSON(message: CallContractRequest): unknown;
+    fromPartial<I extends {
+        sender?: Uint8Array | undefined;
+        chain?: string | undefined;
+        contractAddress?: string | undefined;
+        payload?: Uint8Array | undefined;
+        fee?: {
+            amount?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            recipient?: Uint8Array | undefined;
+            refundRecipient?: Uint8Array | undefined;
+        } | undefined;
+    } & {
+        sender?: Uint8Array | undefined;
+        chain?: string | undefined;
+        contractAddress?: string | undefined;
+        payload?: Uint8Array | undefined;
+        fee?: ({
+            amount?: {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } | undefined;
+            recipient?: Uint8Array | undefined;
+            refundRecipient?: Uint8Array | undefined;
+        } & {
+            amount?: ({
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } & {
+                denom?: string | undefined;
+                amount?: string | undefined;
+            } & Record<Exclude<keyof I["fee"]["amount"], keyof import("../../../cosmos/base/v1beta1/coin").Coin>, never>) | undefined;
+            recipient?: Uint8Array | undefined;
+            refundRecipient?: Uint8Array | undefined;
+        } & Record<Exclude<keyof I["fee"], keyof Fee>, never>) | undefined;
+    } & Record<Exclude<keyof I, keyof CallContractRequest>, never>>(object: I): CallContractRequest;
+};
+export declare const CallContractResponse: {
+    encode(_: CallContractResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): CallContractResponse;
+    fromJSON(_: any): CallContractResponse;
+    toJSON(_: CallContractResponse): unknown;
+    fromPartial<I extends {} & {} & Record<Exclude<keyof I, never>, never>>(_: I): CallContractResponse;
 };
 declare type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export declare type DeepPartial<T> = T extends Builtin ? T : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {

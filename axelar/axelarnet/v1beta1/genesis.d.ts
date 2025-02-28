@@ -28,6 +28,14 @@ export declare const GenesisState: {
             routeTimeoutWindow?: string | number | Long.Long | undefined;
             transferLimit?: string | number | Long.Long | undefined;
             endBlockerLimit?: string | number | Long.Long | undefined;
+            callContractsProposalMinDeposits?: {
+                chain?: string | undefined;
+                contractAddress?: string | undefined;
+                minDeposits?: {
+                    denom?: string | undefined;
+                    amount?: string | undefined;
+                }[] | undefined;
+            }[] | undefined;
         } | undefined;
         collectorAddress?: Uint8Array | undefined;
         chains?: {
@@ -68,6 +76,14 @@ export declare const GenesisState: {
             routeTimeoutWindow?: string | number | Long.Long | undefined;
             transferLimit?: string | number | Long.Long | undefined;
             endBlockerLimit?: string | number | Long.Long | undefined;
+            callContractsProposalMinDeposits?: {
+                chain?: string | undefined;
+                contractAddress?: string | undefined;
+                minDeposits?: {
+                    denom?: string | undefined;
+                    amount?: string | undefined;
+                }[] | undefined;
+            }[] | undefined;
         } & {
             routeTimeoutWindow?: string | number | (Long.Long & {
                 high: number;
@@ -243,6 +259,44 @@ export declare const GenesisState: {
                 toUnsigned: () => Long.Long;
                 xor: (other: string | number | Long.Long) => Long.Long;
             } & Record<Exclude<keyof I["params"]["endBlockerLimit"], keyof Long.Long>, never>) | undefined;
+            callContractsProposalMinDeposits?: ({
+                chain?: string | undefined;
+                contractAddress?: string | undefined;
+                minDeposits?: {
+                    denom?: string | undefined;
+                    amount?: string | undefined;
+                }[] | undefined;
+            }[] & ({
+                chain?: string | undefined;
+                contractAddress?: string | undefined;
+                minDeposits?: {
+                    denom?: string | undefined;
+                    amount?: string | undefined;
+                }[] | undefined;
+            } & {
+                chain?: string | undefined;
+                contractAddress?: string | undefined;
+                minDeposits?: ({
+                    denom?: string | undefined;
+                    amount?: string | undefined;
+                }[] & ({
+                    denom?: string | undefined;
+                    amount?: string | undefined;
+                } & {
+                    denom?: string | undefined;
+                    amount?: string | undefined;
+                } & Record<Exclude<keyof I["params"]["callContractsProposalMinDeposits"][number]["minDeposits"][number], keyof import("../../../cosmos/base/v1beta1/coin").Coin>, never>)[] & Record<Exclude<keyof I["params"]["callContractsProposalMinDeposits"][number]["minDeposits"], keyof {
+                    denom?: string | undefined;
+                    amount?: string | undefined;
+                }[]>, never>) | undefined;
+            } & Record<Exclude<keyof I["params"]["callContractsProposalMinDeposits"][number], keyof import("../../../axelar/axelarnet/v1beta1/params").CallContractProposalMinDeposit>, never>)[] & Record<Exclude<keyof I["params"]["callContractsProposalMinDeposits"], keyof {
+                chain?: string | undefined;
+                contractAddress?: string | undefined;
+                minDeposits?: {
+                    denom?: string | undefined;
+                    amount?: string | undefined;
+                }[] | undefined;
+            }[]>, never>) | undefined;
         } & Record<Exclude<keyof I["params"], keyof Params>, never>) | undefined;
         collectorAddress?: Uint8Array | undefined;
         chains?: ({

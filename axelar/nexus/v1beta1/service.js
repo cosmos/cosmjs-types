@@ -83,7 +83,10 @@ class QueryServiceClientImpl {
         this.ChainState = this.ChainState.bind(this);
         this.ChainsByAsset = this.ChainsByAsset.bind(this);
         this.RecipientAddress = this.RecipientAddress.bind(this);
+        this.ChainMaintainers = this.ChainMaintainers.bind(this);
         this.TransferRateLimit = this.TransferRateLimit.bind(this);
+        this.Message = this.Message.bind(this);
+        this.Params = this.Params.bind(this);
     }
     LatestDepositAddress(request) {
         const data = query_1.LatestDepositAddressRequest.encode(request).finish();
@@ -130,10 +133,25 @@ class QueryServiceClientImpl {
         const promise = this.rpc.request("axelar.nexus.v1beta1.QueryService", "RecipientAddress", data);
         return promise.then((data) => query_1.RecipientAddressResponse.decode(new _m0.Reader(data)));
     }
+    ChainMaintainers(request) {
+        const data = query_1.ChainMaintainersRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.nexus.v1beta1.QueryService", "ChainMaintainers", data);
+        return promise.then((data) => query_1.ChainMaintainersResponse.decode(new _m0.Reader(data)));
+    }
     TransferRateLimit(request) {
         const data = query_1.TransferRateLimitRequest.encode(request).finish();
         const promise = this.rpc.request("axelar.nexus.v1beta1.QueryService", "TransferRateLimit", data);
         return promise.then((data) => query_1.TransferRateLimitResponse.decode(new _m0.Reader(data)));
+    }
+    Message(request) {
+        const data = query_1.MessageRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.nexus.v1beta1.QueryService", "Message", data);
+        return promise.then((data) => query_1.MessageResponse.decode(new _m0.Reader(data)));
+    }
+    Params(request) {
+        const data = query_1.ParamsRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.nexus.v1beta1.QueryService", "Params", data);
+        return promise.then((data) => query_1.ParamsResponse.decode(new _m0.Reader(data)));
     }
 }
 exports.QueryServiceClientImpl = QueryServiceClientImpl;

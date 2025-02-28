@@ -34,6 +34,7 @@ class MsgServiceClientImpl {
         this.rpc = rpc;
         this.SetGateway = this.SetGateway.bind(this);
         this.ConfirmGatewayTx = this.ConfirmGatewayTx.bind(this);
+        this.ConfirmGatewayTxs = this.ConfirmGatewayTxs.bind(this);
         this.Link = this.Link.bind(this);
         this.ConfirmToken = this.ConfirmToken.bind(this);
         this.ConfirmDeposit = this.ConfirmDeposit.bind(this);
@@ -55,6 +56,11 @@ class MsgServiceClientImpl {
         const data = tx_1.ConfirmGatewayTxRequest.encode(request).finish();
         const promise = this.rpc.request("axelar.evm.v1beta1.MsgService", "ConfirmGatewayTx", data);
         return promise.then((data) => tx_1.ConfirmGatewayTxResponse.decode(new _m0.Reader(data)));
+    }
+    ConfirmGatewayTxs(request) {
+        const data = tx_1.ConfirmGatewayTxsRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.evm.v1beta1.MsgService", "ConfirmGatewayTxs", data);
+        return promise.then((data) => tx_1.ConfirmGatewayTxsResponse.decode(new _m0.Reader(data)));
     }
     Link(request) {
         const data = tx_1.LinkRequest.encode(request).finish();
@@ -122,12 +128,14 @@ class QueryServiceClientImpl {
         this.DepositState = this.DepositState.bind(this);
         this.PendingCommands = this.PendingCommands.bind(this);
         this.Chains = this.Chains.bind(this);
+        this.Command = this.Command.bind(this);
         this.KeyAddress = this.KeyAddress.bind(this);
         this.GatewayAddress = this.GatewayAddress.bind(this);
         this.Bytecode = this.Bytecode.bind(this);
         this.Event = this.Event.bind(this);
         this.ERC20Tokens = this.ERC20Tokens.bind(this);
         this.TokenInfo = this.TokenInfo.bind(this);
+        this.Params = this.Params.bind(this);
     }
     BatchedCommands(request) {
         const data = query_1.BatchedCommandsRequest.encode(request).finish();
@@ -159,6 +167,11 @@ class QueryServiceClientImpl {
         const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "Chains", data);
         return promise.then((data) => query_1.ChainsResponse.decode(new _m0.Reader(data)));
     }
+    Command(request) {
+        const data = query_1.CommandRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "Command", data);
+        return promise.then((data) => query_1.CommandResponse.decode(new _m0.Reader(data)));
+    }
     KeyAddress(request) {
         const data = query_1.KeyAddressRequest.encode(request).finish();
         const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "KeyAddress", data);
@@ -188,6 +201,11 @@ class QueryServiceClientImpl {
         const data = query_1.TokenInfoRequest.encode(request).finish();
         const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "TokenInfo", data);
         return promise.then((data) => query_1.TokenInfoResponse.decode(new _m0.Reader(data)));
+    }
+    Params(request) {
+        const data = query_1.ParamsRequest.encode(request).finish();
+        const promise = this.rpc.request("axelar.evm.v1beta1.QueryService", "Params", data);
+        return promise.then((data) => query_1.ParamsResponse.decode(new _m0.Reader(data)));
     }
 }
 exports.QueryServiceClientImpl = QueryServiceClientImpl;

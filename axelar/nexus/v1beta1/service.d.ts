@@ -1,5 +1,5 @@
 import { RegisterChainMaintainerResponse, DeregisterChainMaintainerResponse, ActivateChainResponse, DeactivateChainResponse, RegisterAssetFeeResponse, SetTransferRateLimitResponse, RegisterChainMaintainerRequest, DeregisterChainMaintainerRequest, ActivateChainRequest, DeactivateChainRequest, RegisterAssetFeeRequest, SetTransferRateLimitRequest } from "../../../axelar/nexus/v1beta1/tx";
-import { LatestDepositAddressResponse, TransfersForChainResponse, FeeInfoResponse, TransferFeeResponse, ChainsResponse, AssetsResponse, ChainStateResponse, ChainsByAssetResponse, RecipientAddressResponse, TransferRateLimitResponse, LatestDepositAddressRequest, TransfersForChainRequest, FeeInfoRequest, TransferFeeRequest, ChainsRequest, AssetsRequest, ChainStateRequest, ChainsByAssetRequest, RecipientAddressRequest, TransferRateLimitRequest } from "../../../axelar/nexus/v1beta1/query";
+import { LatestDepositAddressResponse, TransfersForChainResponse, FeeInfoResponse, TransferFeeResponse, ChainsResponse, AssetsResponse, ChainStateResponse, ChainsByAssetResponse, RecipientAddressResponse, ChainMaintainersResponse, TransferRateLimitResponse, MessageResponse, ParamsResponse, LatestDepositAddressRequest, TransfersForChainRequest, FeeInfoRequest, TransferFeeRequest, ChainsRequest, AssetsRequest, ChainStateRequest, ChainsByAssetRequest, RecipientAddressRequest, ChainMaintainersRequest, TransferRateLimitRequest, MessageRequest, ParamsRequest } from "../../../axelar/nexus/v1beta1/query";
 export declare const protobufPackage = "axelar.nexus.v1beta1";
 /** Msg defines the nexus Msg service. */
 export interface MsgService {
@@ -43,11 +43,15 @@ export interface QueryService {
     ChainsByAsset(request: ChainsByAssetRequest): Promise<ChainsByAssetResponse>;
     /** RecipientAddress queries the recipient address for a given deposit address */
     RecipientAddress(request: RecipientAddressRequest): Promise<RecipientAddressResponse>;
+    /** ChainMaintainers queries the chain maintainers for a given chain */
+    ChainMaintainers(request: ChainMaintainersRequest): Promise<ChainMaintainersResponse>;
     /**
      * TransferRateLimit queries the transfer rate limit for a given chain and
      * asset. If a rate limit is not set, nil is returned.
      */
     TransferRateLimit(request: TransferRateLimitRequest): Promise<TransferRateLimitResponse>;
+    Message(request: MessageRequest): Promise<MessageResponse>;
+    Params(request: ParamsRequest): Promise<ParamsResponse>;
 }
 export declare class QueryServiceClientImpl implements QueryService {
     private readonly rpc;
@@ -61,7 +65,10 @@ export declare class QueryServiceClientImpl implements QueryService {
     ChainState(request: ChainStateRequest): Promise<ChainStateResponse>;
     ChainsByAsset(request: ChainsByAssetRequest): Promise<ChainsByAssetResponse>;
     RecipientAddress(request: RecipientAddressRequest): Promise<RecipientAddressResponse>;
+    ChainMaintainers(request: ChainMaintainersRequest): Promise<ChainMaintainersResponse>;
     TransferRateLimit(request: TransferRateLimitRequest): Promise<TransferRateLimitResponse>;
+    Message(request: MessageRequest): Promise<MessageResponse>;
+    Params(request: ParamsRequest): Promise<ParamsResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

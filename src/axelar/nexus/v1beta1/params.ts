@@ -11,6 +11,8 @@ export interface Params {
   chainMaintainerMissingVoteThreshold?: Threshold;
   chainMaintainerIncorrectVoteThreshold?: Threshold;
   chainMaintainerCheckWindow: number;
+  gateway: Uint8Array;
+  endBlockerLimit: Long;
 }
 
 function createBaseParams(): Params {
@@ -19,6 +21,8 @@ function createBaseParams(): Params {
     chainMaintainerMissingVoteThreshold: undefined,
     chainMaintainerIncorrectVoteThreshold: undefined,
     chainMaintainerCheckWindow: 0,
+    gateway: new Uint8Array(),
+    endBlockerLimit: Long.UZERO,
   };
 }
 
@@ -35,6 +39,12 @@ export const Params = {
     }
     if (message.chainMaintainerCheckWindow !== 0) {
       writer.uint32(32).int32(message.chainMaintainerCheckWindow);
+    }
+    if (message.gateway.length !== 0) {
+      writer.uint32(42).bytes(message.gateway);
+    }
+    if (!message.endBlockerLimit.isZero()) {
+      writer.uint32(48).uint64(message.endBlockerLimit);
     }
     return writer;
   },
@@ -58,6 +68,12 @@ export const Params = {
         case 4:
           message.chainMaintainerCheckWindow = reader.int32();
           break;
+        case 5:
+          message.gateway = reader.bytes();
+          break;
+        case 6:
+          message.endBlockerLimit = reader.uint64() as Long;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -80,6 +96,8 @@ export const Params = {
       chainMaintainerCheckWindow: isSet(object.chainMaintainerCheckWindow)
         ? Number(object.chainMaintainerCheckWindow)
         : 0,
+      gateway: isSet(object.gateway) ? bytesFromBase64(object.gateway) : new Uint8Array(),
+      endBlockerLimit: isSet(object.endBlockerLimit) ? Long.fromValue(object.endBlockerLimit) : Long.UZERO,
     };
   },
 
@@ -99,6 +117,10 @@ export const Params = {
         : undefined);
     message.chainMaintainerCheckWindow !== undefined &&
       (obj.chainMaintainerCheckWindow = Math.round(message.chainMaintainerCheckWindow));
+    message.gateway !== undefined &&
+      (obj.gateway = base64FromBytes(message.gateway !== undefined ? message.gateway : new Uint8Array()));
+    message.endBlockerLimit !== undefined &&
+      (obj.endBlockerLimit = (message.endBlockerLimit || Long.UZERO).toString());
     return obj;
   },
 
@@ -119,9 +141,46 @@ export const Params = {
         ? Threshold.fromPartial(object.chainMaintainerIncorrectVoteThreshold)
         : undefined;
     message.chainMaintainerCheckWindow = object.chainMaintainerCheckWindow ?? 0;
+    message.gateway = object.gateway ?? new Uint8Array();
+    message.endBlockerLimit =
+      object.endBlockerLimit !== undefined && object.endBlockerLimit !== null
+        ? Long.fromValue(object.endBlockerLimit)
+        : Long.UZERO;
     return message;
   },
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+declare var global: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
+
+const atob: (b64: string) => string =
+  globalThis.atob || ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
+function bytesFromBase64(b64: string): Uint8Array {
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; ++i) {
+    arr[i] = bin.charCodeAt(i);
+  }
+  return arr;
+}
+
+const btoa: (bin: string) => string =
+  globalThis.btoa || ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
+function base64FromBytes(arr: Uint8Array): string {
+  const bin: string[] = [];
+  arr.forEach((byte) => {
+    bin.push(String.fromCharCode(byte));
+  });
+  return btoa(bin.join(""));
+}
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 

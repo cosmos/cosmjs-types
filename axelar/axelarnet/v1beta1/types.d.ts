@@ -34,6 +34,11 @@ export interface Asset {
     denom: string;
     minAmount: Uint8Array;
 }
+export interface Fee {
+    amount?: Coin;
+    recipient: Uint8Array;
+    refundRecipient: Uint8Array;
+}
 export declare const IBCTransfer: {
     encode(message: IBCTransfer, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number | undefined): IBCTransfer;
@@ -226,6 +231,30 @@ export declare const Asset: {
         denom?: string | undefined;
         minAmount?: Uint8Array | undefined;
     } & Record<Exclude<keyof I, keyof Asset>, never>>(object: I): Asset;
+};
+export declare const Fee: {
+    encode(message: Fee, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number | undefined): Fee;
+    fromJSON(object: any): Fee;
+    toJSON(message: Fee): unknown;
+    fromPartial<I extends {
+        amount?: {
+            denom?: string | undefined;
+            amount?: string | undefined;
+        } | undefined;
+        recipient?: Uint8Array | undefined;
+        refundRecipient?: Uint8Array | undefined;
+    } & {
+        amount?: ({
+            denom?: string | undefined;
+            amount?: string | undefined;
+        } & {
+            denom?: string | undefined;
+            amount?: string | undefined;
+        } & Record<Exclude<keyof I["amount"], keyof Coin>, never>) | undefined;
+        recipient?: Uint8Array | undefined;
+        refundRecipient?: Uint8Array | undefined;
+    } & Record<Exclude<keyof I, keyof Fee>, never>>(object: I): Fee;
 };
 declare type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export declare type DeepPartial<T> = T extends Builtin ? T : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {

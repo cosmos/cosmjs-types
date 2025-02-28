@@ -3,6 +3,7 @@ import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { Chain, Asset } from "../../../axelar/nexus/exported/v1beta1/types";
 import { Duration } from "../../../google/protobuf/duration";
+import { Fee } from "../../../axelar/axelarnet/v1beta1/types";
 
 export const protobufPackage = "axelar.axelarnet.v1beta1";
 
@@ -117,11 +118,31 @@ export interface RegisterFeeCollectorResponse {}
 
 export interface RetryIBCTransferRequest {
   sender: Uint8Array;
+  /** @deprecated */
   chain: string;
   id: Long;
 }
 
 export interface RetryIBCTransferResponse {}
+
+export interface RouteMessageRequest {
+  sender: Uint8Array;
+  id: string;
+  payload: Uint8Array;
+  feegranter: Uint8Array;
+}
+
+export interface RouteMessageResponse {}
+
+export interface CallContractRequest {
+  sender: Uint8Array;
+  chain: string;
+  contractAddress: string;
+  payload: Uint8Array;
+  fee?: Fee;
+}
+
+export interface CallContractResponse {}
 
 function createBaseLinkRequest(): LinkRequest {
   return { sender: new Uint8Array(), recipientAddr: "", recipientChain: "", asset: "" };
@@ -1147,6 +1168,258 @@ export const RetryIBCTransferResponse = {
 
   fromPartial<I extends Exact<DeepPartial<RetryIBCTransferResponse>, I>>(_: I): RetryIBCTransferResponse {
     const message = createBaseRetryIBCTransferResponse();
+    return message;
+  },
+};
+
+function createBaseRouteMessageRequest(): RouteMessageRequest {
+  return { sender: new Uint8Array(), id: "", payload: new Uint8Array(), feegranter: new Uint8Array() };
+}
+
+export const RouteMessageRequest = {
+  encode(message: RouteMessageRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.sender.length !== 0) {
+      writer.uint32(10).bytes(message.sender);
+    }
+    if (message.id !== "") {
+      writer.uint32(18).string(message.id);
+    }
+    if (message.payload.length !== 0) {
+      writer.uint32(26).bytes(message.payload);
+    }
+    if (message.feegranter.length !== 0) {
+      writer.uint32(34).bytes(message.feegranter);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RouteMessageRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRouteMessageRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sender = reader.bytes();
+          break;
+        case 2:
+          message.id = reader.string();
+          break;
+        case 3:
+          message.payload = reader.bytes();
+          break;
+        case 4:
+          message.feegranter = reader.bytes();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RouteMessageRequest {
+    return {
+      sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
+      id: isSet(object.id) ? String(object.id) : "",
+      payload: isSet(object.payload) ? bytesFromBase64(object.payload) : new Uint8Array(),
+      feegranter: isSet(object.feegranter) ? bytesFromBase64(object.feegranter) : new Uint8Array(),
+    };
+  },
+
+  toJSON(message: RouteMessageRequest): unknown {
+    const obj: any = {};
+    message.sender !== undefined &&
+      (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
+    message.id !== undefined && (obj.id = message.id);
+    message.payload !== undefined &&
+      (obj.payload = base64FromBytes(message.payload !== undefined ? message.payload : new Uint8Array()));
+    message.feegranter !== undefined &&
+      (obj.feegranter = base64FromBytes(
+        message.feegranter !== undefined ? message.feegranter : new Uint8Array(),
+      ));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<RouteMessageRequest>, I>>(object: I): RouteMessageRequest {
+    const message = createBaseRouteMessageRequest();
+    message.sender = object.sender ?? new Uint8Array();
+    message.id = object.id ?? "";
+    message.payload = object.payload ?? new Uint8Array();
+    message.feegranter = object.feegranter ?? new Uint8Array();
+    return message;
+  },
+};
+
+function createBaseRouteMessageResponse(): RouteMessageResponse {
+  return {};
+}
+
+export const RouteMessageResponse = {
+  encode(_: RouteMessageResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RouteMessageResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRouteMessageResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): RouteMessageResponse {
+    return {};
+  },
+
+  toJSON(_: RouteMessageResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<RouteMessageResponse>, I>>(_: I): RouteMessageResponse {
+    const message = createBaseRouteMessageResponse();
+    return message;
+  },
+};
+
+function createBaseCallContractRequest(): CallContractRequest {
+  return {
+    sender: new Uint8Array(),
+    chain: "",
+    contractAddress: "",
+    payload: new Uint8Array(),
+    fee: undefined,
+  };
+}
+
+export const CallContractRequest = {
+  encode(message: CallContractRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.sender.length !== 0) {
+      writer.uint32(10).bytes(message.sender);
+    }
+    if (message.chain !== "") {
+      writer.uint32(18).string(message.chain);
+    }
+    if (message.contractAddress !== "") {
+      writer.uint32(26).string(message.contractAddress);
+    }
+    if (message.payload.length !== 0) {
+      writer.uint32(34).bytes(message.payload);
+    }
+    if (message.fee !== undefined) {
+      Fee.encode(message.fee, writer.uint32(42).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CallContractRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCallContractRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sender = reader.bytes();
+          break;
+        case 2:
+          message.chain = reader.string();
+          break;
+        case 3:
+          message.contractAddress = reader.string();
+          break;
+        case 4:
+          message.payload = reader.bytes();
+          break;
+        case 5:
+          message.fee = Fee.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CallContractRequest {
+    return {
+      sender: isSet(object.sender) ? bytesFromBase64(object.sender) : new Uint8Array(),
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
+      payload: isSet(object.payload) ? bytesFromBase64(object.payload) : new Uint8Array(),
+      fee: isSet(object.fee) ? Fee.fromJSON(object.fee) : undefined,
+    };
+  },
+
+  toJSON(message: CallContractRequest): unknown {
+    const obj: any = {};
+    message.sender !== undefined &&
+      (obj.sender = base64FromBytes(message.sender !== undefined ? message.sender : new Uint8Array()));
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
+    message.payload !== undefined &&
+      (obj.payload = base64FromBytes(message.payload !== undefined ? message.payload : new Uint8Array()));
+    message.fee !== undefined && (obj.fee = message.fee ? Fee.toJSON(message.fee) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<CallContractRequest>, I>>(object: I): CallContractRequest {
+    const message = createBaseCallContractRequest();
+    message.sender = object.sender ?? new Uint8Array();
+    message.chain = object.chain ?? "";
+    message.contractAddress = object.contractAddress ?? "";
+    message.payload = object.payload ?? new Uint8Array();
+    message.fee = object.fee !== undefined && object.fee !== null ? Fee.fromPartial(object.fee) : undefined;
+    return message;
+  },
+};
+
+function createBaseCallContractResponse(): CallContractResponse {
+  return {};
+}
+
+export const CallContractResponse = {
+  encode(_: CallContractResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CallContractResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCallContractResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): CallContractResponse {
+    return {};
+  },
+
+  toJSON(_: CallContractResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<CallContractResponse>, I>>(_: I): CallContractResponse {
+    const message = createBaseCallContractResponse();
     return message;
   },
 };

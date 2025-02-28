@@ -25,7 +25,10 @@ import {
   ChainStateResponse,
   ChainsByAssetResponse,
   RecipientAddressResponse,
+  ChainMaintainersResponse,
   TransferRateLimitResponse,
+  MessageResponse,
+  ParamsResponse,
   LatestDepositAddressRequest,
   TransfersForChainRequest,
   FeeInfoRequest,
@@ -35,7 +38,10 @@ import {
   ChainStateRequest,
   ChainsByAssetRequest,
   RecipientAddressRequest,
+  ChainMaintainersRequest,
   TransferRateLimitRequest,
+  MessageRequest,
+  ParamsRequest,
 } from "../../../axelar/nexus/v1beta1/query";
 
 export const protobufPackage = "axelar.nexus.v1beta1";
@@ -125,11 +131,15 @@ export interface QueryService {
   ChainsByAsset(request: ChainsByAssetRequest): Promise<ChainsByAssetResponse>;
   /** RecipientAddress queries the recipient address for a given deposit address */
   RecipientAddress(request: RecipientAddressRequest): Promise<RecipientAddressResponse>;
+  /** ChainMaintainers queries the chain maintainers for a given chain */
+  ChainMaintainers(request: ChainMaintainersRequest): Promise<ChainMaintainersResponse>;
   /**
    * TransferRateLimit queries the transfer rate limit for a given chain and
    * asset. If a rate limit is not set, nil is returned.
    */
   TransferRateLimit(request: TransferRateLimitRequest): Promise<TransferRateLimitResponse>;
+  Message(request: MessageRequest): Promise<MessageResponse>;
+  Params(request: ParamsRequest): Promise<ParamsResponse>;
 }
 
 export class QueryServiceClientImpl implements QueryService {
@@ -145,7 +155,10 @@ export class QueryServiceClientImpl implements QueryService {
     this.ChainState = this.ChainState.bind(this);
     this.ChainsByAsset = this.ChainsByAsset.bind(this);
     this.RecipientAddress = this.RecipientAddress.bind(this);
+    this.ChainMaintainers = this.ChainMaintainers.bind(this);
     this.TransferRateLimit = this.TransferRateLimit.bind(this);
+    this.Message = this.Message.bind(this);
+    this.Params = this.Params.bind(this);
   }
   LatestDepositAddress(request: LatestDepositAddressRequest): Promise<LatestDepositAddressResponse> {
     const data = LatestDepositAddressRequest.encode(request).finish();
@@ -201,10 +214,28 @@ export class QueryServiceClientImpl implements QueryService {
     return promise.then((data) => RecipientAddressResponse.decode(new _m0.Reader(data)));
   }
 
+  ChainMaintainers(request: ChainMaintainersRequest): Promise<ChainMaintainersResponse> {
+    const data = ChainMaintainersRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.nexus.v1beta1.QueryService", "ChainMaintainers", data);
+    return promise.then((data) => ChainMaintainersResponse.decode(new _m0.Reader(data)));
+  }
+
   TransferRateLimit(request: TransferRateLimitRequest): Promise<TransferRateLimitResponse> {
     const data = TransferRateLimitRequest.encode(request).finish();
     const promise = this.rpc.request("axelar.nexus.v1beta1.QueryService", "TransferRateLimit", data);
     return promise.then((data) => TransferRateLimitResponse.decode(new _m0.Reader(data)));
+  }
+
+  Message(request: MessageRequest): Promise<MessageResponse> {
+    const data = MessageRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.nexus.v1beta1.QueryService", "Message", data);
+    return promise.then((data) => MessageResponse.decode(new _m0.Reader(data)));
+  }
+
+  Params(request: ParamsRequest): Promise<ParamsResponse> {
+    const data = ParamsRequest.encode(request).finish();
+    const promise = this.rpc.request("axelar.nexus.v1beta1.QueryService", "Params", data);
+    return promise.then((data) => ParamsResponse.decode(new _m0.Reader(data)));
   }
 }
 
