@@ -9,11 +9,6 @@ export enum AccessType {
   ACCESS_TYPE_UNSPECIFIED = 0,
   /** ACCESS_TYPE_NOBODY - AccessTypeNobody forbidden */
   ACCESS_TYPE_NOBODY = 1,
-  /**
-   * ACCESS_TYPE_ONLY_ADDRESS - AccessTypeOnlyAddress restricted to a single address
-   * Deprecated: use AccessTypeAnyOfAddresses instead
-   */
-  ACCESS_TYPE_ONLY_ADDRESS = 2,
   /** ACCESS_TYPE_EVERYBODY - AccessTypeEverybody unrestricted */
   ACCESS_TYPE_EVERYBODY = 3,
   /** ACCESS_TYPE_ANY_OF_ADDRESSES - AccessTypeAnyOfAddresses allow any of the addresses */
@@ -28,9 +23,6 @@ export function accessTypeFromJSON(object: any): AccessType {
     case 1:
     case "ACCESS_TYPE_NOBODY":
       return AccessType.ACCESS_TYPE_NOBODY;
-    case 2:
-    case "ACCESS_TYPE_ONLY_ADDRESS":
-      return AccessType.ACCESS_TYPE_ONLY_ADDRESS;
     case 3:
     case "ACCESS_TYPE_EVERYBODY":
       return AccessType.ACCESS_TYPE_EVERYBODY;
@@ -49,8 +41,6 @@ export function accessTypeToJSON(object: AccessType): string {
       return "ACCESS_TYPE_UNSPECIFIED";
     case AccessType.ACCESS_TYPE_NOBODY:
       return "ACCESS_TYPE_NOBODY";
-    case AccessType.ACCESS_TYPE_ONLY_ADDRESS:
-      return "ACCESS_TYPE_ONLY_ADDRESS";
     case AccessType.ACCESS_TYPE_EVERYBODY:
       return "ACCESS_TYPE_EVERYBODY";
     case AccessType.ACCESS_TYPE_ANY_OF_ADDRESSES:
@@ -114,11 +104,6 @@ export interface AccessTypeParam {
 /** AccessConfig access control type. */
 export interface AccessConfig {
   permission: AccessType;
-  /**
-   * Address
-   * Deprecated: replaced by addresses
-   */
-  address: string;
   addresses: string[];
 }
 /** Params defines the set of wasm parameters. */
@@ -232,7 +217,6 @@ export const AccessTypeParam = {
 function createBaseAccessConfig(): AccessConfig {
   return {
     permission: 0,
-    address: "",
     addresses: [],
   };
 }
@@ -241,9 +225,6 @@ export const AccessConfig = {
   encode(message: AccessConfig, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.permission !== 0) {
       writer.uint32(8).int32(message.permission);
-    }
-    if (message.address !== "") {
-      writer.uint32(18).string(message.address);
     }
     for (const v of message.addresses) {
       writer.uint32(26).string(v!);
@@ -260,9 +241,6 @@ export const AccessConfig = {
         case 1:
           message.permission = reader.int32() as any;
           break;
-        case 2:
-          message.address = reader.string();
-          break;
         case 3:
           message.addresses.push(reader.string());
           break;
@@ -276,14 +254,12 @@ export const AccessConfig = {
   fromJSON(object: any): AccessConfig {
     const obj = createBaseAccessConfig();
     if (isSet(object.permission)) obj.permission = accessTypeFromJSON(object.permission);
-    if (isSet(object.address)) obj.address = String(object.address);
     if (Array.isArray(object?.addresses)) obj.addresses = object.addresses.map((e: any) => String(e));
     return obj;
   },
   toJSON(message: AccessConfig): unknown {
     const obj: any = {};
     message.permission !== undefined && (obj.permission = accessTypeToJSON(message.permission));
-    message.address !== undefined && (obj.address = message.address);
     if (message.addresses) {
       obj.addresses = message.addresses.map((e) => e);
     } else {
@@ -294,7 +270,6 @@ export const AccessConfig = {
   fromPartial<I extends Exact<DeepPartial<AccessConfig>, I>>(object: I): AccessConfig {
     const message = createBaseAccessConfig();
     message.permission = object.permission ?? 0;
-    message.address = object.address ?? "";
     message.addresses = object.addresses?.map((e) => e) || [];
     return message;
   },

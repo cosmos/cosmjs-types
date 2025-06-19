@@ -13,10 +13,8 @@ export interface MsgGrant {
   grantee: string;
   grant: Grant;
 }
-/** MsgExecResponse defines the Msg/MsgExecResponse response type. */
-export interface MsgExecResponse {
-  results: Uint8Array[];
-}
+/** MsgGrantResponse defines the Msg/MsgGrant response type. */
+export interface MsgGrantResponse {}
 /**
  * MsgExec attempts to execute the provided messages using
  * authorizations granted to the grantee. Each message should have only
@@ -31,8 +29,10 @@ export interface MsgExec {
    */
   msgs: Any[];
 }
-/** MsgGrantResponse defines the Msg/MsgGrant response type. */
-export interface MsgGrantResponse {}
+/** MsgExecResponse defines the Msg/MsgExecResponse response type. */
+export interface MsgExecResponse {
+  results: Uint8Array[];
+}
 /**
  * MsgRevoke revokes any authorization with the provided sdk.Msg type on the
  * granter's account with that has been granted to the grantee.
@@ -112,29 +112,21 @@ export const MsgGrant = {
     return message;
   },
 };
-function createBaseMsgExecResponse(): MsgExecResponse {
-  return {
-    results: [],
-  };
+function createBaseMsgGrantResponse(): MsgGrantResponse {
+  return {};
 }
-export const MsgExecResponse = {
-  typeUrl: "/cosmos.authz.v1beta1.MsgExecResponse",
-  encode(message: MsgExecResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    for (const v of message.results) {
-      writer.uint32(10).bytes(v!);
-    }
+export const MsgGrantResponse = {
+  typeUrl: "/cosmos.authz.v1beta1.MsgGrantResponse",
+  encode(_: MsgGrantResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgExecResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgGrantResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgExecResponse();
+    const message = createBaseMsgGrantResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          message.results.push(reader.bytes());
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -142,23 +134,16 @@ export const MsgExecResponse = {
     }
     return message;
   },
-  fromJSON(object: any): MsgExecResponse {
-    const obj = createBaseMsgExecResponse();
-    if (Array.isArray(object?.results)) obj.results = object.results.map((e: any) => bytesFromBase64(e));
+  fromJSON(_: any): MsgGrantResponse {
+    const obj = createBaseMsgGrantResponse();
     return obj;
   },
-  toJSON(message: MsgExecResponse): unknown {
+  toJSON(_: MsgGrantResponse): unknown {
     const obj: any = {};
-    if (message.results) {
-      obj.results = message.results.map((e) => base64FromBytes(e !== undefined ? e : new Uint8Array()));
-    } else {
-      obj.results = [];
-    }
     return obj;
   },
-  fromPartial<I extends Exact<DeepPartial<MsgExecResponse>, I>>(object: I): MsgExecResponse {
-    const message = createBaseMsgExecResponse();
-    message.results = object.results?.map((e) => e) || [];
+  fromPartial<I extends Exact<DeepPartial<MsgGrantResponse>, I>>(_: I): MsgGrantResponse {
+    const message = createBaseMsgGrantResponse();
     return message;
   },
 };
@@ -222,21 +207,29 @@ export const MsgExec = {
     return message;
   },
 };
-function createBaseMsgGrantResponse(): MsgGrantResponse {
-  return {};
+function createBaseMsgExecResponse(): MsgExecResponse {
+  return {
+    results: [],
+  };
 }
-export const MsgGrantResponse = {
-  typeUrl: "/cosmos.authz.v1beta1.MsgGrantResponse",
-  encode(_: MsgGrantResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+export const MsgExecResponse = {
+  typeUrl: "/cosmos.authz.v1beta1.MsgExecResponse",
+  encode(message: MsgExecResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.results) {
+      writer.uint32(10).bytes(v!);
+    }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgGrantResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExecResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgGrantResponse();
+    const message = createBaseMsgExecResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.results.push(reader.bytes());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -244,16 +237,23 @@ export const MsgGrantResponse = {
     }
     return message;
   },
-  fromJSON(_: any): MsgGrantResponse {
-    const obj = createBaseMsgGrantResponse();
+  fromJSON(object: any): MsgExecResponse {
+    const obj = createBaseMsgExecResponse();
+    if (Array.isArray(object?.results)) obj.results = object.results.map((e: any) => bytesFromBase64(e));
     return obj;
   },
-  toJSON(_: MsgGrantResponse): unknown {
+  toJSON(message: MsgExecResponse): unknown {
     const obj: any = {};
+    if (message.results) {
+      obj.results = message.results.map((e) => base64FromBytes(e !== undefined ? e : new Uint8Array()));
+    } else {
+      obj.results = [];
+    }
     return obj;
   },
-  fromPartial<I extends Exact<DeepPartial<MsgGrantResponse>, I>>(_: I): MsgGrantResponse {
-    const message = createBaseMsgGrantResponse();
+  fromPartial<I extends Exact<DeepPartial<MsgExecResponse>, I>>(object: I): MsgExecResponse {
+    const message = createBaseMsgExecResponse();
+    message.results = object.results?.map((e) => e) || [];
     return message;
   },
 };

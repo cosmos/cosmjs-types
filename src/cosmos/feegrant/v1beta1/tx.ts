@@ -26,6 +26,21 @@ export interface MsgRevokeAllowance {
 }
 /** MsgRevokeAllowanceResponse defines the Msg/RevokeAllowanceResponse response type. */
 export interface MsgRevokeAllowanceResponse {}
+/**
+ * MsgPruneAllowances prunes expired fee allowances.
+ *
+ * Since cosmos-sdk 0.50
+ */
+export interface MsgPruneAllowances {
+  /** pruner is the address of the user pruning expired allowances. */
+  pruner: string;
+}
+/**
+ * MsgPruneAllowancesResponse defines the Msg/PruneAllowancesResponse response type.
+ *
+ * Since cosmos-sdk 0.50
+ */
+export interface MsgPruneAllowancesResponse {}
 function createBaseMsgGrantAllowance(): MsgGrantAllowance {
   return {
     granter: "",
@@ -221,6 +236,87 @@ export const MsgRevokeAllowanceResponse = {
     return message;
   },
 };
+function createBaseMsgPruneAllowances(): MsgPruneAllowances {
+  return {
+    pruner: "",
+  };
+}
+export const MsgPruneAllowances = {
+  typeUrl: "/cosmos.feegrant.v1beta1.MsgPruneAllowances",
+  encode(message: MsgPruneAllowances, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pruner !== "") {
+      writer.uint32(10).string(message.pruner);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgPruneAllowances {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgPruneAllowances();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pruner = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgPruneAllowances {
+    const obj = createBaseMsgPruneAllowances();
+    if (isSet(object.pruner)) obj.pruner = String(object.pruner);
+    return obj;
+  },
+  toJSON(message: MsgPruneAllowances): unknown {
+    const obj: any = {};
+    message.pruner !== undefined && (obj.pruner = message.pruner);
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgPruneAllowances>, I>>(object: I): MsgPruneAllowances {
+    const message = createBaseMsgPruneAllowances();
+    message.pruner = object.pruner ?? "";
+    return message;
+  },
+};
+function createBaseMsgPruneAllowancesResponse(): MsgPruneAllowancesResponse {
+  return {};
+}
+export const MsgPruneAllowancesResponse = {
+  typeUrl: "/cosmos.feegrant.v1beta1.MsgPruneAllowancesResponse",
+  encode(_: MsgPruneAllowancesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgPruneAllowancesResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgPruneAllowancesResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgPruneAllowancesResponse {
+    const obj = createBaseMsgPruneAllowancesResponse();
+    return obj;
+  },
+  toJSON(_: MsgPruneAllowancesResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgPruneAllowancesResponse>, I>>(_: I): MsgPruneAllowancesResponse {
+    const message = createBaseMsgPruneAllowancesResponse();
+    return message;
+  },
+};
 /** Msg defines the feegrant msg service. */
 export interface Msg {
   /**
@@ -233,6 +329,12 @@ export interface Msg {
    * has been granted to the grantee.
    */
   RevokeAllowance(request: MsgRevokeAllowance): Promise<MsgRevokeAllowanceResponse>;
+  /**
+   * PruneAllowances prunes expired fee allowances, currently up to 75 at a time.
+   *
+   * Since cosmos-sdk 0.50
+   */
+  PruneAllowances(request: MsgPruneAllowances): Promise<MsgPruneAllowancesResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -240,6 +342,7 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
     this.GrantAllowance = this.GrantAllowance.bind(this);
     this.RevokeAllowance = this.RevokeAllowance.bind(this);
+    this.PruneAllowances = this.PruneAllowances.bind(this);
   }
   GrantAllowance(request: MsgGrantAllowance): Promise<MsgGrantAllowanceResponse> {
     const data = MsgGrantAllowance.encode(request).finish();
@@ -250,5 +353,10 @@ export class MsgClientImpl implements Msg {
     const data = MsgRevokeAllowance.encode(request).finish();
     const promise = this.rpc.request("cosmos.feegrant.v1beta1.Msg", "RevokeAllowance", data);
     return promise.then((data) => MsgRevokeAllowanceResponse.decode(new BinaryReader(data)));
+  }
+  PruneAllowances(request: MsgPruneAllowances): Promise<MsgPruneAllowancesResponse> {
+    const data = MsgPruneAllowances.encode(request).finish();
+    const promise = this.rpc.request("cosmos.feegrant.v1beta1.Msg", "PruneAllowances", data);
+    return promise.then((data) => MsgPruneAllowancesResponse.decode(new BinaryReader(data)));
   }
 }

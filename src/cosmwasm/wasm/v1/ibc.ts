@@ -27,6 +27,8 @@ export interface MsgIBCSendResponse {
   /** Sequence number of the IBC packet sent */
   sequence: bigint;
 }
+/** MsgIBCWriteAcknowledgementResponse */
+export interface MsgIBCWriteAcknowledgementResponse {}
 /** MsgIBCCloseChannel port and channel need to be owned by the contract */
 export interface MsgIBCCloseChannel {
   channel: string;
@@ -159,6 +161,43 @@ export const MsgIBCSendResponse = {
     if (object.sequence !== undefined && object.sequence !== null) {
       message.sequence = BigInt(object.sequence.toString());
     }
+    return message;
+  },
+};
+function createBaseMsgIBCWriteAcknowledgementResponse(): MsgIBCWriteAcknowledgementResponse {
+  return {};
+}
+export const MsgIBCWriteAcknowledgementResponse = {
+  typeUrl: "/cosmwasm.wasm.v1.MsgIBCWriteAcknowledgementResponse",
+  encode(_: MsgIBCWriteAcknowledgementResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgIBCWriteAcknowledgementResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgIBCWriteAcknowledgementResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgIBCWriteAcknowledgementResponse {
+    const obj = createBaseMsgIBCWriteAcknowledgementResponse();
+    return obj;
+  },
+  toJSON(_: MsgIBCWriteAcknowledgementResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgIBCWriteAcknowledgementResponse>, I>>(
+    _: I,
+  ): MsgIBCWriteAcknowledgementResponse {
+    const message = createBaseMsgIBCWriteAcknowledgementResponse();
     return message;
   },
 };

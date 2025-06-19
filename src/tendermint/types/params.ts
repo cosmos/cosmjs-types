@@ -12,6 +12,7 @@ export interface ConsensusParams {
   evidence?: EvidenceParams;
   validator?: ValidatorParams;
   version?: VersionParams;
+  abci?: ABCIParams;
 }
 /** BlockParams contains limits on the block size. */
 export interface BlockParams {
@@ -70,12 +71,28 @@ export interface HashedParams {
   blockMaxBytes: bigint;
   blockMaxGas: bigint;
 }
+/** ABCIParams configure functionality specific to the Application Blockchain Interface. */
+export interface ABCIParams {
+  /**
+   * vote_extensions_enable_height configures the first height during which
+   * vote extensions will be enabled. During this specified height, and for all
+   * subsequent heights, precommit messages that do not contain valid extension data
+   * will be considered invalid. Prior to this height, vote extensions will not
+   * be used or accepted by validators on the network.
+   *
+   * Once enabled, vote extensions will be created by the application in ExtendVote,
+   * passed to the application for validation in VerifyVoteExtension and given
+   * to the application to use when proposing a block during PrepareProposal.
+   */
+  voteExtensionsEnableHeight: bigint;
+}
 function createBaseConsensusParams(): ConsensusParams {
   return {
     block: undefined,
     evidence: undefined,
     validator: undefined,
     version: undefined,
+    abci: undefined,
   };
 }
 export const ConsensusParams = {
@@ -92,6 +109,9 @@ export const ConsensusParams = {
     }
     if (message.version !== undefined) {
       VersionParams.encode(message.version, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.abci !== undefined) {
+      ABCIParams.encode(message.abci, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -114,6 +134,9 @@ export const ConsensusParams = {
         case 4:
           message.version = VersionParams.decode(reader, reader.uint32());
           break;
+        case 5:
+          message.abci = ABCIParams.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -127,6 +150,7 @@ export const ConsensusParams = {
     if (isSet(object.evidence)) obj.evidence = EvidenceParams.fromJSON(object.evidence);
     if (isSet(object.validator)) obj.validator = ValidatorParams.fromJSON(object.validator);
     if (isSet(object.version)) obj.version = VersionParams.fromJSON(object.version);
+    if (isSet(object.abci)) obj.abci = ABCIParams.fromJSON(object.abci);
     return obj;
   },
   toJSON(message: ConsensusParams): unknown {
@@ -139,6 +163,7 @@ export const ConsensusParams = {
       (obj.validator = message.validator ? ValidatorParams.toJSON(message.validator) : undefined);
     message.version !== undefined &&
       (obj.version = message.version ? VersionParams.toJSON(message.version) : undefined);
+    message.abci !== undefined && (obj.abci = message.abci ? ABCIParams.toJSON(message.abci) : undefined);
     return obj;
   },
   fromPartial<I extends Exact<DeepPartial<ConsensusParams>, I>>(object: I): ConsensusParams {
@@ -154,6 +179,9 @@ export const ConsensusParams = {
     }
     if (object.version !== undefined && object.version !== null) {
       message.version = VersionParams.fromPartial(object.version);
+    }
+    if (object.abci !== undefined && object.abci !== null) {
+      message.abci = ABCIParams.fromPartial(object.abci);
     }
     return message;
   },
@@ -447,6 +475,56 @@ export const HashedParams = {
     }
     if (object.blockMaxGas !== undefined && object.blockMaxGas !== null) {
       message.blockMaxGas = BigInt(object.blockMaxGas.toString());
+    }
+    return message;
+  },
+};
+function createBaseABCIParams(): ABCIParams {
+  return {
+    voteExtensionsEnableHeight: BigInt(0),
+  };
+}
+export const ABCIParams = {
+  typeUrl: "/tendermint.types.ABCIParams",
+  encode(message: ABCIParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.voteExtensionsEnableHeight !== BigInt(0)) {
+      writer.uint32(8).int64(message.voteExtensionsEnableHeight);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): ABCIParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseABCIParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.voteExtensionsEnableHeight = reader.int64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): ABCIParams {
+    const obj = createBaseABCIParams();
+    if (isSet(object.voteExtensionsEnableHeight))
+      obj.voteExtensionsEnableHeight = BigInt(object.voteExtensionsEnableHeight.toString());
+    return obj;
+  },
+  toJSON(message: ABCIParams): unknown {
+    const obj: any = {};
+    message.voteExtensionsEnableHeight !== undefined &&
+      (obj.voteExtensionsEnableHeight = (message.voteExtensionsEnableHeight || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<ABCIParams>, I>>(object: I): ABCIParams {
+    const message = createBaseABCIParams();
+    if (object.voteExtensionsEnableHeight !== undefined && object.voteExtensionsEnableHeight !== null) {
+      message.voteExtensionsEnableHeight = BigInt(object.voteExtensionsEnableHeight.toString());
     }
     return message;
   },

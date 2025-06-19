@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { CapabilityOwners } from "./capability";
-import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, DeepPartial, Exact } from "../../../helpers";
-export const protobufPackage = "cosmos.capability.v1beta1";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, DeepPartial, Exact } from "../../helpers";
+export const protobufPackage = "capability.v1";
 /** GenesisOwners defines the capability owners with their corresponding index. */
 export interface GenesisOwners {
   /** index is the index of the capability owner. */
@@ -27,7 +27,7 @@ function createBaseGenesisOwners(): GenesisOwners {
   };
 }
 export const GenesisOwners = {
-  typeUrl: "/cosmos.capability.v1beta1.GenesisOwners",
+  typeUrl: "/capability.v1.GenesisOwners",
   encode(message: GenesisOwners, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.index !== BigInt(0)) {
       writer.uint32(8).uint64(message.index);
@@ -88,7 +88,7 @@ function createBaseGenesisState(): GenesisState {
   };
 }
 export const GenesisState = {
-  typeUrl: "/cosmos.capability.v1beta1.GenesisState",
+  typeUrl: "/capability.v1.GenesisState",
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.index !== BigInt(0)) {
       writer.uint32(8).uint64(message.index);

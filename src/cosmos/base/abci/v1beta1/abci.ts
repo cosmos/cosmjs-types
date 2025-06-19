@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Any } from "../../../../google/protobuf/any";
 import { Event } from "../../../../tendermint/abci/types";
+import { Block } from "../../../../tendermint/types/block";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes } from "../../../../helpers";
 export const protobufPackage = "cosmos.base.abci.v1beta1";
@@ -153,6 +154,21 @@ export interface SearchTxsResult {
   limit: bigint;
   /** List of txs in current page */
   txs: TxResponse[];
+}
+/** SearchBlocksResult defines a structure for querying blocks pageable */
+export interface SearchBlocksResult {
+  /** Count of all blocks */
+  totalCount: bigint;
+  /** Count of blocks in current page */
+  count: bigint;
+  /** Index of current page, start from 1 */
+  pageNumber: bigint;
+  /** Count of total pages */
+  pageTotal: bigint;
+  /** Max count blocks per page */
+  limit: bigint;
+  /** List of blocks in current page */
+  blocks: Block[];
 }
 function createBaseTxResponse(): TxResponse {
   return {
@@ -959,6 +975,116 @@ export const SearchTxsResult = {
       message.limit = BigInt(object.limit.toString());
     }
     message.txs = object.txs?.map((e) => TxResponse.fromPartial(e)) || [];
+    return message;
+  },
+};
+function createBaseSearchBlocksResult(): SearchBlocksResult {
+  return {
+    totalCount: BigInt(0),
+    count: BigInt(0),
+    pageNumber: BigInt(0),
+    pageTotal: BigInt(0),
+    limit: BigInt(0),
+    blocks: [],
+  };
+}
+export const SearchBlocksResult = {
+  typeUrl: "/cosmos.base.abci.v1beta1.SearchBlocksResult",
+  encode(message: SearchBlocksResult, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.totalCount !== BigInt(0)) {
+      writer.uint32(8).int64(message.totalCount);
+    }
+    if (message.count !== BigInt(0)) {
+      writer.uint32(16).int64(message.count);
+    }
+    if (message.pageNumber !== BigInt(0)) {
+      writer.uint32(24).int64(message.pageNumber);
+    }
+    if (message.pageTotal !== BigInt(0)) {
+      writer.uint32(32).int64(message.pageTotal);
+    }
+    if (message.limit !== BigInt(0)) {
+      writer.uint32(40).int64(message.limit);
+    }
+    for (const v of message.blocks) {
+      Block.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): SearchBlocksResult {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSearchBlocksResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.totalCount = reader.int64();
+          break;
+        case 2:
+          message.count = reader.int64();
+          break;
+        case 3:
+          message.pageNumber = reader.int64();
+          break;
+        case 4:
+          message.pageTotal = reader.int64();
+          break;
+        case 5:
+          message.limit = reader.int64();
+          break;
+        case 6:
+          message.blocks.push(Block.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): SearchBlocksResult {
+    const obj = createBaseSearchBlocksResult();
+    if (isSet(object.totalCount)) obj.totalCount = BigInt(object.totalCount.toString());
+    if (isSet(object.count)) obj.count = BigInt(object.count.toString());
+    if (isSet(object.pageNumber)) obj.pageNumber = BigInt(object.pageNumber.toString());
+    if (isSet(object.pageTotal)) obj.pageTotal = BigInt(object.pageTotal.toString());
+    if (isSet(object.limit)) obj.limit = BigInt(object.limit.toString());
+    if (Array.isArray(object?.blocks)) obj.blocks = object.blocks.map((e: any) => Block.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: SearchBlocksResult): unknown {
+    const obj: any = {};
+    message.totalCount !== undefined && (obj.totalCount = (message.totalCount || BigInt(0)).toString());
+    message.count !== undefined && (obj.count = (message.count || BigInt(0)).toString());
+    message.pageNumber !== undefined && (obj.pageNumber = (message.pageNumber || BigInt(0)).toString());
+    message.pageTotal !== undefined && (obj.pageTotal = (message.pageTotal || BigInt(0)).toString());
+    message.limit !== undefined && (obj.limit = (message.limit || BigInt(0)).toString());
+    if (message.blocks) {
+      obj.blocks = message.blocks.map((e) => (e ? Block.toJSON(e) : undefined));
+    } else {
+      obj.blocks = [];
+    }
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<SearchBlocksResult>, I>>(object: I): SearchBlocksResult {
+    const message = createBaseSearchBlocksResult();
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = BigInt(object.totalCount.toString());
+    }
+    if (object.count !== undefined && object.count !== null) {
+      message.count = BigInt(object.count.toString());
+    }
+    if (object.pageNumber !== undefined && object.pageNumber !== null) {
+      message.pageNumber = BigInt(object.pageNumber.toString());
+    }
+    if (object.pageTotal !== undefined && object.pageTotal !== null) {
+      message.pageTotal = BigInt(object.pageTotal.toString());
+    }
+    if (object.limit !== undefined && object.limit !== null) {
+      message.limit = BigInt(object.limit.toString());
+    }
+    message.blocks = object.blocks?.map((e) => Block.fromPartial(e)) || [];
     return message;
   },
 };

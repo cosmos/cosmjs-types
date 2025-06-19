@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { PageRequest } from "../../../../cosmos/base/query/v1beta1/pagination";
+import { PageRequest, PageResponse } from "../../../../cosmos/base/query/v1beta1/pagination";
 import { PacketId } from "../../../core/channel/v1/channel";
 import { IdentifiedPacketFees } from "./fee";
 import { Coin } from "../../../../cosmos/base/v1beta1/coin";
@@ -18,6 +18,8 @@ export interface QueryIncentivizedPacketsRequest {
 export interface QueryIncentivizedPacketsResponse {
   /** list of identified fees for incentivized packets */
   incentivizedPackets: IdentifiedPacketFees[];
+  /** pagination defines the pagination in the response. */
+  pagination?: PageResponse;
 }
 /** QueryIncentivizedPacketRequest defines the request type for the IncentivizedPacket rpc */
 export interface QueryIncentivizedPacketRequest {
@@ -47,6 +49,8 @@ export interface QueryIncentivizedPacketsForChannelRequest {
 export interface QueryIncentivizedPacketsForChannelResponse {
   /** Map of all incentivized_packets */
   incentivizedPackets: IdentifiedPacketFees[];
+  /** pagination defines the pagination in the response. */
+  pagination?: PageResponse;
 }
 /** QueryTotalRecvFeesRequest defines the request type for the TotalRecvFees rpc */
 export interface QueryTotalRecvFeesRequest {
@@ -113,6 +117,8 @@ export interface QueryFeeEnabledChannelsRequest {
 export interface QueryFeeEnabledChannelsResponse {
   /** list of fee enabled channels */
   feeEnabledChannels: FeeEnabledChannel[];
+  /** pagination defines the pagination in the response. */
+  pagination?: PageResponse;
 }
 /** QueryFeeEnabledChannelRequest defines the request type for the FeeEnabledChannel rpc */
 export interface QueryFeeEnabledChannelRequest {
@@ -195,6 +201,7 @@ export const QueryIncentivizedPacketsRequest = {
 function createBaseQueryIncentivizedPacketsResponse(): QueryIncentivizedPacketsResponse {
   return {
     incentivizedPackets: [],
+    pagination: undefined,
   };
 }
 export const QueryIncentivizedPacketsResponse = {
@@ -205,6 +212,9 @@ export const QueryIncentivizedPacketsResponse = {
   ): BinaryWriter {
     for (const v of message.incentivizedPackets) {
       IdentifiedPacketFees.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -218,6 +228,9 @@ export const QueryIncentivizedPacketsResponse = {
         case 1:
           message.incentivizedPackets.push(IdentifiedPacketFees.decode(reader, reader.uint32()));
           break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -229,6 +242,7 @@ export const QueryIncentivizedPacketsResponse = {
     const obj = createBaseQueryIncentivizedPacketsResponse();
     if (Array.isArray(object?.incentivizedPackets))
       obj.incentivizedPackets = object.incentivizedPackets.map((e: any) => IdentifiedPacketFees.fromJSON(e));
+    if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
   toJSON(message: QueryIncentivizedPacketsResponse): unknown {
@@ -240,6 +254,8 @@ export const QueryIncentivizedPacketsResponse = {
     } else {
       obj.incentivizedPackets = [];
     }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial<I extends Exact<DeepPartial<QueryIncentivizedPacketsResponse>, I>>(
@@ -248,6 +264,9 @@ export const QueryIncentivizedPacketsResponse = {
     const message = createBaseQueryIncentivizedPacketsResponse();
     message.incentivizedPackets =
       object.incentivizedPackets?.map((e) => IdentifiedPacketFees.fromPartial(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    }
     return message;
   },
 };
@@ -463,6 +482,7 @@ export const QueryIncentivizedPacketsForChannelRequest = {
 function createBaseQueryIncentivizedPacketsForChannelResponse(): QueryIncentivizedPacketsForChannelResponse {
   return {
     incentivizedPackets: [],
+    pagination: undefined,
   };
 }
 export const QueryIncentivizedPacketsForChannelResponse = {
@@ -473,6 +493,9 @@ export const QueryIncentivizedPacketsForChannelResponse = {
   ): BinaryWriter {
     for (const v of message.incentivizedPackets) {
       IdentifiedPacketFees.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -486,6 +509,9 @@ export const QueryIncentivizedPacketsForChannelResponse = {
         case 1:
           message.incentivizedPackets.push(IdentifiedPacketFees.decode(reader, reader.uint32()));
           break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -497,6 +523,7 @@ export const QueryIncentivizedPacketsForChannelResponse = {
     const obj = createBaseQueryIncentivizedPacketsForChannelResponse();
     if (Array.isArray(object?.incentivizedPackets))
       obj.incentivizedPackets = object.incentivizedPackets.map((e: any) => IdentifiedPacketFees.fromJSON(e));
+    if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
   toJSON(message: QueryIncentivizedPacketsForChannelResponse): unknown {
@@ -508,6 +535,8 @@ export const QueryIncentivizedPacketsForChannelResponse = {
     } else {
       obj.incentivizedPackets = [];
     }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial<I extends Exact<DeepPartial<QueryIncentivizedPacketsForChannelResponse>, I>>(
@@ -516,6 +545,9 @@ export const QueryIncentivizedPacketsForChannelResponse = {
     const message = createBaseQueryIncentivizedPacketsForChannelResponse();
     message.incentivizedPackets =
       object.incentivizedPackets?.map((e) => IdentifiedPacketFees.fromPartial(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    }
     return message;
   },
 };
@@ -1109,6 +1141,7 @@ export const QueryFeeEnabledChannelsRequest = {
 function createBaseQueryFeeEnabledChannelsResponse(): QueryFeeEnabledChannelsResponse {
   return {
     feeEnabledChannels: [],
+    pagination: undefined,
   };
 }
 export const QueryFeeEnabledChannelsResponse = {
@@ -1119,6 +1152,9 @@ export const QueryFeeEnabledChannelsResponse = {
   ): BinaryWriter {
     for (const v of message.feeEnabledChannels) {
       FeeEnabledChannel.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -1132,6 +1168,9 @@ export const QueryFeeEnabledChannelsResponse = {
         case 1:
           message.feeEnabledChannels.push(FeeEnabledChannel.decode(reader, reader.uint32()));
           break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1143,6 +1182,7 @@ export const QueryFeeEnabledChannelsResponse = {
     const obj = createBaseQueryFeeEnabledChannelsResponse();
     if (Array.isArray(object?.feeEnabledChannels))
       obj.feeEnabledChannels = object.feeEnabledChannels.map((e: any) => FeeEnabledChannel.fromJSON(e));
+    if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
   toJSON(message: QueryFeeEnabledChannelsResponse): unknown {
@@ -1154,6 +1194,8 @@ export const QueryFeeEnabledChannelsResponse = {
     } else {
       obj.feeEnabledChannels = [];
     }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
   fromPartial<I extends Exact<DeepPartial<QueryFeeEnabledChannelsResponse>, I>>(
@@ -1162,6 +1204,9 @@ export const QueryFeeEnabledChannelsResponse = {
     const message = createBaseQueryFeeEnabledChannelsResponse();
     message.feeEnabledChannels =
       object.feeEnabledChannels?.map((e) => FeeEnabledChannel.fromPartial(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    }
     return message;
   },
 };

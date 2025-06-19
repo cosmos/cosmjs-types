@@ -1,25 +1,22 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
-export const protobufPackage = "cosmos.capability.module.v1";
-/** Module is the config object of the capability module. */
+export const protobufPackage = "cosmos.circuit.module.v1";
+/** Module is the config object of the circuit module. */
 export interface Module {
-  /**
-   * seal_keeper defines if keeper.Seal() will run on BeginBlock() to prevent further modules from creating a scoped
-   * keeper. For more details check x/capability/keeper.go.
-   */
-  sealKeeper: boolean;
+  /** authority defines the custom module authority. If not set, defaults to the governance module. */
+  authority: string;
 }
 function createBaseModule(): Module {
   return {
-    sealKeeper: false,
+    authority: "",
   };
 }
 export const Module = {
-  typeUrl: "/cosmos.capability.module.v1.Module",
+  typeUrl: "/cosmos.circuit.module.v1.Module",
   encode(message: Module, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.sealKeeper === true) {
-      writer.uint32(8).bool(message.sealKeeper);
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
     }
     return writer;
   },
@@ -31,7 +28,7 @@ export const Module = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.sealKeeper = reader.bool();
+          message.authority = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -42,17 +39,17 @@ export const Module = {
   },
   fromJSON(object: any): Module {
     const obj = createBaseModule();
-    if (isSet(object.sealKeeper)) obj.sealKeeper = Boolean(object.sealKeeper);
+    if (isSet(object.authority)) obj.authority = String(object.authority);
     return obj;
   },
   toJSON(message: Module): unknown {
     const obj: any = {};
-    message.sealKeeper !== undefined && (obj.sealKeeper = message.sealKeeper);
+    message.authority !== undefined && (obj.authority = message.authority);
     return obj;
   },
   fromPartial<I extends Exact<DeepPartial<Module>, I>>(object: I): Module {
     const message = createBaseModule();
-    message.sealKeeper = object.sealKeeper ?? false;
+    message.authority = object.authority ?? "";
     return message;
   },
 };

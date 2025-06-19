@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { IdentifiedChannel, PacketState } from "./channel";
+import { IdentifiedChannel, PacketState, Params } from "./channel";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
 export const protobufPackage = "ibc.core.channel.v1";
@@ -14,6 +14,7 @@ export interface GenesisState {
   ackSequences: PacketSequence[];
   /** the sequence for the next generated channel identifier */
   nextChannelSequence: bigint;
+  params: Params;
 }
 /**
  * PacketSequence defines the genesis type necessary to retrieve and store
@@ -34,6 +35,7 @@ function createBaseGenesisState(): GenesisState {
     recvSequences: [],
     ackSequences: [],
     nextChannelSequence: BigInt(0),
+    params: Params.fromPartial({}),
   };
 }
 export const GenesisState = {
@@ -62,6 +64,9 @@ export const GenesisState = {
     }
     if (message.nextChannelSequence !== BigInt(0)) {
       writer.uint32(64).uint64(message.nextChannelSequence);
+    }
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -96,6 +101,9 @@ export const GenesisState = {
         case 8:
           message.nextChannelSequence = reader.uint64();
           break;
+        case 9:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -121,6 +129,7 @@ export const GenesisState = {
       obj.ackSequences = object.ackSequences.map((e: any) => PacketSequence.fromJSON(e));
     if (isSet(object.nextChannelSequence))
       obj.nextChannelSequence = BigInt(object.nextChannelSequence.toString());
+    if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
     return obj;
   },
   toJSON(message: GenesisState): unknown {
@@ -162,6 +171,7 @@ export const GenesisState = {
     }
     message.nextChannelSequence !== undefined &&
       (obj.nextChannelSequence = (message.nextChannelSequence || BigInt(0)).toString());
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
   fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
@@ -175,6 +185,9 @@ export const GenesisState = {
     message.ackSequences = object.ackSequences?.map((e) => PacketSequence.fromPartial(e)) || [];
     if (object.nextChannelSequence !== undefined && object.nextChannelSequence !== null) {
       message.nextChannelSequence = BigInt(object.nextChannelSequence.toString());
+    }
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromPartial(object.params);
     }
     return message;
   },

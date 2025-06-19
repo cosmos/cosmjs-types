@@ -1295,7 +1295,7 @@ export interface Query {
   /** DelegationRewards queries the total rewards accrued by a delegation. */
   DelegationRewards(request: QueryDelegationRewardsRequest): Promise<QueryDelegationRewardsResponse>;
   /**
-   * DelegationTotalRewards queries the total rewards accrued by a each
+   * DelegationTotalRewards queries the total rewards accrued by each
    * validator.
    */
   DelegationTotalRewards(

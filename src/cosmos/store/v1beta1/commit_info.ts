@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { Timestamp } from "../../../../google/protobuf/timestamp";
-import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { Timestamp } from "../../../google/protobuf/timestamp";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import {
   isSet,
   fromJsonTimestamp,
@@ -9,8 +9,8 @@ import {
   Exact,
   bytesFromBase64,
   base64FromBytes,
-} from "../../../../helpers";
-export const protobufPackage = "cosmos.base.store.v1beta1";
+} from "../../../helpers";
+export const protobufPackage = "cosmos.store.v1beta1";
 /**
  * CommitInfo defines commit information used by the multi-store when committing
  * a version/height.
@@ -44,7 +44,7 @@ function createBaseCommitInfo(): CommitInfo {
   };
 }
 export const CommitInfo = {
-  typeUrl: "/cosmos.base.store.v1beta1.CommitInfo",
+  typeUrl: "/cosmos.store.v1beta1.CommitInfo",
   encode(message: CommitInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.version !== BigInt(0)) {
       writer.uint32(8).int64(message.version);
@@ -118,7 +118,7 @@ function createBaseStoreInfo(): StoreInfo {
   };
 }
 export const StoreInfo = {
-  typeUrl: "/cosmos.base.store.v1beta1.StoreInfo",
+  typeUrl: "/cosmos.store.v1beta1.StoreInfo",
   encode(message: StoreInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -177,7 +177,7 @@ function createBaseCommitID(): CommitID {
   };
 }
 export const CommitID = {
-  typeUrl: "/cosmos.base.store.v1beta1.CommitID",
+  typeUrl: "/cosmos.store.v1beta1.CommitID",
   encode(message: CommitID, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.version !== BigInt(0)) {
       writer.uint32(8).int64(message.version);

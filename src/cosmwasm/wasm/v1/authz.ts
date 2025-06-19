@@ -1,9 +1,18 @@
 /* eslint-disable */
+import { AccessConfig } from "./types";
 import { Any } from "../../../google/protobuf/any";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { DeepPartial, Exact, isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 export const protobufPackage = "cosmwasm.wasm.v1";
+/**
+ * StoreCodeAuthorization defines authorization for wasm code upload.
+ * Since: wasmd 0.42
+ */
+export interface StoreCodeAuthorization {
+  /** Grants for code upload */
+  grants: CodeGrant[];
+}
 /**
  * ContractExecutionAuthorization defines authorization for wasm execute.
  * Since: wasmd 0.30
@@ -19,6 +28,20 @@ export interface ContractExecutionAuthorization {
 export interface ContractMigrationAuthorization {
   /** Grants for contract migrations */
   grants: ContractGrant[];
+}
+/** CodeGrant a granted permission for a single code */
+export interface CodeGrant {
+  /**
+   * CodeHash is the unique identifier created by wasmvm
+   * Wildcard "*" is used to specify any kind of grant.
+   */
+  codeHash: Uint8Array;
+  /**
+   * InstantiatePermission is the superset access control to apply
+   * on contract creation.
+   * Optional
+   */
+  instantiatePermission?: AccessConfig;
 }
 /**
  * ContractGrant a granted permission for a single contract
@@ -90,6 +113,56 @@ export interface AcceptedMessagesFilter {
   /** Messages is the list of raw contract messages */
   messages: Uint8Array[];
 }
+function createBaseStoreCodeAuthorization(): StoreCodeAuthorization {
+  return {
+    grants: [],
+  };
+}
+export const StoreCodeAuthorization = {
+  typeUrl: "/cosmwasm.wasm.v1.StoreCodeAuthorization",
+  encode(message: StoreCodeAuthorization, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.grants) {
+      CodeGrant.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): StoreCodeAuthorization {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseStoreCodeAuthorization();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.grants.push(CodeGrant.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): StoreCodeAuthorization {
+    const obj = createBaseStoreCodeAuthorization();
+    if (Array.isArray(object?.grants)) obj.grants = object.grants.map((e: any) => CodeGrant.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: StoreCodeAuthorization): unknown {
+    const obj: any = {};
+    if (message.grants) {
+      obj.grants = message.grants.map((e) => (e ? CodeGrant.toJSON(e) : undefined));
+    } else {
+      obj.grants = [];
+    }
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<StoreCodeAuthorization>, I>>(object: I): StoreCodeAuthorization {
+    const message = createBaseStoreCodeAuthorization();
+    message.grants = object.grants?.map((e) => CodeGrant.fromPartial(e)) || [];
+    return message;
+  },
+};
 function createBaseContractExecutionAuthorization(): ContractExecutionAuthorization {
   return {
     grants: [],
@@ -197,6 +270,69 @@ export const ContractMigrationAuthorization = {
   ): ContractMigrationAuthorization {
     const message = createBaseContractMigrationAuthorization();
     message.grants = object.grants?.map((e) => ContractGrant.fromPartial(e)) || [];
+    return message;
+  },
+};
+function createBaseCodeGrant(): CodeGrant {
+  return {
+    codeHash: new Uint8Array(),
+    instantiatePermission: undefined,
+  };
+}
+export const CodeGrant = {
+  typeUrl: "/cosmwasm.wasm.v1.CodeGrant",
+  encode(message: CodeGrant, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.codeHash.length !== 0) {
+      writer.uint32(10).bytes(message.codeHash);
+    }
+    if (message.instantiatePermission !== undefined) {
+      AccessConfig.encode(message.instantiatePermission, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): CodeGrant {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCodeGrant();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.codeHash = reader.bytes();
+          break;
+        case 2:
+          message.instantiatePermission = AccessConfig.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): CodeGrant {
+    const obj = createBaseCodeGrant();
+    if (isSet(object.codeHash)) obj.codeHash = bytesFromBase64(object.codeHash);
+    if (isSet(object.instantiatePermission))
+      obj.instantiatePermission = AccessConfig.fromJSON(object.instantiatePermission);
+    return obj;
+  },
+  toJSON(message: CodeGrant): unknown {
+    const obj: any = {};
+    message.codeHash !== undefined &&
+      (obj.codeHash = base64FromBytes(message.codeHash !== undefined ? message.codeHash : new Uint8Array()));
+    message.instantiatePermission !== undefined &&
+      (obj.instantiatePermission = message.instantiatePermission
+        ? AccessConfig.toJSON(message.instantiatePermission)
+        : undefined);
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<CodeGrant>, I>>(object: I): CodeGrant {
+    const message = createBaseCodeGrant();
+    message.codeHash = object.codeHash ?? new Uint8Array();
+    if (object.instantiatePermission !== undefined && object.instantiatePermission !== null) {
+      message.instantiatePermission = AccessConfig.fromPartial(object.instantiatePermission);
+    }
     return message;
   },
 };
