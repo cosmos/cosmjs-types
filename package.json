@@ -25,9 +25,10 @@
     "tendermint/",
     "/binary.*",
     "/helpers.*",
+    "/index.*",
+    "/json-safe.*",
     "/utf8.*",
     "/varint.*",
-    "/index.*",
     "*.md",
     "!wasmd-*/**/*.md",
     "!cosmos-sdk-*/**/*.md"

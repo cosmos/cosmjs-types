@@ -15,9 +15,12 @@ node_modules/
 /google/
 /ibc/
 /tendermint/
+
+# Helper files from Telescope
 /binary.*
 /helpers.*
 /index.*
+/json-safe.*
 /utf8.*
 /varint.*
 
