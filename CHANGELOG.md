@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.10.1] - 2025-07-29
+
+- Add missing json-safe.\* files to package
+
 ## [0.10.0] - 2025-07-29
 
 - Upgrade to Telescope 1.12.20
@@ -109,7 +113,8 @@ No changelog, sorry. Maybe the diff helps.
 
 - wasmd 0.18 types (cosmwasm/wasm/v1/\*)
 
-[unreleased]: https://github.com/confio/cosmjs-types/compare/v0.10.0...HEAD
+[unreleased]: https://github.com/confio/cosmjs-types/compare/v0.10.1...HEAD
+[0.10.1]: https://github.com/confio/cosmjs-types/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/confio/cosmjs-types/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/confio/cosmjs-types/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/confio/cosmjs-types/compare/v0.7.2...v0.8.0
