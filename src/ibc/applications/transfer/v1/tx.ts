@@ -3,6 +3,7 @@ import { Coin } from "../../../../cosmos/base/v1beta1/coin";
 import { Height, Params } from "../../../core/client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact, Rpc } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.applications.transfer.v1";
 /**
  * MsgTransfer defines a msg to transfer fungible tokens (i.e Coins) between
@@ -145,7 +146,7 @@ export const MsgTransfer = {
     if (isSet(object.memo)) obj.memo = String(object.memo);
     return obj;
   },
-  toJSON(message: MsgTransfer): unknown {
+  toJSON(message: MsgTransfer): JsonSafe<MsgTransfer> {
     const obj: any = {};
     message.sourcePort !== undefined && (obj.sourcePort = message.sourcePort);
     message.sourceChannel !== undefined && (obj.sourceChannel = message.sourceChannel);
@@ -213,7 +214,7 @@ export const MsgTransferResponse = {
     if (isSet(object.sequence)) obj.sequence = BigInt(object.sequence.toString());
     return obj;
   },
-  toJSON(message: MsgTransferResponse): unknown {
+  toJSON(message: MsgTransferResponse): JsonSafe<MsgTransferResponse> {
     const obj: any = {};
     message.sequence !== undefined && (obj.sequence = (message.sequence || BigInt(0)).toString());
     return obj;
@@ -269,7 +270,7 @@ export const MsgUpdateParams = {
     if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: MsgUpdateParams): unknown {
+  toJSON(message: MsgUpdateParams): JsonSafe<MsgUpdateParams> {
     const obj: any = {};
     message.signer !== undefined && (obj.signer = message.signer);
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
@@ -310,7 +311,7 @@ export const MsgUpdateParamsResponse = {
     const obj = createBaseMsgUpdateParamsResponse();
     return obj;
   },
-  toJSON(_: MsgUpdateParamsResponse): unknown {
+  toJSON(_: MsgUpdateParamsResponse): JsonSafe<MsgUpdateParamsResponse> {
     const obj: any = {};
     return obj;
   },

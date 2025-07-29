@@ -3,6 +3,7 @@ import { Coin } from "../../base/v1beta1/coin";
 import { Input, Output, Params, SendEnabled } from "./bank";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact, Rpc } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.bank.v1beta1";
 /** MsgSend represents a message to send coins from one account to another. */
 export interface MsgSend {
@@ -124,7 +125,7 @@ export const MsgSend = {
     if (Array.isArray(object?.amount)) obj.amount = object.amount.map((e: any) => Coin.fromJSON(e));
     return obj;
   },
-  toJSON(message: MsgSend): unknown {
+  toJSON(message: MsgSend): JsonSafe<MsgSend> {
     const obj: any = {};
     message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
     message.toAddress !== undefined && (obj.toAddress = message.toAddress);
@@ -169,7 +170,7 @@ export const MsgSendResponse = {
     const obj = createBaseMsgSendResponse();
     return obj;
   },
-  toJSON(_: MsgSendResponse): unknown {
+  toJSON(_: MsgSendResponse): JsonSafe<MsgSendResponse> {
     const obj: any = {};
     return obj;
   },
@@ -221,7 +222,7 @@ export const MsgMultiSend = {
     if (Array.isArray(object?.outputs)) obj.outputs = object.outputs.map((e: any) => Output.fromJSON(e));
     return obj;
   },
-  toJSON(message: MsgMultiSend): unknown {
+  toJSON(message: MsgMultiSend): JsonSafe<MsgMultiSend> {
     const obj: any = {};
     if (message.inputs) {
       obj.inputs = message.inputs.map((e) => (e ? Input.toJSON(e) : undefined));
@@ -268,7 +269,7 @@ export const MsgMultiSendResponse = {
     const obj = createBaseMsgMultiSendResponse();
     return obj;
   },
-  toJSON(_: MsgMultiSendResponse): unknown {
+  toJSON(_: MsgMultiSendResponse): JsonSafe<MsgMultiSendResponse> {
     const obj: any = {};
     return obj;
   },
@@ -320,7 +321,7 @@ export const MsgUpdateParams = {
     if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: MsgUpdateParams): unknown {
+  toJSON(message: MsgUpdateParams): JsonSafe<MsgUpdateParams> {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
@@ -361,7 +362,7 @@ export const MsgUpdateParamsResponse = {
     const obj = createBaseMsgUpdateParamsResponse();
     return obj;
   },
-  toJSON(_: MsgUpdateParamsResponse): unknown {
+  toJSON(_: MsgUpdateParamsResponse): JsonSafe<MsgUpdateParamsResponse> {
     const obj: any = {};
     return obj;
   },
@@ -423,7 +424,7 @@ export const MsgSetSendEnabled = {
       obj.useDefaultFor = object.useDefaultFor.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: MsgSetSendEnabled): unknown {
+  toJSON(message: MsgSetSendEnabled): JsonSafe<MsgSetSendEnabled> {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
     if (message.sendEnabled) {
@@ -472,7 +473,7 @@ export const MsgSetSendEnabledResponse = {
     const obj = createBaseMsgSetSendEnabledResponse();
     return obj;
   },
-  toJSON(_: MsgSetSendEnabledResponse): unknown {
+  toJSON(_: MsgSetSendEnabledResponse): JsonSafe<MsgSetSendEnabledResponse> {
     const obj: any = {};
     return obj;
   },

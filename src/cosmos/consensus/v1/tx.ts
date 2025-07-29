@@ -2,6 +2,7 @@
 import { BlockParams, EvidenceParams, ValidatorParams, ABCIParams } from "../../../tendermint/types/params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact, Rpc } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.consensus.v1";
 /** MsgUpdateParams is the Msg/UpdateParams request type. */
 export interface MsgUpdateParams {
@@ -92,7 +93,7 @@ export const MsgUpdateParams = {
     if (isSet(object.abci)) obj.abci = ABCIParams.fromJSON(object.abci);
     return obj;
   },
-  toJSON(message: MsgUpdateParams): unknown {
+  toJSON(message: MsgUpdateParams): JsonSafe<MsgUpdateParams> {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
     message.block !== undefined &&
@@ -148,7 +149,7 @@ export const MsgUpdateParamsResponse = {
     const obj = createBaseMsgUpdateParamsResponse();
     return obj;
   },
-  toJSON(_: MsgUpdateParamsResponse): unknown {
+  toJSON(_: MsgUpdateParamsResponse): JsonSafe<MsgUpdateParamsResponse> {
     const obj: any = {};
     return obj;
   },

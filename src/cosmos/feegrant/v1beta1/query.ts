@@ -3,6 +3,7 @@ import { PageRequest, PageResponse } from "../../base/query/v1beta1/pagination";
 import { Grant } from "./feegrant";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact, Rpc } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.feegrant.v1beta1";
 /** QueryAllowanceRequest is the request type for the Query/Allowance RPC method. */
 export interface QueryAllowanceRequest {
@@ -93,7 +94,7 @@ export const QueryAllowanceRequest = {
     if (isSet(object.grantee)) obj.grantee = String(object.grantee);
     return obj;
   },
-  toJSON(message: QueryAllowanceRequest): unknown {
+  toJSON(message: QueryAllowanceRequest): JsonSafe<QueryAllowanceRequest> {
     const obj: any = {};
     message.granter !== undefined && (obj.granter = message.granter);
     message.grantee !== undefined && (obj.grantee = message.grantee);
@@ -141,7 +142,7 @@ export const QueryAllowanceResponse = {
     if (isSet(object.allowance)) obj.allowance = Grant.fromJSON(object.allowance);
     return obj;
   },
-  toJSON(message: QueryAllowanceResponse): unknown {
+  toJSON(message: QueryAllowanceResponse): JsonSafe<QueryAllowanceResponse> {
     const obj: any = {};
     message.allowance !== undefined &&
       (obj.allowance = message.allowance ? Grant.toJSON(message.allowance) : undefined);
@@ -198,7 +199,7 @@ export const QueryAllowancesRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryAllowancesRequest): unknown {
+  toJSON(message: QueryAllowancesRequest): JsonSafe<QueryAllowancesRequest> {
     const obj: any = {};
     message.grantee !== undefined && (obj.grantee = message.grantee);
     message.pagination !== undefined &&
@@ -258,7 +259,7 @@ export const QueryAllowancesResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryAllowancesResponse): unknown {
+  toJSON(message: QueryAllowancesResponse): JsonSafe<QueryAllowancesResponse> {
     const obj: any = {};
     if (message.allowances) {
       obj.allowances = message.allowances.map((e) => (e ? Grant.toJSON(e) : undefined));
@@ -324,7 +325,7 @@ export const QueryAllowancesByGranterRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryAllowancesByGranterRequest): unknown {
+  toJSON(message: QueryAllowancesByGranterRequest): JsonSafe<QueryAllowancesByGranterRequest> {
     const obj: any = {};
     message.granter !== undefined && (obj.granter = message.granter);
     message.pagination !== undefined &&
@@ -389,7 +390,7 @@ export const QueryAllowancesByGranterResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryAllowancesByGranterResponse): unknown {
+  toJSON(message: QueryAllowancesByGranterResponse): JsonSafe<QueryAllowancesByGranterResponse> {
     const obj: any = {};
     if (message.allowances) {
       obj.allowances = message.allowances.map((e) => (e ? Grant.toJSON(e) : undefined));

@@ -14,6 +14,7 @@ import {
   fromTimestamp,
   Rpc,
 } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "cosmos.orm.query.v1alpha1";
 /** GetRequest is the Query/Get request type. */
 export interface GetRequest {
@@ -163,7 +164,7 @@ export const GetRequest = {
     if (Array.isArray(object?.values)) obj.values = object.values.map((e: any) => IndexValue.fromJSON(e));
     return obj;
   },
-  toJSON(message: GetRequest): unknown {
+  toJSON(message: GetRequest): JsonSafe<GetRequest> {
     const obj: any = {};
     message.messageName !== undefined && (obj.messageName = message.messageName);
     message.index !== undefined && (obj.index = message.index);
@@ -217,7 +218,7 @@ export const GetResponse = {
     if (isSet(object.result)) obj.result = Any.fromJSON(object.result);
     return obj;
   },
-  toJSON(message: GetResponse): unknown {
+  toJSON(message: GetResponse): JsonSafe<GetResponse> {
     const obj: any = {};
     message.result !== undefined && (obj.result = message.result ? Any.toJSON(message.result) : undefined);
     return obj;
@@ -297,7 +298,7 @@ export const ListRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: ListRequest): unknown {
+  toJSON(message: ListRequest): JsonSafe<ListRequest> {
     const obj: any = {};
     message.messageName !== undefined && (obj.messageName = message.messageName);
     message.index !== undefined && (obj.index = message.index);
@@ -360,7 +361,7 @@ export const ListRequest_Prefix = {
     if (Array.isArray(object?.values)) obj.values = object.values.map((e: any) => IndexValue.fromJSON(e));
     return obj;
   },
-  toJSON(message: ListRequest_Prefix): unknown {
+  toJSON(message: ListRequest_Prefix): JsonSafe<ListRequest_Prefix> {
     const obj: any = {};
     if (message.values) {
       obj.values = message.values.map((e) => (e ? IndexValue.toJSON(e) : undefined));
@@ -418,7 +419,7 @@ export const ListRequest_Range = {
     if (Array.isArray(object?.end)) obj.end = object.end.map((e: any) => IndexValue.fromJSON(e));
     return obj;
   },
-  toJSON(message: ListRequest_Range): unknown {
+  toJSON(message: ListRequest_Range): JsonSafe<ListRequest_Range> {
     const obj: any = {};
     if (message.start) {
       obj.start = message.start.map((e) => (e ? IndexValue.toJSON(e) : undefined));
@@ -482,7 +483,7 @@ export const ListResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: ListResponse): unknown {
+  toJSON(message: ListResponse): JsonSafe<ListResponse> {
     const obj: any = {};
     if (message.results) {
       obj.results = message.results.map((e) => (e ? Any.toJSON(e) : undefined));
@@ -593,7 +594,7 @@ export const IndexValue = {
     if (isSet(object.duration)) obj.duration = Duration.fromJSON(object.duration);
     return obj;
   },
-  toJSON(message: IndexValue): unknown {
+  toJSON(message: IndexValue): JsonSafe<IndexValue> {
     const obj: any = {};
     if (message.uint !== undefined) {
       obj.uint = message.uint.toString();

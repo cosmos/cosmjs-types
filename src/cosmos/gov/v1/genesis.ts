@@ -2,6 +2,7 @@
 import { Deposit, Vote, Proposal, DepositParams, VotingParams, TallyParams, Params } from "./gov";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.gov.v1";
 /** GenesisState defines the gov module's genesis state. */
 export interface GenesisState {
@@ -148,7 +149,7 @@ export const GenesisState = {
     if (isSet(object.constitution)) obj.constitution = String(object.constitution);
     return obj;
   },
-  toJSON(message: GenesisState): unknown {
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
     const obj: any = {};
     message.startingProposalId !== undefined &&
       (obj.startingProposalId = (message.startingProposalId || BigInt(0)).toString());

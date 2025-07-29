@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { JsonSafe } from "../../../../json-safe";
 import { DeepPartial, Exact } from "../../../../helpers";
 export const protobufPackage = "cosmos.evidence.module.v1";
 /** Module is the config object of the evidence module. */
@@ -30,7 +31,7 @@ export const Module = {
     const obj = createBaseModule();
     return obj;
   },
-  toJSON(_: Module): unknown {
+  toJSON(_: Module): JsonSafe<Module> {
     const obj: any = {};
     return obj;
   },

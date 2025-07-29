@@ -2,6 +2,7 @@
 import { CapabilityOwners } from "./capability";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, DeepPartial, Exact } from "../../helpers";
+import { JsonSafe } from "../../json-safe";
 export const protobufPackage = "capability.v1";
 /** GenesisOwners defines the capability owners with their corresponding index. */
 export interface GenesisOwners {
@@ -63,7 +64,7 @@ export const GenesisOwners = {
     if (isSet(object.indexOwners)) obj.indexOwners = CapabilityOwners.fromJSON(object.indexOwners);
     return obj;
   },
-  toJSON(message: GenesisOwners): unknown {
+  toJSON(message: GenesisOwners): JsonSafe<GenesisOwners> {
     const obj: any = {};
     message.index !== undefined && (obj.index = (message.index || BigInt(0)).toString());
     message.indexOwners !== undefined &&
@@ -124,7 +125,7 @@ export const GenesisState = {
     if (Array.isArray(object?.owners)) obj.owners = object.owners.map((e: any) => GenesisOwners.fromJSON(e));
     return obj;
   },
-  toJSON(message: GenesisState): unknown {
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
     const obj: any = {};
     message.index !== undefined && (obj.index = (message.index || BigInt(0)).toString());
     if (message.owners) {

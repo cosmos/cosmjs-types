@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "cosmos.distribution.module.v1";
 /** Module is the config object of the distribution module. */
 export interface Module {
@@ -51,7 +52,7 @@ export const Module = {
     if (isSet(object.authority)) obj.authority = String(object.authority);
     return obj;
   },
-  toJSON(message: Module): unknown {
+  toJSON(message: Module): JsonSafe<Module> {
     const obj: any = {};
     message.feeCollectorName !== undefined && (obj.feeCollectorName = message.feeCollectorName);
     message.authority !== undefined && (obj.authority = message.authority);

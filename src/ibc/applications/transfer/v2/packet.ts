@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.applications.transfer.v2";
 /**
  * FungibleTokenPacketData defines a struct for the packet payload
@@ -86,7 +87,7 @@ export const FungibleTokenPacketData = {
     if (isSet(object.memo)) obj.memo = String(object.memo);
     return obj;
   },
-  toJSON(message: FungibleTokenPacketData): unknown {
+  toJSON(message: FungibleTokenPacketData): JsonSafe<FungibleTokenPacketData> {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
     message.amount !== undefined && (obj.amount = message.amount);

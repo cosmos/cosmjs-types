@@ -4,6 +4,7 @@ import { Timestamp } from "../../google/protobuf/timestamp";
 import { Validator } from "./validator";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, DeepPartial, Exact, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { JsonSafe } from "../../json-safe";
 export const protobufPackage = "tendermint.types";
 export interface Evidence {
   duplicateVoteEvidence?: DuplicateVoteEvidence;
@@ -73,7 +74,7 @@ export const Evidence = {
       obj.lightClientAttackEvidence = LightClientAttackEvidence.fromJSON(object.lightClientAttackEvidence);
     return obj;
   },
-  toJSON(message: Evidence): unknown {
+  toJSON(message: Evidence): JsonSafe<Evidence> {
     const obj: any = {};
     message.duplicateVoteEvidence !== undefined &&
       (obj.duplicateVoteEvidence = message.duplicateVoteEvidence
@@ -165,7 +166,7 @@ export const DuplicateVoteEvidence = {
     if (isSet(object.timestamp)) obj.timestamp = fromJsonTimestamp(object.timestamp);
     return obj;
   },
-  toJSON(message: DuplicateVoteEvidence): unknown {
+  toJSON(message: DuplicateVoteEvidence): JsonSafe<DuplicateVoteEvidence> {
     const obj: any = {};
     message.voteA !== undefined && (obj.voteA = message.voteA ? Vote.toJSON(message.voteA) : undefined);
     message.voteB !== undefined && (obj.voteB = message.voteB ? Vote.toJSON(message.voteB) : undefined);
@@ -264,7 +265,7 @@ export const LightClientAttackEvidence = {
     if (isSet(object.timestamp)) obj.timestamp = fromJsonTimestamp(object.timestamp);
     return obj;
   },
-  toJSON(message: LightClientAttackEvidence): unknown {
+  toJSON(message: LightClientAttackEvidence): JsonSafe<LightClientAttackEvidence> {
     const obj: any = {};
     message.conflictingBlock !== undefined &&
       (obj.conflictingBlock = message.conflictingBlock
@@ -336,7 +337,7 @@ export const EvidenceList = {
     if (Array.isArray(object?.evidence)) obj.evidence = object.evidence.map((e: any) => Evidence.fromJSON(e));
     return obj;
   },
-  toJSON(message: EvidenceList): unknown {
+  toJSON(message: EvidenceList): JsonSafe<EvidenceList> {
     const obj: any = {};
     if (message.evidence) {
       obj.evidence = message.evidence.map((e) => (e ? Evidence.toJSON(e) : undefined));

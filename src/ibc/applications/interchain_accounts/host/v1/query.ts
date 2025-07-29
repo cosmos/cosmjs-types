@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Params } from "./host";
 import { BinaryReader, BinaryWriter } from "../../../../../binary";
+import { JsonSafe } from "../../../../../json-safe";
 import { DeepPartial, Exact, isSet, Rpc } from "../../../../../helpers";
 export const protobufPackage = "ibc.applications.interchain_accounts.host.v1";
 /** QueryParamsRequest is the request type for the Query/Params RPC method. */
@@ -36,7 +37,7 @@ export const QueryParamsRequest = {
     const obj = createBaseQueryParamsRequest();
     return obj;
   },
-  toJSON(_: QueryParamsRequest): unknown {
+  toJSON(_: QueryParamsRequest): JsonSafe<QueryParamsRequest> {
     const obj: any = {};
     return obj;
   },
@@ -80,7 +81,7 @@ export const QueryParamsResponse = {
     if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: QueryParamsResponse): unknown {
+  toJSON(message: QueryParamsResponse): JsonSafe<QueryParamsResponse> {
     const obj: any = {};
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;

@@ -2,6 +2,7 @@
 import { Params, QueryRequest } from "./host";
 import { BinaryReader, BinaryWriter } from "../../../../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes, Rpc } from "../../../../../helpers";
+import { JsonSafe } from "../../../../../json-safe";
 export const protobufPackage = "ibc.applications.interchain_accounts.host.v1";
 /** MsgUpdateParams defines the payload for Msg/UpdateParams */
 export interface MsgUpdateParams {
@@ -73,7 +74,7 @@ export const MsgUpdateParams = {
     if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: MsgUpdateParams): unknown {
+  toJSON(message: MsgUpdateParams): JsonSafe<MsgUpdateParams> {
     const obj: any = {};
     message.signer !== undefined && (obj.signer = message.signer);
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
@@ -114,7 +115,7 @@ export const MsgUpdateParamsResponse = {
     const obj = createBaseMsgUpdateParamsResponse();
     return obj;
   },
-  toJSON(_: MsgUpdateParamsResponse): unknown {
+  toJSON(_: MsgUpdateParamsResponse): JsonSafe<MsgUpdateParamsResponse> {
     const obj: any = {};
     return obj;
   },
@@ -167,7 +168,7 @@ export const MsgModuleQuerySafe = {
       obj.requests = object.requests.map((e: any) => QueryRequest.fromJSON(e));
     return obj;
   },
-  toJSON(message: MsgModuleQuerySafe): unknown {
+  toJSON(message: MsgModuleQuerySafe): JsonSafe<MsgModuleQuerySafe> {
     const obj: any = {};
     message.signer !== undefined && (obj.signer = message.signer);
     if (message.requests) {
@@ -228,7 +229,7 @@ export const MsgModuleQuerySafeResponse = {
       obj.responses = object.responses.map((e: any) => bytesFromBase64(e));
     return obj;
   },
-  toJSON(message: MsgModuleQuerySafeResponse): unknown {
+  toJSON(message: MsgModuleQuerySafeResponse): JsonSafe<MsgModuleQuerySafeResponse> {
     const obj: any = {};
     message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
     if (message.responses) {

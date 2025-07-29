@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.mint.v1beta1";
 /** Minter represents the minting state. */
 export interface Minter {
@@ -67,7 +68,7 @@ export const Minter = {
     if (isSet(object.annualProvisions)) obj.annualProvisions = String(object.annualProvisions);
     return obj;
   },
-  toJSON(message: Minter): unknown {
+  toJSON(message: Minter): JsonSafe<Minter> {
     const obj: any = {};
     message.inflation !== undefined && (obj.inflation = message.inflation);
     message.annualProvisions !== undefined && (obj.annualProvisions = message.annualProvisions);
@@ -155,7 +156,7 @@ export const Params = {
     if (isSet(object.blocksPerYear)) obj.blocksPerYear = BigInt(object.blocksPerYear.toString());
     return obj;
   },
-  toJSON(message: Params): unknown {
+  toJSON(message: Params): JsonSafe<Params> {
     const obj: any = {};
     message.mintDenom !== undefined && (obj.mintDenom = message.mintDenom);
     message.inflationRateChange !== undefined && (obj.inflationRateChange = message.inflationRateChange);

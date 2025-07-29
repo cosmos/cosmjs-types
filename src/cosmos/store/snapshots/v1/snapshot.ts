@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "cosmos.store.snapshots.v1";
 /** Snapshot contains Tendermint state sync snapshot info. */
 export interface Snapshot {
@@ -131,7 +132,7 @@ export const Snapshot = {
     if (isSet(object.metadata)) obj.metadata = Metadata.fromJSON(object.metadata);
     return obj;
   },
-  toJSON(message: Snapshot): unknown {
+  toJSON(message: Snapshot): JsonSafe<Snapshot> {
     const obj: any = {};
     message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
     message.format !== undefined && (obj.format = Math.round(message.format));
@@ -192,7 +193,7 @@ export const Metadata = {
       obj.chunkHashes = object.chunkHashes.map((e: any) => bytesFromBase64(e));
     return obj;
   },
-  toJSON(message: Metadata): unknown {
+  toJSON(message: Metadata): JsonSafe<Metadata> {
     const obj: any = {};
     if (message.chunkHashes) {
       obj.chunkHashes = message.chunkHashes.map((e) =>
@@ -269,7 +270,7 @@ export const SnapshotItem = {
       obj.extensionPayload = SnapshotExtensionPayload.fromJSON(object.extensionPayload);
     return obj;
   },
-  toJSON(message: SnapshotItem): unknown {
+  toJSON(message: SnapshotItem): JsonSafe<SnapshotItem> {
     const obj: any = {};
     message.store !== undefined &&
       (obj.store = message.store ? SnapshotStoreItem.toJSON(message.store) : undefined);
@@ -335,7 +336,7 @@ export const SnapshotStoreItem = {
     if (isSet(object.name)) obj.name = String(object.name);
     return obj;
   },
-  toJSON(message: SnapshotStoreItem): unknown {
+  toJSON(message: SnapshotStoreItem): JsonSafe<SnapshotStoreItem> {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     return obj;
@@ -405,7 +406,7 @@ export const SnapshotIAVLItem = {
     if (isSet(object.height)) obj.height = Number(object.height);
     return obj;
   },
-  toJSON(message: SnapshotIAVLItem): unknown {
+  toJSON(message: SnapshotIAVLItem): JsonSafe<SnapshotIAVLItem> {
     const obj: any = {};
     message.key !== undefined &&
       (obj.key = base64FromBytes(message.key !== undefined ? message.key : new Uint8Array()));
@@ -469,7 +470,7 @@ export const SnapshotExtensionMeta = {
     if (isSet(object.format)) obj.format = Number(object.format);
     return obj;
   },
-  toJSON(message: SnapshotExtensionMeta): unknown {
+  toJSON(message: SnapshotExtensionMeta): JsonSafe<SnapshotExtensionMeta> {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     message.format !== undefined && (obj.format = Math.round(message.format));
@@ -517,7 +518,7 @@ export const SnapshotExtensionPayload = {
     if (isSet(object.payload)) obj.payload = bytesFromBase64(object.payload);
     return obj;
   },
-  toJSON(message: SnapshotExtensionPayload): unknown {
+  toJSON(message: SnapshotExtensionPayload): JsonSafe<SnapshotExtensionPayload> {
     const obj: any = {};
     message.payload !== undefined &&
       (obj.payload = base64FromBytes(message.payload !== undefined ? message.payload : new Uint8Array()));

@@ -4,6 +4,7 @@ import { Duration } from "../../../google/protobuf/duration";
 import { Any } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.group.v1";
 /** VoteOption enumerates the valid vote options for a given proposal. */
 export enum VoteOption {
@@ -472,7 +473,7 @@ export const Member = {
     if (isSet(object.addedAt)) obj.addedAt = fromJsonTimestamp(object.addedAt);
     return obj;
   },
-  toJSON(message: Member): unknown {
+  toJSON(message: Member): JsonSafe<Member> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.weight !== undefined && (obj.weight = message.weight);
@@ -542,7 +543,7 @@ export const MemberRequest = {
     if (isSet(object.metadata)) obj.metadata = String(object.metadata);
     return obj;
   },
-  toJSON(message: MemberRequest): unknown {
+  toJSON(message: MemberRequest): JsonSafe<MemberRequest> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.weight !== undefined && (obj.weight = message.weight);
@@ -600,7 +601,7 @@ export const ThresholdDecisionPolicy = {
     if (isSet(object.windows)) obj.windows = DecisionPolicyWindows.fromJSON(object.windows);
     return obj;
   },
-  toJSON(message: ThresholdDecisionPolicy): unknown {
+  toJSON(message: ThresholdDecisionPolicy): JsonSafe<ThresholdDecisionPolicy> {
     const obj: any = {};
     message.threshold !== undefined && (obj.threshold = message.threshold);
     message.windows !== undefined &&
@@ -659,7 +660,7 @@ export const PercentageDecisionPolicy = {
     if (isSet(object.windows)) obj.windows = DecisionPolicyWindows.fromJSON(object.windows);
     return obj;
   },
-  toJSON(message: PercentageDecisionPolicy): unknown {
+  toJSON(message: PercentageDecisionPolicy): JsonSafe<PercentageDecisionPolicy> {
     const obj: any = {};
     message.percentage !== undefined && (obj.percentage = message.percentage);
     message.windows !== undefined &&
@@ -721,7 +722,7 @@ export const DecisionPolicyWindows = {
       obj.minExecutionPeriod = Duration.fromJSON(object.minExecutionPeriod);
     return obj;
   },
-  toJSON(message: DecisionPolicyWindows): unknown {
+  toJSON(message: DecisionPolicyWindows): JsonSafe<DecisionPolicyWindows> {
     const obj: any = {};
     message.votingPeriod !== undefined &&
       (obj.votingPeriod = message.votingPeriod ? Duration.toJSON(message.votingPeriod) : undefined);
@@ -817,7 +818,7 @@ export const GroupInfo = {
     if (isSet(object.createdAt)) obj.createdAt = fromJsonTimestamp(object.createdAt);
     return obj;
   },
-  toJSON(message: GroupInfo): unknown {
+  toJSON(message: GroupInfo): JsonSafe<GroupInfo> {
     const obj: any = {};
     message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     message.admin !== undefined && (obj.admin = message.admin);
@@ -887,7 +888,7 @@ export const GroupMember = {
     if (isSet(object.member)) obj.member = Member.fromJSON(object.member);
     return obj;
   },
-  toJSON(message: GroupMember): unknown {
+  toJSON(message: GroupMember): JsonSafe<GroupMember> {
     const obj: any = {};
     message.groupId !== undefined && (obj.groupId = (message.groupId || BigInt(0)).toString());
     message.member !== undefined && (obj.member = message.member ? Member.toJSON(message.member) : undefined);
@@ -987,7 +988,7 @@ export const GroupPolicyInfo = {
     if (isSet(object.createdAt)) obj.createdAt = fromJsonTimestamp(object.createdAt);
     return obj;
   },
-  toJSON(message: GroupPolicyInfo): unknown {
+  toJSON(message: GroupPolicyInfo): JsonSafe<GroupPolicyInfo> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.groupId !== undefined && (obj.groupId = (message.groupId || BigInt(0)).toString());
@@ -1160,7 +1161,7 @@ export const Proposal = {
     if (isSet(object.summary)) obj.summary = String(object.summary);
     return obj;
   },
-  toJSON(message: Proposal): unknown {
+  toJSON(message: Proposal): JsonSafe<Proposal> {
     const obj: any = {};
     message.id !== undefined && (obj.id = (message.id || BigInt(0)).toString());
     message.groupPolicyAddress !== undefined && (obj.groupPolicyAddress = message.groupPolicyAddress);
@@ -1282,7 +1283,7 @@ export const TallyResult = {
     if (isSet(object.noWithVetoCount)) obj.noWithVetoCount = String(object.noWithVetoCount);
     return obj;
   },
-  toJSON(message: TallyResult): unknown {
+  toJSON(message: TallyResult): JsonSafe<TallyResult> {
     const obj: any = {};
     message.yesCount !== undefined && (obj.yesCount = message.yesCount);
     message.abstainCount !== undefined && (obj.abstainCount = message.abstainCount);
@@ -1366,7 +1367,7 @@ export const Vote = {
     if (isSet(object.submitTime)) obj.submitTime = fromJsonTimestamp(object.submitTime);
     return obj;
   },
-  toJSON(message: Vote): unknown {
+  toJSON(message: Vote): JsonSafe<Vote> {
     const obj: any = {};
     message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
     message.voter !== undefined && (obj.voter = message.voter);

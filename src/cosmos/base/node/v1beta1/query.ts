@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Timestamp } from "../../../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { JsonSafe } from "../../../../json-safe";
 import {
   DeepPartial,
   Exact,
@@ -62,7 +63,7 @@ export const ConfigRequest = {
     const obj = createBaseConfigRequest();
     return obj;
   },
-  toJSON(_: ConfigRequest): unknown {
+  toJSON(_: ConfigRequest): JsonSafe<ConfigRequest> {
     const obj: any = {};
     return obj;
   },
@@ -130,7 +131,7 @@ export const ConfigResponse = {
     if (isSet(object.haltHeight)) obj.haltHeight = BigInt(object.haltHeight.toString());
     return obj;
   },
-  toJSON(message: ConfigResponse): unknown {
+  toJSON(message: ConfigResponse): JsonSafe<ConfigResponse> {
     const obj: any = {};
     message.minimumGasPrice !== undefined && (obj.minimumGasPrice = message.minimumGasPrice);
     message.pruningKeepRecent !== undefined && (obj.pruningKeepRecent = message.pruningKeepRecent);
@@ -175,7 +176,7 @@ export const StatusRequest = {
     const obj = createBaseStatusRequest();
     return obj;
   },
-  toJSON(_: StatusRequest): unknown {
+  toJSON(_: StatusRequest): JsonSafe<StatusRequest> {
     const obj: any = {};
     return obj;
   },
@@ -252,7 +253,7 @@ export const StatusResponse = {
     if (isSet(object.validatorHash)) obj.validatorHash = bytesFromBase64(object.validatorHash);
     return obj;
   },
-  toJSON(message: StatusResponse): unknown {
+  toJSON(message: StatusResponse): JsonSafe<StatusResponse> {
     const obj: any = {};
     message.earliestStoreHeight !== undefined &&
       (obj.earliestStoreHeight = (message.earliestStoreHeight || BigInt(0)).toString());

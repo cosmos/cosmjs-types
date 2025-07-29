@@ -2,6 +2,7 @@
 import { PageRequest, PageResponse } from "../../../../cosmos/base/query/v1beta1/pagination";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes, Rpc } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.lightclients.wasm.v1";
 /** QueryChecksumsRequest is the request type for the Query/Checksums RPC method. */
 export interface QueryChecksumsRequest {
@@ -59,7 +60,7 @@ export const QueryChecksumsRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryChecksumsRequest): unknown {
+  toJSON(message: QueryChecksumsRequest): JsonSafe<QueryChecksumsRequest> {
     const obj: any = {};
     message.pagination !== undefined &&
       (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
@@ -116,7 +117,7 @@ export const QueryChecksumsResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryChecksumsResponse): unknown {
+  toJSON(message: QueryChecksumsResponse): JsonSafe<QueryChecksumsResponse> {
     const obj: any = {};
     if (message.checksums) {
       obj.checksums = message.checksums.map((e) => e);
@@ -171,7 +172,7 @@ export const QueryCodeRequest = {
     if (isSet(object.checksum)) obj.checksum = String(object.checksum);
     return obj;
   },
-  toJSON(message: QueryCodeRequest): unknown {
+  toJSON(message: QueryCodeRequest): JsonSafe<QueryCodeRequest> {
     const obj: any = {};
     message.checksum !== undefined && (obj.checksum = message.checksum);
     return obj;
@@ -217,7 +218,7 @@ export const QueryCodeResponse = {
     if (isSet(object.data)) obj.data = bytesFromBase64(object.data);
     return obj;
   },
-  toJSON(message: QueryCodeResponse): unknown {
+  toJSON(message: QueryCodeResponse): JsonSafe<QueryCodeResponse> {
     const obj: any = {};
     message.data !== undefined &&
       (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));

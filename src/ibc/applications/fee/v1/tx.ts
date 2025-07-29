@@ -3,6 +3,7 @@ import { Fee, PacketFee } from "./fee";
 import { PacketId } from "../../../core/channel/v1/channel";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact, Rpc } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.applications.fee.v1";
 /** MsgRegisterPayee defines the request type for the RegisterPayee rpc */
 export interface MsgRegisterPayee {
@@ -120,7 +121,7 @@ export const MsgRegisterPayee = {
     if (isSet(object.payee)) obj.payee = String(object.payee);
     return obj;
   },
-  toJSON(message: MsgRegisterPayee): unknown {
+  toJSON(message: MsgRegisterPayee): JsonSafe<MsgRegisterPayee> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -163,7 +164,7 @@ export const MsgRegisterPayeeResponse = {
     const obj = createBaseMsgRegisterPayeeResponse();
     return obj;
   },
-  toJSON(_: MsgRegisterPayeeResponse): unknown {
+  toJSON(_: MsgRegisterPayeeResponse): JsonSafe<MsgRegisterPayeeResponse> {
     const obj: any = {};
     return obj;
   },
@@ -231,7 +232,7 @@ export const MsgRegisterCounterpartyPayee = {
     if (isSet(object.counterpartyPayee)) obj.counterpartyPayee = String(object.counterpartyPayee);
     return obj;
   },
-  toJSON(message: MsgRegisterCounterpartyPayee): unknown {
+  toJSON(message: MsgRegisterCounterpartyPayee): JsonSafe<MsgRegisterCounterpartyPayee> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -279,7 +280,7 @@ export const MsgRegisterCounterpartyPayeeResponse = {
     const obj = createBaseMsgRegisterCounterpartyPayeeResponse();
     return obj;
   },
-  toJSON(_: MsgRegisterCounterpartyPayeeResponse): unknown {
+  toJSON(_: MsgRegisterCounterpartyPayeeResponse): JsonSafe<MsgRegisterCounterpartyPayeeResponse> {
     const obj: any = {};
     return obj;
   },
@@ -357,7 +358,7 @@ export const MsgPayPacketFee = {
     if (Array.isArray(object?.relayers)) obj.relayers = object.relayers.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: MsgPayPacketFee): unknown {
+  toJSON(message: MsgPayPacketFee): JsonSafe<MsgPayPacketFee> {
     const obj: any = {};
     message.fee !== undefined && (obj.fee = message.fee ? Fee.toJSON(message.fee) : undefined);
     message.sourcePortId !== undefined && (obj.sourcePortId = message.sourcePortId);
@@ -408,7 +409,7 @@ export const MsgPayPacketFeeResponse = {
     const obj = createBaseMsgPayPacketFeeResponse();
     return obj;
   },
-  toJSON(_: MsgPayPacketFeeResponse): unknown {
+  toJSON(_: MsgPayPacketFeeResponse): JsonSafe<MsgPayPacketFeeResponse> {
     const obj: any = {};
     return obj;
   },
@@ -460,7 +461,7 @@ export const MsgPayPacketFeeAsync = {
     if (isSet(object.packetFee)) obj.packetFee = PacketFee.fromJSON(object.packetFee);
     return obj;
   },
-  toJSON(message: MsgPayPacketFeeAsync): unknown {
+  toJSON(message: MsgPayPacketFeeAsync): JsonSafe<MsgPayPacketFeeAsync> {
     const obj: any = {};
     message.packetId !== undefined &&
       (obj.packetId = message.packetId ? PacketId.toJSON(message.packetId) : undefined);
@@ -505,7 +506,7 @@ export const MsgPayPacketFeeAsyncResponse = {
     const obj = createBaseMsgPayPacketFeeAsyncResponse();
     return obj;
   },
-  toJSON(_: MsgPayPacketFeeAsyncResponse): unknown {
+  toJSON(_: MsgPayPacketFeeAsyncResponse): JsonSafe<MsgPayPacketFeeAsyncResponse> {
     const obj: any = {};
     return obj;
   },

@@ -2,6 +2,7 @@
 import { Height } from "../../../core/client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.lightclients.localhost.v2";
 /** ClientState defines the 09-localhost client state */
 export interface ClientState {
@@ -43,7 +44,7 @@ export const ClientState = {
     if (isSet(object.latestHeight)) obj.latestHeight = Height.fromJSON(object.latestHeight);
     return obj;
   },
-  toJSON(message: ClientState): unknown {
+  toJSON(message: ClientState): JsonSafe<ClientState> {
     const obj: any = {};
     message.latestHeight !== undefined &&
       (obj.latestHeight = message.latestHeight ? Height.toJSON(message.latestHeight) : undefined);

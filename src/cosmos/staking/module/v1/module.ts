@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "cosmos.staking.module.v1";
 /** Module is the config object of the staking module. */
 export interface Module {
@@ -76,7 +77,7 @@ export const Module = {
     if (isSet(object.bech32PrefixConsensus)) obj.bech32PrefixConsensus = String(object.bech32PrefixConsensus);
     return obj;
   },
-  toJSON(message: Module): unknown {
+  toJSON(message: Module): JsonSafe<Module> {
     const obj: any = {};
     if (message.hooksOrder) {
       obj.hooksOrder = message.hooksOrder.map((e) => e);

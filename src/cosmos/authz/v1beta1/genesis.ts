@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { GrantAuthorization } from "./authz";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { JsonSafe } from "../../../json-safe";
 import { DeepPartial, Exact } from "../../../helpers";
 export const protobufPackage = "cosmos.authz.v1beta1";
 /** GenesisState defines the authz module's genesis state. */
@@ -43,7 +44,7 @@ export const GenesisState = {
       obj.authorization = object.authorization.map((e: any) => GrantAuthorization.fromJSON(e));
     return obj;
   },
-  toJSON(message: GenesisState): unknown {
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
     const obj: any = {};
     if (message.authorization) {
       obj.authorization = message.authorization.map((e) => (e ? GrantAuthorization.toJSON(e) : undefined));

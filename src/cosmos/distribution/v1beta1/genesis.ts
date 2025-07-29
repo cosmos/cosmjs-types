@@ -11,6 +11,7 @@ import {
 } from "./distribution";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.distribution.v1beta1";
 /**
  * DelegatorWithdrawInfo is the address for where distributions rewards are
@@ -145,7 +146,7 @@ export const DelegatorWithdrawInfo = {
     if (isSet(object.withdrawAddress)) obj.withdrawAddress = String(object.withdrawAddress);
     return obj;
   },
-  toJSON(message: DelegatorWithdrawInfo): unknown {
+  toJSON(message: DelegatorWithdrawInfo): JsonSafe<DelegatorWithdrawInfo> {
     const obj: any = {};
     message.delegatorAddress !== undefined && (obj.delegatorAddress = message.delegatorAddress);
     message.withdrawAddress !== undefined && (obj.withdrawAddress = message.withdrawAddress);
@@ -205,7 +206,7 @@ export const ValidatorOutstandingRewardsRecord = {
       obj.outstandingRewards = object.outstandingRewards.map((e: any) => DecCoin.fromJSON(e));
     return obj;
   },
-  toJSON(message: ValidatorOutstandingRewardsRecord): unknown {
+  toJSON(message: ValidatorOutstandingRewardsRecord): JsonSafe<ValidatorOutstandingRewardsRecord> {
     const obj: any = {};
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     if (message.outstandingRewards) {
@@ -271,7 +272,7 @@ export const ValidatorAccumulatedCommissionRecord = {
       obj.accumulated = ValidatorAccumulatedCommission.fromJSON(object.accumulated);
     return obj;
   },
-  toJSON(message: ValidatorAccumulatedCommissionRecord): unknown {
+  toJSON(message: ValidatorAccumulatedCommissionRecord): JsonSafe<ValidatorAccumulatedCommissionRecord> {
     const obj: any = {};
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     message.accumulated !== undefined &&
@@ -345,7 +346,7 @@ export const ValidatorHistoricalRewardsRecord = {
     if (isSet(object.rewards)) obj.rewards = ValidatorHistoricalRewards.fromJSON(object.rewards);
     return obj;
   },
-  toJSON(message: ValidatorHistoricalRewardsRecord): unknown {
+  toJSON(message: ValidatorHistoricalRewardsRecord): JsonSafe<ValidatorHistoricalRewardsRecord> {
     const obj: any = {};
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     message.period !== undefined && (obj.period = (message.period || BigInt(0)).toString());
@@ -410,7 +411,7 @@ export const ValidatorCurrentRewardsRecord = {
     if (isSet(object.rewards)) obj.rewards = ValidatorCurrentRewards.fromJSON(object.rewards);
     return obj;
   },
-  toJSON(message: ValidatorCurrentRewardsRecord): unknown {
+  toJSON(message: ValidatorCurrentRewardsRecord): JsonSafe<ValidatorCurrentRewardsRecord> {
     const obj: any = {};
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     message.rewards !== undefined &&
@@ -479,7 +480,7 @@ export const DelegatorStartingInfoRecord = {
     if (isSet(object.startingInfo)) obj.startingInfo = DelegatorStartingInfo.fromJSON(object.startingInfo);
     return obj;
   },
-  toJSON(message: DelegatorStartingInfoRecord): unknown {
+  toJSON(message: DelegatorStartingInfoRecord): JsonSafe<DelegatorStartingInfoRecord> {
     const obj: any = {};
     message.delegatorAddress !== undefined && (obj.delegatorAddress = message.delegatorAddress);
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
@@ -561,7 +562,7 @@ export const ValidatorSlashEventRecord = {
       obj.validatorSlashEvent = ValidatorSlashEvent.fromJSON(object.validatorSlashEvent);
     return obj;
   },
-  toJSON(message: ValidatorSlashEventRecord): unknown {
+  toJSON(message: ValidatorSlashEventRecord): JsonSafe<ValidatorSlashEventRecord> {
     const obj: any = {};
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
@@ -721,7 +722,7 @@ export const GenesisState = {
       );
     return obj;
   },
-  toJSON(message: GenesisState): unknown {
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
     const obj: any = {};
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     message.feePool !== undefined &&

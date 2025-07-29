@@ -4,6 +4,7 @@ import { Coin } from "../../base/v1beta1/coin";
 import { Params, Metadata, SendEnabled } from "./bank";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact, Rpc } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.bank.v1beta1";
 /** QueryBalanceRequest is the request type for the Query/Balance RPC method. */
 export interface QueryBalanceRequest {
@@ -300,7 +301,7 @@ export const QueryBalanceRequest = {
     if (isSet(object.denom)) obj.denom = String(object.denom);
     return obj;
   },
-  toJSON(message: QueryBalanceRequest): unknown {
+  toJSON(message: QueryBalanceRequest): JsonSafe<QueryBalanceRequest> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.denom !== undefined && (obj.denom = message.denom);
@@ -348,7 +349,7 @@ export const QueryBalanceResponse = {
     if (isSet(object.balance)) obj.balance = Coin.fromJSON(object.balance);
     return obj;
   },
-  toJSON(message: QueryBalanceResponse): unknown {
+  toJSON(message: QueryBalanceResponse): JsonSafe<QueryBalanceResponse> {
     const obj: any = {};
     message.balance !== undefined &&
       (obj.balance = message.balance ? Coin.toJSON(message.balance) : undefined);
@@ -413,7 +414,7 @@ export const QueryAllBalancesRequest = {
     if (isSet(object.resolveDenom)) obj.resolveDenom = Boolean(object.resolveDenom);
     return obj;
   },
-  toJSON(message: QueryAllBalancesRequest): unknown {
+  toJSON(message: QueryAllBalancesRequest): JsonSafe<QueryAllBalancesRequest> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.pagination !== undefined &&
@@ -474,7 +475,7 @@ export const QueryAllBalancesResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryAllBalancesResponse): unknown {
+  toJSON(message: QueryAllBalancesResponse): JsonSafe<QueryAllBalancesResponse> {
     const obj: any = {};
     if (message.balances) {
       obj.balances = message.balances.map((e) => (e ? Coin.toJSON(e) : undefined));
@@ -539,7 +540,7 @@ export const QuerySpendableBalancesRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QuerySpendableBalancesRequest): unknown {
+  toJSON(message: QuerySpendableBalancesRequest): JsonSafe<QuerySpendableBalancesRequest> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.pagination !== undefined &&
@@ -603,7 +604,7 @@ export const QuerySpendableBalancesResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QuerySpendableBalancesResponse): unknown {
+  toJSON(message: QuerySpendableBalancesResponse): JsonSafe<QuerySpendableBalancesResponse> {
     const obj: any = {};
     if (message.balances) {
       obj.balances = message.balances.map((e) => (e ? Coin.toJSON(e) : undefined));
@@ -671,7 +672,7 @@ export const QuerySpendableBalanceByDenomRequest = {
     if (isSet(object.denom)) obj.denom = String(object.denom);
     return obj;
   },
-  toJSON(message: QuerySpendableBalanceByDenomRequest): unknown {
+  toJSON(message: QuerySpendableBalanceByDenomRequest): JsonSafe<QuerySpendableBalanceByDenomRequest> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.denom !== undefined && (obj.denom = message.denom);
@@ -724,7 +725,7 @@ export const QuerySpendableBalanceByDenomResponse = {
     if (isSet(object.balance)) obj.balance = Coin.fromJSON(object.balance);
     return obj;
   },
-  toJSON(message: QuerySpendableBalanceByDenomResponse): unknown {
+  toJSON(message: QuerySpendableBalanceByDenomResponse): JsonSafe<QuerySpendableBalanceByDenomResponse> {
     const obj: any = {};
     message.balance !== undefined &&
       (obj.balance = message.balance ? Coin.toJSON(message.balance) : undefined);
@@ -775,7 +776,7 @@ export const QueryTotalSupplyRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryTotalSupplyRequest): unknown {
+  toJSON(message: QueryTotalSupplyRequest): JsonSafe<QueryTotalSupplyRequest> {
     const obj: any = {};
     message.pagination !== undefined &&
       (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
@@ -832,7 +833,7 @@ export const QueryTotalSupplyResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryTotalSupplyResponse): unknown {
+  toJSON(message: QueryTotalSupplyResponse): JsonSafe<QueryTotalSupplyResponse> {
     const obj: any = {};
     if (message.supply) {
       obj.supply = message.supply.map((e) => (e ? Coin.toJSON(e) : undefined));
@@ -889,7 +890,7 @@ export const QuerySupplyOfRequest = {
     if (isSet(object.denom)) obj.denom = String(object.denom);
     return obj;
   },
-  toJSON(message: QuerySupplyOfRequest): unknown {
+  toJSON(message: QuerySupplyOfRequest): JsonSafe<QuerySupplyOfRequest> {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
@@ -935,7 +936,7 @@ export const QuerySupplyOfResponse = {
     if (isSet(object.amount)) obj.amount = Coin.fromJSON(object.amount);
     return obj;
   },
-  toJSON(message: QuerySupplyOfResponse): unknown {
+  toJSON(message: QuerySupplyOfResponse): JsonSafe<QuerySupplyOfResponse> {
     const obj: any = {};
     message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;
@@ -974,7 +975,7 @@ export const QueryParamsRequest = {
     const obj = createBaseQueryParamsRequest();
     return obj;
   },
-  toJSON(_: QueryParamsRequest): unknown {
+  toJSON(_: QueryParamsRequest): JsonSafe<QueryParamsRequest> {
     const obj: any = {};
     return obj;
   },
@@ -1018,7 +1019,7 @@ export const QueryParamsResponse = {
     if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: QueryParamsResponse): unknown {
+  toJSON(message: QueryParamsResponse): JsonSafe<QueryParamsResponse> {
     const obj: any = {};
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
@@ -1066,7 +1067,7 @@ export const QueryDenomsMetadataRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryDenomsMetadataRequest): unknown {
+  toJSON(message: QueryDenomsMetadataRequest): JsonSafe<QueryDenomsMetadataRequest> {
     const obj: any = {};
     message.pagination !== undefined &&
       (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
@@ -1126,7 +1127,7 @@ export const QueryDenomsMetadataResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryDenomsMetadataResponse): unknown {
+  toJSON(message: QueryDenomsMetadataResponse): JsonSafe<QueryDenomsMetadataResponse> {
     const obj: any = {};
     if (message.metadatas) {
       obj.metadatas = message.metadatas.map((e) => (e ? Metadata.toJSON(e) : undefined));
@@ -1183,7 +1184,7 @@ export const QueryDenomMetadataRequest = {
     if (isSet(object.denom)) obj.denom = String(object.denom);
     return obj;
   },
-  toJSON(message: QueryDenomMetadataRequest): unknown {
+  toJSON(message: QueryDenomMetadataRequest): JsonSafe<QueryDenomMetadataRequest> {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
@@ -1231,7 +1232,7 @@ export const QueryDenomMetadataResponse = {
     if (isSet(object.metadata)) obj.metadata = Metadata.fromJSON(object.metadata);
     return obj;
   },
-  toJSON(message: QueryDenomMetadataResponse): unknown {
+  toJSON(message: QueryDenomMetadataResponse): JsonSafe<QueryDenomMetadataResponse> {
     const obj: any = {};
     message.metadata !== undefined &&
       (obj.metadata = message.metadata ? Metadata.toJSON(message.metadata) : undefined);
@@ -1285,7 +1286,7 @@ export const QueryDenomMetadataByQueryStringRequest = {
     if (isSet(object.denom)) obj.denom = String(object.denom);
     return obj;
   },
-  toJSON(message: QueryDenomMetadataByQueryStringRequest): unknown {
+  toJSON(message: QueryDenomMetadataByQueryStringRequest): JsonSafe<QueryDenomMetadataByQueryStringRequest> {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
@@ -1336,7 +1337,9 @@ export const QueryDenomMetadataByQueryStringResponse = {
     if (isSet(object.metadata)) obj.metadata = Metadata.fromJSON(object.metadata);
     return obj;
   },
-  toJSON(message: QueryDenomMetadataByQueryStringResponse): unknown {
+  toJSON(
+    message: QueryDenomMetadataByQueryStringResponse,
+  ): JsonSafe<QueryDenomMetadataByQueryStringResponse> {
     const obj: any = {};
     message.metadata !== undefined &&
       (obj.metadata = message.metadata ? Metadata.toJSON(message.metadata) : undefined);
@@ -1395,7 +1398,7 @@ export const QueryDenomOwnersRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryDenomOwnersRequest): unknown {
+  toJSON(message: QueryDenomOwnersRequest): JsonSafe<QueryDenomOwnersRequest> {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
     message.pagination !== undefined &&
@@ -1454,7 +1457,7 @@ export const DenomOwner = {
     if (isSet(object.balance)) obj.balance = Coin.fromJSON(object.balance);
     return obj;
   },
-  toJSON(message: DenomOwner): unknown {
+  toJSON(message: DenomOwner): JsonSafe<DenomOwner> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.balance !== undefined &&
@@ -1514,7 +1517,7 @@ export const QueryDenomOwnersResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryDenomOwnersResponse): unknown {
+  toJSON(message: QueryDenomOwnersResponse): JsonSafe<QueryDenomOwnersResponse> {
     const obj: any = {};
     if (message.denomOwners) {
       obj.denomOwners = message.denomOwners.map((e) => (e ? DenomOwner.toJSON(e) : undefined));
@@ -1582,7 +1585,7 @@ export const QueryDenomOwnersByQueryRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryDenomOwnersByQueryRequest): unknown {
+  toJSON(message: QueryDenomOwnersByQueryRequest): JsonSafe<QueryDenomOwnersByQueryRequest> {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
     message.pagination !== undefined &&
@@ -1647,7 +1650,7 @@ export const QueryDenomOwnersByQueryResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryDenomOwnersByQueryResponse): unknown {
+  toJSON(message: QueryDenomOwnersByQueryResponse): JsonSafe<QueryDenomOwnersByQueryResponse> {
     const obj: any = {};
     if (message.denomOwners) {
       obj.denomOwners = message.denomOwners.map((e) => (e ? DenomOwner.toJSON(e) : undefined));
@@ -1712,7 +1715,7 @@ export const QuerySendEnabledRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QuerySendEnabledRequest): unknown {
+  toJSON(message: QuerySendEnabledRequest): JsonSafe<QuerySendEnabledRequest> {
     const obj: any = {};
     if (message.denoms) {
       obj.denoms = message.denoms.map((e) => e);
@@ -1776,7 +1779,7 @@ export const QuerySendEnabledResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QuerySendEnabledResponse): unknown {
+  toJSON(message: QuerySendEnabledResponse): JsonSafe<QuerySendEnabledResponse> {
     const obj: any = {};
     if (message.sendEnabled) {
       obj.sendEnabled = message.sendEnabled.map((e) => (e ? SendEnabled.toJSON(e) : undefined));

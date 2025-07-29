@@ -3,6 +3,7 @@ import { Params as Params1 } from "../../controller/v1/controller";
 import { Params as Params2 } from "../../host/v1/host";
 import { BinaryReader, BinaryWriter } from "../../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../../helpers";
+import { JsonSafe } from "../../../../../json-safe";
 export const protobufPackage = "ibc.applications.interchain_accounts.genesis.v1";
 /** GenesisState defines the interchain accounts genesis state */
 export interface GenesisState {
@@ -84,7 +85,7 @@ export const GenesisState = {
       obj.hostGenesisState = HostGenesisState.fromJSON(object.hostGenesisState);
     return obj;
   },
-  toJSON(message: GenesisState): unknown {
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
     const obj: any = {};
     message.controllerGenesisState !== undefined &&
       (obj.controllerGenesisState = message.controllerGenesisState
@@ -170,7 +171,7 @@ export const ControllerGenesisState = {
     if (isSet(object.params)) obj.params = Params1.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: ControllerGenesisState): unknown {
+  toJSON(message: ControllerGenesisState): JsonSafe<ControllerGenesisState> {
     const obj: any = {};
     if (message.activeChannels) {
       obj.activeChannels = message.activeChannels.map((e) => (e ? ActiveChannel.toJSON(e) : undefined));
@@ -268,7 +269,7 @@ export const HostGenesisState = {
     if (isSet(object.params)) obj.params = Params2.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: HostGenesisState): unknown {
+  toJSON(message: HostGenesisState): JsonSafe<HostGenesisState> {
     const obj: any = {};
     if (message.activeChannels) {
       obj.activeChannels = message.activeChannels.map((e) => (e ? ActiveChannel.toJSON(e) : undefined));
@@ -358,7 +359,7 @@ export const ActiveChannel = {
     if (isSet(object.isMiddlewareEnabled)) obj.isMiddlewareEnabled = Boolean(object.isMiddlewareEnabled);
     return obj;
   },
-  toJSON(message: ActiveChannel): unknown {
+  toJSON(message: ActiveChannel): JsonSafe<ActiveChannel> {
     const obj: any = {};
     message.connectionId !== undefined && (obj.connectionId = message.connectionId);
     message.portId !== undefined && (obj.portId = message.portId);
@@ -426,7 +427,7 @@ export const RegisteredInterchainAccount = {
     if (isSet(object.accountAddress)) obj.accountAddress = String(object.accountAddress);
     return obj;
   },
-  toJSON(message: RegisteredInterchainAccount): unknown {
+  toJSON(message: RegisteredInterchainAccount): JsonSafe<RegisteredInterchainAccount> {
     const obj: any = {};
     message.connectionId !== undefined && (obj.connectionId = message.connectionId);
     message.portId !== undefined && (obj.portId = message.portId);

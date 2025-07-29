@@ -2,6 +2,7 @@
 import { Height } from "../../../core/client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.lightclients.wasm.v1";
 /** Wasm light client's Client state */
 export interface ClientState {
@@ -86,7 +87,7 @@ export const ClientState = {
     if (isSet(object.latestHeight)) obj.latestHeight = Height.fromJSON(object.latestHeight);
     return obj;
   },
-  toJSON(message: ClientState): unknown {
+  toJSON(message: ClientState): JsonSafe<ClientState> {
     const obj: any = {};
     message.data !== undefined &&
       (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
@@ -141,7 +142,7 @@ export const ConsensusState = {
     if (isSet(object.data)) obj.data = bytesFromBase64(object.data);
     return obj;
   },
-  toJSON(message: ConsensusState): unknown {
+  toJSON(message: ConsensusState): JsonSafe<ConsensusState> {
     const obj: any = {};
     message.data !== undefined &&
       (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
@@ -188,7 +189,7 @@ export const ClientMessage = {
     if (isSet(object.data)) obj.data = bytesFromBase64(object.data);
     return obj;
   },
-  toJSON(message: ClientMessage): unknown {
+  toJSON(message: ClientMessage): JsonSafe<ClientMessage> {
     const obj: any = {};
     message.data !== undefined &&
       (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
@@ -236,7 +237,7 @@ export const Checksums = {
       obj.checksums = object.checksums.map((e: any) => bytesFromBase64(e));
     return obj;
   },
-  toJSON(message: Checksums): unknown {
+  toJSON(message: Checksums): JsonSafe<Checksums> {
     const obj: any = {};
     if (message.checksums) {
       obj.checksums = message.checksums.map((e) => base64FromBytes(e !== undefined ? e : new Uint8Array()));

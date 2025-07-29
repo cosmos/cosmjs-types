@@ -4,6 +4,7 @@ import { Any } from "../../../../google/protobuf/any";
 import { Height, Params } from "../../client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes, Rpc } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.core.connection.v1";
 /**
  * MsgConnectionOpenInit defines the msg sent by an account on Chain A to
@@ -183,7 +184,7 @@ export const MsgConnectionOpenInit = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgConnectionOpenInit): unknown {
+  toJSON(message: MsgConnectionOpenInit): JsonSafe<MsgConnectionOpenInit> {
     const obj: any = {};
     message.clientId !== undefined && (obj.clientId = message.clientId);
     message.counterparty !== undefined &&
@@ -236,7 +237,7 @@ export const MsgConnectionOpenInitResponse = {
     const obj = createBaseMsgConnectionOpenInitResponse();
     return obj;
   },
-  toJSON(_: MsgConnectionOpenInitResponse): unknown {
+  toJSON(_: MsgConnectionOpenInitResponse): JsonSafe<MsgConnectionOpenInitResponse> {
     const obj: any = {};
     return obj;
   },
@@ -380,7 +381,7 @@ export const MsgConnectionOpenTry = {
       obj.hostConsensusStateProof = bytesFromBase64(object.hostConsensusStateProof);
     return obj;
   },
-  toJSON(message: MsgConnectionOpenTry): unknown {
+  toJSON(message: MsgConnectionOpenTry): JsonSafe<MsgConnectionOpenTry> {
     const obj: any = {};
     message.clientId !== undefined && (obj.clientId = message.clientId);
     message.previousConnectionId !== undefined && (obj.previousConnectionId = message.previousConnectionId);
@@ -471,7 +472,7 @@ export const MsgConnectionOpenTryResponse = {
     const obj = createBaseMsgConnectionOpenTryResponse();
     return obj;
   },
-  toJSON(_: MsgConnectionOpenTryResponse): unknown {
+  toJSON(_: MsgConnectionOpenTryResponse): JsonSafe<MsgConnectionOpenTryResponse> {
     const obj: any = {};
     return obj;
   },
@@ -599,7 +600,7 @@ export const MsgConnectionOpenAck = {
       obj.hostConsensusStateProof = bytesFromBase64(object.hostConsensusStateProof);
     return obj;
   },
-  toJSON(message: MsgConnectionOpenAck): unknown {
+  toJSON(message: MsgConnectionOpenAck): JsonSafe<MsgConnectionOpenAck> {
     const obj: any = {};
     message.connectionId !== undefined && (obj.connectionId = message.connectionId);
     message.counterpartyConnectionId !== undefined &&
@@ -679,7 +680,7 @@ export const MsgConnectionOpenAckResponse = {
     const obj = createBaseMsgConnectionOpenAckResponse();
     return obj;
   },
-  toJSON(_: MsgConnectionOpenAckResponse): unknown {
+  toJSON(_: MsgConnectionOpenAckResponse): JsonSafe<MsgConnectionOpenAckResponse> {
     const obj: any = {};
     return obj;
   },
@@ -749,7 +750,7 @@ export const MsgConnectionOpenConfirm = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgConnectionOpenConfirm): unknown {
+  toJSON(message: MsgConnectionOpenConfirm): JsonSafe<MsgConnectionOpenConfirm> {
     const obj: any = {};
     message.connectionId !== undefined && (obj.connectionId = message.connectionId);
     message.proofAck !== undefined &&
@@ -798,7 +799,7 @@ export const MsgConnectionOpenConfirmResponse = {
     const obj = createBaseMsgConnectionOpenConfirmResponse();
     return obj;
   },
-  toJSON(_: MsgConnectionOpenConfirmResponse): unknown {
+  toJSON(_: MsgConnectionOpenConfirmResponse): JsonSafe<MsgConnectionOpenConfirmResponse> {
     const obj: any = {};
     return obj;
   },
@@ -852,7 +853,7 @@ export const MsgUpdateParams = {
     if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: MsgUpdateParams): unknown {
+  toJSON(message: MsgUpdateParams): JsonSafe<MsgUpdateParams> {
     const obj: any = {};
     message.signer !== undefined && (obj.signer = message.signer);
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
@@ -893,7 +894,7 @@ export const MsgUpdateParamsResponse = {
     const obj = createBaseMsgUpdateParamsResponse();
     return obj;
   },
-  toJSON(_: MsgUpdateParamsResponse): unknown {
+  toJSON(_: MsgUpdateParamsResponse): JsonSafe<MsgUpdateParamsResponse> {
     const obj: any = {};
     return obj;
   },

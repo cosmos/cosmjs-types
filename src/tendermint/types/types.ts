@@ -13,6 +13,7 @@ import {
   fromJsonTimestamp,
   fromTimestamp,
 } from "../../helpers";
+import { JsonSafe } from "../../json-safe";
 export const protobufPackage = "tendermint.types";
 /** SignedMsgType is a type of signed message in the consensus. */
 export enum SignedMsgType {
@@ -85,6 +86,7 @@ export interface Header {
   lastBlockId: BlockID;
   /** hashes of block data */
   lastCommitHash: Uint8Array;
+  /** transactions */
   dataHash: Uint8Array;
   /** hashes from the app output from the prev block */
   validatorsHash: Uint8Array;
@@ -94,6 +96,7 @@ export interface Header {
   consensusHash: Uint8Array;
   /** state after txs from the previous block */
   appHash: Uint8Array;
+  /** root hash of all results from the txs from the previous block */
   lastResultsHash: Uint8Array;
   /** consensus info */
   evidenceHash: Uint8Array;
@@ -246,7 +249,7 @@ export const PartSetHeader = {
     if (isSet(object.hash)) obj.hash = bytesFromBase64(object.hash);
     return obj;
   },
-  toJSON(message: PartSetHeader): unknown {
+  toJSON(message: PartSetHeader): JsonSafe<PartSetHeader> {
     const obj: any = {};
     message.total !== undefined && (obj.total = Math.round(message.total));
     message.hash !== undefined &&
@@ -311,7 +314,7 @@ export const Part = {
     if (isSet(object.proof)) obj.proof = Proof.fromJSON(object.proof);
     return obj;
   },
-  toJSON(message: Part): unknown {
+  toJSON(message: Part): JsonSafe<Part> {
     const obj: any = {};
     message.index !== undefined && (obj.index = Math.round(message.index));
     message.bytes !== undefined &&
@@ -372,7 +375,7 @@ export const BlockID = {
     if (isSet(object.partSetHeader)) obj.partSetHeader = PartSetHeader.fromJSON(object.partSetHeader);
     return obj;
   },
-  toJSON(message: BlockID): unknown {
+  toJSON(message: BlockID): JsonSafe<BlockID> {
     const obj: any = {};
     message.hash !== undefined &&
       (obj.hash = base64FromBytes(message.hash !== undefined ? message.hash : new Uint8Array()));
@@ -528,7 +531,7 @@ export const Header = {
     if (isSet(object.proposerAddress)) obj.proposerAddress = bytesFromBase64(object.proposerAddress);
     return obj;
   },
-  toJSON(message: Header): unknown {
+  toJSON(message: Header): JsonSafe<Header> {
     const obj: any = {};
     message.version !== undefined &&
       (obj.version = message.version ? Consensus.toJSON(message.version) : undefined);
@@ -633,7 +636,7 @@ export const Data = {
     if (Array.isArray(object?.txs)) obj.txs = object.txs.map((e: any) => bytesFromBase64(e));
     return obj;
   },
-  toJSON(message: Data): unknown {
+  toJSON(message: Data): JsonSafe<Data> {
     const obj: any = {};
     if (message.txs) {
       obj.txs = message.txs.map((e) => base64FromBytes(e !== undefined ? e : new Uint8Array()));
@@ -755,7 +758,7 @@ export const Vote = {
     if (isSet(object.extensionSignature)) obj.extensionSignature = bytesFromBase64(object.extensionSignature);
     return obj;
   },
-  toJSON(message: Vote): unknown {
+  toJSON(message: Vote): JsonSafe<Vote> {
     const obj: any = {};
     message.type !== undefined && (obj.type = signedMsgTypeToJSON(message.type));
     message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
@@ -863,7 +866,7 @@ export const Commit = {
       obj.signatures = object.signatures.map((e: any) => CommitSig.fromJSON(e));
     return obj;
   },
-  toJSON(message: Commit): unknown {
+  toJSON(message: Commit): JsonSafe<Commit> {
     const obj: any = {};
     message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
     message.round !== undefined && (obj.round = Math.round(message.round));
@@ -948,7 +951,7 @@ export const CommitSig = {
     if (isSet(object.signature)) obj.signature = bytesFromBase64(object.signature);
     return obj;
   },
-  toJSON(message: CommitSig): unknown {
+  toJSON(message: CommitSig): JsonSafe<CommitSig> {
     const obj: any = {};
     message.blockIdFlag !== undefined && (obj.blockIdFlag = blockIDFlagToJSON(message.blockIdFlag));
     message.validatorAddress !== undefined &&
@@ -1033,7 +1036,7 @@ export const ExtendedCommit = {
       obj.extendedSignatures = object.extendedSignatures.map((e: any) => ExtendedCommitSig.fromJSON(e));
     return obj;
   },
-  toJSON(message: ExtendedCommit): unknown {
+  toJSON(message: ExtendedCommit): JsonSafe<ExtendedCommit> {
     const obj: any = {};
     message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
     message.round !== undefined && (obj.round = Math.round(message.round));
@@ -1137,7 +1140,7 @@ export const ExtendedCommitSig = {
     if (isSet(object.extensionSignature)) obj.extensionSignature = bytesFromBase64(object.extensionSignature);
     return obj;
   },
-  toJSON(message: ExtendedCommitSig): unknown {
+  toJSON(message: ExtendedCommitSig): JsonSafe<ExtendedCommitSig> {
     const obj: any = {};
     message.blockIdFlag !== undefined && (obj.blockIdFlag = blockIDFlagToJSON(message.blockIdFlag));
     message.validatorAddress !== undefined &&
@@ -1255,7 +1258,7 @@ export const Proposal = {
     if (isSet(object.signature)) obj.signature = bytesFromBase64(object.signature);
     return obj;
   },
-  toJSON(message: Proposal): unknown {
+  toJSON(message: Proposal): JsonSafe<Proposal> {
     const obj: any = {};
     message.type !== undefined && (obj.type = signedMsgTypeToJSON(message.type));
     message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
@@ -1331,7 +1334,7 @@ export const SignedHeader = {
     if (isSet(object.commit)) obj.commit = Commit.fromJSON(object.commit);
     return obj;
   },
-  toJSON(message: SignedHeader): unknown {
+  toJSON(message: SignedHeader): JsonSafe<SignedHeader> {
     const obj: any = {};
     message.header !== undefined && (obj.header = message.header ? Header.toJSON(message.header) : undefined);
     message.commit !== undefined && (obj.commit = message.commit ? Commit.toJSON(message.commit) : undefined);
@@ -1391,7 +1394,7 @@ export const LightBlock = {
     if (isSet(object.validatorSet)) obj.validatorSet = ValidatorSet.fromJSON(object.validatorSet);
     return obj;
   },
-  toJSON(message: LightBlock): unknown {
+  toJSON(message: LightBlock): JsonSafe<LightBlock> {
     const obj: any = {};
     message.signedHeader !== undefined &&
       (obj.signedHeader = message.signedHeader ? SignedHeader.toJSON(message.signedHeader) : undefined);
@@ -1469,7 +1472,7 @@ export const BlockMeta = {
     if (isSet(object.numTxs)) obj.numTxs = BigInt(object.numTxs.toString());
     return obj;
   },
-  toJSON(message: BlockMeta): unknown {
+  toJSON(message: BlockMeta): JsonSafe<BlockMeta> {
     const obj: any = {};
     message.blockId !== undefined &&
       (obj.blockId = message.blockId ? BlockID.toJSON(message.blockId) : undefined);
@@ -1546,7 +1549,7 @@ export const TxProof = {
     if (isSet(object.proof)) obj.proof = Proof.fromJSON(object.proof);
     return obj;
   },
-  toJSON(message: TxProof): unknown {
+  toJSON(message: TxProof): JsonSafe<TxProof> {
     const obj: any = {};
     message.rootHash !== undefined &&
       (obj.rootHash = base64FromBytes(message.rootHash !== undefined ? message.rootHash : new Uint8Array()));

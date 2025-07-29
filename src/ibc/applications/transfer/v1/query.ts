@@ -4,6 +4,7 @@ import { DenomTrace, Params } from "./transfer";
 import { Coin } from "../../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact, Rpc } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.applications.transfer.v1";
 /**
  * QueryDenomTraceRequest is the request type for the Query/DenomTrace RPC
@@ -117,7 +118,7 @@ export const QueryDenomTraceRequest = {
     if (isSet(object.hash)) obj.hash = String(object.hash);
     return obj;
   },
-  toJSON(message: QueryDenomTraceRequest): unknown {
+  toJSON(message: QueryDenomTraceRequest): JsonSafe<QueryDenomTraceRequest> {
     const obj: any = {};
     message.hash !== undefined && (obj.hash = message.hash);
     return obj;
@@ -163,7 +164,7 @@ export const QueryDenomTraceResponse = {
     if (isSet(object.denomTrace)) obj.denomTrace = DenomTrace.fromJSON(object.denomTrace);
     return obj;
   },
-  toJSON(message: QueryDenomTraceResponse): unknown {
+  toJSON(message: QueryDenomTraceResponse): JsonSafe<QueryDenomTraceResponse> {
     const obj: any = {};
     message.denomTrace !== undefined &&
       (obj.denomTrace = message.denomTrace ? DenomTrace.toJSON(message.denomTrace) : undefined);
@@ -212,7 +213,7 @@ export const QueryDenomTracesRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryDenomTracesRequest): unknown {
+  toJSON(message: QueryDenomTracesRequest): JsonSafe<QueryDenomTracesRequest> {
     const obj: any = {};
     message.pagination !== undefined &&
       (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
@@ -270,7 +271,7 @@ export const QueryDenomTracesResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryDenomTracesResponse): unknown {
+  toJSON(message: QueryDenomTracesResponse): JsonSafe<QueryDenomTracesResponse> {
     const obj: any = {};
     if (message.denomTraces) {
       obj.denomTraces = message.denomTraces.map((e) => (e ? DenomTrace.toJSON(e) : undefined));
@@ -318,7 +319,7 @@ export const QueryParamsRequest = {
     const obj = createBaseQueryParamsRequest();
     return obj;
   },
-  toJSON(_: QueryParamsRequest): unknown {
+  toJSON(_: QueryParamsRequest): JsonSafe<QueryParamsRequest> {
     const obj: any = {};
     return obj;
   },
@@ -362,7 +363,7 @@ export const QueryParamsResponse = {
     if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: QueryParamsResponse): unknown {
+  toJSON(message: QueryParamsResponse): JsonSafe<QueryParamsResponse> {
     const obj: any = {};
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
@@ -410,7 +411,7 @@ export const QueryDenomHashRequest = {
     if (isSet(object.trace)) obj.trace = String(object.trace);
     return obj;
   },
-  toJSON(message: QueryDenomHashRequest): unknown {
+  toJSON(message: QueryDenomHashRequest): JsonSafe<QueryDenomHashRequest> {
     const obj: any = {};
     message.trace !== undefined && (obj.trace = message.trace);
     return obj;
@@ -456,7 +457,7 @@ export const QueryDenomHashResponse = {
     if (isSet(object.hash)) obj.hash = String(object.hash);
     return obj;
   },
-  toJSON(message: QueryDenomHashResponse): unknown {
+  toJSON(message: QueryDenomHashResponse): JsonSafe<QueryDenomHashResponse> {
     const obj: any = {};
     message.hash !== undefined && (obj.hash = message.hash);
     return obj;
@@ -510,7 +511,7 @@ export const QueryEscrowAddressRequest = {
     if (isSet(object.channelId)) obj.channelId = String(object.channelId);
     return obj;
   },
-  toJSON(message: QueryEscrowAddressRequest): unknown {
+  toJSON(message: QueryEscrowAddressRequest): JsonSafe<QueryEscrowAddressRequest> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -560,7 +561,7 @@ export const QueryEscrowAddressResponse = {
     if (isSet(object.escrowAddress)) obj.escrowAddress = String(object.escrowAddress);
     return obj;
   },
-  toJSON(message: QueryEscrowAddressResponse): unknown {
+  toJSON(message: QueryEscrowAddressResponse): JsonSafe<QueryEscrowAddressResponse> {
     const obj: any = {};
     message.escrowAddress !== undefined && (obj.escrowAddress = message.escrowAddress);
     return obj;
@@ -611,7 +612,7 @@ export const QueryTotalEscrowForDenomRequest = {
     if (isSet(object.denom)) obj.denom = String(object.denom);
     return obj;
   },
-  toJSON(message: QueryTotalEscrowForDenomRequest): unknown {
+  toJSON(message: QueryTotalEscrowForDenomRequest): JsonSafe<QueryTotalEscrowForDenomRequest> {
     const obj: any = {};
     message.denom !== undefined && (obj.denom = message.denom);
     return obj;
@@ -662,7 +663,7 @@ export const QueryTotalEscrowForDenomResponse = {
     if (isSet(object.amount)) obj.amount = Coin.fromJSON(object.amount);
     return obj;
   },
-  toJSON(message: QueryTotalEscrowForDenomResponse): unknown {
+  toJSON(message: QueryTotalEscrowForDenomResponse): JsonSafe<QueryTotalEscrowForDenomResponse> {
     const obj: any = {};
     message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;

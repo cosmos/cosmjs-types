@@ -4,6 +4,7 @@ import { InterchainAccountPacketData } from "../../v1/packet";
 import { Params } from "./controller";
 import { BinaryReader, BinaryWriter } from "../../../../../binary";
 import { isSet, DeepPartial, Exact, Rpc } from "../../../../../helpers";
+import { JsonSafe } from "../../../../../json-safe";
 export const protobufPackage = "ibc.applications.interchain_accounts.controller.v1";
 /** MsgRegisterInterchainAccount defines the payload for Msg/RegisterAccount */
 export interface MsgRegisterInterchainAccount {
@@ -104,7 +105,7 @@ export const MsgRegisterInterchainAccount = {
     if (isSet(object.ordering)) obj.ordering = orderFromJSON(object.ordering);
     return obj;
   },
-  toJSON(message: MsgRegisterInterchainAccount): unknown {
+  toJSON(message: MsgRegisterInterchainAccount): JsonSafe<MsgRegisterInterchainAccount> {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
     message.connectionId !== undefined && (obj.connectionId = message.connectionId);
@@ -169,7 +170,7 @@ export const MsgRegisterInterchainAccountResponse = {
     if (isSet(object.portId)) obj.portId = String(object.portId);
     return obj;
   },
-  toJSON(message: MsgRegisterInterchainAccountResponse): unknown {
+  toJSON(message: MsgRegisterInterchainAccountResponse): JsonSafe<MsgRegisterInterchainAccountResponse> {
     const obj: any = {};
     message.channelId !== undefined && (obj.channelId = message.channelId);
     message.portId !== undefined && (obj.portId = message.portId);
@@ -243,7 +244,7 @@ export const MsgSendTx = {
     if (isSet(object.relativeTimeout)) obj.relativeTimeout = BigInt(object.relativeTimeout.toString());
     return obj;
   },
-  toJSON(message: MsgSendTx): unknown {
+  toJSON(message: MsgSendTx): JsonSafe<MsgSendTx> {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
     message.connectionId !== undefined && (obj.connectionId = message.connectionId);
@@ -303,7 +304,7 @@ export const MsgSendTxResponse = {
     if (isSet(object.sequence)) obj.sequence = BigInt(object.sequence.toString());
     return obj;
   },
-  toJSON(message: MsgSendTxResponse): unknown {
+  toJSON(message: MsgSendTxResponse): JsonSafe<MsgSendTxResponse> {
     const obj: any = {};
     message.sequence !== undefined && (obj.sequence = (message.sequence || BigInt(0)).toString());
     return obj;
@@ -359,7 +360,7 @@ export const MsgUpdateParams = {
     if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: MsgUpdateParams): unknown {
+  toJSON(message: MsgUpdateParams): JsonSafe<MsgUpdateParams> {
     const obj: any = {};
     message.signer !== undefined && (obj.signer = message.signer);
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
@@ -400,7 +401,7 @@ export const MsgUpdateParamsResponse = {
     const obj = createBaseMsgUpdateParamsResponse();
     return obj;
   },
-  toJSON(_: MsgUpdateParamsResponse): unknown {
+  toJSON(_: MsgUpdateParamsResponse): JsonSafe<MsgUpdateParamsResponse> {
     const obj: any = {};
     return obj;
   },

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.circuit.v1";
 /** Level is the permission level. */
 export enum Permissions_Level {
@@ -131,7 +132,7 @@ export const Permissions = {
       obj.limitTypeUrls = object.limitTypeUrls.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: Permissions): unknown {
+  toJSON(message: Permissions): JsonSafe<Permissions> {
     const obj: any = {};
     message.level !== undefined && (obj.level = permissions_LevelToJSON(message.level));
     if (message.limitTypeUrls) {
@@ -191,7 +192,7 @@ export const GenesisAccountPermissions = {
     if (isSet(object.permissions)) obj.permissions = Permissions.fromJSON(object.permissions);
     return obj;
   },
-  toJSON(message: GenesisAccountPermissions): unknown {
+  toJSON(message: GenesisAccountPermissions): JsonSafe<GenesisAccountPermissions> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.permissions !== undefined &&
@@ -256,7 +257,7 @@ export const GenesisState = {
       obj.disabledTypeUrls = object.disabledTypeUrls.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: GenesisState): unknown {
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
     const obj: any = {};
     if (message.accountPermissions) {
       obj.accountPermissions = message.accountPermissions.map((e) =>

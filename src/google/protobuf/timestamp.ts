@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, DeepPartial, Exact } from "../../helpers";
+import { JsonSafe } from "../../json-safe";
 export const protobufPackage = "google.protobuf";
 /**
  * A Timestamp represents a point in time independent of any time zone or local
@@ -144,7 +145,7 @@ export const Timestamp = {
     if (isSet(object.nanos)) obj.nanos = Number(object.nanos);
     return obj;
   },
-  toJSON(message: Timestamp): unknown {
+  toJSON(message: Timestamp): JsonSafe<Timestamp> {
     const obj: any = {};
     message.seconds !== undefined && (obj.seconds = (message.seconds || BigInt(0)).toString());
     message.nanos !== undefined && (obj.nanos = Math.round(message.nanos));

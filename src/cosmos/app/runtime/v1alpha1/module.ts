@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "cosmos.app.runtime.v1alpha1";
 /** Module is the config object for the runtime module. */
 export interface Module {
@@ -169,7 +170,7 @@ export const Module = {
       obj.prepareCheckStaters = object.prepareCheckStaters.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: Module): unknown {
+  toJSON(message: Module): JsonSafe<Module> {
     const obj: any = {};
     message.appName !== undefined && (obj.appName = message.appName);
     if (message.beginBlockers) {
@@ -273,7 +274,7 @@ export const StoreKeyConfig = {
     if (isSet(object.kvStoreKey)) obj.kvStoreKey = String(object.kvStoreKey);
     return obj;
   },
-  toJSON(message: StoreKeyConfig): unknown {
+  toJSON(message: StoreKeyConfig): JsonSafe<StoreKeyConfig> {
     const obj: any = {};
     message.moduleName !== undefined && (obj.moduleName = message.moduleName);
     message.kvStoreKey !== undefined && (obj.kvStoreKey = message.kvStoreKey);

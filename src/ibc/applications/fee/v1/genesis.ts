@@ -2,6 +2,7 @@
 import { IdentifiedPacketFees } from "./fee";
 import { PacketId } from "../../../core/channel/v1/channel";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { JsonSafe } from "../../../../json-safe";
 import { DeepPartial, Exact, isSet } from "../../../../helpers";
 export const protobufPackage = "ibc.applications.fee.v1";
 /** GenesisState defines the ICS29 fee middleware genesis state */
@@ -128,7 +129,7 @@ export const GenesisState = {
       obj.forwardRelayers = object.forwardRelayers.map((e: any) => ForwardRelayerAddress.fromJSON(e));
     return obj;
   },
-  toJSON(message: GenesisState): unknown {
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
     const obj: any = {};
     if (message.identifiedFees) {
       obj.identifiedFees = message.identifiedFees.map((e) =>
@@ -220,7 +221,7 @@ export const FeeEnabledChannel = {
     if (isSet(object.channelId)) obj.channelId = String(object.channelId);
     return obj;
   },
-  toJSON(message: FeeEnabledChannel): unknown {
+  toJSON(message: FeeEnabledChannel): JsonSafe<FeeEnabledChannel> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -284,7 +285,7 @@ export const RegisteredPayee = {
     if (isSet(object.payee)) obj.payee = String(object.payee);
     return obj;
   },
-  toJSON(message: RegisteredPayee): unknown {
+  toJSON(message: RegisteredPayee): JsonSafe<RegisteredPayee> {
     const obj: any = {};
     message.channelId !== undefined && (obj.channelId = message.channelId);
     message.relayer !== undefined && (obj.relayer = message.relayer);
@@ -350,7 +351,7 @@ export const RegisteredCounterpartyPayee = {
     if (isSet(object.counterpartyPayee)) obj.counterpartyPayee = String(object.counterpartyPayee);
     return obj;
   },
-  toJSON(message: RegisteredCounterpartyPayee): unknown {
+  toJSON(message: RegisteredCounterpartyPayee): JsonSafe<RegisteredCounterpartyPayee> {
     const obj: any = {};
     message.channelId !== undefined && (obj.channelId = message.channelId);
     message.relayer !== undefined && (obj.relayer = message.relayer);
@@ -410,7 +411,7 @@ export const ForwardRelayerAddress = {
     if (isSet(object.packetId)) obj.packetId = PacketId.fromJSON(object.packetId);
     return obj;
   },
-  toJSON(message: ForwardRelayerAddress): unknown {
+  toJSON(message: ForwardRelayerAddress): JsonSafe<ForwardRelayerAddress> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.packetId !== undefined &&

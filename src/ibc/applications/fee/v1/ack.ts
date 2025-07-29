@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.applications.fee.v1";
 /** IncentivizedAcknowledgement is the acknowledgement format to be used by applications wrapped in the fee middleware */
 export interface IncentivizedAcknowledgement {
@@ -62,7 +63,7 @@ export const IncentivizedAcknowledgement = {
     if (isSet(object.underlyingAppSuccess)) obj.underlyingAppSuccess = Boolean(object.underlyingAppSuccess);
     return obj;
   },
-  toJSON(message: IncentivizedAcknowledgement): unknown {
+  toJSON(message: IncentivizedAcknowledgement): JsonSafe<IncentivizedAcknowledgement> {
     const obj: any = {};
     message.appAcknowledgement !== undefined &&
       (obj.appAcknowledgement = base64FromBytes(

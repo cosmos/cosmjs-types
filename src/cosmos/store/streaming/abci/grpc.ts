@@ -7,6 +7,7 @@ import {
 import { StoreKVPair } from "../../v1beta1/listening";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "cosmos.store.streaming.abci";
 /** ListenEndBlockRequest is the request type for the ListenEndBlock RPC method */
 export interface ListenFinalizeBlockRequest {
@@ -67,7 +68,7 @@ export const ListenFinalizeBlockRequest = {
     if (isSet(object.res)) obj.res = ResponseFinalizeBlock.fromJSON(object.res);
     return obj;
   },
-  toJSON(message: ListenFinalizeBlockRequest): unknown {
+  toJSON(message: ListenFinalizeBlockRequest): JsonSafe<ListenFinalizeBlockRequest> {
     const obj: any = {};
     message.req !== undefined &&
       (obj.req = message.req ? RequestFinalizeBlock.toJSON(message.req) : undefined);
@@ -114,7 +115,7 @@ export const ListenFinalizeBlockResponse = {
     const obj = createBaseListenFinalizeBlockResponse();
     return obj;
   },
-  toJSON(_: ListenFinalizeBlockResponse): unknown {
+  toJSON(_: ListenFinalizeBlockResponse): JsonSafe<ListenFinalizeBlockResponse> {
     const obj: any = {};
     return obj;
   },
@@ -177,7 +178,7 @@ export const ListenCommitRequest = {
       obj.changeSet = object.changeSet.map((e: any) => StoreKVPair.fromJSON(e));
     return obj;
   },
-  toJSON(message: ListenCommitRequest): unknown {
+  toJSON(message: ListenCommitRequest): JsonSafe<ListenCommitRequest> {
     const obj: any = {};
     message.blockHeight !== undefined && (obj.blockHeight = (message.blockHeight || BigInt(0)).toString());
     message.res !== undefined && (obj.res = message.res ? ResponseCommit.toJSON(message.res) : undefined);
@@ -226,7 +227,7 @@ export const ListenCommitResponse = {
     const obj = createBaseListenCommitResponse();
     return obj;
   },
-  toJSON(_: ListenCommitResponse): unknown {
+  toJSON(_: ListenCommitResponse): JsonSafe<ListenCommitResponse> {
     const obj: any = {};
     return obj;
   },

@@ -3,6 +3,7 @@ import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pa
 import { ContractInfo, ContractCodeHistoryEntry, Model, AccessConfig, Params } from "./types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes, Rpc } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmwasm.wasm.v1";
 /**
  * QueryContractInfoRequest is the request type for the Query/ContractInfo RPC
@@ -45,11 +46,9 @@ export interface QueryContractHistoryResponse {
  * RPC method
  */
 export interface QueryContractsByCodeRequest {
-  /**
-   * grpc-gateway_out does not support Go style CodeID
-   * pagination defines an optional pagination for the request.
-   */
+  /** grpc-gateway_out does not support Go style CodeID */
   codeId: bigint;
+  /** pagination defines an optional pagination for the request. */
   pagination?: PageRequest;
 }
 /**
@@ -211,11 +210,6 @@ export interface QueryWasmLimitsConfigRequest {}
  * static validation of Wasm files.
  */
 export interface QueryWasmLimitsConfigResponse {
-  /**
-   * QueryWasmLimitsConfigResponse is the response type for the
-   * Query/WasmLimitsConfig RPC method. It contains the JSON encoded limits for
-   * static validation of Wasm files.
-   */
   config: string;
 }
 /**
@@ -278,7 +272,7 @@ export const QueryContractInfoRequest = {
     if (isSet(object.address)) obj.address = String(object.address);
     return obj;
   },
-  toJSON(message: QueryContractInfoRequest): unknown {
+  toJSON(message: QueryContractInfoRequest): JsonSafe<QueryContractInfoRequest> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     return obj;
@@ -334,7 +328,7 @@ export const QueryContractInfoResponse = {
     if (isSet(object.contractInfo)) obj.contractInfo = ContractInfo.fromJSON(object.contractInfo);
     return obj;
   },
-  toJSON(message: QueryContractInfoResponse): unknown {
+  toJSON(message: QueryContractInfoResponse): JsonSafe<QueryContractInfoResponse> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.contractInfo !== undefined &&
@@ -395,7 +389,7 @@ export const QueryContractHistoryRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryContractHistoryRequest): unknown {
+  toJSON(message: QueryContractHistoryRequest): JsonSafe<QueryContractHistoryRequest> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.pagination !== undefined &&
@@ -457,7 +451,7 @@ export const QueryContractHistoryResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryContractHistoryResponse): unknown {
+  toJSON(message: QueryContractHistoryResponse): JsonSafe<QueryContractHistoryResponse> {
     const obj: any = {};
     if (message.entries) {
       obj.entries = message.entries.map((e) => (e ? ContractCodeHistoryEntry.toJSON(e) : undefined));
@@ -522,7 +516,7 @@ export const QueryContractsByCodeRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryContractsByCodeRequest): unknown {
+  toJSON(message: QueryContractsByCodeRequest): JsonSafe<QueryContractsByCodeRequest> {
     const obj: any = {};
     message.codeId !== undefined && (obj.codeId = (message.codeId || BigInt(0)).toString());
     message.pagination !== undefined &&
@@ -585,7 +579,7 @@ export const QueryContractsByCodeResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryContractsByCodeResponse): unknown {
+  toJSON(message: QueryContractsByCodeResponse): JsonSafe<QueryContractsByCodeResponse> {
     const obj: any = {};
     if (message.contracts) {
       obj.contracts = message.contracts.map((e) => e);
@@ -650,7 +644,7 @@ export const QueryAllContractStateRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryAllContractStateRequest): unknown {
+  toJSON(message: QueryAllContractStateRequest): JsonSafe<QueryAllContractStateRequest> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.pagination !== undefined &&
@@ -711,7 +705,7 @@ export const QueryAllContractStateResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryAllContractStateResponse): unknown {
+  toJSON(message: QueryAllContractStateResponse): JsonSafe<QueryAllContractStateResponse> {
     const obj: any = {};
     if (message.models) {
       obj.models = message.models.map((e) => (e ? Model.toJSON(e) : undefined));
@@ -776,7 +770,7 @@ export const QueryRawContractStateRequest = {
     if (isSet(object.queryData)) obj.queryData = bytesFromBase64(object.queryData);
     return obj;
   },
-  toJSON(message: QueryRawContractStateRequest): unknown {
+  toJSON(message: QueryRawContractStateRequest): JsonSafe<QueryRawContractStateRequest> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.queryData !== undefined &&
@@ -829,7 +823,7 @@ export const QueryRawContractStateResponse = {
     if (isSet(object.data)) obj.data = bytesFromBase64(object.data);
     return obj;
   },
-  toJSON(message: QueryRawContractStateResponse): unknown {
+  toJSON(message: QueryRawContractStateResponse): JsonSafe<QueryRawContractStateResponse> {
     const obj: any = {};
     message.data !== undefined &&
       (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
@@ -889,7 +883,7 @@ export const QuerySmartContractStateRequest = {
     if (isSet(object.queryData)) obj.queryData = bytesFromBase64(object.queryData);
     return obj;
   },
-  toJSON(message: QuerySmartContractStateRequest): unknown {
+  toJSON(message: QuerySmartContractStateRequest): JsonSafe<QuerySmartContractStateRequest> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.queryData !== undefined &&
@@ -945,7 +939,7 @@ export const QuerySmartContractStateResponse = {
     if (isSet(object.data)) obj.data = bytesFromBase64(object.data);
     return obj;
   },
-  toJSON(message: QuerySmartContractStateResponse): unknown {
+  toJSON(message: QuerySmartContractStateResponse): JsonSafe<QuerySmartContractStateResponse> {
     const obj: any = {};
     message.data !== undefined &&
       (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
@@ -994,7 +988,7 @@ export const QueryCodeRequest = {
     if (isSet(object.codeId)) obj.codeId = BigInt(object.codeId.toString());
     return obj;
   },
-  toJSON(message: QueryCodeRequest): unknown {
+  toJSON(message: QueryCodeRequest): JsonSafe<QueryCodeRequest> {
     const obj: any = {};
     message.codeId !== undefined && (obj.codeId = (message.codeId || BigInt(0)).toString());
     return obj;
@@ -1042,7 +1036,7 @@ export const QueryCodeInfoRequest = {
     if (isSet(object.codeId)) obj.codeId = BigInt(object.codeId.toString());
     return obj;
   },
-  toJSON(message: QueryCodeInfoRequest): unknown {
+  toJSON(message: QueryCodeInfoRequest): JsonSafe<QueryCodeInfoRequest> {
     const obj: any = {};
     message.codeId !== undefined && (obj.codeId = (message.codeId || BigInt(0)).toString());
     return obj;
@@ -1115,7 +1109,7 @@ export const QueryCodeInfoResponse = {
       obj.instantiatePermission = AccessConfig.fromJSON(object.instantiatePermission);
     return obj;
   },
-  toJSON(message: QueryCodeInfoResponse): unknown {
+  toJSON(message: QueryCodeInfoResponse): JsonSafe<QueryCodeInfoResponse> {
     const obj: any = {};
     message.codeId !== undefined && (obj.codeId = (message.codeId || BigInt(0)).toString());
     message.creator !== undefined && (obj.creator = message.creator);
@@ -1200,7 +1194,7 @@ export const CodeInfoResponse = {
       obj.instantiatePermission = AccessConfig.fromJSON(object.instantiatePermission);
     return obj;
   },
-  toJSON(message: CodeInfoResponse): unknown {
+  toJSON(message: CodeInfoResponse): JsonSafe<CodeInfoResponse> {
     const obj: any = {};
     message.codeId !== undefined && (obj.codeId = (message.codeId || BigInt(0)).toString());
     message.creator !== undefined && (obj.creator = message.creator);
@@ -1268,7 +1262,7 @@ export const QueryCodeResponse = {
     if (isSet(object.data)) obj.data = bytesFromBase64(object.data);
     return obj;
   },
-  toJSON(message: QueryCodeResponse): unknown {
+  toJSON(message: QueryCodeResponse): JsonSafe<QueryCodeResponse> {
     const obj: any = {};
     message.codeInfo !== undefined &&
       (obj.codeInfo = message.codeInfo ? CodeInfoResponse.toJSON(message.codeInfo) : undefined);
@@ -1320,7 +1314,7 @@ export const QueryCodesRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryCodesRequest): unknown {
+  toJSON(message: QueryCodesRequest): JsonSafe<QueryCodesRequest> {
     const obj: any = {};
     message.pagination !== undefined &&
       (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
@@ -1378,7 +1372,7 @@ export const QueryCodesResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryCodesResponse): unknown {
+  toJSON(message: QueryCodesResponse): JsonSafe<QueryCodesResponse> {
     const obj: any = {};
     if (message.codeInfos) {
       obj.codeInfos = message.codeInfos.map((e) => (e ? CodeInfoResponse.toJSON(e) : undefined));
@@ -1433,7 +1427,7 @@ export const QueryPinnedCodesRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryPinnedCodesRequest): unknown {
+  toJSON(message: QueryPinnedCodesRequest): JsonSafe<QueryPinnedCodesRequest> {
     const obj: any = {};
     message.pagination !== undefined &&
       (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
@@ -1499,7 +1493,7 @@ export const QueryPinnedCodesResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryPinnedCodesResponse): unknown {
+  toJSON(message: QueryPinnedCodesResponse): JsonSafe<QueryPinnedCodesResponse> {
     const obj: any = {};
     if (message.codeIds) {
       obj.codeIds = message.codeIds.map((e) => (e || BigInt(0)).toString());
@@ -1547,7 +1541,7 @@ export const QueryParamsRequest = {
     const obj = createBaseQueryParamsRequest();
     return obj;
   },
-  toJSON(_: QueryParamsRequest): unknown {
+  toJSON(_: QueryParamsRequest): JsonSafe<QueryParamsRequest> {
     const obj: any = {};
     return obj;
   },
@@ -1591,7 +1585,7 @@ export const QueryParamsResponse = {
     if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: QueryParamsResponse): unknown {
+  toJSON(message: QueryParamsResponse): JsonSafe<QueryParamsResponse> {
     const obj: any = {};
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
@@ -1650,7 +1644,7 @@ export const QueryContractsByCreatorRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryContractsByCreatorRequest): unknown {
+  toJSON(message: QueryContractsByCreatorRequest): JsonSafe<QueryContractsByCreatorRequest> {
     const obj: any = {};
     message.creatorAddress !== undefined && (obj.creatorAddress = message.creatorAddress);
     message.pagination !== undefined &&
@@ -1715,7 +1709,7 @@ export const QueryContractsByCreatorResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryContractsByCreatorResponse): unknown {
+  toJSON(message: QueryContractsByCreatorResponse): JsonSafe<QueryContractsByCreatorResponse> {
     const obj: any = {};
     if (message.contractAddresses) {
       obj.contractAddresses = message.contractAddresses.map((e) => e);
@@ -1763,7 +1757,7 @@ export const QueryWasmLimitsConfigRequest = {
     const obj = createBaseQueryWasmLimitsConfigRequest();
     return obj;
   },
-  toJSON(_: QueryWasmLimitsConfigRequest): unknown {
+  toJSON(_: QueryWasmLimitsConfigRequest): JsonSafe<QueryWasmLimitsConfigRequest> {
     const obj: any = {};
     return obj;
   },
@@ -1809,7 +1803,7 @@ export const QueryWasmLimitsConfigResponse = {
     if (isSet(object.config)) obj.config = String(object.config);
     return obj;
   },
-  toJSON(message: QueryWasmLimitsConfigResponse): unknown {
+  toJSON(message: QueryWasmLimitsConfigResponse): JsonSafe<QueryWasmLimitsConfigResponse> {
     const obj: any = {};
     message.config !== undefined && (obj.config = message.config);
     return obj;
@@ -1881,7 +1875,7 @@ export const QueryBuildAddressRequest = {
     if (isSet(object.initArgs)) obj.initArgs = bytesFromBase64(object.initArgs);
     return obj;
   },
-  toJSON(message: QueryBuildAddressRequest): unknown {
+  toJSON(message: QueryBuildAddressRequest): JsonSafe<QueryBuildAddressRequest> {
     const obj: any = {};
     message.codeHash !== undefined && (obj.codeHash = message.codeHash);
     message.creatorAddress !== undefined && (obj.creatorAddress = message.creatorAddress);
@@ -1936,7 +1930,7 @@ export const QueryBuildAddressResponse = {
     if (isSet(object.address)) obj.address = String(object.address);
     return obj;
   },
-  toJSON(message: QueryBuildAddressResponse): unknown {
+  toJSON(message: QueryBuildAddressResponse): JsonSafe<QueryBuildAddressResponse> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     return obj;

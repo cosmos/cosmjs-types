@@ -2,6 +2,7 @@
 import { BaseAccount } from "../../../../cosmos/auth/v1beta1/auth";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.applications.interchain_accounts.v1";
 /** An InterchainAccount is defined as a BaseAccount & the address of the account owner on the controller chain */
 export interface InterchainAccount {
@@ -51,7 +52,7 @@ export const InterchainAccount = {
     if (isSet(object.accountOwner)) obj.accountOwner = String(object.accountOwner);
     return obj;
   },
-  toJSON(message: InterchainAccount): unknown {
+  toJSON(message: InterchainAccount): JsonSafe<InterchainAccount> {
     const obj: any = {};
     message.baseAccount !== undefined &&
       (obj.baseAccount = message.baseAccount ? BaseAccount.toJSON(message.baseAccount) : undefined);

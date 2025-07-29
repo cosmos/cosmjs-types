@@ -3,6 +3,7 @@ import { AccessConfig } from "./types";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmwasm.wasm.v1";
 /**
  * Deprecated: Do not use. Since wasmd v0.40, there is no longer a need for
@@ -382,7 +383,7 @@ export const StoreCodeProposal = {
     if (isSet(object.codeHash)) obj.codeHash = bytesFromBase64(object.codeHash);
     return obj;
   },
-  toJSON(message: StoreCodeProposal): unknown {
+  toJSON(message: StoreCodeProposal): JsonSafe<StoreCodeProposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
@@ -509,7 +510,7 @@ export const InstantiateContractProposal = {
     if (Array.isArray(object?.funds)) obj.funds = object.funds.map((e: any) => Coin.fromJSON(e));
     return obj;
   },
-  toJSON(message: InstantiateContractProposal): unknown {
+  toJSON(message: InstantiateContractProposal): JsonSafe<InstantiateContractProposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
@@ -650,7 +651,7 @@ export const InstantiateContract2Proposal = {
     if (isSet(object.fixMsg)) obj.fixMsg = Boolean(object.fixMsg);
     return obj;
   },
-  toJSON(message: InstantiateContract2Proposal): unknown {
+  toJSON(message: InstantiateContract2Proposal): JsonSafe<InstantiateContract2Proposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
@@ -756,7 +757,7 @@ export const MigrateContractProposal = {
     if (isSet(object.msg)) obj.msg = bytesFromBase64(object.msg);
     return obj;
   },
-  toJSON(message: MigrateContractProposal): unknown {
+  toJSON(message: MigrateContractProposal): JsonSafe<MigrateContractProposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
@@ -837,7 +838,7 @@ export const SudoContractProposal = {
     if (isSet(object.msg)) obj.msg = bytesFromBase64(object.msg);
     return obj;
   },
-  toJSON(message: SudoContractProposal): unknown {
+  toJSON(message: SudoContractProposal): JsonSafe<SudoContractProposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
@@ -930,7 +931,7 @@ export const ExecuteContractProposal = {
     if (Array.isArray(object?.funds)) obj.funds = object.funds.map((e: any) => Coin.fromJSON(e));
     return obj;
   },
-  toJSON(message: ExecuteContractProposal): unknown {
+  toJSON(message: ExecuteContractProposal): JsonSafe<ExecuteContractProposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
@@ -1015,7 +1016,7 @@ export const UpdateAdminProposal = {
     if (isSet(object.contract)) obj.contract = String(object.contract);
     return obj;
   },
-  toJSON(message: UpdateAdminProposal): unknown {
+  toJSON(message: UpdateAdminProposal): JsonSafe<UpdateAdminProposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
@@ -1083,7 +1084,7 @@ export const ClearAdminProposal = {
     if (isSet(object.contract)) obj.contract = String(object.contract);
     return obj;
   },
-  toJSON(message: ClearAdminProposal): unknown {
+  toJSON(message: ClearAdminProposal): JsonSafe<ClearAdminProposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
@@ -1158,7 +1159,7 @@ export const PinCodesProposal = {
     if (Array.isArray(object?.codeIds)) obj.codeIds = object.codeIds.map((e: any) => BigInt(e.toString()));
     return obj;
   },
-  toJSON(message: PinCodesProposal): unknown {
+  toJSON(message: PinCodesProposal): JsonSafe<PinCodesProposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
@@ -1237,7 +1238,7 @@ export const UnpinCodesProposal = {
     if (Array.isArray(object?.codeIds)) obj.codeIds = object.codeIds.map((e: any) => BigInt(e.toString()));
     return obj;
   },
-  toJSON(message: UnpinCodesProposal): unknown {
+  toJSON(message: UnpinCodesProposal): JsonSafe<UnpinCodesProposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
@@ -1300,7 +1301,7 @@ export const AccessConfigUpdate = {
       obj.instantiatePermission = AccessConfig.fromJSON(object.instantiatePermission);
     return obj;
   },
-  toJSON(message: AccessConfigUpdate): unknown {
+  toJSON(message: AccessConfigUpdate): JsonSafe<AccessConfigUpdate> {
     const obj: any = {};
     message.codeId !== undefined && (obj.codeId = (message.codeId || BigInt(0)).toString());
     message.instantiatePermission !== undefined &&
@@ -1375,7 +1376,7 @@ export const UpdateInstantiateConfigProposal = {
       obj.accessConfigUpdates = object.accessConfigUpdates.map((e: any) => AccessConfigUpdate.fromJSON(e));
     return obj;
   },
-  toJSON(message: UpdateInstantiateConfigProposal): unknown {
+  toJSON(message: UpdateInstantiateConfigProposal): JsonSafe<UpdateInstantiateConfigProposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
@@ -1534,7 +1535,7 @@ export const StoreAndInstantiateContractProposal = {
     if (isSet(object.codeHash)) obj.codeHash = bytesFromBase64(object.codeHash);
     return obj;
   },
-  toJSON(message: StoreAndInstantiateContractProposal): unknown {
+  toJSON(message: StoreAndInstantiateContractProposal): JsonSafe<StoreAndInstantiateContractProposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);

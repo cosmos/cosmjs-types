@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes } from "../../../../../helpers";
+import { JsonSafe } from "../../../../../json-safe";
 export const protobufPackage = "ibc.applications.interchain_accounts.host.v1";
 /**
  * Params defines the set of on-chain interchain accounts parameters.
@@ -72,7 +73,7 @@ export const Params = {
       obj.allowMessages = object.allowMessages.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: Params): unknown {
+  toJSON(message: Params): JsonSafe<Params> {
     const obj: any = {};
     message.hostEnabled !== undefined && (obj.hostEnabled = message.hostEnabled);
     if (message.allowMessages) {
@@ -132,7 +133,7 @@ export const QueryRequest = {
     if (isSet(object.data)) obj.data = bytesFromBase64(object.data);
     return obj;
   },
-  toJSON(message: QueryRequest): unknown {
+  toJSON(message: QueryRequest): JsonSafe<QueryRequest> {
     const obj: any = {};
     message.path !== undefined && (obj.path = message.path);
     message.data !== undefined &&

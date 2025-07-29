@@ -3,6 +3,7 @@ import { PageRequest, PageResponse } from "../../base/query/v1beta1/pagination";
 import { Permissions, GenesisAccountPermissions } from "./types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact, Rpc } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.circuit.v1";
 /** QueryAccountRequest is the request type for the Query/Account RPC method. */
 export interface QueryAccountRequest {
@@ -64,7 +65,7 @@ export const QueryAccountRequest = {
     if (isSet(object.address)) obj.address = String(object.address);
     return obj;
   },
-  toJSON(message: QueryAccountRequest): unknown {
+  toJSON(message: QueryAccountRequest): JsonSafe<QueryAccountRequest> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     return obj;
@@ -110,7 +111,7 @@ export const AccountResponse = {
     if (isSet(object.permission)) obj.permission = Permissions.fromJSON(object.permission);
     return obj;
   },
-  toJSON(message: AccountResponse): unknown {
+  toJSON(message: AccountResponse): JsonSafe<AccountResponse> {
     const obj: any = {};
     message.permission !== undefined &&
       (obj.permission = message.permission ? Permissions.toJSON(message.permission) : undefined);
@@ -159,7 +160,7 @@ export const QueryAccountsRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryAccountsRequest): unknown {
+  toJSON(message: QueryAccountsRequest): JsonSafe<QueryAccountsRequest> {
     const obj: any = {};
     message.pagination !== undefined &&
       (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
@@ -217,7 +218,7 @@ export const AccountsResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: AccountsResponse): unknown {
+  toJSON(message: AccountsResponse): JsonSafe<AccountsResponse> {
     const obj: any = {};
     if (message.accounts) {
       obj.accounts = message.accounts.map((e) => (e ? GenesisAccountPermissions.toJSON(e) : undefined));
@@ -263,7 +264,7 @@ export const QueryDisabledListRequest = {
     const obj = createBaseQueryDisabledListRequest();
     return obj;
   },
-  toJSON(_: QueryDisabledListRequest): unknown {
+  toJSON(_: QueryDisabledListRequest): JsonSafe<QueryDisabledListRequest> {
     const obj: any = {};
     return obj;
   },
@@ -308,7 +309,7 @@ export const DisabledListResponse = {
       obj.disabledList = object.disabledList.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: DisabledListResponse): unknown {
+  toJSON(message: DisabledListResponse): JsonSafe<DisabledListResponse> {
     const obj: any = {};
     if (message.disabledList) {
       obj.disabledList = message.disabledList.map((e) => e);

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Class, NFT } from "./nft";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { JsonSafe } from "../../../json-safe";
 import { DeepPartial, Exact, isSet } from "../../../helpers";
 export const protobufPackage = "cosmos.nft.v1beta1";
 /** GenesisState defines the nft module's genesis state. */
@@ -60,7 +61,7 @@ export const GenesisState = {
     if (Array.isArray(object?.entries)) obj.entries = object.entries.map((e: any) => Entry.fromJSON(e));
     return obj;
   },
-  toJSON(message: GenesisState): unknown {
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
     const obj: any = {};
     if (message.classes) {
       obj.classes = message.classes.map((e) => (e ? Class.toJSON(e) : undefined));
@@ -124,7 +125,7 @@ export const Entry = {
     if (Array.isArray(object?.nfts)) obj.nfts = object.nfts.map((e: any) => NFT.fromJSON(e));
     return obj;
   },
-  toJSON(message: Entry): unknown {
+  toJSON(message: Entry): JsonSafe<Entry> {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
     if (message.nfts) {

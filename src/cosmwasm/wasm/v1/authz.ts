@@ -3,6 +3,7 @@ import { AccessConfig } from "./types";
 import { Any } from "../../../google/protobuf/any";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { JsonSafe } from "../../../json-safe";
 import { DeepPartial, Exact, isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 export const protobufPackage = "cosmwasm.wasm.v1";
 /**
@@ -148,7 +149,7 @@ export const StoreCodeAuthorization = {
     if (Array.isArray(object?.grants)) obj.grants = object.grants.map((e: any) => CodeGrant.fromJSON(e));
     return obj;
   },
-  toJSON(message: StoreCodeAuthorization): unknown {
+  toJSON(message: StoreCodeAuthorization): JsonSafe<StoreCodeAuthorization> {
     const obj: any = {};
     if (message.grants) {
       obj.grants = message.grants.map((e) => (e ? CodeGrant.toJSON(e) : undefined));
@@ -201,7 +202,7 @@ export const ContractExecutionAuthorization = {
     if (Array.isArray(object?.grants)) obj.grants = object.grants.map((e: any) => ContractGrant.fromJSON(e));
     return obj;
   },
-  toJSON(message: ContractExecutionAuthorization): unknown {
+  toJSON(message: ContractExecutionAuthorization): JsonSafe<ContractExecutionAuthorization> {
     const obj: any = {};
     if (message.grants) {
       obj.grants = message.grants.map((e) => (e ? ContractGrant.toJSON(e) : undefined));
@@ -256,7 +257,7 @@ export const ContractMigrationAuthorization = {
     if (Array.isArray(object?.grants)) obj.grants = object.grants.map((e: any) => ContractGrant.fromJSON(e));
     return obj;
   },
-  toJSON(message: ContractMigrationAuthorization): unknown {
+  toJSON(message: ContractMigrationAuthorization): JsonSafe<ContractMigrationAuthorization> {
     const obj: any = {};
     if (message.grants) {
       obj.grants = message.grants.map((e) => (e ? ContractGrant.toJSON(e) : undefined));
@@ -317,7 +318,7 @@ export const CodeGrant = {
       obj.instantiatePermission = AccessConfig.fromJSON(object.instantiatePermission);
     return obj;
   },
-  toJSON(message: CodeGrant): unknown {
+  toJSON(message: CodeGrant): JsonSafe<CodeGrant> {
     const obj: any = {};
     message.codeHash !== undefined &&
       (obj.codeHash = base64FromBytes(message.codeHash !== undefined ? message.codeHash : new Uint8Array()));
@@ -387,7 +388,7 @@ export const ContractGrant = {
     if (isSet(object.filter)) obj.filter = Any.fromJSON(object.filter);
     return obj;
   },
-  toJSON(message: ContractGrant): unknown {
+  toJSON(message: ContractGrant): JsonSafe<ContractGrant> {
     const obj: any = {};
     message.contract !== undefined && (obj.contract = message.contract);
     message.limit !== undefined && (obj.limit = message.limit ? Any.toJSON(message.limit) : undefined);
@@ -441,7 +442,7 @@ export const MaxCallsLimit = {
     if (isSet(object.remaining)) obj.remaining = BigInt(object.remaining.toString());
     return obj;
   },
-  toJSON(message: MaxCallsLimit): unknown {
+  toJSON(message: MaxCallsLimit): JsonSafe<MaxCallsLimit> {
     const obj: any = {};
     message.remaining !== undefined && (obj.remaining = (message.remaining || BigInt(0)).toString());
     return obj;
@@ -489,7 +490,7 @@ export const MaxFundsLimit = {
     if (Array.isArray(object?.amounts)) obj.amounts = object.amounts.map((e: any) => Coin.fromJSON(e));
     return obj;
   },
-  toJSON(message: MaxFundsLimit): unknown {
+  toJSON(message: MaxFundsLimit): JsonSafe<MaxFundsLimit> {
     const obj: any = {};
     if (message.amounts) {
       obj.amounts = message.amounts.map((e) => (e ? Coin.toJSON(e) : undefined));
@@ -547,7 +548,7 @@ export const CombinedLimit = {
     if (Array.isArray(object?.amounts)) obj.amounts = object.amounts.map((e: any) => Coin.fromJSON(e));
     return obj;
   },
-  toJSON(message: CombinedLimit): unknown {
+  toJSON(message: CombinedLimit): JsonSafe<CombinedLimit> {
     const obj: any = {};
     message.callsRemaining !== undefined &&
       (obj.callsRemaining = (message.callsRemaining || BigInt(0)).toString());
@@ -593,7 +594,7 @@ export const AllowAllMessagesFilter = {
     const obj = createBaseAllowAllMessagesFilter();
     return obj;
   },
-  toJSON(_: AllowAllMessagesFilter): unknown {
+  toJSON(_: AllowAllMessagesFilter): JsonSafe<AllowAllMessagesFilter> {
     const obj: any = {};
     return obj;
   },
@@ -637,7 +638,7 @@ export const AcceptedMessageKeysFilter = {
     if (Array.isArray(object?.keys)) obj.keys = object.keys.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: AcceptedMessageKeysFilter): unknown {
+  toJSON(message: AcceptedMessageKeysFilter): JsonSafe<AcceptedMessageKeysFilter> {
     const obj: any = {};
     if (message.keys) {
       obj.keys = message.keys.map((e) => e);
@@ -689,7 +690,7 @@ export const AcceptedMessagesFilter = {
     if (Array.isArray(object?.messages)) obj.messages = object.messages.map((e: any) => bytesFromBase64(e));
     return obj;
   },
-  toJSON(message: AcceptedMessagesFilter): unknown {
+  toJSON(message: AcceptedMessagesFilter): JsonSafe<AcceptedMessagesFilter> {
     const obj: any = {};
     if (message.messages) {
       obj.messages = message.messages.map((e) => base64FromBytes(e !== undefined ? e : new Uint8Array()));

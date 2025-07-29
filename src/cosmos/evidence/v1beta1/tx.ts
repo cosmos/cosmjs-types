@@ -2,6 +2,7 @@
 import { Any } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes, Rpc } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.evidence.v1beta1";
 /**
  * MsgSubmitEvidence represents a message that supports submitting arbitrary
@@ -61,7 +62,7 @@ export const MsgSubmitEvidence = {
     if (isSet(object.evidence)) obj.evidence = Any.fromJSON(object.evidence);
     return obj;
   },
-  toJSON(message: MsgSubmitEvidence): unknown {
+  toJSON(message: MsgSubmitEvidence): JsonSafe<MsgSubmitEvidence> {
     const obj: any = {};
     message.submitter !== undefined && (obj.submitter = message.submitter);
     message.evidence !== undefined &&
@@ -112,7 +113,7 @@ export const MsgSubmitEvidenceResponse = {
     if (isSet(object.hash)) obj.hash = bytesFromBase64(object.hash);
     return obj;
   },
-  toJSON(message: MsgSubmitEvidenceResponse): unknown {
+  toJSON(message: MsgSubmitEvidenceResponse): JsonSafe<MsgSubmitEvidenceResponse> {
     const obj: any = {};
     message.hash !== undefined &&
       (obj.hash = base64FromBytes(message.hash !== undefined ? message.hash : new Uint8Array()));

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../binary";
 import { isSet, DeepPartial, Exact } from "../helpers";
+import { JsonSafe } from "../json-safe";
 export const protobufPackage = "cosmos_proto";
 export enum ScalarType {
   SCALAR_TYPE_UNSPECIFIED = 0,
@@ -130,7 +131,7 @@ export const InterfaceDescriptor = {
     if (isSet(object.description)) obj.description = String(object.description);
     return obj;
   },
-  toJSON(message: InterfaceDescriptor): unknown {
+  toJSON(message: InterfaceDescriptor): JsonSafe<InterfaceDescriptor> {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined && (obj.description = message.description);
@@ -204,7 +205,7 @@ export const ScalarDescriptor = {
       obj.fieldType = object.fieldType.map((e: any) => scalarTypeFromJSON(e));
     return obj;
   },
-  toJSON(message: ScalarDescriptor): unknown {
+  toJSON(message: ScalarDescriptor): JsonSafe<ScalarDescriptor> {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined && (obj.description = message.description);

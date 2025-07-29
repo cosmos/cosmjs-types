@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { ConsensusParams } from "../../../tendermint/types/params";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { JsonSafe } from "../../../json-safe";
 import { DeepPartial, Exact, isSet, Rpc } from "../../../helpers";
 export const protobufPackage = "cosmos.consensus.v1";
 /** QueryParamsRequest defines the request type for querying x/consensus parameters. */
@@ -40,7 +41,7 @@ export const QueryParamsRequest = {
     const obj = createBaseQueryParamsRequest();
     return obj;
   },
-  toJSON(_: QueryParamsRequest): unknown {
+  toJSON(_: QueryParamsRequest): JsonSafe<QueryParamsRequest> {
     const obj: any = {};
     return obj;
   },
@@ -84,7 +85,7 @@ export const QueryParamsResponse = {
     if (isSet(object.params)) obj.params = ConsensusParams.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: QueryParamsResponse): unknown {
+  toJSON(message: QueryParamsResponse): JsonSafe<QueryParamsResponse> {
     const obj: any = {};
     message.params !== undefined &&
       (obj.params = message.params ? ConsensusParams.toJSON(message.params) : undefined);

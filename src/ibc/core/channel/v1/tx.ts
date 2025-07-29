@@ -4,6 +4,7 @@ import { Height, Params } from "../../client/v1/client";
 import { UpgradeFields, Upgrade, ErrorReceipt } from "./upgrade";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes, Rpc } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.core.channel.v1";
 /** ResponseResultType defines the possible outcomes of the execution of a message */
 export enum ResponseResultType {
@@ -374,7 +375,7 @@ export const MsgChannelOpenInit = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgChannelOpenInit): unknown {
+  toJSON(message: MsgChannelOpenInit): JsonSafe<MsgChannelOpenInit> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channel !== undefined &&
@@ -435,7 +436,7 @@ export const MsgChannelOpenInitResponse = {
     if (isSet(object.version)) obj.version = String(object.version);
     return obj;
   },
-  toJSON(message: MsgChannelOpenInitResponse): unknown {
+  toJSON(message: MsgChannelOpenInitResponse): JsonSafe<MsgChannelOpenInitResponse> {
     const obj: any = {};
     message.channelId !== undefined && (obj.channelId = message.channelId);
     message.version !== undefined && (obj.version = message.version);
@@ -533,7 +534,7 @@ export const MsgChannelOpenTry = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgChannelOpenTry): unknown {
+  toJSON(message: MsgChannelOpenTry): JsonSafe<MsgChannelOpenTry> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.previousChannelId !== undefined && (obj.previousChannelId = message.previousChannelId);
@@ -608,7 +609,7 @@ export const MsgChannelOpenTryResponse = {
     if (isSet(object.channelId)) obj.channelId = String(object.channelId);
     return obj;
   },
-  toJSON(message: MsgChannelOpenTryResponse): unknown {
+  toJSON(message: MsgChannelOpenTryResponse): JsonSafe<MsgChannelOpenTryResponse> {
     const obj: any = {};
     message.version !== undefined && (obj.version = message.version);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -706,7 +707,7 @@ export const MsgChannelOpenAck = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgChannelOpenAck): unknown {
+  toJSON(message: MsgChannelOpenAck): JsonSafe<MsgChannelOpenAck> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -760,7 +761,7 @@ export const MsgChannelOpenAckResponse = {
     const obj = createBaseMsgChannelOpenAckResponse();
     return obj;
   },
-  toJSON(_: MsgChannelOpenAckResponse): unknown {
+  toJSON(_: MsgChannelOpenAckResponse): JsonSafe<MsgChannelOpenAckResponse> {
     const obj: any = {};
     return obj;
   },
@@ -836,7 +837,7 @@ export const MsgChannelOpenConfirm = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgChannelOpenConfirm): unknown {
+  toJSON(message: MsgChannelOpenConfirm): JsonSafe<MsgChannelOpenConfirm> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -885,7 +886,7 @@ export const MsgChannelOpenConfirmResponse = {
     const obj = createBaseMsgChannelOpenConfirmResponse();
     return obj;
   },
-  toJSON(_: MsgChannelOpenConfirmResponse): unknown {
+  toJSON(_: MsgChannelOpenConfirmResponse): JsonSafe<MsgChannelOpenConfirmResponse> {
     const obj: any = {};
     return obj;
   },
@@ -947,7 +948,7 @@ export const MsgChannelCloseInit = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgChannelCloseInit): unknown {
+  toJSON(message: MsgChannelCloseInit): JsonSafe<MsgChannelCloseInit> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -988,7 +989,7 @@ export const MsgChannelCloseInitResponse = {
     const obj = createBaseMsgChannelCloseInitResponse();
     return obj;
   },
-  toJSON(_: MsgChannelCloseInitResponse): unknown {
+  toJSON(_: MsgChannelCloseInitResponse): JsonSafe<MsgChannelCloseInitResponse> {
     const obj: any = {};
     return obj;
   },
@@ -1075,7 +1076,7 @@ export const MsgChannelCloseConfirm = {
       obj.counterpartyUpgradeSequence = BigInt(object.counterpartyUpgradeSequence.toString());
     return obj;
   },
-  toJSON(message: MsgChannelCloseConfirm): unknown {
+  toJSON(message: MsgChannelCloseConfirm): JsonSafe<MsgChannelCloseConfirm> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -1131,7 +1132,7 @@ export const MsgChannelCloseConfirmResponse = {
     const obj = createBaseMsgChannelCloseConfirmResponse();
     return obj;
   },
-  toJSON(_: MsgChannelCloseConfirmResponse): unknown {
+  toJSON(_: MsgChannelCloseConfirmResponse): JsonSafe<MsgChannelCloseConfirmResponse> {
     const obj: any = {};
     return obj;
   },
@@ -1201,7 +1202,7 @@ export const MsgRecvPacket = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgRecvPacket): unknown {
+  toJSON(message: MsgRecvPacket): JsonSafe<MsgRecvPacket> {
     const obj: any = {};
     message.packet !== undefined && (obj.packet = message.packet ? Packet.toJSON(message.packet) : undefined);
     message.proofCommitment !== undefined &&
@@ -1261,7 +1262,7 @@ export const MsgRecvPacketResponse = {
     if (isSet(object.result)) obj.result = responseResultTypeFromJSON(object.result);
     return obj;
   },
-  toJSON(message: MsgRecvPacketResponse): unknown {
+  toJSON(message: MsgRecvPacketResponse): JsonSafe<MsgRecvPacketResponse> {
     const obj: any = {};
     message.result !== undefined && (obj.result = responseResultTypeToJSON(message.result));
     return obj;
@@ -1339,7 +1340,7 @@ export const MsgTimeout = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgTimeout): unknown {
+  toJSON(message: MsgTimeout): JsonSafe<MsgTimeout> {
     const obj: any = {};
     message.packet !== undefined && (obj.packet = message.packet ? Packet.toJSON(message.packet) : undefined);
     message.proofUnreceived !== undefined &&
@@ -1404,7 +1405,7 @@ export const MsgTimeoutResponse = {
     if (isSet(object.result)) obj.result = responseResultTypeFromJSON(object.result);
     return obj;
   },
-  toJSON(message: MsgTimeoutResponse): unknown {
+  toJSON(message: MsgTimeoutResponse): JsonSafe<MsgTimeoutResponse> {
     const obj: any = {};
     message.result !== undefined && (obj.result = responseResultTypeToJSON(message.result));
     return obj;
@@ -1499,7 +1500,7 @@ export const MsgTimeoutOnClose = {
       obj.counterpartyUpgradeSequence = BigInt(object.counterpartyUpgradeSequence.toString());
     return obj;
   },
-  toJSON(message: MsgTimeoutOnClose): unknown {
+  toJSON(message: MsgTimeoutOnClose): JsonSafe<MsgTimeoutOnClose> {
     const obj: any = {};
     message.packet !== undefined && (obj.packet = message.packet ? Packet.toJSON(message.packet) : undefined);
     message.proofUnreceived !== undefined &&
@@ -1574,7 +1575,7 @@ export const MsgTimeoutOnCloseResponse = {
     if (isSet(object.result)) obj.result = responseResultTypeFromJSON(object.result);
     return obj;
   },
-  toJSON(message: MsgTimeoutOnCloseResponse): unknown {
+  toJSON(message: MsgTimeoutOnCloseResponse): JsonSafe<MsgTimeoutOnCloseResponse> {
     const obj: any = {};
     message.result !== undefined && (obj.result = responseResultTypeToJSON(message.result));
     return obj;
@@ -1654,7 +1655,7 @@ export const MsgAcknowledgement = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgAcknowledgement): unknown {
+  toJSON(message: MsgAcknowledgement): JsonSafe<MsgAcknowledgement> {
     const obj: any = {};
     message.packet !== undefined && (obj.packet = message.packet ? Packet.toJSON(message.packet) : undefined);
     message.acknowledgement !== undefined &&
@@ -1719,7 +1720,7 @@ export const MsgAcknowledgementResponse = {
     if (isSet(object.result)) obj.result = responseResultTypeFromJSON(object.result);
     return obj;
   },
-  toJSON(message: MsgAcknowledgementResponse): unknown {
+  toJSON(message: MsgAcknowledgementResponse): JsonSafe<MsgAcknowledgementResponse> {
     const obj: any = {};
     message.result !== undefined && (obj.result = responseResultTypeToJSON(message.result));
     return obj;
@@ -1791,7 +1792,7 @@ export const MsgChannelUpgradeInit = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgChannelUpgradeInit): unknown {
+  toJSON(message: MsgChannelUpgradeInit): JsonSafe<MsgChannelUpgradeInit> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -1854,7 +1855,7 @@ export const MsgChannelUpgradeInitResponse = {
     if (isSet(object.upgradeSequence)) obj.upgradeSequence = BigInt(object.upgradeSequence.toString());
     return obj;
   },
-  toJSON(message: MsgChannelUpgradeInitResponse): unknown {
+  toJSON(message: MsgChannelUpgradeInitResponse): JsonSafe<MsgChannelUpgradeInitResponse> {
     const obj: any = {};
     message.upgrade !== undefined &&
       (obj.upgrade = message.upgrade ? Upgrade.toJSON(message.upgrade) : undefined);
@@ -1977,7 +1978,7 @@ export const MsgChannelUpgradeTry = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgChannelUpgradeTry): unknown {
+  toJSON(message: MsgChannelUpgradeTry): JsonSafe<MsgChannelUpgradeTry> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -2076,7 +2077,7 @@ export const MsgChannelUpgradeTryResponse = {
     if (isSet(object.result)) obj.result = responseResultTypeFromJSON(object.result);
     return obj;
   },
-  toJSON(message: MsgChannelUpgradeTryResponse): unknown {
+  toJSON(message: MsgChannelUpgradeTryResponse): JsonSafe<MsgChannelUpgradeTryResponse> {
     const obj: any = {};
     message.upgrade !== undefined &&
       (obj.upgrade = message.upgrade ? Upgrade.toJSON(message.upgrade) : undefined);
@@ -2183,7 +2184,7 @@ export const MsgChannelUpgradeAck = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgChannelUpgradeAck): unknown {
+  toJSON(message: MsgChannelUpgradeAck): JsonSafe<MsgChannelUpgradeAck> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -2255,7 +2256,7 @@ export const MsgChannelUpgradeAckResponse = {
     if (isSet(object.result)) obj.result = responseResultTypeFromJSON(object.result);
     return obj;
   },
-  toJSON(message: MsgChannelUpgradeAckResponse): unknown {
+  toJSON(message: MsgChannelUpgradeAckResponse): JsonSafe<MsgChannelUpgradeAckResponse> {
     const obj: any = {};
     message.result !== undefined && (obj.result = responseResultTypeToJSON(message.result));
     return obj;
@@ -2361,7 +2362,7 @@ export const MsgChannelUpgradeConfirm = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgChannelUpgradeConfirm): unknown {
+  toJSON(message: MsgChannelUpgradeConfirm): JsonSafe<MsgChannelUpgradeConfirm> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -2441,7 +2442,7 @@ export const MsgChannelUpgradeConfirmResponse = {
     if (isSet(object.result)) obj.result = responseResultTypeFromJSON(object.result);
     return obj;
   },
-  toJSON(message: MsgChannelUpgradeConfirmResponse): unknown {
+  toJSON(message: MsgChannelUpgradeConfirmResponse): JsonSafe<MsgChannelUpgradeConfirmResponse> {
     const obj: any = {};
     message.result !== undefined && (obj.result = responseResultTypeToJSON(message.result));
     return obj;
@@ -2539,7 +2540,7 @@ export const MsgChannelUpgradeOpen = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgChannelUpgradeOpen): unknown {
+  toJSON(message: MsgChannelUpgradeOpen): JsonSafe<MsgChannelUpgradeOpen> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -2598,7 +2599,7 @@ export const MsgChannelUpgradeOpenResponse = {
     const obj = createBaseMsgChannelUpgradeOpenResponse();
     return obj;
   },
-  toJSON(_: MsgChannelUpgradeOpenResponse): unknown {
+  toJSON(_: MsgChannelUpgradeOpenResponse): JsonSafe<MsgChannelUpgradeOpenResponse> {
     const obj: any = {};
     return obj;
   },
@@ -2685,7 +2686,7 @@ export const MsgChannelUpgradeTimeout = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgChannelUpgradeTimeout): unknown {
+  toJSON(message: MsgChannelUpgradeTimeout): JsonSafe<MsgChannelUpgradeTimeout> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -2745,7 +2746,7 @@ export const MsgChannelUpgradeTimeoutResponse = {
     const obj = createBaseMsgChannelUpgradeTimeoutResponse();
     return obj;
   },
-  toJSON(_: MsgChannelUpgradeTimeoutResponse): unknown {
+  toJSON(_: MsgChannelUpgradeTimeoutResponse): JsonSafe<MsgChannelUpgradeTimeoutResponse> {
     const obj: any = {};
     return obj;
   },
@@ -2831,7 +2832,7 @@ export const MsgChannelUpgradeCancel = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgChannelUpgradeCancel): unknown {
+  toJSON(message: MsgChannelUpgradeCancel): JsonSafe<MsgChannelUpgradeCancel> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -2887,7 +2888,7 @@ export const MsgChannelUpgradeCancelResponse = {
     const obj = createBaseMsgChannelUpgradeCancelResponse();
     return obj;
   },
-  toJSON(_: MsgChannelUpgradeCancelResponse): unknown {
+  toJSON(_: MsgChannelUpgradeCancelResponse): JsonSafe<MsgChannelUpgradeCancelResponse> {
     const obj: any = {};
     return obj;
   },
@@ -2941,7 +2942,7 @@ export const MsgUpdateParams = {
     if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: MsgUpdateParams): unknown {
+  toJSON(message: MsgUpdateParams): JsonSafe<MsgUpdateParams> {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
@@ -2982,7 +2983,7 @@ export const MsgUpdateParamsResponse = {
     const obj = createBaseMsgUpdateParamsResponse();
     return obj;
   },
-  toJSON(_: MsgUpdateParamsResponse): unknown {
+  toJSON(_: MsgUpdateParamsResponse): JsonSafe<MsgUpdateParamsResponse> {
     const obj: any = {};
     return obj;
   },
@@ -3050,7 +3051,7 @@ export const MsgPruneAcknowledgements = {
     if (isSet(object.signer)) obj.signer = String(object.signer);
     return obj;
   },
-  toJSON(message: MsgPruneAcknowledgements): unknown {
+  toJSON(message: MsgPruneAcknowledgements): JsonSafe<MsgPruneAcknowledgements> {
     const obj: any = {};
     message.portId !== undefined && (obj.portId = message.portId);
     message.channelId !== undefined && (obj.channelId = message.channelId);
@@ -3119,7 +3120,7 @@ export const MsgPruneAcknowledgementsResponse = {
       obj.totalRemainingSequences = BigInt(object.totalRemainingSequences.toString());
     return obj;
   },
-  toJSON(message: MsgPruneAcknowledgementsResponse): unknown {
+  toJSON(message: MsgPruneAcknowledgementsResponse): JsonSafe<MsgPruneAcknowledgementsResponse> {
     const obj: any = {};
     message.totalPrunedSequences !== undefined &&
       (obj.totalPrunedSequences = (message.totalPrunedSequences || BigInt(0)).toString());

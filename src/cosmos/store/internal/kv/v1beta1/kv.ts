@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../../binary";
+import { JsonSafe } from "../../../../../json-safe";
 import { DeepPartial, Exact, isSet, bytesFromBase64, base64FromBytes } from "../../../../../helpers";
 export const protobufPackage = "cosmos.store.internal.kv.v1beta1";
 /** Pairs defines a repeated slice of Pair objects. */
@@ -46,7 +47,7 @@ export const Pairs = {
     if (Array.isArray(object?.pairs)) obj.pairs = object.pairs.map((e: any) => Pair.fromJSON(e));
     return obj;
   },
-  toJSON(message: Pairs): unknown {
+  toJSON(message: Pairs): JsonSafe<Pairs> {
     const obj: any = {};
     if (message.pairs) {
       obj.pairs = message.pairs.map((e) => (e ? Pair.toJSON(e) : undefined));
@@ -104,7 +105,7 @@ export const Pair = {
     if (isSet(object.value)) obj.value = bytesFromBase64(object.value);
     return obj;
   },
-  toJSON(message: Pair): unknown {
+  toJSON(message: Pair): JsonSafe<Pair> {
     const obj: any = {};
     message.key !== undefined &&
       (obj.key = base64FromBytes(message.key !== undefined ? message.key : new Uint8Array()));

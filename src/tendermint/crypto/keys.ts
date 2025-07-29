@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../helpers";
+import { JsonSafe } from "../../json-safe";
 export const protobufPackage = "tendermint.crypto";
 /** PublicKey defines the keys available for use with Validators */
 export interface PublicKey {
@@ -50,7 +51,7 @@ export const PublicKey = {
     if (isSet(object.secp256k1)) obj.secp256k1 = bytesFromBase64(object.secp256k1);
     return obj;
   },
-  toJSON(message: PublicKey): unknown {
+  toJSON(message: PublicKey): JsonSafe<PublicKey> {
     const obj: any = {};
     message.ed25519 !== undefined &&
       (obj.ed25519 = message.ed25519 !== undefined ? base64FromBytes(message.ed25519) : undefined);

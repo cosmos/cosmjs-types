@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes } from "../../helpers";
+import { JsonSafe } from "../../json-safe";
 export const protobufPackage = "tendermint.p2p";
 export interface NetAddress {
   id: string;
@@ -77,7 +78,7 @@ export const NetAddress = {
     if (isSet(object.port)) obj.port = Number(object.port);
     return obj;
   },
-  toJSON(message: NetAddress): unknown {
+  toJSON(message: NetAddress): JsonSafe<NetAddress> {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.ip !== undefined && (obj.ip = message.ip);
@@ -143,7 +144,7 @@ export const ProtocolVersion = {
     if (isSet(object.app)) obj.app = BigInt(object.app.toString());
     return obj;
   },
-  toJSON(message: ProtocolVersion): unknown {
+  toJSON(message: ProtocolVersion): JsonSafe<ProtocolVersion> {
     const obj: any = {};
     message.p2p !== undefined && (obj.p2p = (message.p2p || BigInt(0)).toString());
     message.block !== undefined && (obj.block = (message.block || BigInt(0)).toString());
@@ -255,7 +256,7 @@ export const DefaultNodeInfo = {
     if (isSet(object.other)) obj.other = DefaultNodeInfoOther.fromJSON(object.other);
     return obj;
   },
-  toJSON(message: DefaultNodeInfo): unknown {
+  toJSON(message: DefaultNodeInfo): JsonSafe<DefaultNodeInfo> {
     const obj: any = {};
     message.protocolVersion !== undefined &&
       (obj.protocolVersion = message.protocolVersion
@@ -332,7 +333,7 @@ export const DefaultNodeInfoOther = {
     if (isSet(object.rpcAddress)) obj.rpcAddress = String(object.rpcAddress);
     return obj;
   },
-  toJSON(message: DefaultNodeInfoOther): unknown {
+  toJSON(message: DefaultNodeInfoOther): JsonSafe<DefaultNodeInfoOther> {
     const obj: any = {};
     message.txIndex !== undefined && (obj.txIndex = message.txIndex);
     message.rpcAddress !== undefined && (obj.rpcAddress = message.rpcAddress);

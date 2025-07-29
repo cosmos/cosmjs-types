@@ -2,6 +2,7 @@
 import { Permissions } from "./types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact, Rpc } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.circuit.v1";
 /** MsgAuthorizeCircuitBreaker defines the Msg/AuthorizeCircuitBreaker request type. */
 export interface MsgAuthorizeCircuitBreaker {
@@ -106,7 +107,7 @@ export const MsgAuthorizeCircuitBreaker = {
     if (isSet(object.permissions)) obj.permissions = Permissions.fromJSON(object.permissions);
     return obj;
   },
-  toJSON(message: MsgAuthorizeCircuitBreaker): unknown {
+  toJSON(message: MsgAuthorizeCircuitBreaker): JsonSafe<MsgAuthorizeCircuitBreaker> {
     const obj: any = {};
     message.granter !== undefined && (obj.granter = message.granter);
     message.grantee !== undefined && (obj.grantee = message.grantee);
@@ -164,7 +165,7 @@ export const MsgAuthorizeCircuitBreakerResponse = {
     if (isSet(object.success)) obj.success = Boolean(object.success);
     return obj;
   },
-  toJSON(message: MsgAuthorizeCircuitBreakerResponse): unknown {
+  toJSON(message: MsgAuthorizeCircuitBreakerResponse): JsonSafe<MsgAuthorizeCircuitBreakerResponse> {
     const obj: any = {};
     message.success !== undefined && (obj.success = message.success);
     return obj;
@@ -220,7 +221,7 @@ export const MsgTripCircuitBreaker = {
     if (Array.isArray(object?.msgTypeUrls)) obj.msgTypeUrls = object.msgTypeUrls.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: MsgTripCircuitBreaker): unknown {
+  toJSON(message: MsgTripCircuitBreaker): JsonSafe<MsgTripCircuitBreaker> {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
     if (message.msgTypeUrls) {
@@ -272,7 +273,7 @@ export const MsgTripCircuitBreakerResponse = {
     if (isSet(object.success)) obj.success = Boolean(object.success);
     return obj;
   },
-  toJSON(message: MsgTripCircuitBreakerResponse): unknown {
+  toJSON(message: MsgTripCircuitBreakerResponse): JsonSafe<MsgTripCircuitBreakerResponse> {
     const obj: any = {};
     message.success !== undefined && (obj.success = message.success);
     return obj;
@@ -328,7 +329,7 @@ export const MsgResetCircuitBreaker = {
     if (Array.isArray(object?.msgTypeUrls)) obj.msgTypeUrls = object.msgTypeUrls.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: MsgResetCircuitBreaker): unknown {
+  toJSON(message: MsgResetCircuitBreaker): JsonSafe<MsgResetCircuitBreaker> {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
     if (message.msgTypeUrls) {
@@ -383,7 +384,7 @@ export const MsgResetCircuitBreakerResponse = {
     if (isSet(object.success)) obj.success = Boolean(object.success);
     return obj;
   },
-  toJSON(message: MsgResetCircuitBreakerResponse): unknown {
+  toJSON(message: MsgResetCircuitBreakerResponse): JsonSafe<MsgResetCircuitBreakerResponse> {
     const obj: any = {};
     message.success !== undefined && (obj.success = message.success);
     return obj;

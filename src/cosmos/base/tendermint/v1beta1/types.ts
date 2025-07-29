@@ -13,6 +13,7 @@ import {
   fromTimestamp,
   base64FromBytes,
 } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "cosmos.base.tendermint.v1beta1";
 /**
  * Block is tendermint type Block, with the Header proposer address
@@ -35,6 +36,7 @@ export interface Header {
   lastBlockId: BlockID;
   /** hashes of block data */
   lastCommitHash: Uint8Array;
+  /** transactions */
   dataHash: Uint8Array;
   /** hashes from the app output from the prev block */
   validatorsHash: Uint8Array;
@@ -44,6 +46,7 @@ export interface Header {
   consensusHash: Uint8Array;
   /** state after txs from the previous block */
   appHash: Uint8Array;
+  /** root hash of all results from the txs from the previous block */
   lastResultsHash: Uint8Array;
   /** consensus info */
   evidenceHash: Uint8Array;
@@ -113,7 +116,7 @@ export const Block = {
     if (isSet(object.lastCommit)) obj.lastCommit = Commit.fromJSON(object.lastCommit);
     return obj;
   },
-  toJSON(message: Block): unknown {
+  toJSON(message: Block): JsonSafe<Block> {
     const obj: any = {};
     message.header !== undefined && (obj.header = message.header ? Header.toJSON(message.header) : undefined);
     message.data !== undefined && (obj.data = message.data ? Data.toJSON(message.data) : undefined);
@@ -279,7 +282,7 @@ export const Header = {
     if (isSet(object.proposerAddress)) obj.proposerAddress = String(object.proposerAddress);
     return obj;
   },
-  toJSON(message: Header): unknown {
+  toJSON(message: Header): JsonSafe<Header> {
     const obj: any = {};
     message.version !== undefined &&
       (obj.version = message.version ? Consensus.toJSON(message.version) : undefined);

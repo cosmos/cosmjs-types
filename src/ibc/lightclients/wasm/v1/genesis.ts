@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { JsonSafe } from "../../../../json-safe";
 import { DeepPartial, Exact, isSet, bytesFromBase64, base64FromBytes } from "../../../../helpers";
 export const protobufPackage = "ibc.lightclients.wasm.v1";
 /** GenesisState defines 08-wasm's keeper genesis state */
@@ -48,7 +49,7 @@ export const GenesisState = {
       obj.contracts = object.contracts.map((e: any) => Contract.fromJSON(e));
     return obj;
   },
-  toJSON(message: GenesisState): unknown {
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
     const obj: any = {};
     if (message.contracts) {
       obj.contracts = message.contracts.map((e) => (e ? Contract.toJSON(e) : undefined));
@@ -98,7 +99,7 @@ export const Contract = {
     if (isSet(object.codeBytes)) obj.codeBytes = bytesFromBase64(object.codeBytes);
     return obj;
   },
-  toJSON(message: Contract): unknown {
+  toJSON(message: Contract): JsonSafe<Contract> {
     const obj: any = {};
     message.codeBytes !== undefined &&
       (obj.codeBytes = base64FromBytes(

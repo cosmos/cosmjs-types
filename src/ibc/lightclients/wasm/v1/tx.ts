@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact, Rpc } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.lightclients.wasm.v1";
 /** MsgStoreCode defines the request type for the StoreCode rpc. */
 export interface MsgStoreCode {
@@ -79,7 +80,7 @@ export const MsgStoreCode = {
     if (isSet(object.wasmByteCode)) obj.wasmByteCode = bytesFromBase64(object.wasmByteCode);
     return obj;
   },
-  toJSON(message: MsgStoreCode): unknown {
+  toJSON(message: MsgStoreCode): JsonSafe<MsgStoreCode> {
     const obj: any = {};
     message.signer !== undefined && (obj.signer = message.signer);
     message.wasmByteCode !== undefined &&
@@ -130,7 +131,7 @@ export const MsgStoreCodeResponse = {
     if (isSet(object.checksum)) obj.checksum = bytesFromBase64(object.checksum);
     return obj;
   },
-  toJSON(message: MsgStoreCodeResponse): unknown {
+  toJSON(message: MsgStoreCodeResponse): JsonSafe<MsgStoreCodeResponse> {
     const obj: any = {};
     message.checksum !== undefined &&
       (obj.checksum = base64FromBytes(message.checksum !== undefined ? message.checksum : new Uint8Array()));
@@ -185,7 +186,7 @@ export const MsgRemoveChecksum = {
     if (isSet(object.checksum)) obj.checksum = bytesFromBase64(object.checksum);
     return obj;
   },
-  toJSON(message: MsgRemoveChecksum): unknown {
+  toJSON(message: MsgRemoveChecksum): JsonSafe<MsgRemoveChecksum> {
     const obj: any = {};
     message.signer !== undefined && (obj.signer = message.signer);
     message.checksum !== undefined &&
@@ -225,7 +226,7 @@ export const MsgRemoveChecksumResponse = {
     const obj = createBaseMsgRemoveChecksumResponse();
     return obj;
   },
-  toJSON(_: MsgRemoveChecksumResponse): unknown {
+  toJSON(_: MsgRemoveChecksumResponse): JsonSafe<MsgRemoveChecksumResponse> {
     const obj: any = {};
     return obj;
   },
@@ -293,7 +294,7 @@ export const MsgMigrateContract = {
     if (isSet(object.msg)) obj.msg = bytesFromBase64(object.msg);
     return obj;
   },
-  toJSON(message: MsgMigrateContract): unknown {
+  toJSON(message: MsgMigrateContract): JsonSafe<MsgMigrateContract> {
     const obj: any = {};
     message.signer !== undefined && (obj.signer = message.signer);
     message.clientId !== undefined && (obj.clientId = message.clientId);
@@ -338,7 +339,7 @@ export const MsgMigrateContractResponse = {
     const obj = createBaseMsgMigrateContractResponse();
     return obj;
   },
-  toJSON(_: MsgMigrateContractResponse): unknown {
+  toJSON(_: MsgMigrateContractResponse): JsonSafe<MsgMigrateContractResponse> {
     const obj: any = {};
     return obj;
   },

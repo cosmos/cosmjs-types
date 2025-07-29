@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "cosmos.auth.module.v1";
 /** Module is the config object for the auth module. */
 export interface Module {
@@ -75,7 +76,7 @@ export const Module = {
     if (isSet(object.authority)) obj.authority = String(object.authority);
     return obj;
   },
-  toJSON(message: Module): unknown {
+  toJSON(message: Module): JsonSafe<Module> {
     const obj: any = {};
     message.bech32Prefix !== undefined && (obj.bech32Prefix = message.bech32Prefix);
     if (message.moduleAccountPermissions) {
@@ -140,7 +141,7 @@ export const ModuleAccountPermission = {
     if (Array.isArray(object?.permissions)) obj.permissions = object.permissions.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: ModuleAccountPermission): unknown {
+  toJSON(message: ModuleAccountPermission): JsonSafe<ModuleAccountPermission> {
     const obj: any = {};
     message.account !== undefined && (obj.account = message.account);
     if (message.permissions) {

@@ -2,6 +2,7 @@
 import { Timeout, Order, orderFromJSON, orderToJSON } from "./channel";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "ibc.core.channel.v1";
 /**
  * Upgrade is a verifiable type which contains the relevant information
@@ -86,7 +87,7 @@ export const Upgrade = {
     if (isSet(object.nextSequenceSend)) obj.nextSequenceSend = BigInt(object.nextSequenceSend.toString());
     return obj;
   },
-  toJSON(message: Upgrade): unknown {
+  toJSON(message: Upgrade): JsonSafe<Upgrade> {
     const obj: any = {};
     message.fields !== undefined &&
       (obj.fields = message.fields ? UpgradeFields.toJSON(message.fields) : undefined);
@@ -162,7 +163,7 @@ export const UpgradeFields = {
     if (isSet(object.version)) obj.version = String(object.version);
     return obj;
   },
-  toJSON(message: UpgradeFields): unknown {
+  toJSON(message: UpgradeFields): JsonSafe<UpgradeFields> {
     const obj: any = {};
     message.ordering !== undefined && (obj.ordering = orderToJSON(message.ordering));
     if (message.connectionHops) {
@@ -224,7 +225,7 @@ export const ErrorReceipt = {
     if (isSet(object.message)) obj.message = String(object.message);
     return obj;
   },
-  toJSON(message: ErrorReceipt): unknown {
+  toJSON(message: ErrorReceipt): JsonSafe<ErrorReceipt> {
     const obj: any = {};
     message.sequence !== undefined && (obj.sequence = (message.sequence || BigInt(0)).toString());
     message.message !== undefined && (obj.message = message.message);

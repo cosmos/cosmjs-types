@@ -2,6 +2,7 @@
 import { Params, CodeInfo, ContractInfo, Model, ContractCodeHistoryEntry } from "./types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmwasm.wasm.v1";
 /** GenesisState - genesis state of x/wasm */
 export interface GenesisState {
@@ -91,7 +92,7 @@ export const GenesisState = {
       obj.sequences = object.sequences.map((e: any) => Sequence.fromJSON(e));
     return obj;
   },
-  toJSON(message: GenesisState): unknown {
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
     const obj: any = {};
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     if (message.codes) {
@@ -181,7 +182,7 @@ export const Code = {
     if (isSet(object.pinned)) obj.pinned = Boolean(object.pinned);
     return obj;
   },
-  toJSON(message: Code): unknown {
+  toJSON(message: Code): JsonSafe<Code> {
     const obj: any = {};
     message.codeId !== undefined && (obj.codeId = (message.codeId || BigInt(0)).toString());
     message.codeInfo !== undefined &&
@@ -269,7 +270,7 @@ export const Contract = {
       );
     return obj;
   },
-  toJSON(message: Contract): unknown {
+  toJSON(message: Contract): JsonSafe<Contract> {
     const obj: any = {};
     message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
     message.contractInfo !== undefined &&
@@ -343,7 +344,7 @@ export const Sequence = {
     if (isSet(object.value)) obj.value = BigInt(object.value.toString());
     return obj;
   },
-  toJSON(message: Sequence): unknown {
+  toJSON(message: Sequence): JsonSafe<Sequence> {
     const obj: any = {};
     message.idKey !== undefined &&
       (obj.idKey = base64FromBytes(message.idKey !== undefined ? message.idKey : new Uint8Array()));

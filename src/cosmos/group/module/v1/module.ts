@@ -2,6 +2,7 @@
 import { Duration } from "../../../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "cosmos.group.module.v1";
 /** Module is the config object of the group module. */
 export interface Module {
@@ -60,7 +61,7 @@ export const Module = {
     if (isSet(object.maxMetadataLen)) obj.maxMetadataLen = BigInt(object.maxMetadataLen.toString());
     return obj;
   },
-  toJSON(message: Module): unknown {
+  toJSON(message: Module): JsonSafe<Module> {
     const obj: any = {};
     message.maxExecutionPeriod !== undefined &&
       (obj.maxExecutionPeriod = message.maxExecutionPeriod

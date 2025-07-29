@@ -2,6 +2,7 @@
 import { ResponseCommit, RequestFinalizeBlock, ResponseFinalizeBlock } from "../../../tendermint/abci/types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.store.v1beta1";
 /**
  * StoreKVPair is a KVStore KVPair used for listening to state changes (Sets and Deletes)
@@ -87,7 +88,7 @@ export const StoreKVPair = {
     if (isSet(object.value)) obj.value = bytesFromBase64(object.value);
     return obj;
   },
-  toJSON(message: StoreKVPair): unknown {
+  toJSON(message: StoreKVPair): JsonSafe<StoreKVPair> {
     const obj: any = {};
     message.storeKey !== undefined && (obj.storeKey = message.storeKey);
     message.delete !== undefined && (obj.delete = message.delete);
@@ -159,7 +160,7 @@ export const BlockMetadata = {
       obj.responseFinalizeBlock = ResponseFinalizeBlock.fromJSON(object.responseFinalizeBlock);
     return obj;
   },
-  toJSON(message: BlockMetadata): unknown {
+  toJSON(message: BlockMetadata): JsonSafe<BlockMetadata> {
     const obj: any = {};
     message.responseCommit !== undefined &&
       (obj.responseCommit = message.responseCommit

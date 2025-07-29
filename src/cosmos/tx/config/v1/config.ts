@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "cosmos.tx.config.v1";
 /** Config is the config object of the x/auth/tx package. */
 export interface Config {
@@ -58,7 +59,7 @@ export const Config = {
     if (isSet(object.skipPostHandler)) obj.skipPostHandler = Boolean(object.skipPostHandler);
     return obj;
   },
-  toJSON(message: Config): unknown {
+  toJSON(message: Config): JsonSafe<Config> {
     const obj: any = {};
     message.skipAnteHandler !== undefined && (obj.skipAnteHandler = message.skipAnteHandler);
     message.skipPostHandler !== undefined && (obj.skipPostHandler = message.skipPostHandler);

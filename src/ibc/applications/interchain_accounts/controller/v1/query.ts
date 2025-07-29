@@ -2,6 +2,7 @@
 import { Params } from "./controller";
 import { BinaryReader, BinaryWriter } from "../../../../../binary";
 import { isSet, DeepPartial, Exact, Rpc } from "../../../../../helpers";
+import { JsonSafe } from "../../../../../json-safe";
 export const protobufPackage = "ibc.applications.interchain_accounts.controller.v1";
 /** QueryInterchainAccountRequest is the request type for the Query/InterchainAccount RPC method. */
 export interface QueryInterchainAccountRequest {
@@ -62,7 +63,7 @@ export const QueryInterchainAccountRequest = {
     if (isSet(object.connectionId)) obj.connectionId = String(object.connectionId);
     return obj;
   },
-  toJSON(message: QueryInterchainAccountRequest): unknown {
+  toJSON(message: QueryInterchainAccountRequest): JsonSafe<QueryInterchainAccountRequest> {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
     message.connectionId !== undefined && (obj.connectionId = message.connectionId);
@@ -115,7 +116,7 @@ export const QueryInterchainAccountResponse = {
     if (isSet(object.address)) obj.address = String(object.address);
     return obj;
   },
-  toJSON(message: QueryInterchainAccountResponse): unknown {
+  toJSON(message: QueryInterchainAccountResponse): JsonSafe<QueryInterchainAccountResponse> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     return obj;
@@ -154,7 +155,7 @@ export const QueryParamsRequest = {
     const obj = createBaseQueryParamsRequest();
     return obj;
   },
-  toJSON(_: QueryParamsRequest): unknown {
+  toJSON(_: QueryParamsRequest): JsonSafe<QueryParamsRequest> {
     const obj: any = {};
     return obj;
   },
@@ -198,7 +199,7 @@ export const QueryParamsResponse = {
     if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
     return obj;
   },
-  toJSON(message: QueryParamsResponse): unknown {
+  toJSON(message: QueryParamsResponse): JsonSafe<QueryParamsResponse> {
     const obj: any = {};
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;

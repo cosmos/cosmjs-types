@@ -5,6 +5,7 @@ import { Duration } from "../../../google/protobuf/duration";
 import { Any } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, fromJsonTimestamp, fromTimestamp, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.feegrant.v1beta1";
 /**
  * BasicAllowance implements Allowance with a one-time grant of coins
@@ -106,7 +107,7 @@ export const BasicAllowance = {
     if (isSet(object.expiration)) obj.expiration = fromJsonTimestamp(object.expiration);
     return obj;
   },
-  toJSON(message: BasicAllowance): unknown {
+  toJSON(message: BasicAllowance): JsonSafe<BasicAllowance> {
     const obj: any = {};
     if (message.spendLimit) {
       obj.spendLimit = message.spendLimit.map((e) => (e ? Coin.toJSON(e) : undefined));
@@ -194,7 +195,7 @@ export const PeriodicAllowance = {
     if (isSet(object.periodReset)) obj.periodReset = fromJsonTimestamp(object.periodReset);
     return obj;
   },
-  toJSON(message: PeriodicAllowance): unknown {
+  toJSON(message: PeriodicAllowance): JsonSafe<PeriodicAllowance> {
     const obj: any = {};
     message.basic !== undefined &&
       (obj.basic = message.basic ? BasicAllowance.toJSON(message.basic) : undefined);
@@ -273,7 +274,7 @@ export const AllowedMsgAllowance = {
       obj.allowedMessages = object.allowedMessages.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: AllowedMsgAllowance): unknown {
+  toJSON(message: AllowedMsgAllowance): JsonSafe<AllowedMsgAllowance> {
     const obj: any = {};
     message.allowance !== undefined &&
       (obj.allowance = message.allowance ? Any.toJSON(message.allowance) : undefined);
@@ -344,7 +345,7 @@ export const Grant = {
     if (isSet(object.allowance)) obj.allowance = Any.fromJSON(object.allowance);
     return obj;
   },
-  toJSON(message: Grant): unknown {
+  toJSON(message: Grant): JsonSafe<Grant> {
     const obj: any = {};
     message.granter !== undefined && (obj.granter = message.granter);
     message.grantee !== undefined && (obj.grantee = message.grantee);

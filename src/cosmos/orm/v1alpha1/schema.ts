@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.orm.v1alpha1";
 /** StorageType */
 export enum StorageType {
@@ -128,7 +129,7 @@ export const ModuleSchemaDescriptor = {
     if (isSet(object.prefix)) obj.prefix = bytesFromBase64(object.prefix);
     return obj;
   },
-  toJSON(message: ModuleSchemaDescriptor): unknown {
+  toJSON(message: ModuleSchemaDescriptor): JsonSafe<ModuleSchemaDescriptor> {
     const obj: any = {};
     if (message.schemaFile) {
       obj.schemaFile = message.schemaFile.map((e) =>
@@ -202,7 +203,7 @@ export const ModuleSchemaDescriptor_FileEntry = {
     if (isSet(object.storageType)) obj.storageType = storageTypeFromJSON(object.storageType);
     return obj;
   },
-  toJSON(message: ModuleSchemaDescriptor_FileEntry): unknown {
+  toJSON(message: ModuleSchemaDescriptor_FileEntry): JsonSafe<ModuleSchemaDescriptor_FileEntry> {
     const obj: any = {};
     message.id !== undefined && (obj.id = Math.round(message.id));
     message.protoFileName !== undefined && (obj.protoFileName = message.protoFileName);

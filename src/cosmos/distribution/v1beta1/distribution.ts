@@ -2,6 +2,7 @@
 import { DecCoin, Coin } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.distribution.v1beta1";
 /** Params defines the set of params for the distribution module. */
 export interface Params {
@@ -187,7 +188,7 @@ export const Params = {
     if (isSet(object.withdrawAddrEnabled)) obj.withdrawAddrEnabled = Boolean(object.withdrawAddrEnabled);
     return obj;
   },
-  toJSON(message: Params): unknown {
+  toJSON(message: Params): JsonSafe<Params> {
     const obj: any = {};
     message.communityTax !== undefined && (obj.communityTax = message.communityTax);
     message.baseProposerReward !== undefined && (obj.baseProposerReward = message.baseProposerReward);
@@ -248,7 +249,7 @@ export const ValidatorHistoricalRewards = {
     if (isSet(object.referenceCount)) obj.referenceCount = Number(object.referenceCount);
     return obj;
   },
-  toJSON(message: ValidatorHistoricalRewards): unknown {
+  toJSON(message: ValidatorHistoricalRewards): JsonSafe<ValidatorHistoricalRewards> {
     const obj: any = {};
     if (message.cumulativeRewardRatio) {
       obj.cumulativeRewardRatio = message.cumulativeRewardRatio.map((e) =>
@@ -312,7 +313,7 @@ export const ValidatorCurrentRewards = {
     if (isSet(object.period)) obj.period = BigInt(object.period.toString());
     return obj;
   },
-  toJSON(message: ValidatorCurrentRewards): unknown {
+  toJSON(message: ValidatorCurrentRewards): JsonSafe<ValidatorCurrentRewards> {
     const obj: any = {};
     if (message.rewards) {
       obj.rewards = message.rewards.map((e) => (e ? DecCoin.toJSON(e) : undefined));
@@ -370,7 +371,7 @@ export const ValidatorAccumulatedCommission = {
       obj.commission = object.commission.map((e: any) => DecCoin.fromJSON(e));
     return obj;
   },
-  toJSON(message: ValidatorAccumulatedCommission): unknown {
+  toJSON(message: ValidatorAccumulatedCommission): JsonSafe<ValidatorAccumulatedCommission> {
     const obj: any = {};
     if (message.commission) {
       obj.commission = message.commission.map((e) => (e ? DecCoin.toJSON(e) : undefined));
@@ -422,7 +423,7 @@ export const ValidatorOutstandingRewards = {
     if (Array.isArray(object?.rewards)) obj.rewards = object.rewards.map((e: any) => DecCoin.fromJSON(e));
     return obj;
   },
-  toJSON(message: ValidatorOutstandingRewards): unknown {
+  toJSON(message: ValidatorOutstandingRewards): JsonSafe<ValidatorOutstandingRewards> {
     const obj: any = {};
     if (message.rewards) {
       obj.rewards = message.rewards.map((e) => (e ? DecCoin.toJSON(e) : undefined));
@@ -482,7 +483,7 @@ export const ValidatorSlashEvent = {
     if (isSet(object.fraction)) obj.fraction = String(object.fraction);
     return obj;
   },
-  toJSON(message: ValidatorSlashEvent): unknown {
+  toJSON(message: ValidatorSlashEvent): JsonSafe<ValidatorSlashEvent> {
     const obj: any = {};
     message.validatorPeriod !== undefined &&
       (obj.validatorPeriod = (message.validatorPeriod || BigInt(0)).toString());
@@ -534,7 +535,7 @@ export const ValidatorSlashEvents = {
       obj.validatorSlashEvents = object.validatorSlashEvents.map((e: any) => ValidatorSlashEvent.fromJSON(e));
     return obj;
   },
-  toJSON(message: ValidatorSlashEvents): unknown {
+  toJSON(message: ValidatorSlashEvents): JsonSafe<ValidatorSlashEvents> {
     const obj: any = {};
     if (message.validatorSlashEvents) {
       obj.validatorSlashEvents = message.validatorSlashEvents.map((e) =>
@@ -588,7 +589,7 @@ export const FeePool = {
       obj.communityPool = object.communityPool.map((e: any) => DecCoin.fromJSON(e));
     return obj;
   },
-  toJSON(message: FeePool): unknown {
+  toJSON(message: FeePool): JsonSafe<FeePool> {
     const obj: any = {};
     if (message.communityPool) {
       obj.communityPool = message.communityPool.map((e) => (e ? DecCoin.toJSON(e) : undefined));
@@ -662,7 +663,7 @@ export const CommunityPoolSpendProposal = {
     if (Array.isArray(object?.amount)) obj.amount = object.amount.map((e: any) => Coin.fromJSON(e));
     return obj;
   },
-  toJSON(message: CommunityPoolSpendProposal): unknown {
+  toJSON(message: CommunityPoolSpendProposal): JsonSafe<CommunityPoolSpendProposal> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);
@@ -736,7 +737,7 @@ export const DelegatorStartingInfo = {
     if (isSet(object.height)) obj.height = BigInt(object.height.toString());
     return obj;
   },
-  toJSON(message: DelegatorStartingInfo): unknown {
+  toJSON(message: DelegatorStartingInfo): JsonSafe<DelegatorStartingInfo> {
     const obj: any = {};
     message.previousPeriod !== undefined &&
       (obj.previousPeriod = (message.previousPeriod || BigInt(0)).toString());
@@ -799,7 +800,7 @@ export const DelegationDelegatorReward = {
     if (Array.isArray(object?.reward)) obj.reward = object.reward.map((e: any) => DecCoin.fromJSON(e));
     return obj;
   },
-  toJSON(message: DelegationDelegatorReward): unknown {
+  toJSON(message: DelegationDelegatorReward): JsonSafe<DelegationDelegatorReward> {
     const obj: any = {};
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     if (message.reward) {
@@ -888,7 +889,7 @@ export const CommunityPoolSpendProposalWithDeposit = {
     if (isSet(object.deposit)) obj.deposit = String(object.deposit);
     return obj;
   },
-  toJSON(message: CommunityPoolSpendProposalWithDeposit): unknown {
+  toJSON(message: CommunityPoolSpendProposalWithDeposit): JsonSafe<CommunityPoolSpendProposalWithDeposit> {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
     message.description !== undefined && (obj.description = message.description);

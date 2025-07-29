@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "cosmos.bank.module.v1";
 /** Module is the config object of the bank module. */
 export interface Module {
@@ -73,7 +74,7 @@ export const Module = {
       obj.restrictionsOrder = object.restrictionsOrder.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: Module): unknown {
+  toJSON(message: Module): JsonSafe<Module> {
     const obj: any = {};
     if (message.blockedModuleAccountsOverride) {
       obj.blockedModuleAccountsOverride = message.blockedModuleAccountsOverride.map((e) => e);

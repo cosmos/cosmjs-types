@@ -10,6 +10,7 @@ import {
   bytesFromBase64,
   base64FromBytes,
 } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.store.v1beta1";
 /**
  * CommitInfo defines commit information used by the multi-store when committing
@@ -88,7 +89,7 @@ export const CommitInfo = {
     if (isSet(object.timestamp)) obj.timestamp = fromJsonTimestamp(object.timestamp);
     return obj;
   },
-  toJSON(message: CommitInfo): unknown {
+  toJSON(message: CommitInfo): JsonSafe<CommitInfo> {
     const obj: any = {};
     message.version !== undefined && (obj.version = (message.version || BigInt(0)).toString());
     if (message.storeInfos) {
@@ -154,7 +155,7 @@ export const StoreInfo = {
     if (isSet(object.commitId)) obj.commitId = CommitID.fromJSON(object.commitId);
     return obj;
   },
-  toJSON(message: StoreInfo): unknown {
+  toJSON(message: StoreInfo): JsonSafe<StoreInfo> {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     message.commitId !== undefined &&
@@ -213,7 +214,7 @@ export const CommitID = {
     if (isSet(object.hash)) obj.hash = bytesFromBase64(object.hash);
     return obj;
   },
-  toJSON(message: CommitID): unknown {
+  toJSON(message: CommitID): JsonSafe<CommitID> {
     const obj: any = {};
     message.version !== undefined && (obj.version = (message.version || BigInt(0)).toString());
     message.hash !== undefined &&

@@ -2,6 +2,7 @@
 import { Coin } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact, Rpc } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.crisis.v1beta1";
 /** MsgVerifyInvariant represents a message to verify a particular invariance. */
 export interface MsgVerifyInvariant {
@@ -83,7 +84,7 @@ export const MsgVerifyInvariant = {
     if (isSet(object.invariantRoute)) obj.invariantRoute = String(object.invariantRoute);
     return obj;
   },
-  toJSON(message: MsgVerifyInvariant): unknown {
+  toJSON(message: MsgVerifyInvariant): JsonSafe<MsgVerifyInvariant> {
     const obj: any = {};
     message.sender !== undefined && (obj.sender = message.sender);
     message.invariantModuleName !== undefined && (obj.invariantModuleName = message.invariantModuleName);
@@ -124,7 +125,7 @@ export const MsgVerifyInvariantResponse = {
     const obj = createBaseMsgVerifyInvariantResponse();
     return obj;
   },
-  toJSON(_: MsgVerifyInvariantResponse): unknown {
+  toJSON(_: MsgVerifyInvariantResponse): JsonSafe<MsgVerifyInvariantResponse> {
     const obj: any = {};
     return obj;
   },
@@ -176,7 +177,7 @@ export const MsgUpdateParams = {
     if (isSet(object.constantFee)) obj.constantFee = Coin.fromJSON(object.constantFee);
     return obj;
   },
-  toJSON(message: MsgUpdateParams): unknown {
+  toJSON(message: MsgUpdateParams): JsonSafe<MsgUpdateParams> {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
     message.constantFee !== undefined &&
@@ -218,7 +219,7 @@ export const MsgUpdateParamsResponse = {
     const obj = createBaseMsgUpdateParamsResponse();
     return obj;
   },
-  toJSON(_: MsgUpdateParamsResponse): unknown {
+  toJSON(_: MsgUpdateParamsResponse): JsonSafe<MsgUpdateParamsResponse> {
     const obj: any = {};
     return obj;
   },

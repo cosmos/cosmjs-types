@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmwasm.wasm.v1";
 /** MsgIBCSend */
 export interface MsgIBCSend {
@@ -92,7 +93,7 @@ export const MsgIBCSend = {
     if (isSet(object.data)) obj.data = bytesFromBase64(object.data);
     return obj;
   },
-  toJSON(message: MsgIBCSend): unknown {
+  toJSON(message: MsgIBCSend): JsonSafe<MsgIBCSend> {
     const obj: any = {};
     message.channel !== undefined && (obj.channel = message.channel);
     message.timeoutHeight !== undefined &&
@@ -151,7 +152,7 @@ export const MsgIBCSendResponse = {
     if (isSet(object.sequence)) obj.sequence = BigInt(object.sequence.toString());
     return obj;
   },
-  toJSON(message: MsgIBCSendResponse): unknown {
+  toJSON(message: MsgIBCSendResponse): JsonSafe<MsgIBCSendResponse> {
     const obj: any = {};
     message.sequence !== undefined && (obj.sequence = (message.sequence || BigInt(0)).toString());
     return obj;
@@ -190,7 +191,7 @@ export const MsgIBCWriteAcknowledgementResponse = {
     const obj = createBaseMsgIBCWriteAcknowledgementResponse();
     return obj;
   },
-  toJSON(_: MsgIBCWriteAcknowledgementResponse): unknown {
+  toJSON(_: MsgIBCWriteAcknowledgementResponse): JsonSafe<MsgIBCWriteAcknowledgementResponse> {
     const obj: any = {};
     return obj;
   },
@@ -236,7 +237,7 @@ export const MsgIBCCloseChannel = {
     if (isSet(object.channel)) obj.channel = String(object.channel);
     return obj;
   },
-  toJSON(message: MsgIBCCloseChannel): unknown {
+  toJSON(message: MsgIBCCloseChannel): JsonSafe<MsgIBCCloseChannel> {
     const obj: any = {};
     message.channel !== undefined && (obj.channel = message.channel);
     return obj;

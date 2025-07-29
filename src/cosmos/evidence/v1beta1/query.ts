@@ -3,6 +3,7 @@ import { PageRequest, PageResponse } from "../../base/query/v1beta1/pagination";
 import { Any } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact, Rpc } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.evidence.v1beta1";
 /** QueryEvidenceRequest is the request type for the Query/Evidence RPC method. */
 export interface QueryEvidenceRequest {
@@ -85,7 +86,7 @@ export const QueryEvidenceRequest = {
     if (isSet(object.hash)) obj.hash = String(object.hash);
     return obj;
   },
-  toJSON(message: QueryEvidenceRequest): unknown {
+  toJSON(message: QueryEvidenceRequest): JsonSafe<QueryEvidenceRequest> {
     const obj: any = {};
     message.evidenceHash !== undefined &&
       (obj.evidenceHash = base64FromBytes(
@@ -136,7 +137,7 @@ export const QueryEvidenceResponse = {
     if (isSet(object.evidence)) obj.evidence = Any.fromJSON(object.evidence);
     return obj;
   },
-  toJSON(message: QueryEvidenceResponse): unknown {
+  toJSON(message: QueryEvidenceResponse): JsonSafe<QueryEvidenceResponse> {
     const obj: any = {};
     message.evidence !== undefined &&
       (obj.evidence = message.evidence ? Any.toJSON(message.evidence) : undefined);
@@ -185,7 +186,7 @@ export const QueryAllEvidenceRequest = {
     if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryAllEvidenceRequest): unknown {
+  toJSON(message: QueryAllEvidenceRequest): JsonSafe<QueryAllEvidenceRequest> {
     const obj: any = {};
     message.pagination !== undefined &&
       (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
@@ -242,7 +243,7 @@ export const QueryAllEvidenceResponse = {
     if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
     return obj;
   },
-  toJSON(message: QueryAllEvidenceResponse): unknown {
+  toJSON(message: QueryAllEvidenceResponse): JsonSafe<QueryAllEvidenceResponse> {
     const obj: any = {};
     if (message.evidence) {
       obj.evidence = message.evidence.map((e) => (e ? Any.toJSON(e) : undefined));

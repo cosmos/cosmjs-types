@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { FileDescriptorProto } from "../../../google/protobuf/descriptor";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { JsonSafe } from "../../../json-safe";
 import { DeepPartial, Exact, Rpc } from "../../../helpers";
 export const protobufPackage = "cosmos.reflection.v1";
 /** FileDescriptorsRequest is the Query/FileDescriptors request type. */
@@ -36,7 +37,7 @@ export const FileDescriptorsRequest = {
     const obj = createBaseFileDescriptorsRequest();
     return obj;
   },
-  toJSON(_: FileDescriptorsRequest): unknown {
+  toJSON(_: FileDescriptorsRequest): JsonSafe<FileDescriptorsRequest> {
     const obj: any = {};
     return obj;
   },
@@ -81,7 +82,7 @@ export const FileDescriptorsResponse = {
       obj.files = object.files.map((e: any) => FileDescriptorProto.fromJSON(e));
     return obj;
   },
-  toJSON(message: FileDescriptorsResponse): unknown {
+  toJSON(message: FileDescriptorsResponse): JsonSafe<FileDescriptorsResponse> {
     const obj: any = {};
     if (message.files) {
       obj.files = message.files.map((e) => (e ? FileDescriptorProto.toJSON(e) : undefined));

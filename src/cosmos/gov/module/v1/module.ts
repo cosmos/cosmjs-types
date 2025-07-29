@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
 export const protobufPackage = "cosmos.gov.module.v1";
 /** Module is the config object of the gov module. */
 export interface Module {
@@ -55,7 +56,7 @@ export const Module = {
     if (isSet(object.authority)) obj.authority = String(object.authority);
     return obj;
   },
-  toJSON(message: Module): unknown {
+  toJSON(message: Module): JsonSafe<Module> {
     const obj: any = {};
     message.maxMetadataLen !== undefined &&
       (obj.maxMetadataLen = (message.maxMetadataLen || BigInt(0)).toString());

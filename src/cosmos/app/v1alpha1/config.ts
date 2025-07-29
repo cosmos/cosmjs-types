@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Any } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { JsonSafe } from "../../../json-safe";
 import { DeepPartial, Exact, isSet } from "../../../helpers";
 export const protobufPackage = "cosmos.app.v1alpha1";
 /**
@@ -101,7 +102,7 @@ export const Config = {
       obj.golangBindings = object.golangBindings.map((e: any) => GolangBinding.fromJSON(e));
     return obj;
   },
-  toJSON(message: Config): unknown {
+  toJSON(message: Config): JsonSafe<Config> {
     const obj: any = {};
     if (message.modules) {
       obj.modules = message.modules.map((e) => (e ? ModuleConfig.toJSON(e) : undefined));
@@ -174,7 +175,7 @@ export const ModuleConfig = {
       obj.golangBindings = object.golangBindings.map((e: any) => GolangBinding.fromJSON(e));
     return obj;
   },
-  toJSON(message: ModuleConfig): unknown {
+  toJSON(message: ModuleConfig): JsonSafe<ModuleConfig> {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     message.config !== undefined && (obj.config = message.config ? Any.toJSON(message.config) : undefined);
@@ -238,7 +239,7 @@ export const GolangBinding = {
     if (isSet(object.implementation)) obj.implementation = String(object.implementation);
     return obj;
   },
-  toJSON(message: GolangBinding): unknown {
+  toJSON(message: GolangBinding): JsonSafe<GolangBinding> {
     const obj: any = {};
     message.interfaceType !== undefined && (obj.interfaceType = message.interfaceType);
     message.implementation !== undefined && (obj.implementation = message.implementation);

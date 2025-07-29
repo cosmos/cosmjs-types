@@ -3,6 +3,7 @@ import { Params, Metadata, SendEnabled } from "./bank";
 import { Coin } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.bank.v1beta1";
 /** GenesisState defines the bank module's genesis state. */
 export interface GenesisState {
@@ -103,7 +104,7 @@ export const GenesisState = {
       obj.sendEnabled = object.sendEnabled.map((e: any) => SendEnabled.fromJSON(e));
     return obj;
   },
-  toJSON(message: GenesisState): unknown {
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
     const obj: any = {};
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     if (message.balances) {
@@ -183,7 +184,7 @@ export const Balance = {
     if (Array.isArray(object?.coins)) obj.coins = object.coins.map((e: any) => Coin.fromJSON(e));
     return obj;
   },
-  toJSON(message: Balance): unknown {
+  toJSON(message: Balance): JsonSafe<Balance> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     if (message.coins) {

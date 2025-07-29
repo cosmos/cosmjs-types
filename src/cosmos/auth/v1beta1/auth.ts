@@ -2,6 +2,7 @@
 import { Any } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.auth.v1beta1";
 /**
  * BaseAccount defines a base account type. It contains all the necessary fields
@@ -101,7 +102,7 @@ export const BaseAccount = {
     if (isSet(object.sequence)) obj.sequence = BigInt(object.sequence.toString());
     return obj;
   },
-  toJSON(message: BaseAccount): unknown {
+  toJSON(message: BaseAccount): JsonSafe<BaseAccount> {
     const obj: any = {};
     message.address !== undefined && (obj.address = message.address);
     message.pubKey !== undefined && (obj.pubKey = message.pubKey ? Any.toJSON(message.pubKey) : undefined);
@@ -176,7 +177,7 @@ export const ModuleAccount = {
     if (Array.isArray(object?.permissions)) obj.permissions = object.permissions.map((e: any) => String(e));
     return obj;
   },
-  toJSON(message: ModuleAccount): unknown {
+  toJSON(message: ModuleAccount): JsonSafe<ModuleAccount> {
     const obj: any = {};
     message.baseAccount !== undefined &&
       (obj.baseAccount = message.baseAccount ? BaseAccount.toJSON(message.baseAccount) : undefined);
@@ -242,7 +243,7 @@ export const ModuleCredential = {
       obj.derivationKeys = object.derivationKeys.map((e: any) => bytesFromBase64(e));
     return obj;
   },
-  toJSON(message: ModuleCredential): unknown {
+  toJSON(message: ModuleCredential): JsonSafe<ModuleCredential> {
     const obj: any = {};
     message.moduleName !== undefined && (obj.moduleName = message.moduleName);
     if (message.derivationKeys) {
@@ -330,7 +331,7 @@ export const Params = {
       obj.sigVerifyCostSecp256k1 = BigInt(object.sigVerifyCostSecp256k1.toString());
     return obj;
   },
-  toJSON(message: Params): unknown {
+  toJSON(message: Params): JsonSafe<Params> {
     const obj: any = {};
     message.maxMemoCharacters !== undefined &&
       (obj.maxMemoCharacters = (message.maxMemoCharacters || BigInt(0)).toString());

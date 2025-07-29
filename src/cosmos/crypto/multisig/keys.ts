@@ -2,6 +2,7 @@
 import { Any } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.crypto.multisig";
 /**
  * LegacyAminoPubKey specifies a public key type
@@ -56,7 +57,7 @@ export const LegacyAminoPubKey = {
       obj.publicKeys = object.publicKeys.map((e: any) => Any.fromJSON(e));
     return obj;
   },
-  toJSON(message: LegacyAminoPubKey): unknown {
+  toJSON(message: LegacyAminoPubKey): JsonSafe<LegacyAminoPubKey> {
     const obj: any = {};
     message.threshold !== undefined && (obj.threshold = Math.round(message.threshold));
     if (message.publicKeys) {
