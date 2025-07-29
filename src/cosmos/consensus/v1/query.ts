@@ -100,7 +100,7 @@ export const QueryParamsResponse = {
 };
 /** Query defines the gRPC querier service. */
 export interface Query {
-  /** Params queries the parameters of x/consensus_param module. */
+  /** Params queries the parameters of x/consensus module. */
   Params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
 }
 export class QueryClientImpl implements Query {

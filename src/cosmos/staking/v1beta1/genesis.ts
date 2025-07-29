@@ -17,7 +17,7 @@ export interface GenesisState {
    * of the last-block's bonded validators.
    */
   lastValidatorPowers: LastValidatorPower[];
-  /** delegations defines the validator set at genesis. */
+  /** validators defines the validator set at genesis. */
   validators: Validator[];
   /** delegations defines the delegations active at genesis. */
   delegations: Delegation[];
@@ -25,6 +25,7 @@ export interface GenesisState {
   unbondingDelegations: UnbondingDelegation[];
   /** redelegations defines the redelegations active at genesis. */
   redelegations: Redelegation[];
+  /** exported defines a bool to identify whether the chain dealing with exported or initialized genesis. */
   exported: boolean;
 }
 /** LastValidatorPower required for validator set update logic. */

@@ -1058,7 +1058,7 @@ export interface Query {
   Votes(request: QueryVotesRequest): Promise<QueryVotesResponse>;
   /** Params queries all parameters of the gov module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
-  /** Deposit queries single deposit information based proposalID, depositAddr. */
+  /** Deposit queries single deposit information based on proposalID, depositor address. */
   Deposit(request: QueryDepositRequest): Promise<QueryDepositResponse>;
   /** Deposits queries all deposits of a single proposal. */
   Deposits(request: QueryDepositsRequest): Promise<QueryDepositsResponse>;

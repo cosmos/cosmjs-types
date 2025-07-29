@@ -413,9 +413,9 @@ export const QueryAllowancesByGranterResponse = {
 };
 /** Query defines the gRPC querier service. */
 export interface Query {
-  /** Allowance returns fee granted to the grantee by the granter. */
+  /** Allowance returns granted allwance to the grantee by the granter. */
   Allowance(request: QueryAllowanceRequest): Promise<QueryAllowanceResponse>;
-  /** Allowances returns all the grants for address. */
+  /** Allowances returns all the grants for the given grantee address. */
   Allowances(request: QueryAllowancesRequest): Promise<QueryAllowancesResponse>;
   /**
    * AllowancesByGranter returns all the grants given by an address

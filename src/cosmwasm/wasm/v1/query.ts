@@ -46,7 +46,7 @@ export interface QueryContractHistoryResponse {
  */
 export interface QueryContractsByCodeRequest {
   /**
-   * grpc-gateway_out does not support Go style CodID
+   * grpc-gateway_out does not support Go style CodeID
    * pagination defines an optional pagination for the request.
    */
   codeId: bigint;
@@ -118,8 +118,20 @@ export interface QuerySmartContractStateResponse {
 }
 /** QueryCodeRequest is the request type for the Query/Code RPC method */
 export interface QueryCodeRequest {
-  /** grpc-gateway_out does not support Go style CodID */
+  /** grpc-gateway_out does not support Go style CodeID */
   codeId: bigint;
+}
+/** QueryCodeInfoRequest is the request type for the Query/CodeInfo RPC method */
+export interface QueryCodeInfoRequest {
+  /** grpc-gateway_out does not support Go style CodeID */
+  codeId: bigint;
+}
+/** QueryCodeInfoResponse is the response type for the Query/CodeInfo RPC method */
+export interface QueryCodeInfoResponse {
+  codeId: bigint;
+  creator: string;
+  checksum: Uint8Array;
+  instantiatePermission: AccessConfig;
 }
 /** CodeInfoResponse contains code meta data from CodeInfo */
 export interface CodeInfoResponse {
@@ -187,6 +199,49 @@ export interface QueryContractsByCreatorResponse {
   contractAddresses: string[];
   /** Pagination defines the pagination in the response. */
   pagination?: PageResponse;
+}
+/**
+ * QueryWasmLimitsConfigRequest is the request type for the
+ * Query/WasmLimitsConfig RPC method.
+ */
+export interface QueryWasmLimitsConfigRequest {}
+/**
+ * QueryWasmLimitsConfigResponse is the response type for the
+ * Query/WasmLimitsConfig RPC method. It contains the JSON encoded limits for
+ * static validation of Wasm files.
+ */
+export interface QueryWasmLimitsConfigResponse {
+  /**
+   * QueryWasmLimitsConfigResponse is the response type for the
+   * Query/WasmLimitsConfig RPC method. It contains the JSON encoded limits for
+   * static validation of Wasm files.
+   */
+  config: string;
+}
+/**
+ * QueryBuildAddressRequest is the request type for the Query/BuildAddress RPC
+ * method.
+ */
+export interface QueryBuildAddressRequest {
+  /** CodeHash is the hash of the code */
+  codeHash: string;
+  /** CreatorAddress is the address of the contract instantiator */
+  creatorAddress: string;
+  /** Salt is a hex encoded salt */
+  salt: string;
+  /**
+   * InitArgs are optional json encoded init args to be used in contract address
+   * building if provided
+   */
+  initArgs: Uint8Array;
+}
+/**
+ * QueryBuildAddressResponse is the response type for the Query/BuildAddress RPC
+ * method.
+ */
+export interface QueryBuildAddressResponse {
+  /** Address is the contract address */
+  address: string;
 }
 function createBaseQueryContractInfoRequest(): QueryContractInfoRequest {
   return {
@@ -952,6 +1007,139 @@ export const QueryCodeRequest = {
     return message;
   },
 };
+function createBaseQueryCodeInfoRequest(): QueryCodeInfoRequest {
+  return {
+    codeId: BigInt(0),
+  };
+}
+export const QueryCodeInfoRequest = {
+  typeUrl: "/cosmwasm.wasm.v1.QueryCodeInfoRequest",
+  encode(message: QueryCodeInfoRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.codeId !== BigInt(0)) {
+      writer.uint32(8).uint64(message.codeId);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryCodeInfoRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryCodeInfoRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.codeId = reader.uint64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryCodeInfoRequest {
+    const obj = createBaseQueryCodeInfoRequest();
+    if (isSet(object.codeId)) obj.codeId = BigInt(object.codeId.toString());
+    return obj;
+  },
+  toJSON(message: QueryCodeInfoRequest): unknown {
+    const obj: any = {};
+    message.codeId !== undefined && (obj.codeId = (message.codeId || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryCodeInfoRequest>, I>>(object: I): QueryCodeInfoRequest {
+    const message = createBaseQueryCodeInfoRequest();
+    if (object.codeId !== undefined && object.codeId !== null) {
+      message.codeId = BigInt(object.codeId.toString());
+    }
+    return message;
+  },
+};
+function createBaseQueryCodeInfoResponse(): QueryCodeInfoResponse {
+  return {
+    codeId: BigInt(0),
+    creator: "",
+    checksum: new Uint8Array(),
+    instantiatePermission: AccessConfig.fromPartial({}),
+  };
+}
+export const QueryCodeInfoResponse = {
+  typeUrl: "/cosmwasm.wasm.v1.QueryCodeInfoResponse",
+  encode(message: QueryCodeInfoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.codeId !== BigInt(0)) {
+      writer.uint32(8).uint64(message.codeId);
+    }
+    if (message.creator !== "") {
+      writer.uint32(18).string(message.creator);
+    }
+    if (message.checksum.length !== 0) {
+      writer.uint32(26).bytes(message.checksum);
+    }
+    if (message.instantiatePermission !== undefined) {
+      AccessConfig.encode(message.instantiatePermission, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryCodeInfoResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryCodeInfoResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.codeId = reader.uint64();
+          break;
+        case 2:
+          message.creator = reader.string();
+          break;
+        case 3:
+          message.checksum = reader.bytes();
+          break;
+        case 4:
+          message.instantiatePermission = AccessConfig.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryCodeInfoResponse {
+    const obj = createBaseQueryCodeInfoResponse();
+    if (isSet(object.codeId)) obj.codeId = BigInt(object.codeId.toString());
+    if (isSet(object.creator)) obj.creator = String(object.creator);
+    if (isSet(object.checksum)) obj.checksum = bytesFromBase64(object.checksum);
+    if (isSet(object.instantiatePermission))
+      obj.instantiatePermission = AccessConfig.fromJSON(object.instantiatePermission);
+    return obj;
+  },
+  toJSON(message: QueryCodeInfoResponse): unknown {
+    const obj: any = {};
+    message.codeId !== undefined && (obj.codeId = (message.codeId || BigInt(0)).toString());
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.checksum !== undefined &&
+      (obj.checksum = base64FromBytes(message.checksum !== undefined ? message.checksum : new Uint8Array()));
+    message.instantiatePermission !== undefined &&
+      (obj.instantiatePermission = message.instantiatePermission
+        ? AccessConfig.toJSON(message.instantiatePermission)
+        : undefined);
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryCodeInfoResponse>, I>>(object: I): QueryCodeInfoResponse {
+    const message = createBaseQueryCodeInfoResponse();
+    if (object.codeId !== undefined && object.codeId !== null) {
+      message.codeId = BigInt(object.codeId.toString());
+    }
+    message.creator = object.creator ?? "";
+    message.checksum = object.checksum ?? new Uint8Array();
+    if (object.instantiatePermission !== undefined && object.instantiatePermission !== null) {
+      message.instantiatePermission = AccessConfig.fromPartial(object.instantiatePermission);
+    }
+    return message;
+  },
+};
 function createBaseCodeInfoResponse(): CodeInfoResponse {
   return {
     codeId: BigInt(0),
@@ -1549,6 +1737,218 @@ export const QueryContractsByCreatorResponse = {
     return message;
   },
 };
+function createBaseQueryWasmLimitsConfigRequest(): QueryWasmLimitsConfigRequest {
+  return {};
+}
+export const QueryWasmLimitsConfigRequest = {
+  typeUrl: "/cosmwasm.wasm.v1.QueryWasmLimitsConfigRequest",
+  encode(_: QueryWasmLimitsConfigRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryWasmLimitsConfigRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryWasmLimitsConfigRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): QueryWasmLimitsConfigRequest {
+    const obj = createBaseQueryWasmLimitsConfigRequest();
+    return obj;
+  },
+  toJSON(_: QueryWasmLimitsConfigRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryWasmLimitsConfigRequest>, I>>(
+    _: I,
+  ): QueryWasmLimitsConfigRequest {
+    const message = createBaseQueryWasmLimitsConfigRequest();
+    return message;
+  },
+};
+function createBaseQueryWasmLimitsConfigResponse(): QueryWasmLimitsConfigResponse {
+  return {
+    config: "",
+  };
+}
+export const QueryWasmLimitsConfigResponse = {
+  typeUrl: "/cosmwasm.wasm.v1.QueryWasmLimitsConfigResponse",
+  encode(message: QueryWasmLimitsConfigResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.config !== "") {
+      writer.uint32(10).string(message.config);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryWasmLimitsConfigResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryWasmLimitsConfigResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.config = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryWasmLimitsConfigResponse {
+    const obj = createBaseQueryWasmLimitsConfigResponse();
+    if (isSet(object.config)) obj.config = String(object.config);
+    return obj;
+  },
+  toJSON(message: QueryWasmLimitsConfigResponse): unknown {
+    const obj: any = {};
+    message.config !== undefined && (obj.config = message.config);
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryWasmLimitsConfigResponse>, I>>(
+    object: I,
+  ): QueryWasmLimitsConfigResponse {
+    const message = createBaseQueryWasmLimitsConfigResponse();
+    message.config = object.config ?? "";
+    return message;
+  },
+};
+function createBaseQueryBuildAddressRequest(): QueryBuildAddressRequest {
+  return {
+    codeHash: "",
+    creatorAddress: "",
+    salt: "",
+    initArgs: new Uint8Array(),
+  };
+}
+export const QueryBuildAddressRequest = {
+  typeUrl: "/cosmwasm.wasm.v1.QueryBuildAddressRequest",
+  encode(message: QueryBuildAddressRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.codeHash !== "") {
+      writer.uint32(10).string(message.codeHash);
+    }
+    if (message.creatorAddress !== "") {
+      writer.uint32(18).string(message.creatorAddress);
+    }
+    if (message.salt !== "") {
+      writer.uint32(26).string(message.salt);
+    }
+    if (message.initArgs.length !== 0) {
+      writer.uint32(34).bytes(message.initArgs);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryBuildAddressRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryBuildAddressRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.codeHash = reader.string();
+          break;
+        case 2:
+          message.creatorAddress = reader.string();
+          break;
+        case 3:
+          message.salt = reader.string();
+          break;
+        case 4:
+          message.initArgs = reader.bytes();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryBuildAddressRequest {
+    const obj = createBaseQueryBuildAddressRequest();
+    if (isSet(object.codeHash)) obj.codeHash = String(object.codeHash);
+    if (isSet(object.creatorAddress)) obj.creatorAddress = String(object.creatorAddress);
+    if (isSet(object.salt)) obj.salt = String(object.salt);
+    if (isSet(object.initArgs)) obj.initArgs = bytesFromBase64(object.initArgs);
+    return obj;
+  },
+  toJSON(message: QueryBuildAddressRequest): unknown {
+    const obj: any = {};
+    message.codeHash !== undefined && (obj.codeHash = message.codeHash);
+    message.creatorAddress !== undefined && (obj.creatorAddress = message.creatorAddress);
+    message.salt !== undefined && (obj.salt = message.salt);
+    message.initArgs !== undefined &&
+      (obj.initArgs = base64FromBytes(message.initArgs !== undefined ? message.initArgs : new Uint8Array()));
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryBuildAddressRequest>, I>>(
+    object: I,
+  ): QueryBuildAddressRequest {
+    const message = createBaseQueryBuildAddressRequest();
+    message.codeHash = object.codeHash ?? "";
+    message.creatorAddress = object.creatorAddress ?? "";
+    message.salt = object.salt ?? "";
+    message.initArgs = object.initArgs ?? new Uint8Array();
+    return message;
+  },
+};
+function createBaseQueryBuildAddressResponse(): QueryBuildAddressResponse {
+  return {
+    address: "",
+  };
+}
+export const QueryBuildAddressResponse = {
+  typeUrl: "/cosmwasm.wasm.v1.QueryBuildAddressResponse",
+  encode(message: QueryBuildAddressResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryBuildAddressResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryBuildAddressResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryBuildAddressResponse {
+    const obj = createBaseQueryBuildAddressResponse();
+    if (isSet(object.address)) obj.address = String(object.address);
+    return obj;
+  },
+  toJSON(message: QueryBuildAddressResponse): unknown {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryBuildAddressResponse>, I>>(
+    object: I,
+  ): QueryBuildAddressResponse {
+    const message = createBaseQueryBuildAddressResponse();
+    message.address = object.address ?? "";
+    return message;
+  },
+};
 /** Query provides defines the gRPC querier service */
 export interface Query {
   /** ContractInfo gets the contract meta data */
@@ -1563,16 +1963,25 @@ export interface Query {
   RawContractState(request: QueryRawContractStateRequest): Promise<QueryRawContractStateResponse>;
   /** SmartContractState get smart query result from the contract */
   SmartContractState(request: QuerySmartContractStateRequest): Promise<QuerySmartContractStateResponse>;
-  /** Code gets the binary code and metadata for a singe wasm code */
+  /** Code gets the binary code and metadata for a single wasm code */
   Code(request: QueryCodeRequest): Promise<QueryCodeResponse>;
   /** Codes gets the metadata for all stored wasm codes */
   Codes(request?: QueryCodesRequest): Promise<QueryCodesResponse>;
+  /** CodeInfo gets the metadata for a single wasm code */
+  CodeInfo(request: QueryCodeInfoRequest): Promise<QueryCodeInfoResponse>;
   /** PinnedCodes gets the pinned code ids */
   PinnedCodes(request?: QueryPinnedCodesRequest): Promise<QueryPinnedCodesResponse>;
   /** Params gets the module params */
   Params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
   /** ContractsByCreator gets the contracts by creator */
   ContractsByCreator(request: QueryContractsByCreatorRequest): Promise<QueryContractsByCreatorResponse>;
+  /**
+   * WasmLimitsConfig gets the configured limits for static validation of Wasm
+   * files, encoded in JSON.
+   */
+  WasmLimitsConfig(request?: QueryWasmLimitsConfigRequest): Promise<QueryWasmLimitsConfigResponse>;
+  /** BuildAddress builds a contract address */
+  BuildAddress(request: QueryBuildAddressRequest): Promise<QueryBuildAddressResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -1586,9 +1995,12 @@ export class QueryClientImpl implements Query {
     this.SmartContractState = this.SmartContractState.bind(this);
     this.Code = this.Code.bind(this);
     this.Codes = this.Codes.bind(this);
+    this.CodeInfo = this.CodeInfo.bind(this);
     this.PinnedCodes = this.PinnedCodes.bind(this);
     this.Params = this.Params.bind(this);
     this.ContractsByCreator = this.ContractsByCreator.bind(this);
+    this.WasmLimitsConfig = this.WasmLimitsConfig.bind(this);
+    this.BuildAddress = this.BuildAddress.bind(this);
   }
   ContractInfo(request: QueryContractInfoRequest): Promise<QueryContractInfoResponse> {
     const data = QueryContractInfoRequest.encode(request).finish();
@@ -1634,6 +2046,11 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "Codes", data);
     return promise.then((data) => QueryCodesResponse.decode(new BinaryReader(data)));
   }
+  CodeInfo(request: QueryCodeInfoRequest): Promise<QueryCodeInfoResponse> {
+    const data = QueryCodeInfoRequest.encode(request).finish();
+    const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "CodeInfo", data);
+    return promise.then((data) => QueryCodeInfoResponse.decode(new BinaryReader(data)));
+  }
   PinnedCodes(
     request: QueryPinnedCodesRequest = {
       pagination: PageRequest.fromPartial({}),
@@ -1652,5 +2069,15 @@ export class QueryClientImpl implements Query {
     const data = QueryContractsByCreatorRequest.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "ContractsByCreator", data);
     return promise.then((data) => QueryContractsByCreatorResponse.decode(new BinaryReader(data)));
+  }
+  WasmLimitsConfig(request: QueryWasmLimitsConfigRequest = {}): Promise<QueryWasmLimitsConfigResponse> {
+    const data = QueryWasmLimitsConfigRequest.encode(request).finish();
+    const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "WasmLimitsConfig", data);
+    return promise.then((data) => QueryWasmLimitsConfigResponse.decode(new BinaryReader(data)));
+  }
+  BuildAddress(request: QueryBuildAddressRequest): Promise<QueryBuildAddressResponse> {
+    const data = QueryBuildAddressRequest.encode(request).finish();
+    const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "BuildAddress", data);
+    return promise.then((data) => QueryBuildAddressResponse.decode(new BinaryReader(data)));
   }
 }

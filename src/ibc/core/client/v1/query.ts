@@ -1,7 +1,8 @@
 /* eslint-disable */
 import { PageRequest, PageResponse } from "../../../../cosmos/base/query/v1beta1/pagination";
-import { Any } from "../../../../google/protobuf/any";
 import { Height, IdentifiedClientState, ConsensusStateWithHeight, Params } from "./client";
+import { MerklePath } from "../../commitment/v1/commitment";
+import { Any } from "../../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes, Rpc } from "../../../../helpers";
 export const protobufPackage = "ibc.core.client.v1";
@@ -167,6 +168,28 @@ export interface QueryUpgradedConsensusStateRequest {}
 export interface QueryUpgradedConsensusStateResponse {
   /** Consensus state associated with the request identifier */
   upgradedConsensusState?: Any;
+}
+/** QueryVerifyMembershipRequest is the request type for the Query/VerifyMembership RPC method */
+export interface QueryVerifyMembershipRequest {
+  /** client unique identifier. */
+  clientId: string;
+  /** the proof to be verified by the client. */
+  proof: Uint8Array;
+  /** the height of the commitment root at which the proof is verified. */
+  proofHeight: Height;
+  /** the commitment key path. */
+  merklePath: MerklePath;
+  /** the value which is proven. */
+  value: Uint8Array;
+  /** optional time delay */
+  timeDelay: bigint;
+  /** optional block delay */
+  blockDelay: bigint;
+}
+/** QueryVerifyMembershipResponse is the response type for the Query/VerifyMembership RPC method */
+export interface QueryVerifyMembershipResponse {
+  /** boolean indicating success or failure of proof verification. */
+  success: boolean;
 }
 function createBaseQueryClientStateRequest(): QueryClientStateRequest {
   return {
@@ -1198,6 +1221,174 @@ export const QueryUpgradedConsensusStateResponse = {
     return message;
   },
 };
+function createBaseQueryVerifyMembershipRequest(): QueryVerifyMembershipRequest {
+  return {
+    clientId: "",
+    proof: new Uint8Array(),
+    proofHeight: Height.fromPartial({}),
+    merklePath: MerklePath.fromPartial({}),
+    value: new Uint8Array(),
+    timeDelay: BigInt(0),
+    blockDelay: BigInt(0),
+  };
+}
+export const QueryVerifyMembershipRequest = {
+  typeUrl: "/ibc.core.client.v1.QueryVerifyMembershipRequest",
+  encode(message: QueryVerifyMembershipRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.clientId !== "") {
+      writer.uint32(10).string(message.clientId);
+    }
+    if (message.proof.length !== 0) {
+      writer.uint32(18).bytes(message.proof);
+    }
+    if (message.proofHeight !== undefined) {
+      Height.encode(message.proofHeight, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.merklePath !== undefined) {
+      MerklePath.encode(message.merklePath, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.value.length !== 0) {
+      writer.uint32(42).bytes(message.value);
+    }
+    if (message.timeDelay !== BigInt(0)) {
+      writer.uint32(48).uint64(message.timeDelay);
+    }
+    if (message.blockDelay !== BigInt(0)) {
+      writer.uint32(56).uint64(message.blockDelay);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryVerifyMembershipRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryVerifyMembershipRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.clientId = reader.string();
+          break;
+        case 2:
+          message.proof = reader.bytes();
+          break;
+        case 3:
+          message.proofHeight = Height.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.merklePath = MerklePath.decode(reader, reader.uint32());
+          break;
+        case 5:
+          message.value = reader.bytes();
+          break;
+        case 6:
+          message.timeDelay = reader.uint64();
+          break;
+        case 7:
+          message.blockDelay = reader.uint64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryVerifyMembershipRequest {
+    const obj = createBaseQueryVerifyMembershipRequest();
+    if (isSet(object.clientId)) obj.clientId = String(object.clientId);
+    if (isSet(object.proof)) obj.proof = bytesFromBase64(object.proof);
+    if (isSet(object.proofHeight)) obj.proofHeight = Height.fromJSON(object.proofHeight);
+    if (isSet(object.merklePath)) obj.merklePath = MerklePath.fromJSON(object.merklePath);
+    if (isSet(object.value)) obj.value = bytesFromBase64(object.value);
+    if (isSet(object.timeDelay)) obj.timeDelay = BigInt(object.timeDelay.toString());
+    if (isSet(object.blockDelay)) obj.blockDelay = BigInt(object.blockDelay.toString());
+    return obj;
+  },
+  toJSON(message: QueryVerifyMembershipRequest): unknown {
+    const obj: any = {};
+    message.clientId !== undefined && (obj.clientId = message.clientId);
+    message.proof !== undefined &&
+      (obj.proof = base64FromBytes(message.proof !== undefined ? message.proof : new Uint8Array()));
+    message.proofHeight !== undefined &&
+      (obj.proofHeight = message.proofHeight ? Height.toJSON(message.proofHeight) : undefined);
+    message.merklePath !== undefined &&
+      (obj.merklePath = message.merklePath ? MerklePath.toJSON(message.merklePath) : undefined);
+    message.value !== undefined &&
+      (obj.value = base64FromBytes(message.value !== undefined ? message.value : new Uint8Array()));
+    message.timeDelay !== undefined && (obj.timeDelay = (message.timeDelay || BigInt(0)).toString());
+    message.blockDelay !== undefined && (obj.blockDelay = (message.blockDelay || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryVerifyMembershipRequest>, I>>(
+    object: I,
+  ): QueryVerifyMembershipRequest {
+    const message = createBaseQueryVerifyMembershipRequest();
+    message.clientId = object.clientId ?? "";
+    message.proof = object.proof ?? new Uint8Array();
+    if (object.proofHeight !== undefined && object.proofHeight !== null) {
+      message.proofHeight = Height.fromPartial(object.proofHeight);
+    }
+    if (object.merklePath !== undefined && object.merklePath !== null) {
+      message.merklePath = MerklePath.fromPartial(object.merklePath);
+    }
+    message.value = object.value ?? new Uint8Array();
+    if (object.timeDelay !== undefined && object.timeDelay !== null) {
+      message.timeDelay = BigInt(object.timeDelay.toString());
+    }
+    if (object.blockDelay !== undefined && object.blockDelay !== null) {
+      message.blockDelay = BigInt(object.blockDelay.toString());
+    }
+    return message;
+  },
+};
+function createBaseQueryVerifyMembershipResponse(): QueryVerifyMembershipResponse {
+  return {
+    success: false,
+  };
+}
+export const QueryVerifyMembershipResponse = {
+  typeUrl: "/ibc.core.client.v1.QueryVerifyMembershipResponse",
+  encode(message: QueryVerifyMembershipResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.success === true) {
+      writer.uint32(8).bool(message.success);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryVerifyMembershipResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryVerifyMembershipResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.success = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryVerifyMembershipResponse {
+    const obj = createBaseQueryVerifyMembershipResponse();
+    if (isSet(object.success)) obj.success = Boolean(object.success);
+    return obj;
+  },
+  toJSON(message: QueryVerifyMembershipResponse): unknown {
+    const obj: any = {};
+    message.success !== undefined && (obj.success = message.success);
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryVerifyMembershipResponse>, I>>(
+    object: I,
+  ): QueryVerifyMembershipResponse {
+    const message = createBaseQueryVerifyMembershipResponse();
+    message.success = object.success ?? false;
+    return message;
+  },
+};
 /** Query provides defines the gRPC querier service */
 export interface Query {
   /** ClientState queries an IBC light client. */
@@ -1228,6 +1419,8 @@ export interface Query {
   UpgradedConsensusState(
     request?: QueryUpgradedConsensusStateRequest,
   ): Promise<QueryUpgradedConsensusStateResponse>;
+  /** VerifyMembership queries an IBC light client for proof verification of a value at a given key path. */
+  VerifyMembership(request: QueryVerifyMembershipRequest): Promise<QueryVerifyMembershipResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -1242,6 +1435,7 @@ export class QueryClientImpl implements Query {
     this.ClientParams = this.ClientParams.bind(this);
     this.UpgradedClientState = this.UpgradedClientState.bind(this);
     this.UpgradedConsensusState = this.UpgradedConsensusState.bind(this);
+    this.VerifyMembership = this.VerifyMembership.bind(this);
   }
   ClientState(request: QueryClientStateRequest): Promise<QueryClientStateResponse> {
     const data = QueryClientStateRequest.encode(request).finish();
@@ -1297,5 +1491,10 @@ export class QueryClientImpl implements Query {
     const data = QueryUpgradedConsensusStateRequest.encode(request).finish();
     const promise = this.rpc.request("ibc.core.client.v1.Query", "UpgradedConsensusState", data);
     return promise.then((data) => QueryUpgradedConsensusStateResponse.decode(new BinaryReader(data)));
+  }
+  VerifyMembership(request: QueryVerifyMembershipRequest): Promise<QueryVerifyMembershipResponse> {
+    const data = QueryVerifyMembershipRequest.encode(request).finish();
+    const promise = this.rpc.request("ibc.core.client.v1.Query", "VerifyMembership", data);
+    return promise.then((data) => QueryVerifyMembershipResponse.decode(new BinaryReader(data)));
   }
 }

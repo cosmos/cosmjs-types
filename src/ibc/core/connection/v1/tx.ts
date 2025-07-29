@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Counterparty, Version } from "./connection";
 import { Any } from "../../../../google/protobuf/any";
-import { Height } from "../../client/v1/client";
+import { Height, Params } from "../../client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes, Rpc } from "../../../../helpers";
 export const protobufPackage = "ibc.core.connection.v1";
@@ -30,6 +30,7 @@ export interface MsgConnectionOpenTry {
   /** Deprecated: this field is unused. Crossing hellos are no longer supported in core IBC. */
   /** @deprecated */
   previousConnectionId: string;
+  /** @deprecated */
   clientState?: Any;
   counterparty: Counterparty;
   delayPeriod: bigint;
@@ -41,12 +42,16 @@ export interface MsgConnectionOpenTry {
    */
   proofInit: Uint8Array;
   /** proof of client state included in message */
+  /** @deprecated */
   proofClient: Uint8Array;
   /** proof of client consensus state */
+  /** @deprecated */
   proofConsensus: Uint8Array;
+  /** @deprecated */
   consensusHeight: Height;
   signer: string;
   /** optional proof data for host state machines that are unable to introspect their own consensus state */
+  /** @deprecated */
   hostConsensusStateProof: Uint8Array;
 }
 /** MsgConnectionOpenTryResponse defines the Msg/ConnectionOpenTry response type. */
@@ -59,6 +64,7 @@ export interface MsgConnectionOpenAck {
   connectionId: string;
   counterpartyConnectionId: string;
   version?: Version;
+  /** @deprecated */
   clientState?: Any;
   proofHeight: Height;
   /**
@@ -67,12 +73,16 @@ export interface MsgConnectionOpenAck {
    */
   proofTry: Uint8Array;
   /** proof of client state included in message */
+  /** @deprecated */
   proofClient: Uint8Array;
   /** proof of client consensus state */
+  /** @deprecated */
   proofConsensus: Uint8Array;
+  /** @deprecated */
   consensusHeight: Height;
   signer: string;
   /** optional proof data for host state machines that are unable to introspect their own consensus state */
+  /** @deprecated */
   hostConsensusStateProof: Uint8Array;
 }
 /** MsgConnectionOpenAckResponse defines the Msg/ConnectionOpenAck response type. */
@@ -93,6 +103,19 @@ export interface MsgConnectionOpenConfirm {
  * response type.
  */
 export interface MsgConnectionOpenConfirmResponse {}
+/** MsgUpdateParams defines the sdk.Msg type to update the connection parameters. */
+export interface MsgUpdateParams {
+  /** signer address */
+  signer: string;
+  /**
+   * params defines the connection parameters to update.
+   *
+   * NOTE: All parameters must be supplied.
+   */
+  params: Params;
+}
+/** MsgUpdateParamsResponse defines the MsgUpdateParams response type. */
+export interface MsgUpdateParamsResponse {}
 function createBaseMsgConnectionOpenInit(): MsgConnectionOpenInit {
   return {
     clientId: "",
@@ -786,6 +809,99 @@ export const MsgConnectionOpenConfirmResponse = {
     return message;
   },
 };
+function createBaseMsgUpdateParams(): MsgUpdateParams {
+  return {
+    signer: "",
+    params: Params.fromPartial({}),
+  };
+}
+export const MsgUpdateParams = {
+  typeUrl: "/ibc.core.connection.v1.MsgUpdateParams",
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.signer !== "") {
+      writer.uint32(10).string(message.signer);
+    }
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.signer = reader.string();
+          break;
+        case 2:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateParams {
+    const obj = createBaseMsgUpdateParams();
+    if (isSet(object.signer)) obj.signer = String(object.signer);
+    if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
+    return obj;
+  },
+  toJSON(message: MsgUpdateParams): unknown {
+    const obj: any = {};
+    message.signer !== undefined && (obj.signer = message.signer);
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(object: I): MsgUpdateParams {
+    const message = createBaseMsgUpdateParams();
+    message.signer = object.signer ?? "";
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromPartial(object.params);
+    }
+    return message;
+  },
+};
+function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
+  return {};
+}
+export const MsgUpdateParamsResponse = {
+  typeUrl: "/ibc.core.connection.v1.MsgUpdateParamsResponse",
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateParamsResponse {
+    const obj = createBaseMsgUpdateParamsResponse();
+    return obj;
+  },
+  toJSON(_: MsgUpdateParamsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(_: I): MsgUpdateParamsResponse {
+    const message = createBaseMsgUpdateParamsResponse();
+    return message;
+  },
+};
 /** Msg defines the ibc/connection Msg service. */
 export interface Msg {
   /** ConnectionOpenInit defines a rpc handler method for MsgConnectionOpenInit. */
@@ -799,6 +915,11 @@ export interface Msg {
    * MsgConnectionOpenConfirm.
    */
   ConnectionOpenConfirm(request: MsgConnectionOpenConfirm): Promise<MsgConnectionOpenConfirmResponse>;
+  /**
+   * UpdateConnectionParams defines a rpc handler method for
+   * MsgUpdateParams.
+   */
+  UpdateConnectionParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -808,6 +929,7 @@ export class MsgClientImpl implements Msg {
     this.ConnectionOpenTry = this.ConnectionOpenTry.bind(this);
     this.ConnectionOpenAck = this.ConnectionOpenAck.bind(this);
     this.ConnectionOpenConfirm = this.ConnectionOpenConfirm.bind(this);
+    this.UpdateConnectionParams = this.UpdateConnectionParams.bind(this);
   }
   ConnectionOpenInit(request: MsgConnectionOpenInit): Promise<MsgConnectionOpenInitResponse> {
     const data = MsgConnectionOpenInit.encode(request).finish();
@@ -828,5 +950,10 @@ export class MsgClientImpl implements Msg {
     const data = MsgConnectionOpenConfirm.encode(request).finish();
     const promise = this.rpc.request("ibc.core.connection.v1.Msg", "ConnectionOpenConfirm", data);
     return promise.then((data) => MsgConnectionOpenConfirmResponse.decode(new BinaryReader(data)));
+  }
+  UpdateConnectionParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
+    const data = MsgUpdateParams.encode(request).finish();
+    const promise = this.rpc.request("ibc.core.connection.v1.Msg", "UpdateConnectionParams", data);
+    return promise.then((data) => MsgUpdateParamsResponse.decode(new BinaryReader(data)));
   }
 }
