@@ -12,10 +12,8 @@ FILES=(
   helpers.js.map
   index.d.ts
   index.js
-  index.js.map
   json-safe.d.ts
   json-safe.js
-  json-safe.js.map
   utf8.d.ts
   utf8.js
   utf8.js.map
