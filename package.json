@@ -15,6 +15,20 @@
   "publishConfig": {
     "access": "public"
   },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.js"
+    },
+    "./*": {
+      "types": "./*.d.ts",
+      "import": "./*.js",
+      "require": "./*.js"
+    }
+  },
   "files": [
     "cosmos/",
     "cosmos_proto/",
@@ -40,8 +54,7 @@
     "prepare-publishing": "./scripts/prepare-publishing.sh",
     "build": "rm -rf ./build && tsc && npm run prepare-publishing"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@hyperweb/telescope": "^1.17.4",
     "@types/node": "^15.6.2",
