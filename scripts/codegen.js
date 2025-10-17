@@ -106,7 +106,7 @@ telescope({
 
     // Exports we want to provide at the root of the "cosmjs-types" package
 
-    export { DeepPartial, Exact } from "./helpers";
+    export type { DeepPartial, Exact } from "./helpers";
     `;
     writeFileSync(`${outPath}/index.ts`, index_ts);
 
