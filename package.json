@@ -15,18 +15,17 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./index.js",
-  "types": "./index.d.ts",
   "exports": {
     ".": {
-      "types": "./index.d.ts",
-      "import": "./index.js",
-      "require": "./index.js"
+      "types": "./index.d.ts"
     },
     "./*": {
       "types": "./*.d.ts",
-      "import": "./*.js",
-      "require": "./*.js"
+      "default": "./*.js"
+    },
+    "./*.js": {
+      "types": "./*.d.ts",
+      "default": "./*.js"
     }
   },
   "files": [
