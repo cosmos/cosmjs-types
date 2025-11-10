@@ -43,9 +43,9 @@
     "!cosmos-sdk-*/**/*.md"
   ],
   "scripts": {
-    "format": "prettier --write --log-level warn \"./src/**/*.ts\" \"./scripts/**/*.js\"",
+    "format": "prettier --write --log-level warn \"./src/**/*.ts\" \"./scripts/**/*.cjs\"",
     "precodegen": "./scripts/exports_protos.sh",
-    "codegen": "rm -rf ./src && ./scripts/codegen.js && npm run format",
+    "codegen": "rm -rf ./src && ./scripts/codegen.cjs && npm run format",
     "prepare-publishing": "./scripts/prepare-publishing.sh",
     "build": "rm -rf ./build && tsc && npm run prepare-publishing"
   },
