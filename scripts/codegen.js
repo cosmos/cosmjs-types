@@ -10,6 +10,7 @@ telescope({
   protoDirs: ["protos/cosmos-sdk", "protos/wasmd", "protos/ibc-go"],
   outPath: outPath,
   options: {
+    restoreImportExtension: ".js",
     logLevel: 0,
     useSDKTypes: false,
     tsDisable: {
@@ -102,7 +103,7 @@ telescope({
 
     // Exports we want to provide at the root of the "cosmjs-types" package
 
-    export type { DeepPartial, Exact } from "./helpers";
+    export type { DeepPartial, Exact } from "./helpers.js";
     `;
     writeFileSync(`${outPath}/index.ts`, index_ts);
 
