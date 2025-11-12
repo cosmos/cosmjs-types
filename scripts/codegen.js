@@ -2,7 +2,7 @@
 
 const { join } = require("path");
 const { writeFileSync } = require("fs");
-const telescope = require("@cosmology/telescope").default;
+const telescope = require("@hyperweb/telescope").default;
 
 const outPath = join(__dirname, "/../src");
 
