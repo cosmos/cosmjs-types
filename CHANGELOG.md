@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+- Migrate from @cosmology/telescope to @hyperweb/telescope.
+
 ## [0.10.1] - 2025-07-29
 
 - Add missing json-safe.\* files to package
