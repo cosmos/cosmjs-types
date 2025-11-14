@@ -4652,7 +4652,7 @@ function createBaseFeatureSet(): FeatureSet {
     fieldPresence: 1,
     enumType: 1,
     repeatedFieldEncoding: 1,
-    utf8Validation: 1,
+    utf8Validation: 0,
     messageEncoding: 1,
     jsonFormat: 1,
     enforceNamingStyle: 1,
@@ -4670,7 +4670,7 @@ export const FeatureSet = {
     if (message.repeatedFieldEncoding !== 1) {
       writer.uint32(24).int32(message.repeatedFieldEncoding);
     }
-    if (message.utf8Validation !== 1) {
+    if (message.utf8Validation !== 0) {
       writer.uint32(32).int32(message.utf8Validation);
     }
     if (message.messageEncoding !== 1) {
@@ -4756,7 +4756,7 @@ export const FeatureSet = {
     message.fieldPresence = object.fieldPresence ?? 1;
     message.enumType = object.enumType ?? 1;
     message.repeatedFieldEncoding = object.repeatedFieldEncoding ?? 1;
-    message.utf8Validation = object.utf8Validation ?? 1;
+    message.utf8Validation = object.utf8Validation ?? 0;
     message.messageEncoding = object.messageEncoding ?? 1;
     message.jsonFormat = object.jsonFormat ?? 1;
     message.enforceNamingStyle = object.enforceNamingStyle ?? 1;

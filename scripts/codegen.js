@@ -76,6 +76,7 @@ telescope({
           useCosmosSDKDec: false,
         },
         num64: "bigint",
+        autoFixUndefinedEnumDefault: true, // workaround for https://github.com/cosmos/cosmjs-types/issues/112
       },
     },
     lcdClients: {
