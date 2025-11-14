@@ -9,6 +9,14 @@ and this project adheres to
 ## [Unreleased]
 
 - Migrate from @cosmology/telescope to @hyperweb/telescope.
+- Set `exports` field in `package.json`. This disallows importing paths with are
+  not explicitly exported. In case you used the import style with file
+  extension, you need to convert to the extension-less style:
+
+  ```diff
+  -import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx.js"
+  +import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx"
+  ```
 
 ## [0.10.1] - 2025-07-29
 
