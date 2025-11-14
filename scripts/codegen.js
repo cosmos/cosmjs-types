@@ -7,12 +7,7 @@ const telescope = require("@hyperweb/telescope").default;
 const outPath = join(__dirname, "/../src");
 
 telescope({
-  protoDirs: [
-    "protos/cosmos-sdk/proto",
-    "protos/cosmos-sdk/third_party/proto",
-    "protos/wasmd",
-    "protos/ibc-go",
-  ],
+  protoDirs: ["protos/cosmos-sdk", "protos/wasmd", "protos/ibc-go"],
   outPath: outPath,
   options: {
     logLevel: 0,
@@ -81,6 +76,7 @@ telescope({
           useCosmosSDKDec: false,
         },
         num64: "bigint",
+        autoFixUndefinedEnumDefault: true, // workaround for https://github.com/cosmos/cosmjs-types/issues/112
       },
     },
     lcdClients: {

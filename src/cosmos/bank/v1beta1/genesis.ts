@@ -18,11 +18,7 @@ export interface GenesisState {
   supply: Coin[];
   /** denom_metadata defines the metadata of the different coins. */
   denomMetadata: Metadata[];
-  /**
-   * send_enabled defines the denoms where send is enabled or disabled.
-   *
-   * Since: cosmos-sdk 0.47
-   */
+  /** send_enabled defines the denoms where send is enabled or disabled. */
   sendEnabled: SendEnabled[];
 }
 /**

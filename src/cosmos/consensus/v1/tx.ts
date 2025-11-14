@@ -18,7 +18,6 @@ export interface MsgUpdateParams {
   block?: BlockParams;
   evidence?: EvidenceParams;
   validator?: ValidatorParams;
-  /** Since: cosmos-sdk 0.50 */
   abci?: ABCIParams;
 }
 /**
@@ -163,8 +162,6 @@ export interface Msg {
   /**
    * UpdateParams defines a governance operation for updating the x/consensus module parameters.
    * The authority is defined in the keeper.
-   *
-   * Since: cosmos-sdk 0.47
    */
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
 }

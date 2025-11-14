@@ -169,20 +169,12 @@ export interface QueryTallyResultResponse {
   /** tally defines the requested tally. */
   tally: TallyResult;
 }
-/**
- * QueryGroupsRequest is the Query/Groups request type.
- *
- * Since: cosmos-sdk 0.47.1
- */
+/** QueryGroupsRequest is the Query/Groups request type. */
 export interface QueryGroupsRequest {
   /** pagination defines an optional pagination for the request. */
   pagination?: PageRequest;
 }
-/**
- * QueryGroupsResponse is the Query/Groups response type.
- *
- * Since: cosmos-sdk 0.47.1
- */
+/** QueryGroupsResponse is the Query/Groups response type. */
 export interface QueryGroupsResponse {
   /** `groups` is all the groups present in state. */
   groups: GroupInfo[];
@@ -1879,11 +1871,7 @@ export interface Query {
    * proposal itself.
    */
   TallyResult(request: QueryTallyResultRequest): Promise<QueryTallyResultResponse>;
-  /**
-   * Groups queries all groups in state.
-   *
-   * Since: cosmos-sdk 0.47.1
-   */
+  /** Groups queries all groups in state. */
   Groups(request?: QueryGroupsRequest): Promise<QueryGroupsResponse>;
 }
 export class QueryClientImpl implements Query {

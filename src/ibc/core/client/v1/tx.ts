@@ -19,7 +19,9 @@ export interface MsgCreateClient {
   signer: string;
 }
 /** MsgCreateClientResponse defines the Msg/CreateClient response type. */
-export interface MsgCreateClientResponse {}
+export interface MsgCreateClientResponse {
+  clientId: string;
+}
 /**
  * MsgUpdateClient defines an sdk.Msg to update a IBC client state using
  * the given client message.
@@ -122,6 +124,15 @@ export interface MsgUpdateParams {
 }
 /** MsgUpdateParamsResponse defines the MsgUpdateParams response type. */
 export interface MsgUpdateParamsResponse {}
+/** MsgDeleteClientCreator defines a message to delete the client creator of a client */
+export interface MsgDeleteClientCreator {
+  /** client identifier */
+  clientId: string;
+  /** signer address */
+  signer: string;
+}
+/** MsgDeleteClientCreatorResponse defines the Msg/DeleteClientCreator response type. */
+export interface MsgDeleteClientCreatorResponse {}
 function createBaseMsgCreateClient(): MsgCreateClient {
   return {
     clientState: undefined,
@@ -195,11 +206,16 @@ export const MsgCreateClient = {
   },
 };
 function createBaseMsgCreateClientResponse(): MsgCreateClientResponse {
-  return {};
+  return {
+    clientId: "",
+  };
 }
 export const MsgCreateClientResponse = {
   typeUrl: "/ibc.core.client.v1.MsgCreateClientResponse",
-  encode(_: MsgCreateClientResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+  encode(message: MsgCreateClientResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.clientId !== "") {
+      writer.uint32(10).string(message.clientId);
+    }
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateClientResponse {
@@ -209,6 +225,9 @@ export const MsgCreateClientResponse = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.clientId = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -216,16 +235,19 @@ export const MsgCreateClientResponse = {
     }
     return message;
   },
-  fromJSON(_: any): MsgCreateClientResponse {
+  fromJSON(object: any): MsgCreateClientResponse {
     const obj = createBaseMsgCreateClientResponse();
+    if (isSet(object.clientId)) obj.clientId = String(object.clientId);
     return obj;
   },
-  toJSON(_: MsgCreateClientResponse): JsonSafe<MsgCreateClientResponse> {
+  toJSON(message: MsgCreateClientResponse): JsonSafe<MsgCreateClientResponse> {
     const obj: any = {};
+    message.clientId !== undefined && (obj.clientId = message.clientId);
     return obj;
   },
-  fromPartial<I extends Exact<DeepPartial<MsgCreateClientResponse>, I>>(_: I): MsgCreateClientResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateClientResponse>, I>>(object: I): MsgCreateClientResponse {
     const message = createBaseMsgCreateClientResponse();
+    message.clientId = object.clientId ?? "";
     return message;
   },
 };
@@ -889,6 +911,99 @@ export const MsgUpdateParamsResponse = {
     return message;
   },
 };
+function createBaseMsgDeleteClientCreator(): MsgDeleteClientCreator {
+  return {
+    clientId: "",
+    signer: "",
+  };
+}
+export const MsgDeleteClientCreator = {
+  typeUrl: "/ibc.core.client.v1.MsgDeleteClientCreator",
+  encode(message: MsgDeleteClientCreator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.clientId !== "") {
+      writer.uint32(10).string(message.clientId);
+    }
+    if (message.signer !== "") {
+      writer.uint32(18).string(message.signer);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgDeleteClientCreator {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgDeleteClientCreator();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.clientId = reader.string();
+          break;
+        case 2:
+          message.signer = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgDeleteClientCreator {
+    const obj = createBaseMsgDeleteClientCreator();
+    if (isSet(object.clientId)) obj.clientId = String(object.clientId);
+    if (isSet(object.signer)) obj.signer = String(object.signer);
+    return obj;
+  },
+  toJSON(message: MsgDeleteClientCreator): JsonSafe<MsgDeleteClientCreator> {
+    const obj: any = {};
+    message.clientId !== undefined && (obj.clientId = message.clientId);
+    message.signer !== undefined && (obj.signer = message.signer);
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgDeleteClientCreator>, I>>(object: I): MsgDeleteClientCreator {
+    const message = createBaseMsgDeleteClientCreator();
+    message.clientId = object.clientId ?? "";
+    message.signer = object.signer ?? "";
+    return message;
+  },
+};
+function createBaseMsgDeleteClientCreatorResponse(): MsgDeleteClientCreatorResponse {
+  return {};
+}
+export const MsgDeleteClientCreatorResponse = {
+  typeUrl: "/ibc.core.client.v1.MsgDeleteClientCreatorResponse",
+  encode(_: MsgDeleteClientCreatorResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgDeleteClientCreatorResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgDeleteClientCreatorResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgDeleteClientCreatorResponse {
+    const obj = createBaseMsgDeleteClientCreatorResponse();
+    return obj;
+  },
+  toJSON(_: MsgDeleteClientCreatorResponse): JsonSafe<MsgDeleteClientCreatorResponse> {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgDeleteClientCreatorResponse>, I>>(
+    _: I,
+  ): MsgDeleteClientCreatorResponse {
+    const message = createBaseMsgDeleteClientCreatorResponse();
+    return message;
+  },
+};
 /** Msg defines the ibc/client Msg service. */
 export interface Msg {
   /** CreateClient defines a rpc handler method for MsgCreateClient. */
@@ -905,6 +1020,8 @@ export interface Msg {
   IBCSoftwareUpgrade(request: MsgIBCSoftwareUpgrade): Promise<MsgIBCSoftwareUpgradeResponse>;
   /** UpdateClientParams defines a rpc handler method for MsgUpdateParams. */
   UpdateClientParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
+  /** DeleteClientCreator defines a rpc handler method for MsgDeleteClientCreator. */
+  DeleteClientCreator(request: MsgDeleteClientCreator): Promise<MsgDeleteClientCreatorResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -917,6 +1034,7 @@ export class MsgClientImpl implements Msg {
     this.RecoverClient = this.RecoverClient.bind(this);
     this.IBCSoftwareUpgrade = this.IBCSoftwareUpgrade.bind(this);
     this.UpdateClientParams = this.UpdateClientParams.bind(this);
+    this.DeleteClientCreator = this.DeleteClientCreator.bind(this);
   }
   CreateClient(request: MsgCreateClient): Promise<MsgCreateClientResponse> {
     const data = MsgCreateClient.encode(request).finish();
@@ -952,5 +1070,10 @@ export class MsgClientImpl implements Msg {
     const data = MsgUpdateParams.encode(request).finish();
     const promise = this.rpc.request("ibc.core.client.v1.Msg", "UpdateClientParams", data);
     return promise.then((data) => MsgUpdateParamsResponse.decode(new BinaryReader(data)));
+  }
+  DeleteClientCreator(request: MsgDeleteClientCreator): Promise<MsgDeleteClientCreatorResponse> {
+    const data = MsgDeleteClientCreator.encode(request).finish();
+    const promise = this.rpc.request("ibc.core.client.v1.Msg", "DeleteClientCreator", data);
+    return promise.then((data) => MsgDeleteClientCreatorResponse.decode(new BinaryReader(data)));
   }
 }

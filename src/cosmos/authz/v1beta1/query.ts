@@ -447,17 +447,9 @@ export const QueryGranteeGrantsResponse = {
 export interface Query {
   /** Returns list of `Authorization`, granted to the grantee by the granter. */
   Grants(request: QueryGrantsRequest): Promise<QueryGrantsResponse>;
-  /**
-   * GranterGrants returns list of `GrantAuthorization`, granted by granter.
-   *
-   * Since: cosmos-sdk 0.46
-   */
+  /** GranterGrants returns list of `GrantAuthorization`, granted by granter. */
   GranterGrants(request: QueryGranterGrantsRequest): Promise<QueryGranterGrantsResponse>;
-  /**
-   * GranteeGrants returns a list of `GrantAuthorization` by grantee.
-   *
-   * Since: cosmos-sdk 0.46
-   */
+  /** GranteeGrants returns a list of `GrantAuthorization` by grantee. */
   GranteeGrants(request: QueryGranteeGrantsRequest): Promise<QueryGranteeGrantsResponse>;
 }
 export class QueryClientImpl implements Query {

@@ -30,21 +30,13 @@ export interface QueryAllowancesResponse {
   /** pagination defines an pagination for the response. */
   pagination?: PageResponse;
 }
-/**
- * QueryAllowancesByGranterRequest is the request type for the Query/AllowancesByGranter RPC method.
- *
- * Since: cosmos-sdk 0.46
- */
+/** QueryAllowancesByGranterRequest is the request type for the Query/AllowancesByGranter RPC method. */
 export interface QueryAllowancesByGranterRequest {
   granter: string;
   /** pagination defines an pagination for the request. */
   pagination?: PageRequest;
 }
-/**
- * QueryAllowancesByGranterResponse is the response type for the Query/AllowancesByGranter RPC method.
- *
- * Since: cosmos-sdk 0.46
- */
+/** QueryAllowancesByGranterResponse is the response type for the Query/AllowancesByGranter RPC method. */
 export interface QueryAllowancesByGranterResponse {
   /** allowances that have been issued by the granter. */
   allowances: Grant[];
@@ -418,11 +410,7 @@ export interface Query {
   Allowance(request: QueryAllowanceRequest): Promise<QueryAllowanceResponse>;
   /** Allowances returns all the grants for the given grantee address. */
   Allowances(request: QueryAllowancesRequest): Promise<QueryAllowancesResponse>;
-  /**
-   * AllowancesByGranter returns all the grants given by an address
-   *
-   * Since: cosmos-sdk 0.46
-   */
+  /** AllowancesByGranter returns all the grants given by an address */
   AllowancesByGranter(request: QueryAllowancesByGranterRequest): Promise<QueryAllowancesByGranterResponse>;
 }
 export class QueryClientImpl implements Query {

@@ -20,23 +20,11 @@ export interface MsgSubmitProposal {
   proposer: string;
   /** metadata is any arbitrary metadata attached to the proposal. */
   metadata: string;
-  /**
-   * title is the title of the proposal.
-   *
-   * Since: cosmos-sdk 0.47
-   */
+  /** title is the title of the proposal. */
   title: string;
-  /**
-   * summary is the summary of the proposal
-   *
-   * Since: cosmos-sdk 0.47
-   */
+  /** summary is the summary of the proposal */
   summary: string;
-  /**
-   * expedited defines if the proposal is expedited or not
-   *
-   * Since: cosmos-sdk 0.50
-   */
+  /** expedited defines if the proposal is expedited or not */
   expedited: boolean;
 }
 /** MsgSubmitProposalResponse defines the Msg/SubmitProposal response type. */
@@ -93,11 +81,7 @@ export interface MsgDeposit {
 }
 /** MsgDepositResponse defines the Msg/Deposit response type. */
 export interface MsgDepositResponse {}
-/**
- * MsgUpdateParams is the Msg/UpdateParams request type.
- *
- * Since: cosmos-sdk 0.47
- */
+/** MsgUpdateParams is the Msg/UpdateParams request type. */
 export interface MsgUpdateParams {
   /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
   authority: string;
@@ -111,15 +95,9 @@ export interface MsgUpdateParams {
 /**
  * MsgUpdateParamsResponse defines the response structure for executing a
  * MsgUpdateParams message.
- *
- * Since: cosmos-sdk 0.47
  */
 export interface MsgUpdateParamsResponse {}
-/**
- * MsgCancelProposal is the Msg/CancelProposal request type.
- *
- * Since: cosmos-sdk 0.50
- */
+/** MsgCancelProposal is the Msg/CancelProposal request type. */
 export interface MsgCancelProposal {
   /** proposal_id defines the unique id of the proposal. */
   proposalId: bigint;
@@ -129,8 +107,6 @@ export interface MsgCancelProposal {
 /**
  * MsgCancelProposalResponse defines the response structure for executing a
  * MsgCancelProposal message.
- *
- * Since: cosmos-sdk 0.50
  */
 export interface MsgCancelProposalResponse {
   /** proposal_id defines the unique id of the proposal. */
@@ -984,15 +960,9 @@ export interface Msg {
   /**
    * UpdateParams defines a governance operation for updating the x/gov module
    * parameters. The authority is defined in the keeper.
-   *
-   * Since: cosmos-sdk 0.47
    */
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
-  /**
-   * CancelProposal defines a method to cancel governance proposal
-   *
-   * Since: cosmos-sdk 0.50
-   */
+  /** CancelProposal defines a method to cancel governance proposal */
   CancelProposal(request: MsgCancelProposal): Promise<MsgCancelProposalResponse>;
 }
 export class MsgClientImpl implements Msg {

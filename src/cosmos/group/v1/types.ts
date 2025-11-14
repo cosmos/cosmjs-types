@@ -374,17 +374,9 @@ export interface Proposal {
   executorResult: ProposalExecutorResult;
   /** messages is a list of `sdk.Msg`s that will be executed if the proposal passes. */
   messages: Any[];
-  /**
-   * title is the title of the proposal
-   *
-   * Since: cosmos-sdk 0.47
-   */
+  /** title is the title of the proposal */
   title: string;
-  /**
-   * summary is a short summary of the proposal
-   *
-   * Since: cosmos-sdk 0.47
-   */
+  /** summary is a short summary of the proposal */
   summary: string;
 }
 /** TallyResult represents the sum of weighted votes for each vote option. */

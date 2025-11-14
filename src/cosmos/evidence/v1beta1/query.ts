@@ -13,11 +13,7 @@ export interface QueryEvidenceRequest {
    */
   /** @deprecated */
   evidenceHash: Uint8Array;
-  /**
-   * hash defines the evidence hash of the requested evidence.
-   *
-   * Since: cosmos-sdk 0.47
-   */
+  /** hash defines the evidence hash of the requested evidence. */
   hash: string;
 }
 /** QueryEvidenceResponse is the response type for the Query/Evidence RPC method. */

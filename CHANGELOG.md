@@ -20,6 +20,10 @@ and this project adheres to
 
 - The TypeScript build `target` and `lib` is now ES2022,
   [analogue to CosmJS 0.35](https://github.com/cosmos/cosmjs/pull/1783).
+- Upgrade types
+  - Cosmos SDK to 0.53.4
+  - ibc-go to 0.10.3
+  - wasmd 0.61.6
 
 ## [0.10.1] - 2025-07-29
 

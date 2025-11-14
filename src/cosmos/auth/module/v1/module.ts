@@ -11,6 +11,12 @@ export interface Module {
   moduleAccountPermissions: ModuleAccountPermission[];
   /** authority defines the custom module authority. If not set, defaults to the governance module. */
   authority: string;
+  /**
+   * enable_unordered_transactions determines whether unordered transactions should be supported or not.
+   * When true, unordered transactions will be validated and processed.
+   * When false, unordered transactions will be rejected.
+   */
+  enableUnorderedTransactions: boolean;
 }
 /** ModuleAccountPermission represents permissions for a module account. */
 export interface ModuleAccountPermission {
@@ -27,6 +33,7 @@ function createBaseModule(): Module {
     bech32Prefix: "",
     moduleAccountPermissions: [],
     authority: "",
+    enableUnorderedTransactions: false,
   };
 }
 export const Module = {
@@ -40,6 +47,9 @@ export const Module = {
     }
     if (message.authority !== "") {
       writer.uint32(26).string(message.authority);
+    }
+    if (message.enableUnorderedTransactions === true) {
+      writer.uint32(32).bool(message.enableUnorderedTransactions);
     }
     return writer;
   },
@@ -59,6 +69,9 @@ export const Module = {
         case 3:
           message.authority = reader.string();
           break;
+        case 4:
+          message.enableUnorderedTransactions = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -74,6 +87,8 @@ export const Module = {
         ModuleAccountPermission.fromJSON(e),
       );
     if (isSet(object.authority)) obj.authority = String(object.authority);
+    if (isSet(object.enableUnorderedTransactions))
+      obj.enableUnorderedTransactions = Boolean(object.enableUnorderedTransactions);
     return obj;
   },
   toJSON(message: Module): JsonSafe<Module> {
@@ -87,6 +102,8 @@ export const Module = {
       obj.moduleAccountPermissions = [];
     }
     message.authority !== undefined && (obj.authority = message.authority);
+    message.enableUnorderedTransactions !== undefined &&
+      (obj.enableUnorderedTransactions = message.enableUnorderedTransactions);
     return obj;
   },
   fromPartial<I extends Exact<DeepPartial<Module>, I>>(object: I): Module {
@@ -95,6 +112,7 @@ export const Module = {
     message.moduleAccountPermissions =
       object.moduleAccountPermissions?.map((e) => ModuleAccountPermission.fromPartial(e)) || [];
     message.authority = object.authority ?? "";
+    message.enableUnorderedTransactions = object.enableUnorderedTransactions ?? false;
     return message;
   },
 };

@@ -27,20 +27,12 @@ export interface MsgRevokeAllowance {
 }
 /** MsgRevokeAllowanceResponse defines the Msg/RevokeAllowanceResponse response type. */
 export interface MsgRevokeAllowanceResponse {}
-/**
- * MsgPruneAllowances prunes expired fee allowances.
- *
- * Since cosmos-sdk 0.50
- */
+/** MsgPruneAllowances prunes expired fee allowances. */
 export interface MsgPruneAllowances {
   /** pruner is the address of the user pruning expired allowances. */
   pruner: string;
 }
-/**
- * MsgPruneAllowancesResponse defines the Msg/PruneAllowancesResponse response type.
- *
- * Since cosmos-sdk 0.50
- */
+/** MsgPruneAllowancesResponse defines the Msg/PruneAllowancesResponse response type. */
 export interface MsgPruneAllowancesResponse {}
 function createBaseMsgGrantAllowance(): MsgGrantAllowance {
   return {
@@ -330,11 +322,7 @@ export interface Msg {
    * has been granted to the grantee.
    */
   RevokeAllowance(request: MsgRevokeAllowance): Promise<MsgRevokeAllowanceResponse>;
-  /**
-   * PruneAllowances prunes expired fee allowances, currently up to 75 at a time.
-   *
-   * Since cosmos-sdk 0.50
-   */
+  /** PruneAllowances prunes expired fee allowances, currently up to 75 at a time. */
   PruneAllowances(request: MsgPruneAllowances): Promise<MsgPruneAllowancesResponse>;
 }
 export class MsgClientImpl implements Msg {
