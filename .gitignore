@@ -3,6 +3,7 @@ yarn.lock
 
 node_modules/
 
+/protos/cosmos-sdk
 /protos/ibc-go
 /protos/wasmd
 
