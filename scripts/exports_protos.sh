@@ -9,3 +9,6 @@ for dir in cosmos-sdk ibc-go wasmd; do
 
   buf export "protos/$dir-src/" --output "protos/$dir"
 done
+
+# Remove stray semicolons (see https://github.com/cosmos/cosmos-sdk/pull/24105)
+find protos/cosmos-sdk/ -type f -name "*.proto" -exec sed -i -e 's/^  ;//g' {} \;
