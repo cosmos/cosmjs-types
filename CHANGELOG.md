@@ -18,6 +18,9 @@ and this project adheres to
   +import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx"
   ```
 
+- The TypeScript build `target` and `lib` is now ES2022,
+  [analogue to CosmJS 0.35](https://github.com/cosmos/cosmjs/pull/1783).
+
 ## [0.10.1] - 2025-07-29
 
 - Add missing json-safe.\* files to package
