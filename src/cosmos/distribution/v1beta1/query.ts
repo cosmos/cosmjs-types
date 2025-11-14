@@ -1312,7 +1312,11 @@ export interface Query {
   DelegatorWithdrawAddress(
     request: QueryDelegatorWithdrawAddressRequest,
   ): Promise<QueryDelegatorWithdrawAddressResponse>;
-  /** CommunityPool queries the community pool coins. */
+  /**
+   * CommunityPool queries the community pool coins.
+   *
+   * WARNING: This query will fail if an external community pool is used.
+   */
   CommunityPool(request?: QueryCommunityPoolRequest): Promise<QueryCommunityPoolResponse>;
 }
 export class QueryClientImpl implements Query {

@@ -21,11 +21,7 @@ export interface ModuleAccount {
   name: string;
   permissions: string[];
 }
-/**
- * ModuleCredential represents a unclaimable pubkey for base accounts controlled by modules.
- *
- * Since: cosmos-sdk 0.47
- */
+/** ModuleCredential represents a unclaimable pubkey for base accounts controlled by modules. */
 export interface ModuleCredential {
   /** module_name is the name of the module used for address derivation (passed into address.Module). */
   moduleName: string;

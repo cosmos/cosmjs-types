@@ -50,7 +50,6 @@ export interface GetBlockByHeightResponse {
   blockId?: BlockID;
   /** Deprecated: please use `sdk_block` instead */
   block?: Block1;
-  /** Since: cosmos-sdk 0.47 */
   sdkBlock?: Block2;
 }
 /** GetLatestBlockRequest is the request type for the Query/GetLatestBlock RPC method. */
@@ -60,7 +59,6 @@ export interface GetLatestBlockResponse {
   blockId?: BlockID;
   /** Deprecated: please use `sdk_block` instead */
   block?: Block1;
-  /** Since: cosmos-sdk 0.47 */
   sdkBlock?: Block2;
 }
 /** GetSyncingRequest is the request type for the Query/GetSyncing RPC method. */
@@ -85,7 +83,6 @@ export interface VersionInfo {
   buildTags: string;
   goVersion: string;
   buildDeps: Module[];
-  /** Since: cosmos-sdk 0.43 */
   cosmosSdkVersion: string;
 }
 /** Module is the type for VersionInfo */
@@ -1455,8 +1452,6 @@ export interface Service {
    * ABCIQuery defines a query handler that supports ABCI queries directly to the
    * application, bypassing Tendermint completely. The ABCI query must contain
    * a valid and supported path, including app, custom, p2p, and store.
-   *
-   * Since: cosmos-sdk 0.46
    */
   ABCIQuery(request: ABCIQueryRequest): Promise<ABCIQueryResponse>;
 }

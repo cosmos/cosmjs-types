@@ -4,11 +4,7 @@ import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.staking.v1beta1";
-/**
- * AuthorizationType defines the type of staking module authorization type
- *
- * Since: cosmos-sdk 0.43
- */
+/** AuthorizationType defines the type of staking module authorization type */
 export enum AuthorizationType {
   /** AUTHORIZATION_TYPE_UNSPECIFIED - AUTHORIZATION_TYPE_UNSPECIFIED specifies an unknown authorization type */
   AUTHORIZATION_TYPE_UNSPECIFIED = 0,
@@ -62,11 +58,7 @@ export function authorizationTypeToJSON(object: AuthorizationType): string {
       return "UNRECOGNIZED";
   }
 }
-/**
- * StakeAuthorization defines authorization for delegate/undelegate/redelegate.
- *
- * Since: cosmos-sdk 0.43
- */
+/** StakeAuthorization defines authorization for delegate/undelegate/redelegate. */
 export interface StakeAuthorization {
   /**
    * max_tokens specifies the maximum amount of tokens can be delegate to a validator. If it is

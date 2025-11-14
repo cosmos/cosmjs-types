@@ -6,7 +6,7 @@ import { DeepPartial, Exact, isSet, Rpc } from "../../../helpers";
 export const protobufPackage = "cosmos.app.v1alpha1";
 /** QueryConfigRequest is the Query/Config request type. */
 export interface QueryConfigRequest {}
-/** QueryConfigRequest is the Query/Config response type. */
+/** QueryConfigResponse is the Query/Config response type. */
 export interface QueryConfigResponse {
   /** config is the current app config. */
   config?: Config;

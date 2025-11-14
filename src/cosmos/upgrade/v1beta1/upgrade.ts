@@ -67,11 +67,7 @@ export interface CancelSoftwareUpgradeProposal {
   /** description of the proposal */
   description: string;
 }
-/**
- * ModuleVersion specifies a module and its consensus version.
- *
- * Since: cosmos-sdk 0.43
- */
+/** ModuleVersion specifies a module and its consensus version. */
 export interface ModuleVersion {
   /** name of the app module */
   name: string;

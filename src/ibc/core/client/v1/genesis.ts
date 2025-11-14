@@ -23,8 +23,8 @@ export interface GenesisState {
   nextClientSequence: bigint;
 }
 /**
- * GenesisMetadata defines the genesis type for metadata that clients may return
- * with ExportMetadata
+ * GenesisMetadata defines the genesis type for metadata that will be used
+ * to export all client store keys that are not client or consensus states.
  */
 export interface GenesisMetadata {
   /** store key of metadata without clientID-prefix */

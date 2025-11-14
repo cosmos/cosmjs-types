@@ -108,11 +108,7 @@ export interface QueryParamsResponse {
    */
   /** @deprecated */
   tallyParams?: TallyParams;
-  /**
-   * params defines all the paramaters of x/gov module.
-   *
-   * Since: cosmos-sdk 0.47
-   */
+  /** params defines all the paramaters of x/gov module. */
   params?: Params;
 }
 /** QueryDepositRequest is the request type for the Query/Deposit RPC method. */

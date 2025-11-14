@@ -1,10 +1,19 @@
 /* eslint-disable */
 import { Any } from "../../../google/protobuf/any";
+import { Timestamp } from "../../../google/protobuf/timestamp";
 import { SignMode, signModeFromJSON, signModeToJSON } from "../signing/v1beta1/signing";
 import { CompactBitArray } from "../../crypto/multisig/v1beta1/multisig";
 import { Coin } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../helpers";
+import {
+  isSet,
+  bytesFromBase64,
+  base64FromBytes,
+  DeepPartial,
+  Exact,
+  fromJsonTimestamp,
+  fromTimestamp,
+} from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 export const protobufPackage = "cosmos.tx.v1beta1";
 /** Tx is the standard type used for broadcasting transactions. */
@@ -72,8 +81,6 @@ export interface SignDoc {
 /**
  * SignDocDirectAux is the type used for generating sign bytes for
  * SIGN_MODE_DIRECT_AUX.
- *
- * Since: cosmos-sdk 0.46
  */
 export interface SignDocDirectAux {
   /**
@@ -112,14 +119,40 @@ export interface TxBody {
   /**
    * memo is any arbitrary note/comment to be added to the transaction.
    * WARNING: in clients, any publicly exposed text should not be called memo,
-   * but should be called `note` instead (see https://github.com/cosmos/cosmos-sdk/issues/9122).
+   * but should be called `note` instead (see
+   * https://github.com/cosmos/cosmos-sdk/issues/9122).
    */
   memo: string;
   /**
-   * timeout is the block height after which this transaction will not
-   * be processed by the chain
+   * timeout_height is the block height after which this transaction will not
+   * be processed by the chain.
    */
   timeoutHeight: bigint;
+  /**
+   * unordered, when set to true, indicates that the transaction signer(s)
+   * intend for the transaction to be evaluated and executed in an un-ordered
+   * fashion. Specifically, the account's nonce will NOT be checked or
+   * incremented, which allows for fire-and-forget as well as concurrent
+   * transaction execution.
+   *
+   * Note, when set to true, the existing 'timeout_timestamp' value must
+   * be set and will be used to correspond to a timestamp in which the transaction is deemed
+   * valid.
+   *
+   * When true, the sequence value MUST be 0, and any transaction with unordered=true and a non-zero sequence value will
+   * be rejected.
+   * External services that make assumptions about sequence values may need to be updated because of this.
+   */
+  unordered: boolean;
+  /**
+   * timeout_timestamp is the block time after which this transaction will not
+   * be processed by the chain.
+   *
+   * Note, if unordered=true this value MUST be set
+   * and will act as a short-lived TTL in which the transaction is deemed valid
+   * and kept in memory to prevent duplicates.
+   */
+  timeoutTimestamp?: Timestamp;
   /**
    * extension_options are arbitrary options that can be added by chains
    * when the default options are not sufficient. If any of these are present
@@ -157,8 +190,6 @@ export interface AuthInfo {
    *
    * This field is ignored if the chain didn't enable tips, i.e. didn't add the
    * `TipDecorator` in its posthandler.
-   *
-   * Since: cosmos-sdk 0.46
    */
   /** @deprecated */
   tip?: Tip;
@@ -226,23 +257,21 @@ export interface Fee {
    */
   gasLimit: bigint;
   /**
-   * if unset, the first signer is responsible for paying the fees. If set, the specified account must pay the fees.
-   * the payer must be a tx signer (and thus have signed this field in AuthInfo).
-   * setting this field does *not* change the ordering of required signers for the transaction.
+   * if unset, the first signer is responsible for paying the fees. If set, the
+   * specified account must pay the fees. the payer must be a tx signer (and
+   * thus have signed this field in AuthInfo). setting this field does *not*
+   * change the ordering of required signers for the transaction.
    */
   payer: string;
   /**
-   * if set, the fee payer (either the first signer or the value of the payer field) requests that a fee grant be used
-   * to pay fees instead of the fee payer's own balance. If an appropriate fee grant does not exist or the chain does
-   * not support fee grants, this will fail
+   * if set, the fee payer (either the first signer or the value of the payer
+   * field) requests that a fee grant be used to pay fees instead of the fee
+   * payer's own balance. If an appropriate fee grant does not exist or the
+   * chain does not support fee grants, this will fail
    */
   granter: string;
 }
-/**
- * Tip is the tip used for meta-transactions.
- *
- * Since: cosmos-sdk 0.46
- */
+/** Tip is the tip used for meta-transactions. */
 /** @deprecated */
 export interface Tip {
   /** amount is the amount of the tip */
@@ -255,8 +284,6 @@ export interface Tip {
  * tipper) builds and sends to the fee payer (who will build and broadcast the
  * actual tx). AuxSignerData is not a valid tx in itself, and will be rejected
  * by the node if sent directly as-is.
- *
- * Since: cosmos-sdk 0.46
  */
 export interface AuxSignerData {
   /**
@@ -628,6 +655,8 @@ function createBaseTxBody(): TxBody {
     messages: [],
     memo: "",
     timeoutHeight: BigInt(0),
+    unordered: false,
+    timeoutTimestamp: undefined,
     extensionOptions: [],
     nonCriticalExtensionOptions: [],
   };
@@ -643,6 +672,12 @@ export const TxBody = {
     }
     if (message.timeoutHeight !== BigInt(0)) {
       writer.uint32(24).uint64(message.timeoutHeight);
+    }
+    if (message.unordered === true) {
+      writer.uint32(32).bool(message.unordered);
+    }
+    if (message.timeoutTimestamp !== undefined) {
+      Timestamp.encode(message.timeoutTimestamp, writer.uint32(42).fork()).ldelim();
     }
     for (const v of message.extensionOptions) {
       Any.encode(v!, writer.uint32(8186).fork()).ldelim();
@@ -668,6 +703,12 @@ export const TxBody = {
         case 3:
           message.timeoutHeight = reader.uint64();
           break;
+        case 4:
+          message.unordered = reader.bool();
+          break;
+        case 5:
+          message.timeoutTimestamp = Timestamp.decode(reader, reader.uint32());
+          break;
         case 1023:
           message.extensionOptions.push(Any.decode(reader, reader.uint32()));
           break;
@@ -686,6 +727,8 @@ export const TxBody = {
     if (Array.isArray(object?.messages)) obj.messages = object.messages.map((e: any) => Any.fromJSON(e));
     if (isSet(object.memo)) obj.memo = String(object.memo);
     if (isSet(object.timeoutHeight)) obj.timeoutHeight = BigInt(object.timeoutHeight.toString());
+    if (isSet(object.unordered)) obj.unordered = Boolean(object.unordered);
+    if (isSet(object.timeoutTimestamp)) obj.timeoutTimestamp = fromJsonTimestamp(object.timeoutTimestamp);
     if (Array.isArray(object?.extensionOptions))
       obj.extensionOptions = object.extensionOptions.map((e: any) => Any.fromJSON(e));
     if (Array.isArray(object?.nonCriticalExtensionOptions))
@@ -702,6 +745,9 @@ export const TxBody = {
     message.memo !== undefined && (obj.memo = message.memo);
     message.timeoutHeight !== undefined &&
       (obj.timeoutHeight = (message.timeoutHeight || BigInt(0)).toString());
+    message.unordered !== undefined && (obj.unordered = message.unordered);
+    message.timeoutTimestamp !== undefined &&
+      (obj.timeoutTimestamp = fromTimestamp(message.timeoutTimestamp).toISOString());
     if (message.extensionOptions) {
       obj.extensionOptions = message.extensionOptions.map((e) => (e ? Any.toJSON(e) : undefined));
     } else {
@@ -722,6 +768,10 @@ export const TxBody = {
     message.memo = object.memo ?? "";
     if (object.timeoutHeight !== undefined && object.timeoutHeight !== null) {
       message.timeoutHeight = BigInt(object.timeoutHeight.toString());
+    }
+    message.unordered = object.unordered ?? false;
+    if (object.timeoutTimestamp !== undefined && object.timeoutTimestamp !== null) {
+      message.timeoutTimestamp = Timestamp.fromPartial(object.timeoutTimestamp);
     }
     message.extensionOptions = object.extensionOptions?.map((e) => Any.fromPartial(e)) || [];
     message.nonCriticalExtensionOptions =

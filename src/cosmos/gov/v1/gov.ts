@@ -186,35 +186,15 @@ export interface Proposal {
    * https://docs.cosmos.network/v0.47/modules/gov#proposal-3
    */
   metadata: string;
-  /**
-   * title is the title of the proposal
-   *
-   * Since: cosmos-sdk 0.47
-   */
+  /** title is the title of the proposal */
   title: string;
-  /**
-   * summary is a short summary of the proposal
-   *
-   * Since: cosmos-sdk 0.47
-   */
+  /** summary is a short summary of the proposal */
   summary: string;
-  /**
-   * proposer is the address of the proposal sumbitter
-   *
-   * Since: cosmos-sdk 0.47
-   */
+  /** proposer is the address of the proposal sumbitter */
   proposer: string;
-  /**
-   * expedited defines if the proposal is expedited
-   *
-   * Since: cosmos-sdk 0.50
-   */
+  /** expedited defines if the proposal is expedited */
   expedited: boolean;
-  /**
-   * failed_reason defines the reason why the proposal failed
-   *
-   * Since: cosmos-sdk 0.50
-   */
+  /** failed_reason defines the reason why the proposal failed */
   failedReason: string;
 }
 /** TallyResult defines a standard tally for a governance proposal. */
@@ -278,11 +258,7 @@ export interface TallyParams {
    */
   vetoThreshold: string;
 }
-/**
- * Params defines the parameters for the x/gov module.
- *
- * Since: cosmos-sdk 0.47
- */
+/** Params defines the parameters for the x/gov module. */
 export interface Params {
   /** Minimum deposit for a proposal to enter voting period. */
   minDeposit: Coin[];
@@ -307,30 +283,16 @@ export interface Params {
   vetoThreshold: string;
   /** The ratio representing the proportion of the deposit value that must be paid at proposal submission. */
   minInitialDepositRatio: string;
-  /**
-   * The cancel ratio which will not be returned back to the depositors when a proposal is cancelled.
-   *
-   * Since: cosmos-sdk 0.50
-   */
+  /** The cancel ratio which will not be returned back to the depositors when a proposal is cancelled. */
   proposalCancelRatio: string;
   /**
    * The address which will receive (proposal_cancel_ratio * deposit) proposal deposits.
    * If empty, the (proposal_cancel_ratio * deposit) proposal deposits will be burned.
-   *
-   * Since: cosmos-sdk 0.50
    */
   proposalCancelDest: string;
-  /**
-   * Duration of the voting period of an expedited proposal.
-   *
-   * Since: cosmos-sdk 0.50
-   */
+  /** Duration of the voting period of an expedited proposal. */
   expeditedVotingPeriod?: Duration;
-  /**
-   * Minimum proportion of Yes votes for proposal to pass. Default value: 0.67.
-   *
-   * Since: cosmos-sdk 0.50
-   */
+  /** Minimum proportion of Yes votes for proposal to pass. Default value: 0.67. */
   expeditedThreshold: string;
   /** Minimum expedited deposit for a proposal to enter voting period. */
   expeditedMinDeposit: Coin[];
@@ -344,8 +306,6 @@ export interface Params {
    * The ratio representing the proportion of the deposit value minimum that must be met when making a deposit.
    * Default value: 0.01. Meaning that for a chain with a min_deposit of 100stake, a deposit of 1stake would be
    * required.
-   *
-   * Since: cosmos-sdk 0.50
    */
   minDepositRatio: string;
 }

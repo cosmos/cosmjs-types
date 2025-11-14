@@ -24,11 +24,7 @@ export interface QueryAllBalancesRequest {
   address: string;
   /** pagination defines an optional pagination for the request. */
   pagination?: PageRequest;
-  /**
-   * resolve_denom is the flag to resolve the denom into a human-readable form from the metadata.
-   *
-   * Since: cosmos-sdk 0.50
-   */
+  /** resolve_denom is the flag to resolve the denom into a human-readable form from the metadata. */
   resolveDenom: boolean;
 }
 /**
@@ -44,8 +40,6 @@ export interface QueryAllBalancesResponse {
 /**
  * QuerySpendableBalancesRequest defines the gRPC request structure for querying
  * an account's spendable balances.
- *
- * Since: cosmos-sdk 0.46
  */
 export interface QuerySpendableBalancesRequest {
   /** address is the address to query spendable balances for. */
@@ -56,8 +50,6 @@ export interface QuerySpendableBalancesRequest {
 /**
  * QuerySpendableBalancesResponse defines the gRPC response structure for querying
  * an account's spendable balances.
- *
- * Since: cosmos-sdk 0.46
  */
 export interface QuerySpendableBalancesResponse {
   /** balances is the spendable balances of all the coins. */
@@ -68,8 +60,6 @@ export interface QuerySpendableBalancesResponse {
 /**
  * QuerySpendableBalanceByDenomRequest defines the gRPC request structure for
  * querying an account's spendable balance for a specific denom.
- *
- * Since: cosmos-sdk 0.47
  */
 export interface QuerySpendableBalanceByDenomRequest {
   /** address is the address to query balances for. */
@@ -80,8 +70,6 @@ export interface QuerySpendableBalanceByDenomRequest {
 /**
  * QuerySpendableBalanceByDenomResponse defines the gRPC response structure for
  * querying an account's spendable balance for a specific denom.
- *
- * Since: cosmos-sdk 0.47
  */
 export interface QuerySpendableBalanceByDenomResponse {
   /** balance is the balance of the coin. */
@@ -92,11 +80,7 @@ export interface QuerySpendableBalanceByDenomResponse {
  * method.
  */
 export interface QueryTotalSupplyRequest {
-  /**
-   * pagination defines an optional pagination for the request.
-   *
-   * Since: cosmos-sdk 0.43
-   */
+  /** pagination defines an optional pagination for the request. */
   pagination?: PageRequest;
 }
 /**
@@ -106,11 +90,7 @@ export interface QueryTotalSupplyRequest {
 export interface QueryTotalSupplyResponse {
   /** supply is the supply of the coins */
   supply: Coin[];
-  /**
-   * pagination defines the pagination in the response.
-   *
-   * Since: cosmos-sdk 0.43
-   */
+  /** pagination defines the pagination in the response. */
   pagination?: PageResponse;
 }
 /** QuerySupplyOfRequest is the request type for the Query/SupplyOf RPC method. */
@@ -189,8 +169,6 @@ export interface QueryDenomOwnersRequest {
  * DenomOwner defines structure representing an account that owns or holds a
  * particular denominated token. It contains the account address and account
  * balance of the denominated token.
- *
- * Since: cosmos-sdk 0.46
  */
 export interface DenomOwner {
   /** address defines the address that owns a particular denomination. */
@@ -198,11 +176,7 @@ export interface DenomOwner {
   /** balance is the balance of the denominated coin for an account. */
   balance: Coin;
 }
-/**
- * QueryDenomOwnersResponse defines the RPC response of a DenomOwners RPC query.
- *
- * Since: cosmos-sdk 0.46
- */
+/** QueryDenomOwnersResponse defines the RPC response of a DenomOwners RPC query. */
 export interface QueryDenomOwnersResponse {
   denomOwners: DenomOwner[];
   /** pagination defines the pagination in the response. */
@@ -212,8 +186,6 @@ export interface QueryDenomOwnersResponse {
  * QueryDenomOwnersByQueryRequest defines the request type for the DenomOwnersByQuery RPC query,
  * which queries for a paginated set of all account holders of a particular
  * denomination.
- *
- * Since: cosmos-sdk 0.50.3
  */
 export interface QueryDenomOwnersByQueryRequest {
   /** denom defines the coin denomination to query all account holders for. */
@@ -221,21 +193,13 @@ export interface QueryDenomOwnersByQueryRequest {
   /** pagination defines an optional pagination for the request. */
   pagination?: PageRequest;
 }
-/**
- * QueryDenomOwnersByQueryResponse defines the RPC response of a DenomOwnersByQuery RPC query.
- *
- * Since: cosmos-sdk 0.50.3
- */
+/** QueryDenomOwnersByQueryResponse defines the RPC response of a DenomOwnersByQuery RPC query. */
 export interface QueryDenomOwnersByQueryResponse {
   denomOwners: DenomOwner[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponse;
 }
-/**
- * QuerySendEnabledRequest defines the RPC request for looking up SendEnabled entries.
- *
- * Since: cosmos-sdk 0.47
- */
+/** QuerySendEnabledRequest defines the RPC request for looking up SendEnabled entries. */
 export interface QuerySendEnabledRequest {
   /** denoms is the specific denoms you want look up. Leave empty to get all entries. */
   denoms: string[];
@@ -245,11 +209,7 @@ export interface QuerySendEnabledRequest {
    */
   pagination?: PageRequest;
 }
-/**
- * QuerySendEnabledResponse defines the RPC response of a SendEnable query.
- *
- * Since: cosmos-sdk 0.47
- */
+/** QuerySendEnabledResponse defines the RPC response of a SendEnable query. */
 export interface QuerySendEnabledResponse {
   sendEnabled: SendEnabled[];
   /**
@@ -1818,8 +1778,6 @@ export interface Query {
    *
    * When called from another module, this query might consume a high amount of
    * gas if the pagination field is incorrectly set.
-   *
-   * Since: cosmos-sdk 0.46
    */
   SpendableBalances(request: QuerySpendableBalancesRequest): Promise<QuerySpendableBalancesResponse>;
   /**
@@ -1828,8 +1786,6 @@ export interface Query {
    *
    * When called from another module, this query might consume a high amount of
    * gas if the pagination field is incorrectly set.
-   *
-   * Since: cosmos-sdk 0.47
    */
   SpendableBalanceByDenom(
     request: QuerySpendableBalanceByDenomRequest,
@@ -1850,6 +1806,11 @@ export interface Query {
   SupplyOf(request: QuerySupplyOfRequest): Promise<QuerySupplyOfResponse>;
   /** Params queries the parameters of x/bank module. */
   Params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
+  /**
+   * DenomsMetadata queries the client metadata for all registered coin
+   * denominations.
+   */
+  DenomsMetadata(request?: QueryDenomsMetadataRequest): Promise<QueryDenomsMetadataResponse>;
   /** DenomMetadata queries the client metadata of a given coin denomination. */
   DenomMetadata(request: QueryDenomMetadataRequest): Promise<QueryDenomMetadataResponse>;
   /** DenomMetadataByQueryString queries the client metadata of a given coin denomination. */
@@ -1857,25 +1818,16 @@ export interface Query {
     request: QueryDenomMetadataByQueryStringRequest,
   ): Promise<QueryDenomMetadataByQueryStringResponse>;
   /**
-   * DenomsMetadata queries the client metadata for all registered coin
-   * denominations.
-   */
-  DenomsMetadata(request?: QueryDenomsMetadataRequest): Promise<QueryDenomsMetadataResponse>;
-  /**
    * DenomOwners queries for all account addresses that own a particular token
    * denomination.
    *
    * When called from another module, this query might consume a high amount of
    * gas if the pagination field is incorrectly set.
-   *
-   * Since: cosmos-sdk 0.46
    */
   DenomOwners(request: QueryDenomOwnersRequest): Promise<QueryDenomOwnersResponse>;
   /**
    * DenomOwnersByQuery queries for all account addresses that own a particular token
    * denomination.
-   *
-   * Since: cosmos-sdk 0.50.3
    */
   DenomOwnersByQuery(request: QueryDenomOwnersByQueryRequest): Promise<QueryDenomOwnersByQueryResponse>;
   /**
@@ -1884,8 +1836,6 @@ export interface Query {
    * This query only returns denominations that have specific SendEnabled settings.
    * Any denomination that does not have a specific setting will use the default
    * params.default_send_enabled, and will not be returned by this query.
-   *
-   * Since: cosmos-sdk 0.47
    */
   SendEnabled(request: QuerySendEnabledRequest): Promise<QuerySendEnabledResponse>;
 }
@@ -1900,9 +1850,9 @@ export class QueryClientImpl implements Query {
     this.TotalSupply = this.TotalSupply.bind(this);
     this.SupplyOf = this.SupplyOf.bind(this);
     this.Params = this.Params.bind(this);
+    this.DenomsMetadata = this.DenomsMetadata.bind(this);
     this.DenomMetadata = this.DenomMetadata.bind(this);
     this.DenomMetadataByQueryString = this.DenomMetadataByQueryString.bind(this);
-    this.DenomsMetadata = this.DenomsMetadata.bind(this);
     this.DenomOwners = this.DenomOwners.bind(this);
     this.DenomOwnersByQuery = this.DenomOwnersByQuery.bind(this);
     this.SendEnabled = this.SendEnabled.bind(this);
@@ -1948,6 +1898,15 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "Params", data);
     return promise.then((data) => QueryParamsResponse.decode(new BinaryReader(data)));
   }
+  DenomsMetadata(
+    request: QueryDenomsMetadataRequest = {
+      pagination: PageRequest.fromPartial({}),
+    },
+  ): Promise<QueryDenomsMetadataResponse> {
+    const data = QueryDenomsMetadataRequest.encode(request).finish();
+    const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "DenomsMetadata", data);
+    return promise.then((data) => QueryDenomsMetadataResponse.decode(new BinaryReader(data)));
+  }
   DenomMetadata(request: QueryDenomMetadataRequest): Promise<QueryDenomMetadataResponse> {
     const data = QueryDenomMetadataRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "DenomMetadata", data);
@@ -1959,15 +1918,6 @@ export class QueryClientImpl implements Query {
     const data = QueryDenomMetadataByQueryStringRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "DenomMetadataByQueryString", data);
     return promise.then((data) => QueryDenomMetadataByQueryStringResponse.decode(new BinaryReader(data)));
-  }
-  DenomsMetadata(
-    request: QueryDenomsMetadataRequest = {
-      pagination: PageRequest.fromPartial({}),
-    },
-  ): Promise<QueryDenomsMetadataResponse> {
-    const data = QueryDenomsMetadataRequest.encode(request).finish();
-    const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "DenomsMetadata", data);
-    return promise.then((data) => QueryDenomsMetadataResponse.decode(new BinaryReader(data)));
   }
   DenomOwners(request: QueryDenomOwnersRequest): Promise<QueryDenomOwnersResponse> {
     const data = QueryDenomOwnersRequest.encode(request).finish();
