@@ -22,10 +22,6 @@
     "./*": {
       "types": "./*.d.ts",
       "default": "./*.js"
-    },
-    "./*.js": {
-      "types": "./*.d.ts",
-      "default": "./*.js"
     }
   },
   "files": [
