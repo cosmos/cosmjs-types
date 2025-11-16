@@ -22,7 +22,8 @@
     "./*": {
       "types": "./*.d.ts",
       "default": "./*.js"
-    }
+    },
+    "./*.js": null
   },
   "files": [
     "cosmos/",
