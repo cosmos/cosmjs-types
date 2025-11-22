@@ -49,6 +49,9 @@
     "prepare-publishing": "./scripts/prepare-publishing.sh",
     "build": "rm -rf ./build && tsc && npm run prepare-publishing"
   },
+  "engines": {
+    "node": ">=20.19"
+  },
   "dependencies": {},
   "devDependencies": {
     "@hyperweb/telescope": "^1.17.4",
