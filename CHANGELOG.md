@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.11.0] - 2025-11-22
+
 - Migrate from @cosmology/telescope to @hyperweb/telescope.
 - Set `exports` field in `package.json`. This disallows importing paths with are
   not explicitly exported. In case you used the import style with file
@@ -130,7 +132,8 @@ No changelog, sorry. Maybe the diff helps.
 
 - wasmd 0.18 types (cosmwasm/wasm/v1/\*)
 
-[unreleased]: https://github.com/confio/cosmjs-types/compare/v0.10.1...HEAD
+[unreleased]: https://github.com/cosmos/cosmjs-types/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/cosmos/cosmjs-types/compare/v0.10.1...v0.11.0
 [0.10.1]: https://github.com/confio/cosmjs-types/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/confio/cosmjs-types/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/confio/cosmjs-types/compare/v0.8.0...v0.9.0
