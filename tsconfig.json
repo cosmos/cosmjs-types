@@ -21,6 +21,7 @@
     // So minifiers have to strip them off later on.
     "removeComments": false,
     "resolveJsonModule": true,
+    "rewriteRelativeImportExtensions": true,
     "rootDir": "src",
     "sourceMap": true,
     "strict": true
