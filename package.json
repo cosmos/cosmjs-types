@@ -10,7 +10,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/confio/cosmjs-types"
+    "url": "https://github.com/cosmos/cosmjs-types"
   },
   "publishConfig": {
     "access": "public"
